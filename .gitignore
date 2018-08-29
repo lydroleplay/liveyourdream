@@ -1,0 +1,12 @@
+announce*
+samp-license.txt
+samp-npc*
+samp-server*
+server-readme.txt
+pawno/*
+*.amx
+include/*
+scriptfiles/*
+npcmodes/*
+.idea
+*.iml
