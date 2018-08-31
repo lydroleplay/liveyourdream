@@ -8,7 +8,7 @@ enum e_Werbebanner {
 	Float:W_fZ,
 	Text3D:W_t3dLabel,
 	W_iPickup,
-	
+
 	W_iObjectID,
 	W_iModelID,
 	Float:W_fObjX,
@@ -27,7 +27,7 @@ enum e_Werbebanner {
 	W_iFontColor,
 	W_iBackColor,
 	W_iTextAlignment,
-	
+
 	W_unixBought,
 	W_sOwner[MAX_PLAYER_NAME]
 };
@@ -214,7 +214,7 @@ COMMAND:atafelentmieten(playerid,params[]) {
 	new
 	    werbetafel;
 	if( !gPlayerLogged[playerid] ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt");
+        SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt.");
 	    return 1;
 	}
 	if(Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
@@ -230,6 +230,8 @@ COMMAND:atafelentmieten(playerid,params[]) {
 	SendAdminMessage(COLOR_YELLOW, String);
 
 	WerbetafelZuVermieten(werbetafel);
+	UpdateObject(werbetafel);
+	SaveWerbebannerEx(werbetafel);
 	return 1;
 }
 COMMAND:werbetafel(playerid,params[]) {
@@ -328,7 +330,7 @@ stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, input
 	                ShowMainMenu(playerid);
 				}
 	            case 0:{
-					ShowPlayerDialog(playerid,DIALOG_WERBEANLEITUNG,DIALOG_STYLE_MSGBOX,"    "COLOR_R"Anleitung","{FFFFFF}Wichtig Information:\n\nZeilenumbruch im Text wird wie folgt eingefügt:\n<br>\n\nBeispiel:\n1. Eins<br>2. Zwei\n\nErgebnis:\n1. Eins\n2. Zwei","Zurück","");
+					ShowPlayerDialog(playerid,DIALOG_WERBEANLEITUNG,DIALOG_STYLE_MSGBOX,"    "COLOR_R"Anleitung","{FFFFFF}Wichtig Information:\n\nZeilenumbruch im Text wird wie folgt eingefügt:\n\\n\n\nBeispiel:\n1. Eins\\n2. Zwei\n\nErgebnis:\n1. Eins\n2. Zwei","Zurück","");
 	            }
 	            /*
 	            case 1:{
@@ -472,15 +474,20 @@ stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, input
 	*/
 	if(dialogid == TextDialog){
 	    if(response){
-	        new
-	            string[400];
-	        g_Werbebanner[werbetafel][W_sText][0] = '\0';
-	        strcat( g_Werbebanner[werbetafel][W_sText] , inputtext , 256 );
-	        
-			format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Object Text: "COLOR_Y"%s",g_Werbebanner[werbetafel][W_sText]);
-	        SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
-	        SaveWerbebannerEx(werbetafel);
-	    } else { ShowMainMenu(playerid); }
+				new string[400];
+				g_Werbebanner[werbetafel][W_sText][0] = '\0';
+				for (new i, j = strlen(inputtext) - 1; i < j; i++) {
+					if (inputtext[i] == '\\' && inputtext[i + 1] == 'n') {
+						inputtext[i] = ' ';
+						inputtext[i + 1] = '\n';
+					}
+				}
+				strcat( g_Werbebanner[werbetafel][W_sText] , inputtext , 256 );
+
+				format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Object Text: "COLOR_Y"%s",g_Werbebanner[werbetafel][W_sText]);
+		    	SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
+		    	SaveWerbebannerEx(werbetafel);
+			} else { ShowMainMenu(playerid); }
 		return 1;
 	}
 	/*
@@ -538,7 +545,7 @@ stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, input
 	if(dialogid == FontSDialog)
 	{
 	    if(response) {
-	        if(!IsNumeric(inputtext)) return SendClientMessage(playerid,-1,""COLOR_Y"* "COLOR_R"ERROR: "COLOR_G"Please, use a numeric value"COLOR_R"!"), ShowMainMenu(playerid);
+	        if(!isNumeric(inputtext)) return SendClientMessage(playerid,-1,""COLOR_Y"* "COLOR_R"ERROR: "COLOR_G"Please, use a numeric value"COLOR_R"!"), ShowMainMenu(playerid);
 	        new string[128];
 			g_Werbebanner[werbetafel][W_iFontSize] = strval(inputtext);
 			format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Text Size: "COLOR_Y"%d",g_Werbebanner[werbetafel][W_iFontSize]);
@@ -564,7 +571,7 @@ stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, input
 	        		SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Bold Text: "COLOR_Y"Yes");
 	        		UpdateObject(werbetafel), ShowMainMenu(playerid);
 				}
-				
+
 			}
 			SaveWerbebannerEx(werbetafel);
 	    } else { ShowMainMenu(playerid); }
@@ -708,7 +715,7 @@ stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, input
 					g_Werbebanner[werbetafel][W_iTextAlignment] = 2; UpdateObject(werbetafel);
 					SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Text Alignment: "COLOR_Y"Right"), ShowMainMenu(playerid);
 				}
-				
+
 			}
 			SaveWerbebannerEx(werbetafel);
 		} else { ShowMainMenu(playerid); }
@@ -786,38 +793,10 @@ stock HexToInt(string[]) //By Zamaroht, I think... =/
 }
 stock UpdateObject(werbetafel)
 {
-	/*
-	new
-	    werbetafel;
-	werbetafel = IsPlayerAtWerbetafel(playerid);
-	if(werbetafel == 999 ) {
-	    return 0;
-	}
-	*/
-	new
-	    anzahl,
-	    debugstring[256];
-
-    strcat(debugstring,g_Werbebanner[werbetafel][W_sText]);
-    strreplace(debugstring,"<br>","%c");
-
-    // print(debugstring);
-    //printf("anzahl = %d",anzahl);
-	switch(anzahl) {
-	    case 1: format(debugstring,sizeof(debugstring),debugstring,'\n');
-	    case 2: format(debugstring,sizeof(debugstring),debugstring,'\n','\n');
-	    case 3: format(debugstring,sizeof(debugstring),debugstring,'\n','\n','\n');
-	    case 4: format(debugstring,sizeof(debugstring),debugstring,'\n','\n','\n','\n');
-	    case 5: format(debugstring,sizeof(debugstring),debugstring,'\n','\n','\n','\n','\n');
-	    case 6: format(debugstring,sizeof(debugstring),debugstring,'\n','\n','\n','\n','\n','\n');
-	    case 7: format(debugstring,sizeof(debugstring),debugstring,'\n','\n','\n','\n','\n','\n','\n');
-	    case 8: format(debugstring,sizeof(debugstring),debugstring,'\n','\n','\n','\n','\n','\n','\n','\n');
-	}
-    
 	SetDynamicObjectMaterialText(
 		g_Werbebanner[werbetafel][W_iObjectID],
 		g_Werbebanner[werbetafel][W_iMaterialIndex],
-	 	debugstring,
+	 	g_Werbebanner[werbetafel][W_sText],
 		g_Werbebanner[werbetafel][W_iMaterialSize],
 		g_Werbebanner[werbetafel][W_iFontFace],
 		g_Werbebanner[werbetafel][W_iFontSize],
@@ -831,13 +810,13 @@ stock UpdateObject(werbetafel)
 
 
 stock WerbetafelZuVermieten(werbetafel) {
-    format(g_Werbebanner[werbetafel][W_sText],256,"{FF9900}Werbetafel zu vermieten\n{00FFFF}Dauer: {FFFFFF}4 Tage\n{00FF00}Kosten: {FFFFFF}40.000$");
+    format(g_Werbebanner[werbetafel][W_sText],256,"{FF9900}Werbetafel zu vermieten\n\n{00FFFF}Dauer: {FFFFFF}4 Tage\n{00FF00}Kosten: {FFFFFF}40.000$");
 	format(g_Werbebanner[werbetafel][W_sOwner],MAX_PLAYER_NAME,"Niemand");
 	g_Werbebanner[werbetafel][W_unixBought] = 0;
 	g_Werbebanner[werbetafel][W_iMaterialIndex] = 0;
-	g_Werbebanner[werbetafel][W_iMaterialSize] = 90;
-	format(g_Werbebanner[werbetafel][W_iFontFace],24,"Arial");
-	g_Werbebanner[werbetafel][W_iFontSize] = 20;
+	g_Werbebanner[werbetafel][W_iMaterialSize] = 130;
+	format(g_Werbebanner[werbetafel][W_iFontFace], 32, "Verdana");
+	g_Werbebanner[werbetafel][W_iFontSize] = 38;
 	g_Werbebanner[werbetafel][W_iBold] = 1;
 	g_Werbebanner[werbetafel][W_iFontColor] = 0xFFFFFFFF;
 	g_Werbebanner[werbetafel][W_iBackColor] = -16777216;
