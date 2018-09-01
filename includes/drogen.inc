@@ -125,13 +125,13 @@ new const PFLANZEN_HELP[][] = {
 };
 
 COMMAND:pflanzen(playerid,params[]) {
-	if (!strcmp(params,"help") || isnull(params)) {
+	if (!strcmp(params,"help", true) || isnull(params)) {
 		if (Spieler[playerid][pFraktion] != 15)	return SendClientMessage(playerid, COLOR_RED, "Du hast mit Pflanzen nichts am Hut.");
 		new dialogText[800];
 		for (new i = 0; i < sizeof(PFLANZEN_HELP); i++) format(dialogText, sizeof(dialogText), "%s%s\n", dialogText, PFLANZEN_HELP[i]);
 		return ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_LIST, "Pflanzen Hilfe", dialogText, "Schließen", "");
 	}
-	else if(!strcmp(params,"anbauen")) {
+	else if(!strcmp(params,"anbauen", true)) {
 	    new
 	        pflanze;
 		pflanze = GetClosestDrogenPflanze(playerid);
@@ -164,7 +164,7 @@ COMMAND:pflanzen(playerid,params[]) {
 		FreezePlayer(playerid);
 		SetPlayerPos(playerid,x,y,z + 0.01);
 	}
-	else if(!strcmp(params,"info")) {
+	else if(!strcmp(params,"info", true)) {
 		if( Spieler[playerid][pFraktion] != 15 ) {
 			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Spicepflanzen einsehen.");
 		    return 1;
@@ -194,7 +194,7 @@ COMMAND:pflanzen(playerid,params[]) {
         }
 		return 1;
 	}
-	else if(!strcmp(params,"giessen")) {
+	else if(!strcmp(params,"giessen", true)) {
 		if( Spieler[playerid][pFraktion] != 15 ) {
 			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Spicepflanzen gießen.");
 		    return 1;
@@ -213,7 +213,7 @@ COMMAND:pflanzen(playerid,params[]) {
 		g_DrogenPflanzen[pflanze][DP_iWasser] = DROGENPFLANZEN_WASSER_COOLDOWN;
 		SendClientMessage(playerid,COLOR_YELLOW,"Du hast die Spicepflanze bewässert.");
 	}
-	else if(!strcmp(params,"verbrennen")) {
+	else if(!strcmp(params,"verbrennen", true)) {
 	    if(!IsPlayerExecutive(playerid) && Spieler[playerid][pFraktion] != 15) {
 			SendClientMessage(playerid,COLOR_RED,"Diese Funktion können nur FBI Agenten und Polizisten nutzen.");
 		    return 1;
@@ -229,7 +229,7 @@ COMMAND:pflanzen(playerid,params[]) {
 		if (Spieler[playerid][pFraktion] != 15) SendFraktionMessage(15, COLOR_RED, "Eine eurer Spicepflanzen wurde von einem Exekutivbeamten zerstört.");
         SetDrogenPflanzenOnFire(pflanze);
 	}
-	else if(!strcmp(params,"abbauen")) {
+	else if(!strcmp(params,"abbauen", true)) {
 		if( Spieler[playerid][pFraktion] != 15 ) {
 			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Spicepflanzen abbauen.");
 		    return 1;
@@ -258,7 +258,7 @@ COMMAND:pflanzen(playerid,params[]) {
 		SetTimerEx("TogglePlayerControllableEx",2*1000,false,"dd",playerid,true);
 	 	g_FraktionsSafeBox[15][FSB_iSpice] += r;
 	}
-	return 1;
+	return 0;
 }
 
 COMMAND:nimmspice(playerid,params[]) {
