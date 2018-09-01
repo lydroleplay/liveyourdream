@@ -49,7 +49,7 @@ new
 	    {"",296.6713,-40.4204,1001.5156,7.2681,1,4,179, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID}, //Hauptammu LS
 	    {"",501.8529,-21.1311,1000.6797,86.4007,42,17,172, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID}, //Alhambra
 	    {"",2.1166,-30.7914,1003.5494,358.4960,28,10,172, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID}, //247 Shop
-		{"",1375.8090,-980.6082,31.2592,351.6009,24,10,172, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID}, //247 Shop
+		// {"",1375.8090,-980.6082,31.2592,351.6009,24,10,172, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID}, //247 Shop | [*] R.I.P Verkäufer Label auf der Strasse 2018
 		{"",370.0415,-4.4723,1001.8589,178.8840,18,9,167, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID}, //Clucking Ball
 		{"",370.0415,-4.4723,1001.8589,178.8840,25,9,167, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID},  //Clucking Ball
 		{"",161.5822,-80.8033,1001.8047,179.1740,36,18,151, ROBBING_STATE_NONE, INVALID_PLAYER_ID, INVALID_PLAYER_ID, INVALID_PLAYER_ID},  //Skin Shop ZIP
@@ -308,7 +308,7 @@ public Robbing_ConnectBots()
 	    biz_index = GetBizIndexByID(g_RobbingBiz[i][RB_iBizID]);
 	    SetActorVirtualWorld(g_RobbingBiz[i][RB_iBotID],biz_index);
 	    SetActorInvulnerable(g_RobbingBiz[i][RB_iBotID]);
-	    Create3DTextLabel("Verkäufer",0xFFFFFFFF,g_RobbingBiz[i][RB_fX],g_RobbingBiz[i][RB_fY],g_RobbingBiz[i][RB_fZ]+0.8,10.0,0);
+	    CreateDynamic3DTextLabel("Verkäufer", 0xFFFFFFFF, g_RobbingBiz[i][RB_fX], g_RobbingBiz[i][RB_fY], g_RobbingBiz[i][RB_fZ] + 1.05, 10.0, .worldid = biz_index);
 		robbingvar[g_RobbingBiz[i][RB_iBotID]]=i;
 	}
     SetTimer("Robbing_Pulse", 523, true);
