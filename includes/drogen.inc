@@ -111,34 +111,40 @@ public Pulse_DrogenPflanzen() {
 	return 1;
 }
 
+new const PFLANZEN_HELP[][] = {
+	"/Pflanzen help\t\tDiese Liste anzeigen",
+	"/Pflanzen anbauen\tEine Pflanze anbauen",
+	"/Pflanzen info\t\tInfo über nächstgelegene Pflanze (Reifezeit, Gießzeit)",
+	"/Pflanzen giessen\t\tNächstgelegene Pflanze giessen (Zeit zum Gießen: 600 Sekunden)",
+	"/Pflanzen verbrennen\tNächstgelegene Pflanze wird verbrannt",
+	"/Pflanzen abbauen\tNächstgelegene Pflanze wird geerntet",
+	"/Nimmspice\t\tEin Gramm Spice einnehmen (10 Sekunden Cooldown)",
+	"/Sellspice\t\tSpice verkaufen",
+	"/Geben [ID] Spice [Menge]\tEinem Spieler Spice geben",
+	"/Getsamen\t\tAn einem Samenpunkt Samen holen"
+};
+
 COMMAND:pflanzen(playerid,params[]) {
-	if(!strcmp(params,"help") || isnull(params) ) {
-		SendClientMessage(playerid,COLOR_WHITE,"/Pflanzen help          - Alle Befehle");
-		SendClientMessage(playerid,COLOR_WHITE,"/Pflanzen anbauen       - Pflanze anbauen | Dauert 10sekunden(freeze)");
-		SendClientMessage(playerid,COLOR_WHITE,"/Pflanzen info          - Pflanzeninfo(Wielange noch bis reif und ob gegossen oder nicht)");
-		SendClientMessage(playerid,COLOR_WHITE,"/Pflanzen giessen       - bei nicht giessen wird die Pflanze zerstï¿½rt, giessen evtl nach ner stunde oder so");
-		SendClientMessage(playerid,COLOR_WHITE,"/Pflanzen verbrennen    - FBI Befehl, Pflanze wird zerstï¿½rt. bluebikerz bekommen meldung");
-		SendClientMessage(playerid,COLOR_WHITE,"/Pflanzen abbauen       - Pflanze wird abgebaut und Spice geerntet | Dauer 30sekunden(freeze)");
-		SendClientMessage(playerid,COLOR_WHITE,"/Nimmspice              - man nimmt die droge(10sekunden cooldown)");
-		SendClientMessage(playerid,COLOR_WHITE,"/Sellspice              - so verkauft man die Drogen(Mindestpreis 1$ und maximal Preis 10.000$)");
-		SendClientMessage(playerid,COLOR_WHITE,"/Geben ID Spice Anzahl  - jo erklï¿½rt sich von selbst");
-		SendClientMessage(playerid,COLOR_WHITE,"/Getsamen               - Maximal Anzahl von Samen die man tragen kann 5.");
-		return 1;
+	if (!strcmp(params,"help") || isnull(params)) {
+		if (Spieler[playerid][pFraktion] != 15)	return SendClientMessage(playerid, COLOR_RED, "Du hast mit Pflanzen nichts am Hut.");
+		new dialogText[800];
+		for (new i = 0; i < sizeof(PFLANZEN_HELP); i++) format(dialogText, sizeof(dialogText), "%s%s\n", dialogText, PFLANZEN_HELP[i]);
+		return ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_LIST, "Pflanzen Hilfe", dialogText, "Schließen", "");
 	}
 	else if(!strcmp(params,"anbauen")) {
 	    new
 	        pflanze;
 		pflanze = GetClosestDrogenPflanze(playerid);
 		if( Spieler[playerid][pFraktion] != 15 ) {
-			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Drogenpflanzen anbauen");
+			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Spicepflanzen anbauen.");
 		    return 1;
 		}
 		if(pflanze != -1 ) {
-			SendClientMessage(playerid,COLOR_RED,"Hier ist bereits eine Drogenpflanze");
+			SendClientMessage(playerid,COLOR_RED,"Hier ist bereits eine Spicepflanze.");
 		    return 1;
 		}
 		if( Spieler[playerid][pDrogenSamen] < 1 ) {
-			SendClientMessage(playerid,COLOR_RED,"Du besitzt keine Samen,um eine Drogenpflanze anzubauen");
+			SendClientMessage(playerid,COLOR_RED,"Du besitzt keine Samen, um eine Spicepflanze anzubauen.");
 		    return 1;
 		}
 	    new
@@ -150,15 +156,17 @@ COMMAND:pflanzen(playerid,params[]) {
 		GetPlayerFacingAngle(playerid,face);
 		GetXYInFrontOfPosition(x, y, face, 1.0 );
 		CreateDrogenPflanzen(x,y,z);
-		SendClientMessage(playerid,COLOR_WHITE,"Drogenpflanzen wird gezogen");
-		SetTimerEx("TogglePlayerControllableEx",1*1000,false,"dd",playerid,true);
 		Spieler[playerid][pDrogenSamen]--;
+		new message[128];
+		format(message, sizeof(message), "Spicepflanze wird gezogen. Du hast noch {FFFFFF}%d {FFFF00}Samen übrig.", Spieler[playerid][pDrogenSamen]);
+		SendClientMessage(playerid, COLOR_YELLOW, message);
+		SetTimerEx("TogglePlayerControllableEx",1*1000,false,"dd",playerid,true);
 		FreezePlayer(playerid);
 		SetPlayerPos(playerid,x,y,z + 0.01);
 	}
 	else if(!strcmp(params,"info")) {
 		if( Spieler[playerid][pFraktion] != 15 ) {
-			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Drogenpflanzen einsehen");
+			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Spicepflanzen einsehen.");
 		    return 1;
 		}
 	    new
@@ -166,11 +174,11 @@ COMMAND:pflanzen(playerid,params[]) {
 		pflanze = GetClosestDrogenPflanze(playerid,3.0);
 
 		if(pflanze == -1 ) {
-			SendClientMessage(playerid,COLOR_RED,"Keine Drogenpflanze in deiner nï¿½he");
+			SendClientMessage(playerid,COLOR_RED,"Keine Spicepflanze in deiner Nähe.");
 		    return 1;
 		}
         if( g_DrogenPflanzen[pflanze][DP_iFortschritt] > DROGENPFLANZE_REIF ) {
-			SendClientMessage(playerid,COLOR_YELLOW,"Diese Drogenpflanze ist reif");
+			SendClientMessage(playerid,COLOR_YELLOW,"Diese Spicepflanze ist reif.");
         }
         else {
             new
@@ -178,71 +186,71 @@ COMMAND:pflanzen(playerid,params[]) {
                 wasser,
                 String[128];
 			reif = DROGENPFLANZE_REIF - g_DrogenPflanzen[pflanze][DP_iFortschritt];
-			format(String,sizeof(String),"Drogenpflanze reif in: %d Sekunden",reif);
+			format(String,sizeof(String),"Spicepflanze reif in: %d Sekunden",reif);
 			SendClientMessage(playerid,COLOR_WHITE,String);
 			wasser = g_DrogenPflanzen[pflanze][DP_iWasser] - DROGENPFLANZEN_WASSER_NOTICE;
-			format(String,sizeof(String),"Drogenpflanze benï¿½tigt Wasser in: %d bis %d Sekunden",wasser,g_DrogenPflanzen[pflanze][DP_iWasser]);
+			format(String,sizeof(String),"Spicepflanze benötigt Wasser in: %d bis %d Sekunden",wasser,g_DrogenPflanzen[pflanze][DP_iWasser]);
 			SendClientMessage(playerid,COLOR_WHITE,String);
         }
 		return 1;
 	}
 	else if(!strcmp(params,"giessen")) {
 		if( Spieler[playerid][pFraktion] != 15 ) {
-			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Drogenpflanzen gieï¿½en");
+			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Spicepflanzen gießen.");
 		    return 1;
 		}
 	    new
 	        pflanze;
 		pflanze = GetClosestDrogenPflanze(playerid,3.0);
 		if(pflanze == -1 ) {
-			SendClientMessage(playerid,COLOR_RED,"Keine Drogenpflanze in deiner nï¿½he");
+			SendClientMessage(playerid,COLOR_RED,"Keine Spicepflanze in deiner Nähe.");
 		    return 1;
 		}
 		if( g_DrogenPflanzen[pflanze][DP_iWasser] > DROGENPFLANZEN_WASSER_NOTICE ) {
-			SendClientMessage(playerid,COLOR_RED,"Diese Pflanze benï¿½tigt noch kein Wasser");
+			SendClientMessage(playerid,COLOR_RED,"Diese Pflanze benötigt noch kein Wasser.");
 		    return 1;
 		}
 		g_DrogenPflanzen[pflanze][DP_iWasser] = DROGENPFLANZEN_WASSER_COOLDOWN;
-		SendClientMessage(playerid,COLOR_YELLOW,"Du hast die Drogenpflanze bewï¿½ssert");
+		SendClientMessage(playerid,COLOR_YELLOW,"Du hast die Spicepflanze bewässert.");
 	}
 	else if(!strcmp(params,"verbrennen")) {
-	    if(!IsPlayerExecutive(playerid)) {
-			SendClientMessage(playerid,COLOR_RED,"Diese Funktion kï¿½nnen nur FBI Agenten und Polizisten nutzen");
+	    if(!IsPlayerExecutive(playerid) && Spieler[playerid][pFraktion] != 15) {
+			SendClientMessage(playerid,COLOR_RED,"Diese Funktion können nur FBI Agenten und Polizisten nutzen.");
 		    return 1;
 	    }
 	    new
 	        pflanze;
 		pflanze = GetClosestDrogenPflanze(playerid,3.0);
 		if(pflanze == -1 ) {
-			SendClientMessage(playerid,COLOR_RED,"Keine Drogenpflanze in deiner nï¿½he");
+			SendClientMessage(playerid,COLOR_RED,"Keine Spicepflanze in deiner Nähe.");
 		    return 1;
 		}
-		SendClientMessage(playerid,COLOR_YELLOW,"Die Drogenpflanze wurde verbrannt");
-		SendFraktionMessage(17, COLOR_RED, "Eine eurer Drogenpflanzen wurde von einem Agenten zerstï¿½rt");
+		SendClientMessage(playerid,COLOR_YELLOW,"Die Spicepflanze wurde verbrannt");
+		if (Spieler[playerid][pFraktion] != 15) SendFraktionMessage(15, COLOR_RED, "Eine eurer Spicepflanzen wurde von einem Exekutivbeamten zerstört.");
         SetDrogenPflanzenOnFire(pflanze);
 	}
 	else if(!strcmp(params,"abbauen")) {
 		if( Spieler[playerid][pFraktion] != 15 ) {
-			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Drogenpflanzen abbauen");
+			SendClientMessage(playerid,COLOR_RED,"Du kannst keine Spicepflanzen abbauen.");
 		    return 1;
 		}
 	    new
 	        pflanze;
 		pflanze = GetClosestDrogenPflanze(playerid,3.0);
 		if(pflanze == -1 ) {
-			SendClientMessage(playerid,COLOR_RED,"Keine Drogenpflanze in deiner nï¿½he");
+			SendClientMessage(playerid,COLOR_RED,"Keine Spicepflanze in deiner Nähe.");
 		    return 1;
 		}
         if( g_DrogenPflanzen[pflanze][DP_iFortschritt] < DROGENPFLANZE_REIF ) {
-			SendClientMessage(playerid,COLOR_RED,"Die Pflanze ist noch nicht reif");
+			SendClientMessage(playerid,COLOR_RED,"Die Pflanze ist noch nicht reif.");
 		    return 1;
         }
         new
             r = RandomEx(25,30),
             String[128];
-		format(String,sizeof(String),"%s hat Spice %d Stk abgebaut. Es befinden sich nur %d Stk Spice in der Fraktions-Safebox",GetName(playerid),r,g_FraktionsSafeBox[15][FSB_iSpice] + r );
+		format(String,sizeof(String),"%s hat %d Gramm Spice abgebaut. Es befinden sich nun %d Gramm Spice in der Fraktions-Safebox.",GetName(playerid),r,g_FraktionsSafeBox[15][FSB_iSpice] + r );
 		SendFraktionMessage(15, COLOR_RED, String);
-		SendClientMessage(playerid,COLOR_YELLOW,"Die Drogenpflanze wird von dir geerntet.");
+		SendClientMessage(playerid,COLOR_YELLOW,"Die Spicepflanze wird von dir geerntet.");
 	    SetTimerEx("DestroyDrogenPflanze",2*1000,false,"d",pflanze);
 	    MoveDynamicObject(g_DrogenPflanzen[pflanze][DP_iObject] ,g_DrogenPflanzen[pflanze][DP_fX] , g_DrogenPflanzen[pflanze][DP_fY], g_DrogenPflanzen[pflanze][DP_fZ] - 2.0 , 0.05 );
 	    g_DrogenPflanzen[pflanze][DP_bInUse] = false;
@@ -254,21 +262,21 @@ COMMAND:pflanzen(playerid,params[]) {
 }
 
 COMMAND:nimmspice(playerid,params[]) {
-	if(Spieler[playerid][pSpice] < 1)return SendClientMessage(playerid, COLOR_GREY, "Du benï¿½tigst mindestens 1g Spice-Drogen.");
+	if(Spieler[playerid][pSpice] < 1)return SendClientMessage(playerid, COLOR_GREY, "Du benötigst mindestens ein Gramm Spice.");
 	if( gettime() < Spieler[playerid][unixSpiceCooldown] ) {
-		SendClientMessage(playerid,COLOR_RED,"Warte noch einen Moment bis du wieder Spice nehmen kannst");
+		SendClientMessage(playerid,COLOR_RED,"Du musst noch einen Moment warten, bis du wieder Spice nehmen kannst.");
 	    return 1;
 	}
 	new
 	    Float:armor;
 	GetPlayerArmour(playerid,armor);
 	if( armor >= 80.0 ) {
-		SendClientMessage(playerid,COLOR_RED,"Du kannst kein Spice nehmen,da deine Rï¿½stung bereits zu hoch ist");
+		SendClientMessage(playerid,COLOR_RED,"Du kannst kein Spice nehmen, da deine AP bereits zu hoch sind.");
 	    return 1;
 	}
 	if(damagesperre[playerid]>0)
 	{
-	    SendClientMessage(playerid,COLOR_RED,"Da du Schaden genommen hast, kannst du erst nach 20 Sekunden deine HP wieder pushen.");
+	    SendClientMessage(playerid,COLOR_RED,"Du kannst noch kein Spice nehmen, da du gerade Schaden genommen hast.");
 	    return 1;
 	}
 	armor += 30.0;
@@ -296,44 +304,33 @@ COMMAND:sellspice(playerid,params[]) {
 	if(sscanf(params, "uii", pID, menge, preis))return SendClientMessage(playerid, COLOR_GREY, "* Benutze: /Sellspice [SpielerID/Name] [Menge] [Preis]");
 	if(Spieler[playerid][pFraktion] != 15)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Spicedealer.");
 	GetPlayerPos(pID, x,y,z);
-	if(playerid==pID)return SendClientMessage(playerid, COLOR_RED, "Du kannst Spice nicht an dich selbst verkaufen");
+	if(playerid==pID)return SendClientMessage(playerid, COLOR_RED, "Du kannst Spice nicht an dich selbst verkaufen.");
 	if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
-	if(!IsPlayerInRangeOfPoint(playerid, 5.0, x,y,z))return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nï¿½he des Spielers.");
+	if(!IsPlayerInRangeOfPoint(playerid, 5.0, x,y,z))return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Spielers.");
 	if(menge > Spieler[playerid][pSpice]) return SendClientMessage(playerid, COLOR_RED, "Soviel Spice hast du nicht.");
-	if(menge < 1 || menge > 100000)return SendClientMessage(playerid, COLOR_RED, "Der Wert sollte zwischen 1 und 100.000 liegen.");
+	if(menge < 1 || menge > 10000)return SendClientMessage(playerid, COLOR_RED, "Der Wert sollte zwischen 1 und 10.000 liegen.");
 	SetPVarString(playerid,"SellSpice",params);
-/*
-	pSpiceID[pID] = playerid;
-	pSpicePreis[pID] = preis;
-	pSpiceMenge[pID] = menge;
-	format(string, sizeof(string), "Du hast von %s eine Anfrage fï¿½r Spice erhalten. Menge: %d, Preis: $%d.", GetName(playerid), menge, preis);
-	SendClientMessage(pID, COLOR_LIGHTBLUE, string);
-    SendClientMessage(pID, COLOR_LIGHTBLUE, "Tippe '/Accept Spice' zur Annahme von Spice.");
-    format(string, sizeof(string), "Du hast %s eine Anfrage fï¿½r Spice gemacht. Menge: %d, Preis: $%d.", GetName(pID), menge, preis);
-    SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
-*/
 	if(preis > 1 && preis < 1000000)
 	{
-		ShowPlayerDialog(playerid,DIALOG_SELLSPICE,DIALOG_STYLE_MSGBOX,"SellSpice Information","\
-		Der aktuelle Preis je Gramm von Spice ist im Rahmen von 300$ bis 500$!\n\
-		Hï¿½here Betrï¿½ge werden laut Server Regel ï¿½6 als Geldwï¿½sche gewertet und Administrativ bestraft!\n\
-		Die Strafe kï¿½nnte sein: Perm-/Timeban, Admin-Verwarnung, Prison oder Drogen/Geld wird eingezogen!\n\
+		ShowPlayerDialog(playerid,DIALOG_SELLSPICE,DIALOG_STYLE_MSGBOX,"Spice Verkauf Information","\
+		Der aktuelle Preis je Gramm Spice ist im Rahmen von 2.000$ bis 2.500$!\n\
+		Höhere Beträge werden laut Server Regel §6 als Geldwäsche gewertet und Administrativ bestraft!\n\
+		Die Strafe könnte sein: Perm-/Timeban, Admin-Verwarnung, Prison oder Drogen/Geld wird eingezogen!\n\
 		Jeder Drogenhandel wird gespeichert!!!","Einverstanden","Ablehnen");
 	}
 	else
-	{
 		SendClientMessage(playerid, COLOR_GREY, "Der Preis sollte zwischen $1 und $1.000.000 liegen.");
-	}
+	
 	return 1;
 }
 
 COMMAND:getsamen(playerid,params[]) {
 	if( Spieler[playerid][pFraktion] != 15 ) {
-		SendClientMessage(playerid,COLOR_RED,"Du kannst mit Samen nichts anfangen");
+		SendClientMessage(playerid,COLOR_RED,"Du kannst mit Samen nichts anfangen.");
 	    return 1;
 	}
 	if( Spieler[playerid][pDrogenSamen] >= 3 ) {
-		SendClientMessage(playerid,COLOR_RED,"Du besitzt bereits die maximale Anzahl an Samen");
+		SendClientMessage(playerid,COLOR_RED,"Du besitzt bereits die maximale Anzahl an Samen.");
 	    return 1;
 	}
 	if(!IsPlayerInRangeOfPoint(playerid, 3.0, -85.5813, 2.2551, 3.1172) && !IsPlayerInRangeOfPoint(playerid, 3.0, 760.485779, 378.900787, 23.168301) && !IsPlayerInRangeOfPoint(playerid, 3.0, 797.553528, -617.843811, 16.335899)) {
@@ -347,7 +344,7 @@ COMMAND:getsamen(playerid,params[]) {
 	drogensamen = RandomEx(8,10);
     total = Spieler[playerid][pDrogenSamen] + drogensamen;
     if( total > 15 ) total = 15;
-    format(String,sizeof(String),"Du hast nun Insgesamt %d Samen ( + %d Stk )", total , total - Spieler[playerid][pDrogenSamen] );
+    format(String,sizeof(String),"Du hast nun insgesamt %d Samen (+ %d Stk)", total , total - Spieler[playerid][pDrogenSamen]);
     SendClientMessage(playerid,COLOR_YELLOW,String);
     Spieler[playerid][pDrogenSamen] = total;
     Spieler[playerid][unixGetSamenCooldown] = gettime() + 60*60;
