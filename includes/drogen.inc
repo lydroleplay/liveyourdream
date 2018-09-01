@@ -258,7 +258,7 @@ COMMAND:pflanzen(playerid,params[]) {
 		SetTimerEx("TogglePlayerControllableEx",2*1000,false,"dd",playerid,true);
 	 	g_FraktionsSafeBox[15][FSB_iSpice] += r;
 	}
-	return 0;
+	return 1;
 }
 
 COMMAND:nimmspice(playerid,params[]) {
