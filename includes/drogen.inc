@@ -270,7 +270,7 @@ COMMAND:nimmspice(playerid,params[]) {
 COMMAND:sellspice(playerid,params[]) {
 	new pID, menge, preis, Float:x, Float:y, Float:z;
 	if(sscanf(params, "uii", pID, menge, preis))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze: {00CC00}/Sellspice [SpielerID/Name] [Menge] [Preis]");
-	if(Spieler[playerid][pFraktion] != 15)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Spicedealer.");
+	if(Spieler[playerid][pFraktion] != 15)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Member der Nine Demons.");
 	GetPlayerPos(pID, x,y,z);
 	if(playerid==pID)return SendClientMessage(playerid, COLOR_RED, "Du kannst Spice nicht an dich selbst verkaufen.");
 	if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
@@ -281,7 +281,7 @@ COMMAND:sellspice(playerid,params[]) {
 	if(preis > 1 && preis < 1000000)
 	{
 		ShowPlayerDialog(playerid,DIALOG_SELLSPICE,DIALOG_STYLE_MSGBOX,"Spice Verkauf Information","\
-		Der aktuelle Preis je Gramm Spice ist im Rahmen von 1.800$ bis 1.500$!\n\
+		Der aktuelle Preis je Gramm Spice ist im Rahmen von 1.000$ bis 1.500$!\n\
 		Höhere Beträge werden laut Server Regel §6 als Geldwäsche gewertet und Administrativ bestraft!\n\
 		Die Strafe könnte sein: Perm-/Timeban, Admin-Verwarnung, Prison oder Drogen/Geld wird eingezogen!\n\
 		Jeder Drogenhandel wird gespeichert!","Einverstanden","Ablehnen");
