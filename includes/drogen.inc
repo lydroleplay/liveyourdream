@@ -238,8 +238,8 @@ COMMAND:nimmspice(playerid,params[]) {
 	new
 	    Float:armor;
 	GetPlayerArmour(playerid,armor);
-	if( armor >= 80.0 ) {
-		SendClientMessage(playerid,COLOR_RED,"Du kannst kein Spice nehmen, da deine AP bereits zu hoch sind.");
+	if( armor >= 100.0 ) {
+		SendClientMessage(playerid,COLOR_RED,"Du kannst kein Spice nehmen, da deine AP bereits voll sind.");
 	    return 1;
 	}
 	if(damagesperre[playerid]>0)
@@ -278,7 +278,7 @@ COMMAND:sellspice(playerid,params[]) {
 	if(menge > Spieler[playerid][pSpice]) return SendClientMessage(playerid, COLOR_RED, "Soviel Spice hast du nicht.");
 	if(menge < 1 || menge > 10000)return SendClientMessage(playerid, COLOR_RED, "Der Wert sollte zwischen 1 und 10.000 liegen.");
 	SetPVarString(playerid,"SellSpice",params);
-	if(preis > 1 && preis < 1000000)
+	if(preis >= 1 && preis < 100000000)
 	{
 		ShowPlayerDialog(playerid,DIALOG_SELLSPICE,DIALOG_STYLE_MSGBOX,"Spice Verkauf Information","\
 		Der aktuelle Preis je Gramm Spice ist im Rahmen von 1.000$ bis 1.500$!\n\
@@ -287,7 +287,7 @@ COMMAND:sellspice(playerid,params[]) {
 		Jeder Drogenhandel wird gespeichert!","Einverstanden","Ablehnen");
 	}
 	else
-		SendClientMessage(playerid, COLOR_GREY, "Der Preis sollte zwischen $1 und $1.000.000 liegen.");
+		SendClientMessage(playerid, COLOR_GREY, "Der Preis sollte zwischen $1 und $100.000.000 liegen.");
 	
 	return 1;
 }
