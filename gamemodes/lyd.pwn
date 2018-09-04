@@ -2181,6 +2181,7 @@ enum {
 #include <maps\samdInterior>
 #include <maps\samdInterior2>
 #include <maps\subway>
+#include <maps\sanaBase>
 
 enum GangFight
 {
@@ -4067,7 +4068,6 @@ new oamtcars[18];
 new fbicars[29];
 new ballascars[17];
 new grovecars[16];
-new newscars[9];
 new fscars[22];
 new fsacars[2];
 new yakucars[19];
@@ -5270,16 +5270,6 @@ OnGameModeInit2() {
 	grovecars[14]=AddStaticVehicleEx(522,2515.3694,-1664.5391,13.2992,96.7674,86,86,-1); // NEUE GROVE CARS
 	grovecars[15]=AddStaticVehicleEx(535,2468.4702,-1669.6483,13.1571,190.2437,86,86,-1); // NEUE GROVE CARS
 
-	newscars[0]=AddStaticVehicleEx(582,-15.9140,-2504.3687,36.7524,240.5006,252,3,-1); //
-	newscars[1]=AddStaticVehicleEx(582,-12.0308,-2500.4768,36.7838,210.9168,252,3,-1); //
-	newscars[2]=AddStaticVehicleEx(582,-6.5823,-2499.5076,36.7461,173.8799,252,3,-1); //
-	newscars[3]=AddStaticVehicleEx(586,0.7940,-2507.0969,36.1744,120.2104,252,237,-1); //
-	newscars[4]=AddStaticVehicleEx(586,1.7753,-2509.0540,36.1744,118.9045,252,237,-1); //
-	newscars[5]=AddStaticVehicleEx(586,2.8586,-2510.8201,36.1712,119.4415,252,237,-1); //
-	newscars[6]=AddStaticVehicleEx(507,6.1631,-2519.2834,36.3668,26.5717,252,157,-1); //
-	newscars[7]=AddStaticVehicleEx(579,1.8224,-2521.4883,36.5807,28.0272,252,43,-1); //
-	newscars[8]=AddStaticVehicleEx(488,-38.9985,-2495.0537,40.4055,215.1756,252,17,-1); //
-
 	fscars[0] = AddStaticVehicleEx(445,1263.2448,-1795.6274,13.3110,269.4153,3,3,-1); // FAHRFS
 	fscars[1] = AddStaticVehicleEx(445,1263.3678,-1800.2133,13.3047,270.6445,3,3,-1); // FAHRFS
 	fscars[2] = AddStaticVehicleEx(445,1263.1033,-1804.4402,13.2867,269.5510,3,3,-1); // FAHRFS
@@ -5488,11 +5478,11 @@ OnGameModeInit2() {
 	outlawzscars[14] = AddStaticVehicleEx(409,-39.7334,-300.3714,5.2297,269.4898,219,219,-1); // StretchO
 	outlawzscars[15] = AddStaticVehicleEx(482,-23.1192,-271.8727,5.5486,179.3399,219,219,-1); // BurritoO
 	outlawzscars[16] = AddStaticVehicleEx(579,-14.4494,-272.1361,5.3607,181.2796,219,219,-1); // HuntleyO
-    for(new i=0;i<sizeof(newscars);i++)
+    for(new i=0;i<sizeof(vehicle_sanaBase);i++)
     {
-        SetVehicleNumberPlate(newscars[i], COLOR_HEX_BLACK"SA-NA");
-        SetVehicleToRespawn(newscars[i]);
-		aiVehicles[ newscars[i] ] = VEH_NEWSCARS;
+        SetVehicleNumberPlate(vehicle_sanaBase[i], COLOR_HEX_BLACK"SA-NA");
+        SetVehicleToRespawn(vehicle_sanaBase[i]);
+		aiVehicles[vehicle_sanaBase[i]] = VEH_NEWSCARS;
 	}
 	for(new i=0;i<sizeof(grovecars);i++)
 	{
@@ -5826,7 +5816,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1279, 1, 1685.7469,1746.1523,10.8251, 0);//Safebox in LV
 	CreateDynamicPickup(1239, 1, 2338.4551,-656.2542,131.4021, 0);//Hitman Werbung
     //CreateDynamicPickup(1239, 1, 2004.6497,1018.1676,994.4688, 50);//Casino Info
-    CreateDynamicPickup(1274, 1, -26.9868,-2499.7585,36.6484, 0);//Spende Newsreprter
    	CreateDynamicPickup(1239, 1, 2041.3099,-1408.8322,17.1641, 0);//Zollamt oben
 	CreateDynamicPickup(1239, 1, 610.4565,-583.6769,18.1342, 0);//Zollamt unten
 	CreateDynamicPickup(3798, 1, 2571.6233,-2226.6980,13.3550, 0);//Warenkauf LS
@@ -5858,7 +5847,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 300.6684,305.8593,1003.5391, 0);//Hitman
 	CreateDynamicPickup(1240, 1, 508.3369,-84.9195,998.9609, 0);//Aztecas
 	CreateDynamicPickup(1240, 1, 902.5193,-1277.1499,14.5935, 0);//O-Amt /dienst
-	CreateDynamicPickup(1240, 1, -41.6871,-2501.5251,36.7248,0);//News /dienst
 	CreateDynamicPickup(1240, 1, -2033.1216,-117.4597,1035.1719, 0);//Dienst Fahrschule
 	CreateDynamicPickup(1240, 1, 257.4659,77.3020,1003.6406,0);//LSPD Duty
 	CreateDynamicPickup(1240, 1, 2280.1423,2423.6230,3.4766,0);//LVPD Duty
@@ -5890,7 +5878,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1, 307.6244,-131.3671,999.6083, 0);//Army Skin'
 	CreateDynamicPickup(1275, 1, 326.9853,306.7588,999.1484, -1);//Zollamt Skin
 	CreateDynamicPickup(1275, 1, 300.8034,311.0651,1003.3047, 0);//Hitman Skin
-	CreateDynamicPickup(1275, 1, -43.4200,-2499.0371,36.7248, 0);//San News Skin
 
 	//Waffenlager Gang
 	CreateDynamicPickup(1254, 1, 331.9387,1119.7072,1083.8903, 0);//Ballas Waffenlager
@@ -6200,12 +6187,11 @@ OnGameModeInit2() {
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 1", COLOR_WHITE, 359.0863,210.2258,1008.3828, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 2", COLOR_WHITE, 358.2361,184.5094,1008.3828, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"-> LS - GROßES CASINO <-", COLOR_WHITE, 1498.3309,-1585.8683,13.5469, 25.0);//Casino
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"SanNews - SPENDENKASSE\n"COLOR_HEX_BLUE"/Newsspenden", COLOR_WHITE, -26.9868,-2499.7585,36.6484, 28.0);//Spende News
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - FAHRSCHULE", COLOR_WHITE, 1270.0138,-1846.0366,13.3906, 20.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.3948,-1379.4574,13.2933, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.0052,-1297.3274,13.2804, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"TÜV-WERKSTATT", COLOR_WHITE, 556.9567,-1258.7034,17.2422, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"SHISHA - LOUNGE\n"COLOR_HEX_BLUE"Befehl: /Shisha", COLOR_WHITE, 1833.2488,-1285.7264,120.2656, 10.0);//Spende News
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"SHISHA - LOUNGE\n"COLOR_HEX_BLUE"Befehl: /Shisha", COLOR_WHITE, 1833.2488,-1285.7264,120.2656, 10.0);// Shisha Lounge
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"ASSERVATENKAMMER\nDER BEHÖRDEN\n"COLOR_HEX_BLUE"Betreten mit 'Enter'", COLOR_WHITE, 1798.3326,-1578.8495,14.0915, 15.0);//Asservatenkammer Eingang
    	/*CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof NORD\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1433.3264,2640.8018,11.3926, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof OST\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 2859.5542,1290.5511,11.3906, 18.0);
@@ -6273,7 +6259,7 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 26);//24/7-4
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 27);//24/7-5
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 28);//24/7-6
-CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Subway\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 2);//BSN (BS 1)
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Subway\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 2);//BSN (BS 1)
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 4);//BSS (BS 2)
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Cluckin Bell\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 369.8342,-6.2002,1001.8589, 10.0, .worldid = 3);//Cluckin Bell 1
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Pizza Stack\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 375.5368,-119.2299,1001.4995, 10.0, .worldid = 6);//Pizza Stack 1
@@ -10751,10 +10737,8 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 4)
 			{
-				SetPlayerPos(playerid, -41.6871,-2501.5251,36.7248);
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, -41.6871,-2501.5251,36.7248);
+				SetPlayerPosEx(playerid, SANABASE_DUTY_POINT, MAPS_SANABASE_INTERIOR, VW_MAIN);
+				SetPlayerFacingAngle(playerid, SANABASE_DUTY_POINT_FACING);
 			}
 			else if(Spieler[playerid][pFraktion] == 5)
 			{
@@ -19625,9 +19609,9 @@ CMD:news(playerid, params[])
 	}
 	if(sscanf(params, "s[96]", text))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /News [Nachricht]");
 	format(string, sizeof(string), "Reporter %s: %s", GetName(playerid), text);
-	for(new i=0;i<sizeof(newscars);i++)
+	for(new i=0;i<sizeof(vehicle_sanaBase);i++)
 	{
-		if(vID == newscars[i])
+		if(vID == vehicle_sanaBase[i])
 		{
 			SendClientMessageToAll(COLOR_ORANGE, string);
 			return 1;
@@ -20408,11 +20392,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 4)
 	{
-		for(new i=0;i<sizeof(newscars);i++)
+		for(new i=0;i<sizeof(vehicle_sanaBase);i++)
 		{
-			if(!IsVehicleOccupied(newscars[i]))
+			if(!IsVehicleOccupied(vehicle_sanaBase[i]))
 			{
-				SetVehicleToRespawn(newscars[i]);
+				SetVehicleToRespawn(vehicle_sanaBase[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die SA-NA Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -49332,9 +49316,9 @@ stock GetVehicleFraktion(vehicleid) {
 			}
 		}
 	}
-	else if( aiVehicles[vehicleid] == VEH_NEWSCARS ) {
-		for( i  = 0; i < sizeof(newscars) ; i++) {
-			if( newscars[i] == vehicleid ) {
+	else if (aiVehicles[vehicleid] == VEH_NEWSCARS) {
+		for (i = 0; i < sizeof(vehicle_sanaBase); i++) {
+			if (vehicle_sanaBase[i] == vehicleid) {
 			    return 4;
 			}
 		}
@@ -54012,6 +53996,21 @@ stock GetWeaponSlot(weaponid)
 	case 44 .. 46: slot = 11;
 	}
 	return slot;
+}
+
+CMD:sanagarage(playerid, params[]) {
+	if (Spieler[playerid][pFraktion] != 4) return SendClientMessage(playerid, COLOR_RED, "Du bist kein News-Reporter.");
+	if (!IsPlayerInRangeOfPoint(playerid, 20.0, SANABASE_GARAGE_FOR_RANGE_COORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Garagentores.");
+
+	new Float:fX, Float:fY, Float:fZ;
+	GetDynamicObjectPos(object_sanaBase_garageDoor, fX, fY, fZ);
+
+	if (fZ == SANABASE_GARAGE_OPEN_Z)
+		MoveDynamicObject(object_sanaBase_garageDoor, fX, fY, SANABASE_GARAGE_CLOSED_Z, 2.0);
+	else
+		MoveDynamicObject(object_sanaBase_garageDoor, fX, fY, SANABASE_GARAGE_OPEN_Z, 2.0);
+
+	return 1;
 }
 
 COMMAND:interview(playerid,params[]) {
@@ -61487,7 +61486,7 @@ COMMAND:newsspenden(playerid,params[]) {
 	if(sscanf(params,"i",betrag)) {
 		return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Newsspenden [BETRAG]");
 	}
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,-26.9868,-2499.7585,36.6484)) {
+	if( !IsPlayerInRangeOfPoint(playerid, 3.0, SANABASE_DONATION_POINT)) {
 	    SendClientMessage(playerid, COLOR_RED, "Falscher Ort um eine Spende durchzuführen");
 	    return 1;
 	}
@@ -61501,7 +61500,7 @@ COMMAND:newsspenden(playerid,params[]) {
 	}
 	new
 	    String[128];
-	format(String,sizeof(String),"[SPENDE] %s hat %d$ an die SanNews gespendet. Vielen Dank!",GetName(playerid),betrag);
+	format(String,sizeof(String),"[SPENDE] %s hat %d$ an die SA-NA gespendet. Vielen Dank!",GetName(playerid),betrag);
 	GivePlayerCash(playerid, -betrag);
 	Kasse[Sana] += betrag;
 	SendClientMessageToAll(COLOR_YELLOW,String);

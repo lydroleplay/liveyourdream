@@ -27,8 +27,8 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 6010, 1214.1484, -913.4453, 43.0547, 0.25);
     RemoveBuildingForPlayer(playerid, 5742, 1197.3203, -899.2109, 45.0938, 0.25);
 
-	// Map Icon
-    SetPlayerMapIcon(playerid, 9, SUBWAY_INTERIOR_ENTER_COORDS, 10, 0, 0);
+	// Map Icon // TODO: Peek add coords here
+    // SetPlayerMapIcon(playerid, 9, SUBWAY_INTERIOR_ENTER_COORDS, 10, 0, 0);
 }
 
 hook OnGameModeInit() {
