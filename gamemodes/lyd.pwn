@@ -2180,6 +2180,7 @@ enum {
 #include <maps\samdExterior>
 #include <maps\samdInterior>
 #include <maps\samdInterior2>
+#include <maps\subway>
 
 enum GangFight
 {
@@ -5988,7 +5989,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 1702.9427,-1470.3704,13.5469, 0);//Motorradfärbe point
 	CreateDynamicPickup(1239, 1, 1763.4915,2080.2959,10.8203, 0);//Autofärbe point
 	CreateDynamicPickup(1239, 1, 1798.4768,-2423.4924,13.5547, 0);//Flugzeugfärbe point
-	CreateDynamicPickup(1582, 1, 1198.0000,-886.5568,43.0159, 0);//Drivein Point
 	CreateDynamicPickup(1275, 1, 2316.5325,-1010.7850,1054.7188, 0);//Club Shop
 	CreateDynamicPickup(1239, 1, 2313.3645,-1013.3300,1050.2109, 0);//Getränke Clubvilla in Los Santos
 	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//Getränke Clubvilla in Las Venturas
@@ -6255,7 +6255,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Count And Schutz\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2126.9578,-1124.4517,25.4636, 30.0);//Autohaus günstig 2 LS
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2107.6689,1386.0609,10.8203, 30.0);//Autohaus günstig LV
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootsverleih\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, -69.6897,-552.7130,3.7063, 30.0);//Bootsverleih
-	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"BSN - Drive-In\n"COLOR_HEX_WHITE"Tippe /Drivein", COLOR_WHITE, 1198.0000,-886.5568,43.0159, 15.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"Kampfstil - lernen\n"COLOR_HEX_WHITE"Tippe /Kampfstil", COLOR_WHITE, 660.3523,-1869.5139,5.5537, 20.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"FISCHE GRILLEN\n"COLOR_HEX_WHITE"Tippe /Grillen", COLOR_WHITE, 847.1649,-2043.4889,13.7553, 20.0, .worldid = 0);
 
@@ -12051,7 +12050,7 @@ CMD:finden(playerid, params[])
 
 CMD:drivein(playerid)
 {
-	if(IsPlayerInRangeOfPoint(playerid, 2.0, 1198.0000,-886.5568,43.0159)) // Burgershot North
+	if(IsPlayerInRangeOfPoint(playerid, 2.0, SUBWAY_DRIVEIN_COORDS)) // Burgershot North
 	{
 		if(GetPlayerMoney(playerid) < 50)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
 		SetPlayerHealth(playerid, 100);

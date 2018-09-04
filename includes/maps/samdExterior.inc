@@ -55,8 +55,8 @@ hook OnGameModeInit() {
 	pickup_samdExterior[1] = CreateDynamicPickup(1239, 1, SAMD_STATEREPAIR_COORDS, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR); // Staterepair
 
 	// 3DTextLabels
-	text3D_samdExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Krankenhaus\n" COLOR_HEX_WHITE "Gebäude betreten mit 'Enter'", COLOR_WHITE, SAMD_INTERIOR_ENTER_COORDS, 20.0); // Entrance
-	text3D_samdExterior[1] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Staats-Reparatur\n" COLOR_HEX_WHITE "Tippe /Staatrepair", COLOR_WHITE, SAMD_STATEREPAIR_COORDS, 10.0); // Staterepair
+	text3D_samdExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Krankenhaus\n" COLOR_HEX_WHITE "Gebäude betreten mit 'Enter'", COLOR_WHITE, SAMD_INTERIOR_ENTER_COORDS, 20.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SAMDEXTERIOR_INTERIOR); // Entrance
+	text3D_samdExterior[1] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Staats-Reparatur\n" COLOR_HEX_WHITE "Tippe /Staatrepair", COLOR_WHITE, SAMD_STATEREPAIR_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SAMDEXTERIOR_INTERIOR); // Staterepair
 
 	// Objects
 	object_samdExterior[0] = CreateDynamicObject(18981, 1459.5190, -1055.5102, 22.3278, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
