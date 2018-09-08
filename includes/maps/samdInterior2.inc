@@ -530,10 +530,10 @@ hook OnGameModeInit() {
 	SetDynamicObjectMaterialText(object_samdInterior2[243], 0, "Medical Department", 90, "Arial", 30, 1, 0xFF000000, 0x0, 1);
 	SetDynamicObjectMaterial(object_samdInterior2[243], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 	object_samdInterior2[244] = CreateDynamicObject(19175, 1455.2650, -999.5208, 676.7819, 0.0000, 0.0000, 90.0000, VW_SAMDINTERIOR2, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-	SetDynamicObjectMaterialText(object_samdInterior2[244], 0, "Los Santos", 90, "Arial", 30, 1, 0xFF000000, 0x0, 1);
+	SetDynamicObjectMaterialText(object_samdInterior2[244], 0, "San Andreas", 90, "Arial", 30, 1, 0xFF000000, 0x0, 1);
 	SetDynamicObjectMaterial(object_samdInterior2[244], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 	object_samdInterior2[245] = CreateDynamicObject(19175, 1455.2650, -985.0407, 676.7819, 0.0000, 0.0000, 90.0000, VW_SAMDINTERIOR2, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-	SetDynamicObjectMaterialText(object_samdInterior2[245], 0, "Los Santos", 90, "Arial", 30, 1, 0xFF000000, 0x0, 1);
+	SetDynamicObjectMaterialText(object_samdInterior2[245], 0, "San Andreas", 90, "Arial", 30, 1, 0xFF000000, 0x0, 1);
 	SetDynamicObjectMaterial(object_samdInterior2[245], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 	object_samdInterior2[246] = CreateDynamicObject(19089, 1455.2711, -993.7105, 676.5744, 0.0000, 90.0000, 90.0000, VW_SAMDINTERIOR2, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
 	SetDynamicObjectMaterial(object_samdInterior2[246], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);

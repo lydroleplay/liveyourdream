@@ -19,7 +19,7 @@ static Float:DRAWDISTANCE   = 350.0;
 #define SAMD_GARAGE_CLOSED_Z			21.7887
 
 // Map variables
-new object_samdExterior[377];
+new object_samdExterior[381];
 new pickup_samdExterior[2];
 new text3D_samdExterior[2];
 new object_samdExterior_garageDoor;
@@ -779,8 +779,8 @@ hook OnGameModeInit() {
 	SetDynamicObjectMaterial(object_samdExterior[352], 0, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
 	object_samdExterior[353] = CreateDynamicObject(18981, 1432.6761, -1055.9886, 10.3079, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
 	SetDynamicObjectMaterial(object_samdExterior[353], 0, 17545, "burnsground", "indund_64", 0xFF9F9D94);
-	object_samdExterior[354] = CreateDynamicObject(19175, 1461.0888, -1045.3542, 27.4741, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-	SetDynamicObjectMaterialText(object_samdExterior[354], 0, "Medic", 90, "Arial Black", 50, 1, 0xFFFFFFFF, 0x0, 0);
+	object_samdExterior[354] = CreateDynamicObject(19175, 1461.0888 + 2.0, -1045.3542, 27.4741, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+	SetDynamicObjectMaterialText(object_samdExterior[354], 0, "Medical", 90, "Arial Black", 50, 1, 0xFFFFFFFF, 0x0, 0);
 	SetDynamicObjectMaterial(object_samdExterior[354], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 	object_samdExterior[355] = CreateDynamicObject(19175, 1462.4793, -1045.3542, 27.8141, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
 	SetDynamicObjectMaterialText(object_samdExterior[355], 0, "San Andreas", 90, "Arial Black", 50, 1, 0xFFFFFFFF, 0x0, 0);
@@ -829,9 +829,21 @@ hook OnGameModeInit() {
 	SetDynamicObjectMaterial(object_samdExterior[374], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
 	object_samdExterior[375] = CreateDynamicObject(18980, 1434.6473, -1066.4670, 9.2044, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx1mx25m
 	SetDynamicObjectMaterial(object_samdExterior[375], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+	
+	// Garage door
 	object_samdExterior[376] = CreateDynamicObject(2885, 1440.6060, -1066.2077, 21.7887, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //xref_garagedoor
 	SetDynamicObjectMaterial(object_samdExterior[376], 0, 9524, "blokmodb", "sf_garagedr1", 0xFFFFFFFF);
 	SetDynamicObjectMaterial(object_samdExterior[376], 1, 9524, "blokmodb", "sf_garagedr1", 0xFFFFFFFF);
+
+	// Solid ground
+	object_samdExterior[377] = CreateDynamicObject(18981, 1446.4970, -1078.4708, 15.3776, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+	SetDynamicObjectMaterial(object_samdExterior[377], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+	object_samdExterior[378] = CreateDynamicObject(18981, 1452.6878, -1078.4708, 22.3476, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+	SetDynamicObjectMaterial(object_samdExterior[378], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+	object_samdExterior[379] = CreateDynamicObject(18981, 1461.3382, -1078.4708, 15.3775, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+	SetDynamicObjectMaterial(object_samdExterior[379], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+	object_samdExterior[380] = CreateDynamicObject(18981, 1461.3382, -1034.4807, 10.5275, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+	SetDynamicObjectMaterial(object_samdExterior[380], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 
 	object_samdExterior_garageDoor = object_samdExterior[376];
 }

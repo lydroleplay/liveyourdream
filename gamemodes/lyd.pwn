@@ -141,7 +141,10 @@ enum
 	VW_ADMINPRISON,
 	VW_LSPD,
 	VW_SAMDINTERIOR, // Lobby
-	VW_SAMDINTERIOR2 // First Floor
+	VW_SAMDINTERIOR2, // First Floor
+	VW_CITYHALLINTERIOR,
+	VW_REGISTRATIONOFFICE,
+
 }
 
 new gSQL;
@@ -2182,6 +2185,8 @@ enum {
 #include <maps\samdInterior2>
 #include <maps\subway>
 #include <maps\sanaBase>
+#include <maps\cityhallExterior>
+#include <maps\cityhallInterior>
 
 enum GangFight
 {
@@ -3398,8 +3403,6 @@ new Float:ATM[][MAX_ATM] = {
 {1225.32947,-1811.68408,16.24608},
 {1420.52087, -980.45911, 1639.41125},
 {881.15, -1198.46, 16.61},
-{1471.130737, -1805.306030, 15.000000},
-{1490.133789, -1805.306030, 15.000000},
 {1790.9886, -1303.7802, 119.8556}
 };
 
@@ -4084,7 +4087,6 @@ new terrorcars[16];
 new triadencars[17];
 new outlawzscars[17];
 new zollcars[9];
-new jeffsVan;
 
 new gSteuern;
 
@@ -4608,6 +4610,7 @@ public HauptTimer()
 public OnGameModeInit()
 {
 	Connect_To_Database();
+	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 800, -1); // Object fix
 	OnGameModeInit2();
 }
 
@@ -4784,7 +4787,6 @@ OnGameModeInit2() {
 	reingemacht.*/
 
 	//AddStaticVehicleEx(538,827.9582,-1378.5370,-1.6589,90.00000000,0,0,320); // zug hier
-	jeffsVan = AddStaticVehicle(482,1506.7893,-1848.1467,13.6686,91.2961,0,0); // burrito
 
 	//Drogen Transporter
 	drogen[0] = AddStaticVehicleEx(482,311.2510,-47.8946,1.6779,180.0258,34,34,60*10); // Drogen1
@@ -5700,10 +5702,8 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 1384.1174,-1661.3926,13.4622, 0);//Donatladen enter
 	CreateDynamicPickup(19197, 1, 1038.3171,-1339.7793,13.7266, -1);//Donatladen exit
 	CreateDynamicPickup(19197, 1, 389.6256,173.6593,1008.3828, 0);//Stadthalle Innen
-	CreateDynamicPickup(19197, 1, 1480.7660,-1805.3538,15.3578, 0);//Stadthalle Außen
 	CreateDynamicPickup(19197, 1, 1249.2776,-14.6761,1001.0366, VW_EVIDENCEROOM, 18);//Asservaterkammer Innen
 	CreateDynamicPickup(19197, 1, 1798.3326,-1578.8495,14.0915, 0);//Asservaterkammer Außen
-	CreateDynamicPickup(19197, 1, 1473.9695,-1805.2731,15.3500);//Zulassungsstelle enter
 	CreateDynamicPickup(19197, 1, 2305.8259,-16.1325,26.7496, 0);//KFZ-AMT Außen
 	CreateDynamicPickup(19197, 1, 246.8488,62.3274,1003.6406,0);//LSPD Innen
 	CreateDynamicPickup(19197, 1, 1555.3770,-1675.5115,16.1953,0 );//LSPD Außen
@@ -5761,9 +5761,8 @@ OnGameModeInit2() {
 	//Info Position
 	//CreateDynamicPickup(1247, 1, 814.4642,-1345.7327,13.5320, 0);//Server-Experte
 	CreateDynamicPickup(1239, 1, 822.3183,1.8747,1004.1797, -1);//Posthaus /Post
-	CreateDynamicPickup(1239, 1, 2316.4529,-12.6540,26.7422, 0);//KFZ Schalter 1
-	CreateDynamicPickup(1239, 1, 2316.3318,-9.9532,26.7422, 0);//KFZ Schalter 2
-	CreateDynamicPickup(1239, 1, 359.0863,210.2258,1008.3828, 0);//Rechtsschutzversicherung Point
+	CreateDynamicPickup(1239, 1, 2316.4529,-12.6540,26.7422, VW_REGISTRATIONOFFICE);//KFZ Schalter 1
+	CreateDynamicPickup(1239, 1, 2316.3318,-9.9532,26.7422, VW_REGISTRATIONOFFICE);//KFZ Schalter 2
 	//CreateDynamicPickup(1239, 1, 358.2364,180.3480,1008.3828, 0);//Staatsamt Point
 	//CreateDynamicPickup(1239, 1, 358.2361,184.5094,1008.3828, 0);//Staatsamt Point 2
 	CreateDynamicPickup(1239, 1, 1432.2867,-997.2612,1639.7911, 500);//Bankschalter in Zentralbank
@@ -5787,8 +5786,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, -258.9534,-2181.9905,29.0150, 0);//Unloadpunkt Drogendealer
 	CreateDynamicPickup(1239, 1, 809.3212,-1339.9855,13.5408, 0);//Startbonus
 	//CreateDynamicPickup(1239, 1, 1481.7039,-1740.6183,13.5469, 0);//Stadtamt-Information
-	CreateDynamicPickup(1210, 1, 362.0343,173.5644,1008.3828, 0);//Stadthalle Information
-	CreateDynamicPickup(1210, 1, 1510.1044,-1848.0715,13.5469, 0);//Illegale Jobs Information
 	CreateDynamicPickup(1254, 1, -1510.6661,1975.3440,48.4219, 0);//Wanted-Hacker point
 	CreateDynamicPickup(1318, 1, -1548.0554,125.1203,3.5547, 0);//Autodieb kran
 	CreateDynamicPickup(1239, 1, 1412.1915,-1700.3817,13.5395, 0);//Werbeagentur LS
@@ -5987,7 +5984,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1274, 1, 1242.3182,-1857.9050,13.5469, 0);//Neuling Verleih Fahrschule
 	CreateDynamicPickup(1274, 1, 1496.3137,-1719.4701,13.7969, 0);//Neuling Verleih Stadthalle
 	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
-	CreateDynamicPickup(1581, 1, 358.8310,167.5885,1008.3828, 0);//Zollpass
 	CreateDynamicPickup(1985, 1, 660.1712,-1869.5763,7.5781, 0);//Kampfstyle
 	CreateDynamicPickup(1239, 1, 1805.2650,-1709.8883,13.5630, 0);//Tierhandel
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
@@ -6125,8 +6121,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Zentralbank Las Venturas\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1952.5675,1342.9261,15.3672, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrschule\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1216.5732,-1812.2876,16.5938, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1738.5869,-1586.3961,13.5555, 8.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"-> Kraftfahrtbundesamt - Zulassungsstelle <-\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1473.9695,-1805.2731,15.3500, 30.0);//Zulassunsstelle
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"-> San Andreas Stadtamt <-\n"COLOR_HEX_WHITE"Arbeitsamt, Meldeamt,\nVisum-/Passbehörde\nGebäude betreten mit 'Enter'", COLOR_WHITE, 1480.7660,-1805.3538,15.3578, 30.0);//Stadtamt
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"VIP - Bereich\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Preis: 25.000$", COLOR_WHITE, 1805.3219,-1307.5023,120.2586, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ü18 - Bereich\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Preis: 40.000$", COLOR_WHITE, 1783.8965,-1296.5836,120.2656, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"SHISHA - LOUNGE\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Eintrittspreis: 500$", COLOR_WHITE, 1786.6959,-1299.6388,13.4341, 20.0);
@@ -6149,7 +6143,6 @@ OnGameModeInit2() {
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OSTER-AKTION im LyD-Shop\n"COLOR_HEX_GREEN"Es erwarten dich tolle Preise!\n"COLOR_HEX_WHITE"Weitere Informationen im Forum!", COLOR_WHITE, 1480.9296,-1613.7988,14.0979, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"POSTHAUS - Eingang\n"COLOR_HEX_WHITE"Betreten mit 'Enter'", COLOR_WHITE, 914.3174,-1004.0942,37.9902, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"POSTHAUS\n"COLOR_HEX_WHITE"Tippe /Post", COLOR_WHITE, 822.3183,1.8747,1004.1797, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Stadthalle\n"COLOR_HEX_WHITE"Tippe /Stadthalle", COLOR_WHITE, 362.0343,173.5644,1008.3828, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Illegaler Jobvermittler - Jeff\n"COLOR_HEX_WHITE"Tippe /Illegalejobs", COLOR_WHITE, 1510.1044,-1848.0715,13.5469, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Schmied (Befreit von Handschellen)\n"COLOR_HEX_WHITE"Tippe /Zerbrechen\n"COLOR_HEX_ORANGE"Preis: 500$", COLOR_WHITE, -382.0342,-1426.4521,26.0822, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Werbeagentur\n"COLOR_HEX_WHITE"Tippe /Werbung", COLOR_WHITE, 1412.1915,-1700.3817,13.5395, 15.0); //in LS
@@ -6179,11 +6172,9 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_GREEN"Server Informationen\n"COLOR_HEX_WHITE"Tippe /Info", COLOR_WHITE, 817.4735,-1345.8376,13.5269, 15.0, .worldid = 0);
     //CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Informationen zum Stadtamt\n"COLOR_HEX_WHITE"Tippe /Stadtamtinfo", COLOR_WHITE, 1481.7039,-1740.6183,13.5469, 30.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Los Santos 4 Sterne Hotel\n"COLOR_HEX_WHITE"Miete Dir günstig ein schönes Hotelzimmer", COLOR_WHITE, 1722.5425,-1650.1168,20.2289, 20.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Zollamt Schalter\n"COLOR_HEX_WHITE"Tippe /Zollpass", COLOR_WHITE, 358.8310,167.5885,1008.3828, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"VISUM-AMT\n"COLOR_HEX_WHITE"Tippe /Visumbeantragen", COLOR_WHITE, 359.0354,180.4977,1008.3828, 15.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 1\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.4529,-12.6540,26.7422, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 2\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.3318,-9.9532,26.7422, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Rechtsschutzversicherung\n"COLOR_HEX_WHITE"62 Tage - Preis: 87.000$\n"COLOR_HEX_ORANGE"Tippe /Rechtsschutz", COLOR_WHITE, 359.0863,210.2258,1008.3828, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 1", COLOR_WHITE, 359.0863,210.2258,1008.3828, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 2", COLOR_WHITE, 358.2361,184.5094,1008.3828, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"-> LS - GROßES CASINO <-", COLOR_WHITE, 1498.3309,-1585.8683,13.5469, 25.0);//Casino
@@ -7920,6 +7911,17 @@ public OnPlayerDisconnect(playerid, reason)
 		Spieler[playerid][pTaxiKundenStart][0] = 0;
 		Spieler[playerid][pTaxiKunden][0] = INVALID_PLAYER_ID;
 	}
+	return 1;
+}
+
+CMD:debug(playerid, params[]) {
+	if (Spieler[playerid][pAdmin] != 7) return 1;
+
+	new animlib[32], animname[32];
+	if (sscanf(params, "s[32]s[32]", animlib, animname)) return SendClientMessage(playerid, COLOR_WHITE, "Usage: /debug [animlib] [animname]");
+
+	LoopingAnim(playerid, animlib, animname, 4.0, 1, 0, 0, 0, 0);
+	SendClientMessage(playerid, COLOR_WHITE, "{00FF00}>> {FFFFFF}Animation set.");
 	return 1;
 }
 
@@ -13951,7 +13953,7 @@ CMD:stadthalle(playerid)
 		SendClientMessage(playerid, COLOR_GREEN, "Du kannst ihn natürlich auch jetzt aussuchen. Wenn du dies getan hast, gehe wieder nach draußen!");
 		SetPlayerCheckpointEx(playerid, 387.5433,173.5221,1008.3828, 5.0, CP_TUTORIAL5);
 	}
-	if(!(IsPlayerInRangeOfPoint(playerid, 2.0, 362.0343,173.5644,1008.3828) && GetPlayerInterior(playerid) == 3))return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Stadthalle am Informationspunkt.");
+	if (!IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_STADTHALLE)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Stadthalle am Informationspunkt.");
 	new
 	    String[228];
 	String = COLOR_HEX_WHITE"Personalausweis beantragen"COLOR_HEX_ORANGE" ($200)"COLOR_HEX_WHITE"\n------------\nArbeitsamt:\nBerufe\nSelbstständigkeit\n------------";
@@ -27572,7 +27574,7 @@ CMD:motor(playerid,params[])
 			    return SendClientMessage(playerid, COLOR_RED, "Fahrräder haben keinen Motor");
 			}
 
-			if (vID == jeffsVan) {
+			if (vID == vehicle_cityhallExterior[0]) {
 				RemovePlayerFromVehicle(playerid);
 				return SendClientMessage(playerid, COLOR_WHITE, "Jeff: Hey, du kannst doch nicht einfach meinen Van klauen!");
 			}
@@ -29448,18 +29450,11 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerVirtualWorld(playerid, 0);
 		    SetPlayerPos(playerid, 2127.5486,2378.9626,10.8203);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1480.7660,-1805.3538,15.3578))//SH Außen
-		{
-			if(pCheckpoint[playerid] == CP_TUTORIAL3)
-			{
-				SetPlayerCheckpointEx(playerid, 362.0343,173.5644,1008.3828, 5.0, CP_TUTORIAL4);
+		else if (IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_ENTER_COORDS)) { // Cityhall Entrance
+			if(pCheckpoint[playerid] == CP_TUTORIAL3) {
+				SetPlayerCheckpointEx(playerid, CITYHALL_INTERIOR_STADTHALLE, 5.0, CP_TUTORIAL4);
 				SendClientMessage(playerid, COLOR_GREEN, "Gehe nun zum Informations-Punkt und beantrage einen Personalausweis und suche dir ein Job aus.");
 			}
-			SendClientMessage(playerid, COLOR_WHITE, "Sachbearbeiter sagt: Herzlich Willkommen im Los Santos Stadtamt!");
-		    SetPlayerInterior(playerid, 3);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 389.6256,173.6593,1008.3828);
-			SetPlayerFacingAngle(playerid,90.0);
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 389.6256,173.6593,1008.3828))//SH Innen
 		{
@@ -29480,20 +29475,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		else if(IsPlayerExecutive(playerid) && IsPlayerInRangeOfPoint(playerid, 2.0, 2871.016602, 1902.781982, 11.551001))//Alca EXIT
 		{
 			SetPlayerPos(playerid, 2870.938965, 1906.032227, 11.551001);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1473.9695,-1805.2731,15.3500))//KFZ-AMT Außen
-		{
-            SendClientMessage(playerid, COLOR_WHITE, "Sachbearbeiter sagt: Herzlich Willkommen beim Kraftfahrtbundesamt(Zulassungsstelle)!");
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 2305.8259,-16.1325,26.7496);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 2305.8259,-16.1325,26.7496))//KFZ-AMT Innen
-		{
-		    SendClientMessage(playerid, COLOR_WHITE, "Sachbearbeiter sagt: Vielen Dank für Ihr Besuch! Wir wünschen Ihnen einen schönen Tag.");
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 1473.9695,-1805.2731,15.3500);
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1805.3219,-1307.5023,120.2586)) {//Shishabar VIP Eingang
 			if (GetPlayerMoney(playerid) < 25000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei, um den VIP-Bereich zu betreten.");
@@ -32765,47 +32746,40 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
      	    }
      	}
      	case DIALOG_ZULASSUNGSSTELLE: {
-     	    if(response) {
-     	        if(listitem == 0 ) {
-					if( !PlayerHaveCar[playerid][PlayerKey[playerid]] ) {
-						return SendClientMessage(playerid, COLOR_RED, "Du hast gerade kein Fahrzeug gewählt ( /Carkey ).");
-					}
-					new
-     	                String[256+64],
-					    slot,
-						vehicleid,
-						modelid;
+     	    if (response) {
+     	        if (listitem == 0) {
+					if (!PlayerHaveCar[playerid][PlayerKey[playerid]])
+						return SendClientMessage(playerid, COLOR_RED, "Du hast gerade kein Fahrzeug gewählt (/Carkey).");
+					
+					new String[256+64], slot, vehicleid, modelid;
 					slot = PlayerKey[playerid];
-					if( HasVehicleLicence(playerid,slot) ) {
-						return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug hat bereits eine KFZ-Zulassung");
-					}
+
+					if (HasVehicleLicence(playerid, slot))
+						return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug hat bereits eine KFZ-Zulassung.");
+
 					vehicleid = PlayerCar[playerid][slot][CarId];
 					modelid = GetVehicleModel(vehicleid);
-					format(String,sizeof(String),"Folgendes Fahrzeug möchten Sie amtlich Zulassen: %s\n\
-						Eine Neuzulassung für ein Kraftfahrzeug nimmt einmalige Gebühren in Höhe von $4.500,-",
+					format(String,sizeof(String), "Folgendes Fahrzeug möchten Sie amtlich Zulassen: %s\n\
+						Eine Neuzulassung für ein Kraftfahrzeug nimmt einmalige Gebühren in Höhe von $4.500.",
 						CarName[modelid-400]);
-					ShowPlayerDialog(playerid,DIALOG_FAHRZEUGZULASSEN,DIALOG_STYLE_MSGBOX,"Fahrzeug Zulassen",String,"Akzeptieren","Abbrechen");
-     	        }
-     	        else if(listitem == 1 ) {
-					if( !PlayerHaveCar[playerid][PlayerKey[playerid]] ) {
-						return SendClientMessage(playerid, COLOR_RED, "Du hast gerade kein Fahrzeug gewählt ( /Carkey ).");
-					}
-					new
-     	                String[256+64],
-					    slot,
-						vehicleid,
-						modelid;
+					ShowPlayerDialog(playerid, DIALOG_FAHRZEUGZULASSEN, DIALOG_STYLE_MSGBOX, "Fahrzeug Zulassen", String, "Akzeptieren", "Abbrechen");
+     	        } else if (listitem == 1) {
+					if (!PlayerHaveCar[playerid][PlayerKey[playerid]])
+						return SendClientMessage(playerid, COLOR_RED, "Du hast gerade kein Fahrzeug gewählt (/Carkey).");
+					
+					new String[256+64], slot, vehicleid, modelid;
 					slot = PlayerKey[playerid];
-					if( !HasVehicleLicence(playerid,slot) ) {
-						return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug hat keine KFZ-Zulassung");
-					}
+
+					if (!HasVehicleLicence(playerid, slot))
+						return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug hat keine KFZ-Zulassung.");
+					
 					vehicleid = PlayerCar[playerid][slot][CarId];
 					modelid = GetVehicleModel(vehicleid);
-					format(String,sizeof(String),"Sie möchten Ihr Fahrzeug %s mit dem amtlichen Kennzeichen %s abmelden.\n\
+					format(String, sizeof(String), "Sie möchten Ihr Fahrzeug %s mit dem amtlichen Kennzeichen %s abmelden.\n\
 						Eine Fahrzeugabmeldung würde $4.500 an Gebühren kosten!\n\
 						Sollten Sie die Fahrzeug stillegung akzeptieren, dürfen Sie mit dem Fahrzeug nicht mehr weiterfahren!",
-						CarName[modelid-400],PlayerCar[playerid][slot][CarNumberplate]);
-					ShowPlayerDialog(playerid,DIALOG_FAHRZEUGABMELDEN,DIALOG_STYLE_MSGBOX,"Fahrzeug Abmelden",String,"Akzeptieren","Abbrechen");
+						CarName[modelid-400], PlayerCar[playerid][slot][CarNumberplate]);
+					ShowPlayerDialog(playerid, DIALOG_FAHRZEUGABMELDEN, DIALOG_STYLE_MSGBOX, "Fahrzeug Abmelden", String, "Akzeptieren", "Abbrechen");
      	        }
      	    }
      	}
@@ -39612,7 +39586,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				if(listitem==2)
 				{
-					SetPlayerCheckpointEx(playerid, 1473.9695,-1805.2731,15.3500,5.0, CP_NAVI77);
+					SetPlayerCheckpointEx(playerid, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, 5.0, CP_NAVI77);
 					SendClientMessage(playerid, COLOR_SAMP, "GPS: Die San Andreas Zulassungsstelle wurde auf der Karte Rot markiert.");
 				}
 				if(listitem==3)
@@ -59949,12 +59923,10 @@ COMMAND:savehouseobject(playerid,params[]) {
 }
 
 COMMAND:zulassungsstelle(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,2316.4529,-12.6540,26.7422) || !IsPlayerInRangeOfPoint(playerid,5.0,2316.3318,-9.9532,26.7422) ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe der Zulassungsstelle.");
-	    return 1;
-	}
-	ShowPlayerDialog(playerid,DIALOG_ZULASSUNGSSTELLE,DIALOG_STYLE_LIST,"Zulassungsstelle","Fahrzeug zulassen\nFahrzeug abmelden","Weiter","Abbruch");
-	return 1;
+	if (!IsPlayerInRangeOfPoint(playerid, 5.0, 2316.4529, -12.6540, 26.7422) || !IsPlayerInRangeOfPoint(playerid, 5.0, 2316.3318, -9.9532, 26.7422))
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe der Zulassungsstelle.");
+	
+	return ShowPlayerDialog(playerid, DIALOG_ZULASSUNGSSTELLE, DIALOG_STYLE_LIST, "Zulassungsstelle", "Fahrzeug zulassen\nFahrzeug abmelden", "Weiter", "Abbruch");
 }
 
 stock CreateHouseSellObject(houseindex) {
@@ -68197,11 +68169,10 @@ stock ShowNextCow(playerid) {
 	return 1;
 }
 
-COMMAND:zollpass(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,358.8310,167.5885,1008.3828) || GetPlayerInterior(playerid) != 3 ) {
-	    return SendClientMessage(playerid,COLOR_RED,"Du kannst hier keinen Zollpass kaufen");
-	}
-	ShowPlayerDialog(playerid,DIALOG_ZOLLPASS,DIALOG_STYLE_MSGBOX,"Zollpass","Du kannst für 15.000$ einen Zollpass kaufen.\nDamit kannst du für 7Tage gratis den Zollübergang durchschreiten","Kaufen","Abbruch");
+COMMAND:zollpass(playerid, params[]) {
+	if (!IsPlayerInRangeOfPoint(playerid, 3.0, CITYHALL_INTERIOR_DESK1)) return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keinen Zollpass kaufen.");
+
+	ShowPlayerDialog(playerid, DIALOG_ZOLLPASS, DIALOG_STYLE_MSGBOX, "Zollpass", "Du kannst für 15.000$ einen Zollpass kaufen.\nDamit kannst du für 7Tage gratis den Zollübergang durchschreiten", "Kaufen", "Abbruch");
 	return 1;
 }
 
@@ -70078,7 +70049,7 @@ COMMAND:kfzversicherung(playerid,params[]) {
 }
 
 COMMAND:rechtsschutz(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,359.0863,210.2258,1008.3828)) {
+	if( !IsPlayerInRangeOfPoint(playerid, 3.0, CITYHALL_INTERIOR_DESK2)) {
 	    return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keine Rechtsschutzversicherung abschließen.");
 	}
 	if( Spieler[playerid][pExperte] > gettime() ) {
@@ -70250,9 +70221,10 @@ stock InitParkscheibe() {
 
 	// TODO: Peek parkscheiben map file?
 
-	CreateDynamicObject(963, 1523.273559, -1799.463867, 13.636719, 89.699981, 89.302856, 179.996978); // STADTHALLE PARKSCHEINAUTOMAT
-	CreateDynamicObject(963, 1431.887084, -1798.368774, 13.632292, 89.699981, 89.302856, 0.597012); // STADTHALLE PARKSCHEINAUTOMAT
 	CreateDynamicObject(963, 1350.57544, -1269.46570, 13.78736,   0.00000, 0.00000, 0.00000); //Hauptammu Parkscheinautomat
+	CreateDynamicObject(963, 1445.02282, -1772.52527, 13.57012, 90.00000, 90.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
+	CreateDynamicObject(963, 1429.53638, -1755.35925, 13.56855, 90.00000, 0.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
+
 	for(new i , j = Streamer_GetUpperBound(STREAMER_TYPE_OBJECT) ; i < j ; i++) {
 	    if( IsValidDynamicObject(i) ) {
 	        modelid = Streamer_GetIntData(STREAMER_TYPE_OBJECT,i,E_STREAMER_MODEL_ID);

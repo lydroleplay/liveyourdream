@@ -862,7 +862,10 @@ hook OnGameModeInit() {
     object_sanaBase[434] = CreateDynamicObject(2776, -37.0373, -2481.4628, 36.3656, 0.0000, 0.0000, 23.1998, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LEE_stripCHAIR2
     object_sanaBase[435] = CreateDynamicObject(8661, -16.8097, -2491.7189, 35.7229, 0.0000, 0.0000, 119.3999, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //gnhtelgrnd_lvs
     SetDynamicObjectMaterial(object_sanaBase[435], 0, 14714, "vghss1int2", "HS1_2Floor1", 0xFFFFFFFF);
+
+    // Solid ground
     object_sanaBase[436] = CreateDynamicObject(8661, -29.4078, -2487.5410, 39.1747, 0.0000, 0.0000, 35.7999, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); // Helipad Ground
+    
     object_sanaBase[437] = CreateDynamicObject(17951, -6.7410, -2508.9094, 37.4948, 0.0000, 0.0000, 119.3999, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Garage door
 
     object_sanaBase_garageDoor = object_sanaBase[437];

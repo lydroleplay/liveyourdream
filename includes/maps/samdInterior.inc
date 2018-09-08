@@ -179,14 +179,14 @@ hook OnGameModeInit() {
     object_samdInterior[55] = CreateDynamicObject(3051, 1456.5815, -1001.3095, 675.9667, 0.0000, 0.0000, -43.6999, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lift_dr
     SetDynamicObjectMaterial(object_samdInterior[55], 0, 10023, "bigwhitesfe", "liftdoors_kb_256", 0xFFFFFFFF);
     object_samdInterior[56] = CreateDynamicObject(19175, 1457.2138, -1001.3010, 677.6220, 0.0000, 0.0000, 180.0000, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_samdInterior[56], 0, "1. Stock", 90, "Arial", 24, 1, 0xFFFFFFFF, 0x0, 1);
+    SetDynamicObjectMaterialText(object_samdInterior[56], 0, "EG", 90, "Arial", 24, 1, 0xFFFFFFFF, 0x0, 1);
     SetDynamicObjectMaterial(object_samdInterior[56], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_samdInterior[57] = CreateDynamicObject(3051, 1454.6435, -1001.3146, 675.9667, 0.0000, 0.0000, 136.3000, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lift_dr
     SetDynamicObjectMaterial(object_samdInterior[57], 0, 10023, "bigwhitesfe", "liftdoors_kb_256", 0xFFFFFFFF);
     object_samdInterior[58] = CreateDynamicObject(3051, 1457.7705, -1001.3126, 675.9667, 0.0000, 0.0000, 136.3999, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lift_dr
     SetDynamicObjectMaterial(object_samdInterior[58], 0, 10023, "bigwhitesfe", "liftdoors_kb_256", 0xFFFFFFFF);
     object_samdInterior[59] = CreateDynamicObject(19175, 1454.0938, -1001.3010, 677.6220, 0.0000, 0.0000, 180.0000, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_samdInterior[59], 0, "1. Stock", 90, "Arial", 24, 1, 0xFFFFFFFF, 0x0, 1);
+    SetDynamicObjectMaterialText(object_samdInterior[59], 0, "EG", 90, "Arial", 24, 1, 0xFFFFFFFF, 0x0, 1);
     SetDynamicObjectMaterial(object_samdInterior[59], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_samdInterior[60] = CreateDynamicObject(19175, 1454.0938, -1001.3010, 677.6220, 0.0000, 0.0000, 180.0000, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
     SetDynamicObjectMaterialText(object_samdInterior[60], 0, "____________", 90, "Arial", 24, 1, 0xFFFFFFFF, 0x0, 1);
@@ -492,7 +492,7 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterialText(object_samdInterior[201], 0, "______________", 130, "Arial", 30, 1, 0xFFFFFFFF, 0x0, 1);
     SetDynamicObjectMaterial(object_samdInterior[201], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_samdInterior[202] = CreateDynamicObject(19175, 1462.0654, -993.2716, 676.3115, 0.0000, 0.0000, -90.0000, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_samdInterior[202], 0, "Only Personal", 130, "Arial", 30, 1, 0xFFFFFFFF, 0x0, 1);
+    SetDynamicObjectMaterialText(object_samdInterior[202], 0, "STAFF ONLY", 130, "Arial", 30, 1, 0xFFFFFFFF, 0x0, 1);
     SetDynamicObjectMaterial(object_samdInterior[202], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_samdInterior[203] = CreateDynamicObject(19175, 1462.0654, -993.2716, 676.2714, 0.0000, 0.0000, -90.0000, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
     SetDynamicObjectMaterialText(object_samdInterior[203], 0, "______________", 130, "Arial", 30, 1, 0xFFFFFFFF, 0x0, 1);
