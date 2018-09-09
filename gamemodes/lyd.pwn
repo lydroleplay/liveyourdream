@@ -6118,7 +6118,6 @@ OnGameModeInit2() {
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OSTER-AKTION im LyD-Shop\n"COLOR_HEX_GREEN"Es erwarten dich tolle Preise!\n"COLOR_HEX_WHITE"Weitere Informationen im Forum!", COLOR_WHITE, 1480.9296,-1613.7988,14.0979, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"POSTHAUS - Eingang\n"COLOR_HEX_WHITE"Betreten mit 'Enter'", COLOR_WHITE, 914.3174,-1004.0942,37.9902, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"POSTHAUS\n"COLOR_HEX_WHITE"Tippe /Post", COLOR_WHITE, 822.3183,1.8747,1004.1797, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Illegaler Jobvermittler - Jeff\n"COLOR_HEX_WHITE"Tippe /Illegalejobs", COLOR_WHITE, 1510.1044,-1848.0715,13.5469, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Schmied (Befreit von Handschellen)\n"COLOR_HEX_WHITE"Tippe /Zerbrechen\n"COLOR_HEX_ORANGE"Preis: 500$", COLOR_WHITE, -382.0342,-1426.4521,26.0822, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Werbeagentur\n"COLOR_HEX_WHITE"Tippe /Werbung", COLOR_WHITE, 1412.1915,-1700.3817,13.5395, 15.0); //in LS
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Werbeagentur\n"COLOR_HEX_WHITE"Tippe /Werbung", COLOR_WHITE, 2008.1722,1169.3364,10.8203, 15.0); // in LV
@@ -13944,7 +13943,7 @@ CMD:stadthalle(playerid)
 
 CMD:illegalejobs(playerid)
 {
-	if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1510.1044,-1848.0715,13.5469))return SendClientMessage(playerid, COLOR_RED, "Du bist nicht am Van, der hinter der Stadthalle steht.");
+	if(!IsPlayerInRangeOfPoint(playerid, 5.0, JEFF_CORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei Jeff.");
     SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt aus dem Van: Mh.. Du willst also dein Geld auf eine andere Weise verdienen?");
     SendClientMessage(playerid, COLOR_WHITE, "Ich hab da so einige Jobs für dich auf Lager. Schau dich um!");
 	ShowPlayerDialog(playerid, DIALOG_SCHWARZBERUF, DIALOG_STYLE_LIST, "ILLEGALE JOBS", COLOR_HEX_WHITE">> aktuellen Beruf kündigen\nDrogendealer\nWaffendealer\nTaschendieb\nProstituierte\nWanted-Hacker\nAutodieb", "Auswählen", "Abbrechen");
@@ -40075,7 +40074,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 			    if(listitem==0)
 				{
-					SetPlayerCheckpointEx(playerid, 1510.1044,-1848.0715,13.5469,5.0, CP_NAVI64);
+					SetPlayerCheckpointEx(playerid, JEFF_COORDS, 5.0, CP_NAVI64);
 					SendClientMessage(playerid, COLOR_SAMP, "GPS: Der illegale Berufsmarkt wurde auf der Karte Rot markiert.");
 				}
 				if(listitem==1)
