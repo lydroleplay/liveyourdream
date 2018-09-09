@@ -2187,6 +2187,7 @@ enum {
 #include <maps\sanaBase>
 #include <maps\cityhallExterior>
 #include <maps\cityhallInterior>
+#include <maps\impoundLot>
 
 enum GangFight
 {
@@ -4066,7 +4067,6 @@ new eismann[4];
 new hotdogcar[3];
 new pdeaccadmin[MAX_PLAYERS][MAX_PLAYER_NAME];
 new lspdcars[33];
-new sanicars[24];
 new oamtcars[18];
 new fbicars[29];
 new ballascars[17];
@@ -5119,31 +5119,6 @@ OnGameModeInit2() {
 	staatcars[22] = AddStaticVehicleEx(596,1277.4084,-2040.2709,58.7408,88.5071,1,0,-1); // PDCarR2
 	staatcars[23] = AddStaticVehicleEx(596,1277.0834,-2045.0055,58.7637,88.9386,1,0,-1); // PDCarR1
 
-	sanicars[0] = AddStaticVehicleEx(416, 1707.4990, -1100.3671, 24.0185, 359.1716, 3, 1, -1); //Ambulance
-	sanicars[1] = AddStaticVehicleEx(426, 1712.5053, -1099.0091, 23.8213, 359.6816, 1, 1, -1); //Premier
-	sanicars[2] = AddStaticVehicleEx(487, 1848.8328, -1143.6588, 52.0393, 89.4947, 3, 1, -1); //Maverick
-	sanicars[3] = AddStaticVehicleEx(426, 1717.5458, -1099.0058, 23.8569, 359.4348, 3, 3, -1); //Premier
-	sanicars[4] = AddStaticVehicleEx(563, 1847.5186, -1161.1353, 52.5730, 90.4705, 3, 1, -1); //Raindance
-	sanicars[5] = AddStaticVehicleEx(407, 1742.1149, -1101.3974, 24.2800, 359.5376, 3, 3, -1); //Firetruck
-	sanicars[6] = AddStaticVehicleEx(487, 1848.9713, -1127.9527, 52.0376, 88.6702, 3, 1, -1); //Maverick
-	sanicars[7] = AddStaticVehicleEx(407, 1746.7537, -1101.5279, 24.3149, 359.8195, 3, 3, -1); //Firetruck
-	sanicars[8] = AddStaticVehicleEx(407, 1751.6723, -1101.4709, 24.2800, 358.1226, 3, 3, -1); //Firetruck
-	sanicars[9] = AddStaticVehicleEx(407, 1758.6165, -1101.1184, 24.3217, 358.6258, 3, 3, -1); //Firetruck
-	sanicars[10] = AddStaticVehicleEx(407, 1763.6981, -1101.7475, 24.2930, 359.4226, 3, 3, -1); //Firetruck
-	sanicars[11] = AddStaticVehicleEx(544, 1768.9631, -1101.3096, 24.2865, 357.7942, 3, 3, -1); //Firetruck
-	sanicars[12] = AddStaticVehicleEx(416, 1751.9680, -1136.4855, 24.0248, 179.0856, 3, 1, -1); //Ambulance
-	sanicars[13] = AddStaticVehicleEx(416, 1746.7059, -1136.6640, 24.2089, 180.7433, 3, 1, -1); //Ambulance
-	sanicars[14] = AddStaticVehicleEx(416, 1759.1783, -1136.3720, 24.0380, 177.5092, 3, 1, -1); //Ambulance
-	sanicars[15] = AddStaticVehicleEx(416, 1741.9332, -1136.5867, 24.4786, 180.4113, 3, 1, -1); //Ambulance
-	sanicars[16] = AddStaticVehicleEx(416, 1763.8444, -1136.2958, 24.0333, 180.2202, 3, 1, -1); //Ambulance
-	sanicars[17] = AddStaticVehicleEx(416, 1768.6776, -1135.9713, 24.0370, 180.9981, 3, 1, -1); //Ambulance
-	sanicars[18] = AddStaticVehicleEx(490, 1724.7150, -1137.8990, 24.0459, 180.1071, 1, 3, -1); //FBI Rancher
-	sanicars[19] = AddStaticVehicleEx(490, 1729.9071, -1137.8762, 24.0359, 179.8338, 3, 1, -1); //FBI Rancher
-	sanicars[20] = AddStaticVehicleEx(490, 1734.7635, -1137.7502, 24.0362, 178.1419, 3, 1, -1); //FBI Rancher
-	sanicars[21] = AddStaticVehicleEx(442, 1729.6065, -1100.2562, 23.9069, 0.0934, 0, 1, -1); //Romero
-	sanicars[22] = AddStaticVehicleEx(416,1601.5392,-1700.3927,6.0577,90.0617,1,3, -1); // im PD medic
-	sanicars[23] = AddStaticVehicleEx(407,1602.3230,-1704.3032,6.1842,90.1637,3,1, -1); // im PD medic
-
 	oamtcars[0]=AddStaticVehicleEx(599,926.3906,-1281.3569,14.6599,89.9598,158,8,-1); // oamtcar
 	oamtcars[1]=AddStaticVehicleEx(599,926.3103,-1286.1449,14.3807,90.9599,158,8,-1); // oamtcar
 	oamtcars[2]=AddStaticVehicleEx(525,913.4863,-1303.4385,13.6119,0.1262,8,158,-1); // oamtcar
@@ -5522,11 +5497,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(staatcars[i]);
 		aiVehicles[ staatcars[i] ] = VEH_STAATCARS;
 	}
-	for(new i=0;i<sizeof(sanicars);i++)
+	for(new i=0;i<sizeof(vehicle_samdExterior);i++)
 	{
-	    SetVehicleNumberPlate(sanicars[i], COLOR_HEX_BLACK"SA-MD");
-        SetVehicleToRespawn(sanicars[i]);
-		aiVehicles[ sanicars[i] ] = VEH_SANICARS;
+	    SetVehicleNumberPlate(vehicle_samdExterior[i], COLOR_HEX_BLACK "SA-MD");
+        SetVehicleToRespawn(vehicle_samdExterior[i]);
+		aiVehicles[vehicle_samdExterior[i]] = VEH_SANICARS;
 	}
 	for(new i=0;i<sizeof(fscars);i++)
 	{
@@ -20381,13 +20356,10 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 3)
 	{
-		for(new i=0;i<sizeof(sanicars);i++)
-		{
-			if(!IsVehicleOccupied(sanicars[i]))
-			{
-				SetVehicleToRespawn(sanicars[i]);
-			}
-		}
+		for(new i=0;i<sizeof(vehicle_samdExterior);i++)
+			if(!IsVehicleOccupied(vehicle_samdExterior[i]))
+				SetVehicleToRespawn(vehicle_samdExterior[i]);
+		
 		format(string, sizeof(string), "* Die Sanitäter Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(3, COLOR_DARKRED, string);
 		return 1;
@@ -49305,8 +49277,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_SANICARS ) {
-		for( i  = 0; i < sizeof(sanicars) ; i++) {
-			if( sanicars[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_samdExterior) ; i++) {
+			if( vehicle_samdExterior[i] == vehicleid ) {
 			    return 3;
 			}
 		}
@@ -51830,8 +51802,8 @@ COMMAND:meinsatz(playerid,params[]){
 	new vehicleid = GetPlayerVehicleID(playerid);
 	if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "Du kannst diese Funktion nur in einem SAMD-Fahrzeug nutzen.");
 
-	for (new i = 0; i < sizeof(sanicars); i++) {
-		if (sanicars[i] == vehicleid) {
+	for (new i = 0; i < sizeof(vehicle_samdExterior); i++) {
+		if (vehicle_samdExterior[i] == vehicleid) {
 			if (_:g_t3dPolizeiKontrolle[vehicleid] != INVALID_3DTEXT_ID) {
 			    Delete3DTextLabel(g_t3dPolizeiKontrolle[vehicleid]);
 			    g_t3dPolizeiKontrolle[vehicleid] = Text3D:INVALID_3DTEXT_ID;

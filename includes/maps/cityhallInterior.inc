@@ -107,7 +107,7 @@ hook OnGameModeInit() {
     text3D_cityhallInterior[2] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Rechtsschutzversicherung\n" COLOR_HEX_WHITE "62 Tage - Preis: 87.000$\n" COLOR_HEX_ORANGE "Tippe /Rechtsschutz", COLOR_WHITE, CITYHALL_INTERIOR_DESK2, 15.0, .testlos = 1, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Desk 2 (Rechtsschutzversicherung)
 
     // Actors
-    actor_cityhallInterior[0] = CreateDynamicActor(141, 918.6574, -1462.0676, 2754.3459, 180.0000, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Maindesk
+    actor_cityhallInterior[0] = CreateDynamicActor(141, 918.6574, -1461.5676, 2754.3459, 180.0000, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Maindesk
     ApplyDynamicActorAnimation(actor_cityhallInterior[0], "PED", "SEAT_idle", 4.0, 1, 0, 0, 0, 0);
     actor_cityhallInterior[1] = CreateDynamicActor(150, 945.6470, -1464.4348, 2761.0164, 90.0000, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Desk 1
     actor_cityhallInterior[2] = CreateDynamicActor(219, 945.6470, -1466.8208, 2761.0164, 90.0000, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Desk 2
@@ -302,10 +302,10 @@ hook OnGameModeInit() {
     object_cityhallInterior[89] = CreateDynamicObject(19565, 906.5625, -1457.1499, 2756.4052, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[89], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
     object_cityhallInterior[90] = CreateDynamicObject(19174, 909.6889, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[90], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[90], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[90], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[91] = CreateDynamicObject(19174, 906.8087, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[91], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[91], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[91], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[92] = CreateDynamicObject(19174, 915.0288, -1463.6440, 2755.8454, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
     SetDynamicObjectMaterialText(object_cityhallInterior[92], 0, "Cityhall", 90, "Times New Roman", 40, 1, 0xFFA5A9A7, 0x0, 1);
@@ -648,10 +648,10 @@ hook OnGameModeInit() {
     object_cityhallInterior[271] = CreateDynamicObject(19565, 932.8837, -1457.1499, 2756.4155, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[271], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
     object_cityhallInterior[272] = CreateDynamicObject(19174, 929.8189, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[272], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[272], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[272], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[273] = CreateDynamicObject(19174, 932.6793, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[273], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[273], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[273], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[274] = CreateDynamicObject(19565, 929.4240, -1456.9095, 2756.3754, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[274], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);

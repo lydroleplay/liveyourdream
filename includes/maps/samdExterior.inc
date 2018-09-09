@@ -22,6 +22,7 @@ static Float:DRAWDISTANCE   = 350.0;
 new object_samdExterior[381];
 new pickup_samdExterior[2];
 new text3D_samdExterior[2];
+new vehicle_samdExterior[16];
 new object_samdExterior_garageDoor;
 
 hook OnPlayerConnect(playerid) {
@@ -57,6 +58,24 @@ hook OnGameModeInit() {
 	// 3DTextLabels
 	text3D_samdExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Krankenhaus\n" COLOR_HEX_WHITE "Gebäude betreten mit 'Enter'", COLOR_WHITE, SAMD_INTERIOR_ENTER_COORDS, 20.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SAMDEXTERIOR_INTERIOR); // Entrance
 	text3D_samdExterior[1] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Staats-Reparatur\n" COLOR_HEX_WHITE "Tippe /Staatrepair", COLOR_WHITE, SAMD_STATEREPAIR_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SAMDEXTERIOR_INTERIOR); // Staterepair
+
+	// Vehicles
+	vehicle_samdExterior[0] = AddStaticVehicleEx(560, 1454.9530, -1028.0219, 11.7533, 180.0571, 3, 3, -1, 1);
+	vehicle_samdExterior[1] = AddStaticVehicleEx(407, 1460.4161, -1027.5656, 12.3143, 180.1641, 3, 3, -1);
+	vehicle_samdExterior[2] = AddStaticVehicleEx(407, 1465.8832, -1027.5900, 12.3120, 179.9669, 3, 1, -1);
+	vehicle_samdExterior[3] = AddStaticVehicleEx(407, 1470.7163, -1027.6685, 12.3148, 179.6473, 3, 1, -1);
+	vehicle_samdExterior[4] = AddStaticVehicleEx(416, 1471.2307, -1084.9839, 17.0415, 359.9535, 3, 1, -1);
+	vehicle_samdExterior[5] = AddStaticVehicleEx(416, 1467.1896, -1085.0172, 17.0322, 358.1650, 3, 1, -1);
+	vehicle_samdExterior[6] = AddStaticVehicleEx(416, 1462.6599, -1084.9329, 17.0322, 2.3726, 3, 1, -1);
+	vehicle_samdExterior[7] = AddStaticVehicleEx(416, 1458.3461, -1084.9078, 17.0395, 359.4107, 3, 1, -1);
+	vehicle_samdExterior[8] = AddStaticVehicleEx(442, 1449.9778, -1084.7781, 16.7431, 359.7631, 0, 1, -1);
+	vehicle_samdExterior[9] = AddStaticVehicleEx(426, 1445.2729, -1085.0615, 16.6535, 359.4812, 3, 3, -1, 1);
+	vehicle_samdExterior[10] = AddStaticVehicleEx(490, 1440.7616, -1084.4047, 17.0189, 359.6755, 3, 1, -1, 1);
+	vehicle_samdExterior[11] = AddStaticVehicleEx(490, 1436.1016, -1084.2474, 17.0029, 0.5190, 1, 3, -1, 1); 
+	vehicle_samdExterior[12] = AddStaticVehicleEx(544, 1429.9166, -1055.5347, 23.4110, 359.8393, 3, 3, -1);
+	vehicle_samdExterior[13] = AddStaticVehicleEx(544, 1425.2450, -1055.5708, 23.3982, 0.0006, 3, 3, -1); 
+	vehicle_samdExterior[14] = AddStaticVehicleEx(487, 1442.4778, -1078.0905, 24.0328, 359.8795, 3, 3, -1);
+	vehicle_samdExterior[15] = AddStaticVehicleEx(487, 1461.5143, -1078.1357, 24.0961, 0.0003, 3, 1, -1); 
 
 	// Objects
 	object_samdExterior[0] = CreateDynamicObject(18981, 1459.5190, -1055.5102, 22.3278, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
