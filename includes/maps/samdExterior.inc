@@ -798,7 +798,7 @@ hook OnGameModeInit() {
 	SetDynamicObjectMaterial(object_samdExterior[352], 0, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
 	object_samdExterior[353] = CreateDynamicObject(18981, 1432.6761, -1055.9886, 10.3079, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
 	SetDynamicObjectMaterial(object_samdExterior[353], 0, 17545, "burnsground", "indund_64", 0xFF9F9D94);
-	object_samdExterior[354] = CreateDynamicObject(19175, 1461.0888 + 2.0, -1045.3542, 27.4741, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+	object_samdExterior[354] = CreateDynamicObject(19175, 1461.5372, -1045.3542, 27.4741, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
 	SetDynamicObjectMaterialText(object_samdExterior[354], 0, "Medical", 90, "Arial Black", 50, 1, 0xFFFFFFFF, 0x0, 0);
 	SetDynamicObjectMaterial(object_samdExterior[354], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 	object_samdExterior[355] = CreateDynamicObject(19175, 1462.4793, -1045.3542, 27.8141, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4

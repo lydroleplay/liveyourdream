@@ -25,6 +25,9 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 5813, 958.8203, -1359.8672, 17.9688, 0.25);
     RemoveBuildingForPlayer(playerid, 1440, 957.9688, -1336.4531, 13.0313, 0.25);
     RemoveBuildingForPlayer(playerid, 1283, 951.4453, -1327.9531, 15.4922, 0.25);
+
+    // TODO: peek Remove objects from the old impound lot.
+    // TODO: peek Make solid ground
 }
 
 hook OnGameModeInit() {

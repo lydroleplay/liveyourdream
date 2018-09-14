@@ -144,7 +144,7 @@ enum
 	VW_SAMDINTERIOR2, // First Floor
 	VW_CITYHALLINTERIOR,
 	VW_REGISTRATIONOFFICE,
-
+	VW_POOINTERIOR
 }
 
 new gSQL;
@@ -2188,6 +2188,8 @@ enum {
 #include <maps\cityhallExterior>
 #include <maps\cityhallInterior>
 #include <maps\impoundLot>
+#include <maps\pooExterior>
+#include <maps\pooInterior>
 
 enum GangFight
 {
@@ -4067,7 +4069,6 @@ new eismann[4];
 new hotdogcar[3];
 new pdeaccadmin[MAX_PLAYERS][MAX_PLAYER_NAME];
 new lspdcars[33];
-new oamtcars[18];
 new fbicars[29];
 new ballascars[17];
 new grovecars[16];
@@ -5119,26 +5120,6 @@ OnGameModeInit2() {
 	staatcars[22] = AddStaticVehicleEx(596,1277.4084,-2040.2709,58.7408,88.5071,1,0,-1); // PDCarR2
 	staatcars[23] = AddStaticVehicleEx(596,1277.0834,-2045.0055,58.7637,88.9386,1,0,-1); // PDCarR1
 
-	oamtcars[0]=AddStaticVehicleEx(599,926.3906,-1281.3569,14.6599,89.9598,158,8,-1); // oamtcar
-	oamtcars[1]=AddStaticVehicleEx(599,926.3103,-1286.1449,14.3807,90.9599,158,8,-1); // oamtcar
-	oamtcars[2]=AddStaticVehicleEx(525,913.4863,-1303.4385,13.6119,0.1262,8,158,-1); // oamtcar
-	oamtcars[3]=AddStaticVehicleEx(525,908.4105,-1303.6641,13.6686,0.0024,8,158,-1); // oamtcar
-	oamtcars[4]=AddStaticVehicleEx(525,903.2119,-1303.6648,13.6739,0.0041,8,158,-1); // oamtcar
-	oamtcars[5]=AddStaticVehicleEx(525,898.3492,-1303.5029,13.6594,359.7888,8,158,-1); // oamtcar
-	oamtcars[6]=AddStaticVehicleEx(525,893.3322,-1303.3844,13.6594,0.1644,8,158,-1); // oamtcar
-	oamtcars[7]=AddStaticVehicleEx(525,888.0982,-1303.3633,13.6594,0.1532,8,158,-1); // oamtcar
-	oamtcars[8]=AddStaticVehicleEx(561,883.3049,-1303.4906,13.5932,359.4886,200,200,-1); // oamtcar
-	oamtcars[9]=AddStaticVehicleEx(561,878.0458,-1303.4498,13.6107,0.8185,186,186,-1); // oamtcar NEUUU
-	oamtcars[10]=AddStaticVehicleEx(560,873.1513,-1303.5944,13.4875,359.2220,160,160,-1); // oamtcar NEUUU
-	oamtcars[11]=AddStaticVehicleEx(560,868.2502,-1303.7721,13.4902,0.8699,0,0,-1); // oamtcar NEUUUwqxewq KOMPLETT r/ihadastroke 2.0
-	oamtcars[12]=AddStaticVehicleEx(426,862.9113,-1303.4976,13.5356,0.7241,129,129,-1); // oamtcar
-	oamtcars[13]=AddStaticVehicleEx(497,913.2249,-1269.8003,19.5623,0.0010,158,6,-1); // mav oamt
-	oamtcars[14]=AddStaticVehicleEx(525,1602.2885,-1695.8485,5.7742,90.9151,158,158,-1); // im PD OAMT
-
-	oamtcars[15]=AddStaticVehicleEx(598,925.9750,-1290.9988,13.7504,89.4362,158,8,-1); // Oamt Leaderfahrzeug
-	oamtcars[16]=AddStaticVehicleEx(461,914.7352,-1278.8463,14.1084,182.3583,158,158,-1); // Oamt PCJ 1
-	oamtcars[17]=AddStaticVehicleEx(461,917.1901,-1278.9626,14.1006,184.9209,158,158,-1); // Oamt PCJ 2
-
 	fbicars[0]=AddStaticVehicleEx(523,1898.4823,720.6070,10.3905,271.9332,0,0,-1); // FBIMotorrad1
 	fbicars[1]=AddStaticVehicleEx(523,1898.5605,722.6526,10.3913,271.5622,0,0,-1); // FBIMotorrad2
 	fbicars[2]=AddStaticVehicleEx(523,1898.2538,724.8604,10.3901,270.4993,0,0,-1); // FBIMotorrad3
@@ -5467,11 +5448,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(grovecars[i]);
 		aiVehicles[ grovecars[i] ] = VEH_GROVECARS;
 	}
-	for(new i=0;i<sizeof(oamtcars);i++)
+	for (new i = 0; i < sizeof(vehicle_pooExterior); i++)
 	{
-	    SetVehicleNumberPlate(oamtcars[i], COLOR_HEX_BLACK"O-AMT");
-        SetVehicleToRespawn(oamtcars[i]);
-		aiVehicles[ oamtcars[i] ] = VEH_OAMTCARS;
+	    SetVehicleNumberPlate(vehicle_pooExterior[i], COLOR_HEX_BLACK "O-AMT");
+        SetVehicleToRespawn(vehicle_pooExterior[i]);
+		aiVehicles[vehicle_pooExterior[i]] = VEH_OAMTCARS;
 	}
 	for(new i=0;i<sizeof(fbicars);i++)
 	{
@@ -5770,7 +5751,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 1819.9427,-2400.1108,13.5547, 0);//Repair am Flughafen Los Santos
 	CreateDynamicPickup(1239, 1, 1585.9081,-1677.1216,5.8970, 0);//Staatsrepair von LSPD
 	CreateDynamicPickup(1239, 1, 1882.3618,718.3406,10.8203, 0);//Staatsrepair von FBI
-	CreateDynamicPickup(1239, 1, 903.7567,-1257.1174,14.9563, 0);//Staatsrepair von Ordnungsamt
 	// CreateDynamicPickup(1239, 1, 2288.5466,2444.9841,3.2734, 0);//Staatsrepair von LVPD
 	// CreateDynamicPickup(1239, 1, 621.3207,-584.6555,17.2330, 0);//Staatsrepair von Zollamt
 	CreateDynamicPickup(1239, 1, 1248.3843,-1833.8750,13.3930, 0);//Staatsrepair von Army
@@ -5977,7 +5957,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1279, 1, 760.4858, 378.9008, 23.1683, 0);//Spice Drogenfarm Punkt 3
 
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1585.9081,-1677.1216,5.8970, 10.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 903.7567,-1257.1174,14.9563, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1882.3618,718.3406,10.8203, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 2288.5466,2444.9841,3.2734, 10.0);
 	// CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 621.3207,-584.6555,17.2330, 10.0);
@@ -6555,7 +6534,6 @@ public OnPlayerConnect(playerid)
     SetPlayerMapIcon(playerid, 29, 1457.8679,-1140.2852,24.0735, 45, 0, 0);//Skin Shop Bank
     SetPlayerMapIcon(playerid, 30, 2244.6521,-1664.0035,15.4766, 45, 0, 0);//Skin Shop Grove
     SetPlayerMapIcon(playerid, 31, 912.2803,-999.1210,38.0857, 36, 0, 0);//normale Bank
-    SetPlayerMapIcon(playerid, 32, 927.0587,-1221.2727,16.9531, 11, 0, 0);//oamt
     SetPlayerMapIcon(playerid, 33, 817.6655,-1618.9307,13.7034, 10, 0, 0);//süd bsn
     SetPlayerMapIcon(playerid, 34, -1617.0315,672.2584,7.1875, 30, 0, 0);//FBI
     SetPlayerMapIcon(playerid, 35, 1411.5352,-1699.5714,13.5395, 46, 0, 0);//Werbung in LS
@@ -10710,18 +10688,19 @@ public SetPlayerSpawn(playerid)
 			{
 				SetPlayerPosEx(playerid, SAMD_INTERIOR_SPAWN_POINT, MAPS_SAMDINTERIOR_INTERIOR, VW_SAMDINTERIOR2);
 				SetPlayerFacingAngle(playerid, SAMD_INTERIOR_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 4)
 			{
 				SetPlayerPosEx(playerid, SANABASE_DUTY_POINT, MAPS_SANABASE_INTERIOR, VW_MAIN);
 				SetPlayerFacingAngle(playerid, SANABASE_DUTY_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 5)
 			{
-				SetPlayerPos(playerid, 902.5193,-1277.1499,14.5935);
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 902.5193,-1277.1499,14.5935);
+				SetPlayerPosEx(playerid, POO_INTERIOR_SPAWN_POINT, MAPS_POOINTERIOR_INTERIOR, VW_POOINTERIOR);
+				SetPlayerFacingAngle(playerid, POO_INTERIOR_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 6)
 			{
@@ -13943,7 +13922,7 @@ CMD:stadthalle(playerid)
 
 CMD:illegalejobs(playerid)
 {
-	if(!IsPlayerInRangeOfPoint(playerid, 5.0, JEFF_CORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei Jeff.");
+	if(!IsPlayerInRangeOfPoint(playerid, 5.0, JEFF_COORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei Jeff.");
     SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt aus dem Van: Mh.. Du willst also dein Geld auf eine andere Weise verdienen?");
     SendClientMessage(playerid, COLOR_WHITE, "Ich hab da so einige Jobs für dich auf Lager. Schau dich um!");
 	ShowPlayerDialog(playerid, DIALOG_SCHWARZBERUF, DIALOG_STYLE_LIST, "ILLEGALE JOBS", COLOR_HEX_WHITE">> aktuellen Beruf kündigen\nDrogendealer\nWaffendealer\nTaschendieb\nProstituierte\nWanted-Hacker\nAutodieb", "Auswählen", "Abbrechen");
@@ -19236,15 +19215,15 @@ CMD:dienst(playerid)
 			SendFraktionMessage(4, COLOR_YELLOW, string);
 			GivePlayerWeapon(playerid, 43, 100);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 902.5193,-1277.1499,14.5935))//O-Amt
+		else if(IsPlayerInRangeOfPoint(playerid, 2.0, POO_INTERIOR_DUTY_POINT)) //O-Amt
 		{
-		    if(!(Spieler[playerid][pFraktion] == 5))return SendClientMessage(playerid, COLOR_RED, "Nur für Ordnungsamt verfügbar.");
+		    if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "Nur für Ordnungsamt verfügbar.");
 		    Spieler[playerid][pDuty] = 1;
 		    GiveOAmtWeapons(playerid);
 			format(string, sizeof(string), "* %s ist nun als Ordnungsbeamter im Dienst.", GetName(playerid));
 			SendFraktionMessage(5, COLOR_YELLOW, string);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, SAMD_INTERIOR_DUTY_POINT))//Sanitäter
+		else if(IsPlayerInRangeOfPoint(playerid, 2.0, SAMD_INTERIOR_DUTY_POINT)) //Sanitäter
 		{
 		    if (Spieler[playerid][pFraktion] != 3) return SendClientMessage(playerid, COLOR_RED, "Nur für Sanitäter verfügbar.");
 		    Spieler[playerid][pDuty] = 1;
@@ -20355,8 +20334,8 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 3)
 	{
-		for(new i=0;i<sizeof(vehicle_samdExterior);i++)
-			if(!IsVehicleOccupied(vehicle_samdExterior[i]))
+		for (new i = 0; i < sizeof(vehicle_samdExterior); i++)
+			if (!IsVehicleOccupied(vehicle_samdExterior[i]))
 				SetVehicleToRespawn(vehicle_samdExterior[i]);
 		
 		format(string, sizeof(string), "* Die Sanitäter Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -20378,13 +20357,10 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 5)
 	{
-		for(new i=0;i<sizeof(oamtcars);i++)
-		{
-			if(!IsVehicleOccupied(oamtcars[i]))
-			{
-				SetVehicleToRespawn(oamtcars[i]);
-			}
-		}
+		for (new i = 0; i < sizeof(vehicle_pooExterior); i++)
+			if (!IsVehicleOccupied(vehicle_pooExterior[i]))
+				SetVehicleToRespawn(vehicle_pooExterior[i]);
+		
 		format(string, sizeof(string), "* Die Ordnungsamt Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(5, COLOR_DARKRED, string);
 		return 1;
@@ -49282,11 +49258,10 @@ stock GetVehicleFraktion(vehicleid) {
 			}
 		}
 	}
-	else if( aiVehicles[vehicleid] == VEH_OAMTCARS ) {
-		for( i  = 0; i < sizeof(oamtcars) ; i++) {
-			if( oamtcars[i] == vehicleid ) {
+	else if (aiVehicles[vehicleid] == VEH_OAMTCARS) {
+		for (i = 0; i < sizeof(vehicle_pooExterior); i++) {
+			if (vehicle_pooExterior[i] == vehicleid)
 			    return 5;
-			}
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_FBICARS ) {
@@ -50410,16 +50385,16 @@ enum e_FraktionsSkins {
 
 new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	// X    Y       Z     Frak  { Skin 1-7 }
-	{253.7036, 76.8204, 1003.6406,	    1, { 300 , 301 , 281 , 283 , 267 , 265 , 266 , 265 , 306 , 285 , 284 , 303 , 304 , 192 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{SAMD_INTERIOR_FSKIN_POINT,			3, { 70 , 274, 275, 276, 277, 278, 279, 308 , 59 , 60 , 29 , 72 , 188 , 229 , 93 , 233 , 226} },
-	{902.6084, -1277.045, 15.1935,	    5, { 71 , 44 , 305 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{244.9089,	188.2697,	1008.1719,	2, { 286 , 285 , 309 , 59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{-2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
-	{300.8034,	311.0651,	1003.3047,	14, { 2 , 29 , 229 , 294 , 171 , 23 , 19 , 35 , 22 , 11, 8 } },
-	{195.1181, -232.7614, 1.7786,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
-	{2284.1960,	2423.7107,	3.4766,		16, { 282 , 285 , 303 , 305 , 304 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{307.6244,  -131.3671,  999.6083,	18, { 287 , 303 , 305 , 304 , 44 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } }
+	{ 253.7036, 76.8204, 1003.6406,	    1, { 300 , 301 , 281 , 283 , 267 , 265 , 266 , 265 , 306 , 285 , 284 , 303 , 304 , 192 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{ SAMD_INTERIOR_FSKIN_POINT,		3, { 70 , 274, 275, 276, 277, 278, 279, 308 , 59 , 60 , 29 , 72 , 188 , 229 , 93 , 233 , 226 } },
+	{ POO_INTERIOR_FSKIN_POINT,		    5, { 71 , 44 , 305 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{ 244.9089,	188.2697,	1008.1719,	2, { 286 , 285 , 309 , 59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{ -2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
+	{ 300.8034,	311.0651,	1003.3047,	14, { 2 , 29 , 229 , 294 , 171 , 23 , 19 , 35 , 22 , 11, 8 } },
+	{ 195.1181, -232.7614, 1.7786,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
+	{ 2284.1960,	2423.7107,	3.4766,		16, { 282 , 285 , 303 , 305 , 304 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{ 307.6244,  -131.3671,  999.6083,	18, { 287 , 303 , 305 , 304 , 44 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{ 326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } }
 };
 
 
@@ -51778,8 +51753,8 @@ COMMAND:vrk2(playerid,params[]){
 	new vehicleid = GetPlayerVehicleID(playerid);
 	if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "Du kannst diese Funktion nur in einem Fahrzeug nutzen.");
 
-	for (new i = 0; i < sizeof(oamtcars); i++) {
-		if (oamtcars[i] == vehicleid) {
+	for (new i = 0; i < sizeof(vehicle_pooExterior); i++) {
+		if (vehicle_pooExterior[i] == vehicleid) {
 			if (_:g_t3dPolizeiKontrolle[vehicleid] != INVALID_3DTEXT_ID) {
 			    Delete3DTextLabel(g_t3dPolizeiKontrolle[vehicleid]);
 			    g_t3dPolizeiKontrolle[vehicleid] = Text3D:INVALID_3DTEXT_ID;
@@ -55915,7 +55890,7 @@ public CreateFireworkEx(Float:x,Float:y,Float:z,Float:face,obj) {
 new const Float:g_StaatRepair[][] = {
 	{1585.9081, -1677.1216, 5.8970}, 	// PD
 	{ SAMD_STATEREPAIR_COORDS }, 	// Medic
-	{903.7567,  -1257.1174, 14.9563}, 	// Oamt
+	{ POO_STATEREPAIR_COORDS }, 	// Oamt
 	{1882.3618, 718.3406, 	10.8203}, 	// FBI
 	{2288.5466, 2444.9841, 	3.2734}, 	// LVPD
 	{1248.3843, -1833.8750, 13.3930}, 	// Fahrschule
