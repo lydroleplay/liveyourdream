@@ -1,6 +1,5 @@
 #define MAX_WERBEBANNER 50
 
-// 4729
 enum e_Werbebanner {
 	W_iID,
 	Float:W_fX,
@@ -32,55 +31,72 @@ enum e_Werbebanner {
 	W_sOwner[MAX_PLAYER_NAME]
 };
 
-/*
-new g_Werbebanner[1][e_Werbebanner] = {
-	{1560.9818,-1723.1691,13.5469,Text3D:0,0,INVALID_OBJECT_ID,4729,1565.2359, -1722.4185, 31.1512, 0.0000, 0.0000, -65.3964,
-		"{FFFFFF}Das ist ein {FF0000}Test", 0, 90, "Arial", 24, 0, -32256, -16777216, 0,
-		0,"Niemand"}
-};
-*/
-new
-	g_iWerbebanner,
-	g_Werbebanner[MAX_WERBEBANNER][e_Werbebanner];
+new g_iWerbebanner, g_Werbebanner[MAX_WERBEBANNER][e_Werbebanner];
 
+enum E_MAT_SIZE {
+    MAT_SIZE_NAME[8],
+    MAT_SIZE_VALUE,
+}
+
+new const g_MatSizes[][E_MAT_SIZE] = {
+    {"32x32",   10},
+    {"64x32",   20},
+    {"64x64",   30},
+    {"128x32",  40},
+    {"128x64",  50},
+    {"128x128", 60},
+    {"256x32",  70},
+    {"256x64",  80},
+    {"256x128", 90},
+    {"256x256", 100},
+    {"512x64",  110},
+    {"512x128", 120},
+    {"512x256", 130},
+    {"512x512", 140}
+};
+
+enum E_TEXT_COLOR {
+	TEXT_COLOR_NAME[12],
+	TEXT_COLOR_EMBEDDED[9],
+	TEXT_COLOR_VALUE
+}
+
+new const g_textColors[][E_TEXT_COLOR] = {
+	{"Rot", "{FF0000}", 0xFFFF0000},
+	{"Grün", "{04B404}", 0xFF04B404},
+	{"Blau", "{0000FF}", 0xFF0000FF},
+	{"Gelb", "{FFFF00}", 0xFFFFFF00},
+	{"Pink", "{FF00FF}", 0xFFFF00FF},
+	{"Grau", "{848484}", 0xFF848484},
+	{"Weiß", "{FFFFFF}", 0xFFFFFFFF},
+	{"Grün-Blau", "{00B5CD}", 0xFF00B5CD}
+};
 
 stock InitWerbebanner() {
-	mysql_oquery("SELECT * FROM `werbetafel`",THREAD_WERBEBANNER,INVALID_OBJECT_ID,gSQL);
-	SetTimer("SaveWerbebanner",99989 * 5 , true );
-	SetTimer("CheckWerbebanner",30103,true);
+	mysql_oquery("SELECT * FROM `werbetafel`", THREAD_WERBEBANNER, INVALID_OBJECT_ID, gSQL);
+	SetTimer("SaveWerbebanner", 99989 * 5, true);
+	SetTimer("CheckWerbebanner", 30103, true);
 	return 1;
 }
+
 forward CheckWerbebanner();
 public CheckWerbebanner() {
-	new
-	    now;
-	now = gettime();
-	//print("CheckWerbebanner");
-	for(new i ; i < g_iWerbebanner ; i++) {
-	    if( g_Werbebanner[i][W_unixBought] > 0 ) {
-	        if( now >= g_Werbebanner[i][W_unixBought] ) {
-	            // printf("Werbetafel %d muss verkauft werden",i);
-	            if( strcmp("Niemand",g_Werbebanner[i][W_sOwner],true) != 0 ) {
-	                new
-	                    playerid;
-					sscanf(g_Werbebanner[i][W_sOwner],"u",playerid);
-					if(IsPlayerConnected(playerid)) {
-					    SendClientMessage(playerid,COLOR_YELLOW,"Deine Werbetafelmiete ist abgelaufen!");
-					}
-					WerbetafelZuVermieten(i);
-					UpdateObject(i);
-	            }
-	        }
-	    }
+	new playerid, now = gettime();
+	for (new i; i < g_iWerbebanner; i++) {
+	    if (g_Werbebanner[i][W_unixBought] <= 0 || now < g_Werbebanner[i][W_unixBought]) continue;
+        if (!strcmp("Niemand", g_Werbebanner[i][W_sOwner], true)) continue;
+		sscanf(g_Werbebanner[i][W_sOwner], "u", playerid);
+		if (playerid != INVALID_PLAYER_ID) SendClientMessage(playerid, COLOR_YELLOW, "Deine Werbetafelmiete ist abgelaufen!");
+		WerbetafelZuVermieten(i);
+		UpdateObject(i);
 	}
 	return 1;
 }
 
 forward SaveWerbebannerEx(index);
 public SaveWerbebannerEx(index) {
-	new
-	    query[800];
-    format(query,sizeof(query),"UPDATE `werbetafel` SET \
+	new query[800];
+    format(query, sizeof(query), "UPDATE `werbetafel` SET \
         `IconX` = '%.2f',\
         `IconY` = '%.2f',\
         `IconZ` = '%.2f',\
@@ -126,15 +142,15 @@ public SaveWerbebannerEx(index) {
 			g_Werbebanner[index][W_sOwner],
 			g_Werbebanner[index][W_iID]
 	);
-	mysql_oquery(query,THREAD_SAVEWERBEBANNER,INVALID_PLAYER_ID,gSQL);
+	mysql_oquery(query, THREAD_SAVEWERBEBANNER, INVALID_PLAYER_ID, gSQL);
 	return 1;
 }
+
 forward SaveWerbebanner();
 public SaveWerbebanner() {
-	new
-	    query[800];
-	for(new i ; i < g_iWerbebanner ; i++) {
-	    format(query,sizeof(query),"UPDATE `werbetafel` SET \
+	new query[800];
+	for (new i; i < g_iWerbebanner; i++) {
+	    format(query, sizeof(query), "UPDATE `werbetafel` SET \
 	        `IconX` = '%.2f',\
 	        `IconY` = '%.2f',\
 	        `IconZ` = '%.2f',\
@@ -180,53 +196,42 @@ public SaveWerbebanner() {
 				g_Werbebanner[i][W_sOwner],
 				g_Werbebanner[i][W_iID]
 		);
-		mysql_oquery(query,THREAD_SAVEWERBEBANNER,INVALID_PLAYER_ID,gSQL);
-	}
-	return 1;
-}
-stock AddWerbebanner( index ) {
-	//printf("AddWerbebanner(%d)",index);
-	new
-	    String[64];
-	g_Werbebanner[index][W_iPickup] = CreateDynamicPickup(1239,1,g_Werbebanner[index][W_fX],g_Werbebanner[index][W_fY],g_Werbebanner[index][W_fZ]);
-	if(!strcmp(g_Werbebanner[index][W_sOwner],"Niemand")) {
-		format(String,sizeof(String),"Diese Werbetafel steht zum Verkauf!");
-	}
-	else {
-		format(String,sizeof(String),"Werbetafel gehört: %s",g_Werbebanner[index][W_sOwner]);
-	}
-	g_Werbebanner[index][W_t3dLabel] = CreateDynamic3DTextLabel(String,0xFFFFFFFF,g_Werbebanner[index][W_fX],g_Werbebanner[index][W_fY],g_Werbebanner[index][W_fZ],30.0);
 
-	g_Werbebanner[index][W_iObjectID] = CreateDynamicObject( g_Werbebanner[index][W_iModelID],g_Werbebanner[index][W_fObjX],g_Werbebanner[index][W_fObjY],g_Werbebanner[index][W_fObjZ],g_Werbebanner[index][W_fObjRotX],g_Werbebanner[index][W_fObjRotY],g_Werbebanner[index][W_fObjRotZ]);
-	UpdateObject(index);
-	Streamer_SetFloatData(STREAMER_TYPE_OBJECT,g_Werbebanner[index][W_iObjectID], E_STREAMER_DRAW_DISTANCE , 300.0 );
+		mysql_oquery(query, THREAD_SAVEWERBEBANNER, INVALID_PLAYER_ID, gSQL);
+	}
+
 	return 1;
 }
-stock IsPlayerAtWerbetafel(playerid,Float:distance = 3.0) {
-	for(new x = 0; x < g_iWerbebanner ; x++) {
-		if(IsPlayerInRangeOfPoint(playerid, distance, g_Werbebanner[x][W_fX], g_Werbebanner[x][W_fY], g_Werbebanner[x][W_fZ])) {
-			return x;
-		}
-	}
+
+stock AddWerbebanner(index) {
+	new String[128];
+	g_Werbebanner[index][W_iPickup] = CreateDynamicPickup(1239, 1, g_Werbebanner[index][W_fX], g_Werbebanner[index][W_fY], g_Werbebanner[index][W_fZ]);
+	if (!strcmp(g_Werbebanner[index][W_sOwner], "Niemand")) format(String, sizeof(String), "Diese Werbetafel steht zum Verkauf!\n{FFFFFF}Benutze /Werbetafelkaufen");
+	else format(String, sizeof(String), "Besitzer der Werbetafel:\n{FFFFFF}%s", g_Werbebanner[index][W_sOwner]);
+	g_Werbebanner[index][W_t3dLabel] = CreateDynamic3DTextLabel(String, 0x28C0D6FF, g_Werbebanner[index][W_fX], g_Werbebanner[index][W_fY] ,g_Werbebanner[index][W_fZ], 30.0);
+	g_Werbebanner[index][W_iObjectID] = CreateDynamicObject(g_Werbebanner[index][W_iModelID], g_Werbebanner[index][W_fObjX], g_Werbebanner[index][W_fObjY], 
+		g_Werbebanner[index][W_fObjZ], g_Werbebanner[index][W_fObjRotX], g_Werbebanner[index][W_fObjRotY], g_Werbebanner[index][W_fObjRotZ]);
+
+	UpdateObject(index);
+	Streamer_SetFloatData(STREAMER_TYPE_OBJECT, g_Werbebanner[index][W_iObjectID], E_STREAMER_DRAW_DISTANCE, 300.0);
+	return 1;
+}
+
+stock IsPlayerAtWerbetafel(playerid, Float:distance = 3.0) {
+	for (new x = 0; x < g_iWerbebanner; x++)
+		if (IsPlayerInRangeOfPoint(playerid, distance, g_Werbebanner[x][W_fX], g_Werbebanner[x][W_fY], g_Werbebanner[x][W_fZ])) return x;
+
 	return 999;
 }
-COMMAND:atafelentmieten(playerid,params[]) {
-	new
-	    werbetafel;
-	if( !gPlayerLogged[playerid] ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt.");
-	    return 1;
-	}
-	if(Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-	werbetafel = IsPlayerAtWerbetafel(playerid);
-	//printf("werbetafel %d",werbetafel);
-	if(werbetafel == 999 ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe einer Werbetafel.");
-	    return 1;
-	}
-	new
-	    String[128];
-	format(String,sizeof(String),"Admin %s hat Werbetafel Nr. %d freigestellt.",GetName(playerid),werbetafel);
+
+COMMAND:atafelentmieten(playerid, params[]) {
+	if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+	if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du besitzt nicht die benötigten Rechte.");
+	new werbetafel = IsPlayerAtWerbetafel(playerid);
+	if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht in der Nähe einer Werbetafel.");
+
+	new String[128];
+	format(String, sizeof(String), "Admin %s hat Werbetafel Nr. %d freigestellt.", GetName(playerid), werbetafel);
 	SendAdminMessage(COLOR_YELLOW, String);
 
 	WerbetafelZuVermieten(werbetafel);
@@ -234,565 +239,279 @@ COMMAND:atafelentmieten(playerid,params[]) {
 	SaveWerbebannerEx(werbetafel);
 	return 1;
 }
-COMMAND:werbetafel(playerid,params[]) {
-	new
-	    werbetafel;
-	if( !gPlayerLogged[playerid] ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt");
-	    return 1;
-	}
-	werbetafel = IsPlayerAtWerbetafel(playerid);
-	//printf("werbetafel %d",werbetafel);
-	if(werbetafel == 999 ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe einer Werbetafel.");
-	    return 1;
-	}
-	if(!strcmp(g_Werbebanner[werbetafel][W_sOwner],GetName(playerid))) {
-	    ShowMainMenu(playerid);
-	}
-	else {
-        SendClientMessage(playerid, COLOR_RED, "Diese Werbetafel gehört nicht dir.");
-	    return 1;
-	}
-	return 1;
+
+COMMAND:werbetafel(playerid, params[]) {
+	if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+	new werbetafel = IsPlayerAtWerbetafel(playerid);
+	if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht in der Nähe einer Werbetafel.");
+	if (!strcmp(g_Werbebanner[werbetafel][W_sOwner], GetName(playerid))) return ShowWerbetafelMenu(playerid);
+
+	return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel gehört nicht dir.");
 }
-COMMAND:werbetafelkaufen(playerid,params[]) {
-	#pragma unused params
-	new
-	    werbetafel;
-	if( !gPlayerLogged[playerid] ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt");
-	    return 1;
-	}
-	werbetafel = IsPlayerAtWerbetafel(playerid);
-	if(werbetafel == 999 ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe einer Werbetafel.");
-	    return 1;
-	}
-	if(strcmp(g_Werbebanner[werbetafel][W_sOwner],"Niemand") != 0 ) {
-		if(!strcmp(g_Werbebanner[werbetafel][W_sOwner],GetName(playerid) )) {
-		    // Owner
-		    return cmd_werbetafel(playerid,"");
-		}
-		else {
-	        SendClientMessage(playerid, COLOR_RED, "Diese Werbetafel steht nicht zum Verkauf.");
-		    return 1;
-		}
-	}
-	else {
-	    // Hat vllt schon Werbetafel gemietet
-	    if(GetPlayerWerbetafel(playerid) != 999 ) {
-	        SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits eine Werbetafel");
-		    return 1;
-	    }
-	    ShowPlayerDialog(playerid,DIALOG_WERBETAFEL_KAUFEN,DIALOG_STYLE_MSGBOX,"Werbetafel Kaufen","Das Kaufen dieser Werbetafel kostet 40.000$.\nDauer: 4 Tage","Kaufen","Abbruch");
-	}
-	return 1;
+
+COMMAND:werbetafelkaufen(playerid, params[]) {
+	if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+	new werbetafel = IsPlayerAtWerbetafel(playerid);
+	if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht in der Nähe einer Werbetafel.");
+	if (!strcmp(g_Werbebanner[werbetafel][W_sOwner], GetName(playerid))) return ShowWerbetafelMenu(playerid);
+	if (GetPlayerWerbetafel(playerid) != 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du besitzt bereits eine Werbetafel.");
+	if (strcmp(g_Werbebanner[werbetafel][W_sOwner], "Niemand") != 0) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel steht nicht zum Verkauf.");
+	return ShowPlayerDialog(playerid, DIALOG_ADBOARD_BUY, DIALOG_STYLE_MSGBOX, "Werbetafel Kaufen",\
+		"{FFFFFF}Möchtest du diese Werbetafel kaufen?\n{00FFFF}Dauer: {FFFFFF}4 Tage\n{00FF00}Kosten: {FFFFFF}$40.000", "Kaufen", "Abbrechen");
 }
 
 stock GetPlayerWerbetafel(playerid) {
-	new
-	    name[MAX_PLAYER_NAME];
-	GetPlayerName(playerid,name,sizeof(name));
-	for(new x = 0; x < g_iWerbebanner ; x++) {
-		if(!strcmp(g_Werbebanner[x][W_sOwner],name)) {
-		    return x;
-		}
-	}
+	new name[MAX_PLAYER_NAME];
+	GetPlayerName(playerid, name, sizeof(name));
+	for (new x = 0; x < g_iWerbebanner; x++) if (!strcmp(g_Werbebanner[x][W_sOwner], name)) return x;
 	return 999;
 }
 
-
-ShowMainMenu(playerid)
-{
-    new string[600];
-    strcat(string,""COLOR_Y"1. "COLOR_B"Hilfe\n"COLOR_Y"2. "COLOR_B"---\n"COLOR_Y"3. "COLOR_B"Set Object Text\
-	\n"COLOR_Y"4. "COLOR_B"---\n"COLOR_Y"5. "COLOR_B"Set Material Size\n");
-	strcat(string, ""COLOR_Y"6. "COLOR_B"Set Text Font\n"COLOR_Y"7. "COLOR_B"Set Text Size\n"COLOR_Y"8. "COLOR_B"Set Bold Text\
-	\n"COLOR_Y"9. "COLOR_B"Set Text Color\n"COLOR_Y"10. "COLOR_B"Set Background Color\n"COLOR_Y"11. "COLOR_B"Set Text Alignment\n"COLOR_Y"12. "COLOR_G"---\
-	\n"COLOR_Y"13. "COLOR_G"---\n"COLOR_Y"14. "COLOR_G"Reset Object");
-	ShowPlayerDialog(playerid,MainDialog,DIALOG_STYLE_LIST,""COLOR_R"Text Object | Main Menu",string,"Continue","Exit");
-	return 1;
+stock ShowWerbetafelMenu(playerid) {
+	return ShowPlayerDialog(playerid, DIALOG_ADBOARD_MAIN, DIALOG_STYLE_LIST, "Werbetafel - Einstellungen",
+		COLOR_B "Hilfe\n" COLOR_B "Text ändern\n" COLOR_B "Textgröße ändern\n" COLOR_B "Textfarbe ändern\n" COLOR_B "Schriftart ändern\n" COLOR_B\
+		"Textausrichtung ändern\n" COLOR_B "Fettschrift einstellen\n" COLOR_B "Hintergrundfarbe ändern\n" COLOR_B "Materialgröße ändern\n" COLOR_B\
+		"Standard wiederherstellen\n" COLOR_B "Werbetafel verkaufen", "Weiter", "Abbrechen");
 }
 
-stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
-{
-	new
-	    werbetafel;
-	werbetafel = IsPlayerAtWerbetafel(playerid);
-	if(werbetafel == 999 ) {
-	    return 0;
-	}
-	if(dialogid == MainDialog){
-	    if(response){
-	        switch(listitem) {
-	            case 1,3,11,12: {
-	                ShowMainMenu(playerid);
-				}
-	            case 0:{
-					ShowPlayerDialog(playerid,DIALOG_WERBEANLEITUNG,DIALOG_STYLE_MSGBOX,"    "COLOR_R"Anleitung","{FFFFFF}Wichtig Information:\n\nZeilenumbruch im Text wird wie folgt eingefügt:\n\\n\n\nBeispiel:\n1. Eins\\n2. Zwei\n\nErgebnis:\n1. Eins\n2. Zwei","Zurück","");
-	            }
-	            /*
-	            case 1:{
-	                new string[128];
-	                format(string, sizeof(string), ""COLOR_B"Current Object Model ID: "COLOR_Y"%d\
-					\n"COLOR_G"Please, type below a Model ID for the object (example = 19353):",ObjectID[playerid]);
-					ShowPlayerDialog(playerid,OModelDialog,DIALOG_STYLE_INPUT,"    "COLOR_R"Object Model ID",string,"Change","Back");
-	            }
-	            */
-	        	case 2:{
-	        	    new string[400];
-	        	    format(string, sizeof(string),""COLOR_B"Current Object Text: "COLOR_Y"%s\
-					\n"COLOR_G"Please, type below your text for the object:",g_Werbebanner[werbetafel][W_sText]);
-	        	    ShowPlayerDialog(playerid,TextDialog,DIALOG_STYLE_INPUT,"    "COLOR_R"Object Text",string,"Change","Back");
-	        	}
-	        	/*
-	        	case 3: {
-					new string[128];
-					format(string, sizeof(string),""COLOR_B"Current Material Index: "COLOR_Y"%d\
-					\n"COLOR_G"Please, type below the Material Index which you want use (default = 0):",Index[playerid]);
-					ShowPlayerDialog(playerid,IndexDialog,DIALOG_STYLE_INPUT,"    "COLOR_R"Material Index",string,"Change","Back");
-				}
-				*/
-				case 4: {
-				    new sizes[600];
-					strcat(sizes,""COLOR_Y"1. "COLOR_B"32x32 "COLOR_G"(10)\
-								\n"COLOR_Y"2. "COLOR_B"64x32 "COLOR_G"(20)\
-								\n"COLOR_Y"3. "COLOR_B"64x64 "COLOR_G"(30)\
-								\n"COLOR_Y"4. "COLOR_B"128x32 "COLOR_G"(40)\
-								\n"COLOR_Y"5. "COLOR_B"128x64 "COLOR_G"(50)\
-								\n"COLOR_Y"6. "COLOR_B"128x128 "COLOR_G"(60)\
-								\n"COLOR_Y"7. "COLOR_B"256x32 "COLOR_G"(70)");
-					strcat(sizes,"\n"COLOR_Y"8. "COLOR_B"256x64 "COLOR_G"(80)\
-								\n"COLOR_Y"9. "COLOR_B"256x128 "COLOR_G"(90)\
-								\n"COLOR_Y"10. "COLOR_B"256x256 "COLOR_G"(100)\
-								\n"COLOR_Y"11. "COLOR_B"512x64 "COLOR_G"(110)\
-								\n"COLOR_Y"12. "COLOR_B"512x128 "COLOR_G"(120)\
-								\n"COLOR_Y"13. "COLOR_B"512x256 "COLOR_G"(130)\
-								\n"COLOR_Y"14. "COLOR_B"512x512 "COLOR_G"(140)");
-					new current[128];
-					format(current, sizeof(current),""COLOR_R"Material Size "COLOR_G"| "COLOR_B"Current size: "COLOR_Y"%d",g_Werbebanner[werbetafel][W_iMaterialSize]);
-					ShowPlayerDialog(playerid,SizesDialog,DIALOG_STYLE_LIST,current,sizes,"Change","Back");
-				}
-				case 5: {
-				    new string[128];
-				    format(string, sizeof(string), ""COLOR_B"Current Text Font: "COLOR_Y"%s\
-					\n"COLOR_G"Please, type below the Text Font name which you want use:",g_Werbebanner[werbetafel][W_iFontFace]);
-                    ShowPlayerDialog(playerid,FontNDialog,DIALOG_STYLE_INPUT,"    "COLOR_R"Text Font",string,"Change","Back");
-				}
-				case 6: {
-				    new string[128];
-				    format(string, sizeof(string), ""COLOR_B"Current Text Size: "COLOR_Y"%d\
-					\n"COLOR_G"Please, type below the Text Size which you want use:",g_Werbebanner[werbetafel][W_iFontSize]);
-                    ShowPlayerDialog(playerid,FontSDialog,DIALOG_STYLE_INPUT,"    "COLOR_R"Text Size",string,"Change","Back");
-				}
-				case 7: {
-				    new title[100]; new yesorno[10];
-				    if(g_Werbebanner[werbetafel][W_iBold] == 0) yesorno = "No";
-				    else if(g_Werbebanner[werbetafel][W_iBold] == 1) yesorno = "Yes";
-				    format(title, sizeof(title), ""COLOR_R"Bold Text "COLOR_G"| "COLOR_B"Using Bold Text: "COLOR_Y"%s",yesorno);
-                    ShowPlayerDialog(playerid,BoldDialog,DIALOG_STYLE_LIST,title,""COLOR_Y"1. "COLOR_B"No\n"COLOR_Y"2. "COLOR_B"Yes","Change","Back");
-				}
-				case 8: {
-				    new titulo[100];
-				    format(titulo, sizeof(titulo),""COLOR_R"Text Color "COLOR_G"| "COLOR_B"Current Text Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iFontColor]);
-                    ShowPlayerDialog(playerid,ColorDialog,DIALOG_STYLE_LIST,titulo,""COLOR_Y"1. "COLOR_B"Type a ARGB color code\
-					\n"COLOR_Y"2. "COLOR_B"Select a predefinded color","Next","Back");
-				}
-				case 9: {
-				    new titulo[100];
-				    format(titulo, sizeof(titulo),""COLOR_R"Object Background "COLOR_G"| "COLOR_B"Current Text Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iBackColor]);
-                    ShowPlayerDialog(playerid,BackgColorD,DIALOG_STYLE_LIST,titulo,""COLOR_Y"1. "COLOR_B"Disable Background\n"COLOR_Y"2. "COLOR_B"Type a ARGB color code\
-					\n"COLOR_Y"3. "COLOR_B"Select a predefinded color","Next","Back");
-				}
-				case 10: {
-                    new title[100]; new position[30];
-				    if(g_Werbebanner[werbetafel][W_iTextAlignment] == 0) position = "Left";
-				    else if(g_Werbebanner[werbetafel][W_iTextAlignment] == 1) position = "Center";
-				    else if(g_Werbebanner[werbetafel][W_iTextAlignment] == 2) position = "Right";
-				    format(title, sizeof(title), ""COLOR_R"Text Alignment "COLOR_G"| "COLOR_B"Current Alignment: "COLOR_Y"%s",position);
-                    ShowPlayerDialog(playerid,AlignDialog,DIALOG_STYLE_LIST,title,""COLOR_Y"1. "COLOR_B"Left\n"COLOR_Y"2. "COLOR_B"Center\n"COLOR_Y"3. "COLOR_B"Right","Change","Back");
-				}
-				/*
-				case 11: {
-				    EditPlayerObject(playerid, Object[playerid]);
-					SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"INFO: "COLOR_Y"Use "COLOR_G"ESC "COLOR_Y"to cancel the object edition.");
-				}
-				case 12: {
-				    ShowPlayerDialog(playerid,SaveDialog,DIALOG_STYLE_INPUT,"    "COLOR_R"Exporting Lines",
-					"Please, type a name for the object below (example = MyObject):","Export","Back");
-				}
-				*/
-				case 13: {
-                    // CreatingTextO[playerid] = false;
-					// DestroyDynamicObject(playerid, g_Werbebanner[werbetafel][W_iObjectID]);
-					g_Werbebanner[werbetafel][W_iTextAlignment] = 1;
-					format(g_Werbebanner[werbetafel][W_sText],256,"Example");
-					format(g_Werbebanner[werbetafel][W_iFontFace],32,"Arial");
-					g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFFFF8200");
-					g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFF000000");
-     				g_Werbebanner[werbetafel][W_iFontSize] = 50;
-					g_Werbebanner[werbetafel][W_iMaterialIndex] = 0;
-					g_Werbebanner[werbetafel][W_iBold] = 0;
-					g_Werbebanner[werbetafel][W_iFontSize] = 24;
-					// g_Werbebanner[werbetafel][W_iModelID] = 19353;
-					SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"INFO: "COLOR_Y"All settings have been reseted.");
-                    SaveWerbebannerEx(werbetafel);
-				}
-	        }
-	    }
-	    return 1;
-	}
-	if(dialogid == DIALOG_WERBEANLEITUNG ) {
-	    ShowMainMenu(playerid);
-	}
-	/*
-	if(dialogid == OTypeDialog)
-	{
-	    if(response)
-	    {
-	        ObjectType[playerid] = false;
-	        SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Object Type: "COLOR_Y"Normal Object"); ShowMainMenu(playerid);
-	    } else {
-			ObjectType[playerid] = true;
-            SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Object Type: "COLOR_Y"Player Object"); ShowMainMenu(playerid);
-		}
-	    return 1;
-	}
-	if(dialogid == OModelDialog)
-	{
-	    if(response)
-	    {
-	        if(!IsNumeric(inputtext)) return SendClientMessage(playerid,-1,""COLOR_Y"* "COLOR_R"ERROR: "COLOR_G"Please, use a numeric value"COLOR_R"!"), ShowMainMenu(playerid);
-	        new string[128];
-	        ObjectID[playerid] = strval(inputtext);
-	        format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Object Model ID: "COLOR_Y"%d",ObjectID[playerid]);
-	        SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
-	}
-	*/
-	if(dialogid == TextDialog){
-	    if(response){
-				new string[400];
-				g_Werbebanner[werbetafel][W_sText][0] = '\0';
-				for (new i, j = strlen(inputtext) - 1; i < j; i++) {
-					if (inputtext[i] == '\\' && inputtext[i + 1] == 'n') {
-						inputtext[i] = ' ';
-						inputtext[i + 1] = '\n';
-					}
-				}
-				strcat( g_Werbebanner[werbetafel][W_sText] , inputtext , 256 );
+stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
+	new werbetafel = IsPlayerAtWerbetafel(playerid);
+	if (werbetafel == 999) return 0;
+	if (dialogid == DIALOG_ADBOARD_HELP) return ShowWerbetafelMenu(playerid);
+	if (dialogid == DIALOG_ADBOARD_BUY) {
+        if (!response) return 1;
+        if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Um eine Werbetafel zu kaufen, musst du mindestens Level 3 sein.");
+        if (Spieler[playerid][pCash] < 40000) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du besitzt keine $40.000 um die Werbetafel zu kaufen.");
+        new String[128];
+        if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht in der Nähe einer Werbetafel.");
+        if (strcmp(g_Werbebanner[werbetafel][W_sOwner], "Niemand") != 0) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel steht nicht zum Verkauf.");
+        format(g_Werbebanner[werbetafel][W_sOwner], MAX_PLAYER_NAME, GetName(playerid));
+        SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Diese Werbetafel gehört nun 96 Stunden lang dir.");
+        SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Benutze /Werbetafel um sie einzustellen.");
+        GivePlayerCash(playerid, -40000);
+        format(String, sizeof(String), "Besitzer der Werbetafel:\n{FFFFFF}%s", g_Werbebanner[werbetafel][W_sOwner]);
+        UpdateDynamic3DTextLabelText(g_Werbebanner[werbetafel][W_t3dLabel], 0x28C0D6FF, String);
+        g_Werbebanner[werbetafel][W_unixBought] = gettime() + 4*24*60*60;
+    }
+	if (dialogid == DIALOG_ADBOARD_MAIN) {
+	    if (!response) return 1;
+        switch (listitem) {
+            case 0: return ShowPlayerDialog(playerid, DIALOG_ADBOARD_HELP, DIALOG_STYLE_MSGBOX, "Werbetafel - Hilfe", COLOR_B\
+            	"Der Text ist auf 127 Zeichen beschränkt.\nIm Text können eingebettete Farben wie z.B.\n{ FF9900 } - ohne die Leerzeichen benutzt werden.\n\
+            	Ein Zeilenumbruch kann mit \\n eingefügt werden.\nDie Materialgröße bestimmt, wie lesbar die Schrift\nauf der Werbetafel sein wird.", "Zurück", "");
+        	case 1: {
+        	    new string[400];
+        	    format(string, sizeof(string), COLOR_B "Derzeitiger Text:\n{FFFFFF}%s\n\n" COLOR_G "Gebe hier den neuen Text ein:", g_Werbebanner[werbetafel][W_sText]);
+        	    return ShowPlayerDialog(playerid, DIALOG_ADBOARD_TEXT, DIALOG_STYLE_INPUT, "Werbetafel - Text", string, "Bestätigen", "Zurück");
+        	}
+        	case 2: {
+			    new string[128];
+			    format(string, sizeof(string), COLOR_B "Derzeitige Textgröße: {FFFFFF}%d\n\n" COLOR_G "Gebe hier die neue Textgröße ein:", g_Werbebanner[werbetafel][W_iFontSize]);
+                return ShowPlayerDialog(playerid, DIALOG_ADBOARD_TEXTSIZE, DIALOG_STYLE_INPUT, "Werbetafel - Textgröße", string, "Bestätigen", "Zurück");
+			}
+			case 3: {
+				return ShowPlayerDialog(playerid, DIALOG_ADBOARD_TEXTCOLOR, DIALOG_STYLE_LIST, "Werbetafel - Textfarbe", 
+					COLOR_B "Wähle eine vorgegebene Farbe\n" COLOR_B "Gebe einen ARGB Farbcode ein", "Weiter", "Zurück");
+			}
+			case 4: {
+				new dialogText[128];
+				format(dialogText, sizeof(dialogText), COLOR_B "Derzeitige Schriftart: {FFFFFF}%s\n\n" COLOR_G "Gebe hier die neue Schriftart ein:", 
+					g_Werbebanner[werbetafel][W_iFontFace]);
+				return ShowPlayerDialog(playerid, DIALOG_ADBOARD_FONT, DIALOG_STYLE_INPUT, "Werbetafel - Schriftart", dialogText, "Bestätigen", "Zurück");
+			}
+			case 5: {
+				new dialogCaption[64];
+				format(dialogCaption, sizeof(dialogCaption), "Werbetafel - Textausrichtung | {FFFFFF}%s", 
+					g_Werbebanner[werbetafel][W_iTextAlignment] == 1 ? "Zentriert" : (g_Werbebanner[werbetafel][W_iTextAlignment] == 2 ? "Rechtsbündig" : "Linksbündig"));
 
-				format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Object Text: "COLOR_Y"%s",g_Werbebanner[werbetafel][W_sText]);
-		    	SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
-		    	SaveWerbebannerEx(werbetafel);
-			} else { ShowMainMenu(playerid); }
-		return 1;
-	}
-	/*
-	if(dialogid == IndexDialog){
-	    if(response){
-	        if(!IsNumeric(inputtext)) return SendClientMessage(playerid,-1,""COLOR_Y"* "COLOR_R"ERROR: "COLOR_G"Please, use a numeric value"COLOR_R"!"), ShowMainMenu(playerid);
-			new string[100];
-			Index[playerid] = strval(inputtext);
-			format(string, sizeof(string),""COLOR_R"* "COLOR_B"Object Material Index: "COLOR_Y"%d",Index[playerid]);
-			SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
-	    } else { ShowMainMenu(playerid); }
-		return 1;
-	}
-	*/
-	if(dialogid == SizesDialog){
-	    if(response)
-	    {
-	        switch(listitem) {
-	            case 0: g_Werbebanner[werbetafel][W_iMaterialSize] = 10;
-	            case 1:  g_Werbebanner[werbetafel][W_iMaterialSize] = 20;
-	            case 2:  g_Werbebanner[werbetafel][W_iMaterialSize] = 30;
-	            case 3:  g_Werbebanner[werbetafel][W_iMaterialSize] = 40;
-	            case 4:  g_Werbebanner[werbetafel][W_iMaterialSize] = 50;
-	            case 5:  g_Werbebanner[werbetafel][W_iMaterialSize] = 60;
-	            case 6:  g_Werbebanner[werbetafel][W_iMaterialSize] = 70;
-	            case 7:  g_Werbebanner[werbetafel][W_iMaterialSize] = 80;
-	            case 8:  g_Werbebanner[werbetafel][W_iMaterialSize] = 90;
-	            case 9:  g_Werbebanner[werbetafel][W_iMaterialSize] = 100;
-	            case 10:  g_Werbebanner[werbetafel][W_iMaterialSize] = 110;
-	            case 11:  g_Werbebanner[werbetafel][W_iMaterialSize] = 120;
-	            case 12:  g_Werbebanner[werbetafel][W_iMaterialSize] = 130;
-	            case 13:  g_Werbebanner[werbetafel][W_iMaterialSize] = 140;
-	            default: g_Werbebanner[werbetafel][W_iMaterialSize] = 70;
+			    return ShowPlayerDialog(playerid, DIALOG_ADBOARD_ALIGN, DIALOG_STYLE_LIST, dialogCaption, COLOR_B "Linksbündig\n" COLOR_B "Zentriert\n" COLOR_B\
+			     "Rechtsbündig", "Bestätigen", "Zurück");
 			}
-			new string[128];
-			format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Object Material Size: "COLOR_Y"%d",g_Werbebanner[werbetafel][W_iMaterialSize]);
-			SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
-            SaveWerbebannerEx(werbetafel);
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
-	}
-	if(dialogid == FontNDialog)
-	{
-	    if(response) {
-	        new string[128]; format(string, sizeof(string),"%s",inputtext);
-			format(g_Werbebanner[werbetafel][W_iFontFace],32,string);
-	        format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Text Font: "COLOR_Y"%s",g_Werbebanner[werbetafel][W_iFontFace]);
-			SendClientMessage(playerid,-1,string);
-			UpdateObject(werbetafel);
-			ShowMainMenu(playerid);
-			SaveWerbebannerEx(werbetafel);
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
-	}
-	if(dialogid == FontSDialog)
-	{
-	    if(response) {
-	        if(!isNumeric(inputtext)) return SendClientMessage(playerid,-1,""COLOR_Y"* "COLOR_R"ERROR: "COLOR_G"Please, use a numeric value"COLOR_R"!"), ShowMainMenu(playerid);
-	        new string[128];
-			g_Werbebanner[werbetafel][W_iFontSize] = strval(inputtext);
-			format(string, sizeof(string), ""COLOR_R"* "COLOR_B"Text Size: "COLOR_Y"%d",g_Werbebanner[werbetafel][W_iFontSize]);
-			SendClientMessage(playerid,-1,string);
-			UpdateObject(werbetafel), ShowMainMenu(playerid);
-			SaveWerbebannerEx(werbetafel);
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
-	}
-	if(dialogid == BoldDialog)
-	{
-	    if(response)
-	    {
-			switch(listitem)
-			{
-	        	case 0: {
-                    g_Werbebanner[werbetafel][W_iBold] = 0;
-	        		SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Bold Text: "COLOR_Y"No");
-	        		UpdateObject(werbetafel), ShowMainMenu(playerid);
-				}
-				case 1: {
-				    g_Werbebanner[werbetafel][W_iBold] = 1;
-	        		SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Bold Text: "COLOR_Y"Yes");
-	        		UpdateObject(werbetafel), ShowMainMenu(playerid);
-				}
+			case 6: {
+				new dialogCaption[64];
+				format(dialogCaption, sizeof(dialogCaption), "Werbetafel - Fettschrift einstellen | {FFFFFF}%s",
+					g_Werbebanner[werbetafel][W_iBold] ? "Fettschrift" : "Keine Fettschrift");
+				return ShowPlayerDialog(playerid, DIALOG_ADBOARD_BOLD, DIALOG_STYLE_LIST, dialogCaption, COLOR_B "Keine Fettschrift\n" COLOR_B\
+				 "Fettschrift", "Bestätigen", "Zurück");
+			}
+			case 7: {
+				return ShowPlayerDialog(playerid, DIALOG_ADBOARD_BACKCOLOR, DIALOG_STYLE_LIST, "Werbetafel - Hintergrundfarbe", 
+					COLOR_B "Wähle eine vorgegebene Farbe\n" COLOR_B "Gebe einen ARGB Farbcode ein", "Weiter", "Zurück");
+			}
+			case 8: {
+				new dialogCaption[64], dialogText[512], mSize = g_Werbebanner[werbetafel][W_iMaterialSize];
+				format(dialogCaption, sizeof(dialogCaption), "Werbetafel - Materialgröße | {FFFFFF}%s (%i)", g_MatSizes[mSize / 10 - 1][MAT_SIZE_NAME], mSize);
+				for (new i; i < sizeof(g_MatSizes); i++) format(dialogText, sizeof(dialogText), "%s" COLOR_B "%s" COLOR_G " (%i)\n", dialogText, g_MatSizes[i][MAT_SIZE_NAME], g_MatSizes[i][MAT_SIZE_VALUE]);
+				return ShowPlayerDialog(playerid, DIALOG_ADBOARD_MATSIZE, DIALOG_STYLE_TABLIST, dialogCaption, dialogText, "Bestätigen", "Zurück");
+			}
+			case 9: {
+				return ShowPlayerDialog(playerid, DIALOG_ADBOARD_RESET, DIALOG_STYLE_MSGBOX, "Werbetafel - Standard wiederherstellen", COLOR_B "Bist du sicher, \
+					dass du die Werbetafel auf die\nStandardeinstellungen zurücksetzen möchtest?", "Bestätigen", "Zurück");
+			}
+			case 10: {
+				return ShowPlayerDialog(playerid, DIALOG_ADBOARD_SELL, DIALOG_STYLE_MSGBOX, "Werbetafel - Verkaufen", COLOR_B "Bist du sicher, \
+					dass du die Werbetafel verkaufen möchtest?\nDu bekommst kein Geld dafür zurück.", "Bestätigen", "Zurück");
+			}
+        }
 
+	    return 1;
+	}
+	if (dialogid == DIALOG_ADBOARD_TEXT) {
+		if (!response || isnull(inputtext)) return ShowWerbetafelMenu(playerid);
+		for (new i, j = strlen(inputtext) - 1; i < j; i++) {
+			if (inputtext[i] == '\\' && inputtext[i + 1] == 'n') {
+				inputtext[i] = ' ';
+				inputtext[i + 1] = '\n';
 			}
-			SaveWerbebannerEx(werbetafel);
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
-	}
-	if(dialogid == ColorDialog)
-	{
-	    if(response)
-	    {
-			switch(listitem)
-			{
-			    case 0: {
-			        ShowPlayerDialog(playerid,ColorDialog2,DIALOG_STYLE_INPUT,"    "COLOR_R"Text Color",
-			        ""COLOR_G"Please, type a ARGB color code below (example = 0xFFFF0000):","Change","Back");
-			    }
-			    case 1: {
-			        ShowPlayerDialog(playerid,ColorDialog3,DIALOG_STYLE_LIST,""COLOR_R"Color List",
-			        "{FF0000}Red\n{04B404}Green\n{00B5CD}Sky-Blue\n{FFFF00}Yellow\
-					\n{0000FF}Blue\n{848484}Grey\n{FF00FF}Pink\n{FFFFFF}White","Change","Back");
-			    }
-			}
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
-	}
-	if(dialogid == ColorDialog2)
-	{
-	    if(response) {
-	    	new string[80]; g_Werbebanner[werbetafel][W_iFontColor] = HexToInt(inputtext);
-			format(string, sizeof(string),""COLOR_R"* "COLOR_B"Text Color: "COLOR_Y"%i", g_Werbebanner[werbetafel][W_iFontColor]);
-			SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
-		} else {
-		    new titulo[100];
-		    format(titulo, sizeof(titulo),""COLOR_R"Text Color "COLOR_G"| "COLOR_B"Current Text Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iFontColor]);
-            ShowPlayerDialog(playerid,ColorDialog,DIALOG_STYLE_LIST,titulo,""COLOR_Y"1. "COLOR_B"Type a ARGB color code\
-			\n"COLOR_Y"2. "COLOR_B"Select a predefinded color","Next","Back");
 		}
-   		return 1;
-	}
-	if(dialogid == ColorDialog3)
-	{
-	    if(response) {
-	        switch(listitem)
-	        {
-	            case 0: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFFFF0000"); } //Red
-	            case 1: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFF04B404"); }
-	            case 2: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFF00B5CD"); }
-	            case 3: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFFFFFF00"); } //Yellow
-	            case 4: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFF0000FF"); }
-	            case 5: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFF848484"); }
-	            case 6: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFFFF00FF"); }
-	            case 7: { g_Werbebanner[werbetafel][W_iFontColor] = HexToInt("0xFFFFFFFF"); } //White
-	        }
-	        new string[80]; UpdateObject(werbetafel);
-	        format(string, sizeof(string),""COLOR_R"* "COLOR_B"Text Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iFontColor]);
-			SendClientMessage(playerid,-1,string); ShowMainMenu(playerid);
-			SaveWerbebannerEx(werbetafel);
-		} else {
-		    new titulo[100];
-		    format(titulo, sizeof(titulo),""COLOR_R"Text Color "COLOR_G"| "COLOR_B"Current Text Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iFontColor]);
-            ShowPlayerDialog(playerid,ColorDialog,DIALOG_STYLE_LIST,titulo,""COLOR_Y"1. "COLOR_B"Type a ARGB color code\
-			\n"COLOR_Y"2. "COLOR_B"Select a predefinded color","Next","Back");
-			SaveWerbebannerEx(werbetafel);
-		}
-   		return 1;
-	}
-	if(dialogid == BackgColorD)
-	{
-	    if(response)
-	    {
-	        switch(listitem)
-	        {
-	            case 0: { g_Werbebanner[werbetafel][W_iBackColor] = 0; UpdateObject(werbetafel);  ShowMainMenu(playerid); SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Background Color: "COLOR_Y"Disabled"); }
-	            case 1: {
-	                ShowPlayerDialog(playerid,ColorDialog4,DIALOG_STYLE_INPUT,"    "COLOR_R"Background Color",
-			        ""COLOR_G"Please, type a ARGB color code below (example = 0xFFFF0000):","Change","Back");
-	            }
-	            case 2: {
-	                ShowPlayerDialog(playerid,ColorDialog5,DIALOG_STYLE_LIST,""COLOR_R"Color List",
-			        "{FF0000}Red\n{04B404}Green\n{00B5CD}Sky-Blue\n{FFFF00}Yellow\
-					\n{0000FF}Blue\n{848484}Grey\n{FF00FF}Pink\n{FFFFFF}White","Change","Back");
-	            }
-	        }
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
-	}
-	if(dialogid == ColorDialog4)
-	{
-	    if(response) {
-	    	new string[80]; g_Werbebanner[werbetafel][W_iBackColor] = HexToInt(inputtext);
-			format(string, sizeof(string),""COLOR_R"* "COLOR_B"Background Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iBackColor]);
-			SendClientMessage(playerid,-1,string); UpdateObject(werbetafel), ShowMainMenu(playerid);
-			SaveWerbebannerEx(werbetafel);
-		} else {
-		    new titulo[100];
-		    format(titulo, sizeof(titulo),""COLOR_R"Object Background "COLOR_G"| "COLOR_B"Current Text Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iBackColor]);
-            ShowPlayerDialog(playerid,BackgColorD,DIALOG_STYLE_LIST,titulo,""COLOR_Y"1. "COLOR_B"Disable Background\n"COLOR_Y"2. "COLOR_B"Type a ARGB color code\
-			\n"COLOR_Y"3. "COLOR_B"Select a predefinded color","Next","Back");
-		}
-   		return 1;
-	}
-	if(dialogid == ColorDialog5)
-	{
-	    if(response) {
-	        switch(listitem)
-	        {
-	            case 0: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFFFF0000"); } //Red
-	            case 1: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFF04B404"); }
-	            case 2: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFF00B5CD"); }
-	            case 3: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFFFFFF00"); } //Yellow
-	            case 4: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFF0000FF"); }
-	            case 5: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFF848484"); }
-	            case 6: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFFFF00FF"); }
-	            case 7: { g_Werbebanner[werbetafel][W_iBackColor] = HexToInt("0xFFFFFFFF"); } //White
-	        }
-	        new string[80]; UpdateObject(werbetafel); ShowMainMenu(playerid);
-	        format(string, sizeof(string),""COLOR_R"* "COLOR_B"Background Color: "COLOR_Y"%i", g_Werbebanner[werbetafel][W_iBackColor]);
-			SendClientMessage(playerid,-1,string);
-			SaveWerbebannerEx(werbetafel);
-		} else {
-		    new titulo[100];
-		    format(titulo, sizeof(titulo),""COLOR_R"Object Background "COLOR_G"| "COLOR_B"Current Text Color: "COLOR_Y"%i",g_Werbebanner[werbetafel][W_iBackColor]);
-            ShowPlayerDialog(playerid,BackgColorD,DIALOG_STYLE_LIST,titulo,""COLOR_Y"1. "COLOR_B"Disable Background\n"COLOR_Y"2. "COLOR_B"Type a ARGB color code\
-			\n"COLOR_Y"3. "COLOR_B"Select a predefinded color","Next","Back");
-		}
-   		return 1;
-	}
-	if(dialogid == AlignDialog)
-	{
-	    if(response) {
-			switch(listitem)
-			{
-			    case 0: {
-					g_Werbebanner[werbetafel][W_iTextAlignment] = 0; UpdateObject(werbetafel);
-					SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Text Alignment: "COLOR_Y"Left"), ShowMainMenu(playerid);
-				}
-				case 1: {
-					g_Werbebanner[werbetafel][W_iTextAlignment] = 1; UpdateObject(werbetafel);
-					SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Text Alignment: "COLOR_Y"Center"), ShowMainMenu(playerid);
-				}
-				case 2: {
-					g_Werbebanner[werbetafel][W_iTextAlignment] = 2; UpdateObject(werbetafel);
-					SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"Text Alignment: "COLOR_Y"Right"), ShowMainMenu(playerid);
-				}
 
-			}
-			SaveWerbebannerEx(werbetafel);
-		} else { ShowMainMenu(playerid); }
+		format(g_Werbebanner[werbetafel][W_sText], 256, inputtext);
+		UpdateObject(werbetafel);
+		SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast den Text deiner Werbetafel auf folgendes geändert:");
+		SendClientMessage(playerid, COLOR_WHITE, inputtext);
+		return ShowWerbetafelMenu(playerid);
 	}
-	/*
-	if(dialogid == SaveDialog)
-	{
-	    if(response)
-	    {
-	        if(strlen(inputtext) <= 0) return SendClientMessage(playerid,-1,""COLOR_Y"* "COLOR_R"ERROR: "COLOR_G"Please, type something for the object name"COLOR_R"!"), ShowMainMenu(playerid);
-			new string[600], soname[30];
-			format(soname, sizeof(soname),"%s",inputtext); OName[playerid] = soname;
-		    new Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ;
-		    GetPlayerObjectPos(playerid, Object[playerid], fX, fY, fZ),
-			GetPlayerObjectRot(playerid, Object[playerid], fRotX, fRotY, fRotZ);
-		    if(!fexist("textobjects.txt"))
-			{
-			    new File:archivo = fopen("textobjects.txt", io_write);
-			    if(ObjectType[playerid] == false) {
-			        format(string, sizeof(string),"new %s = CreateObject(%d, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f);\
-					\r\nSetObjectMaterialText(%s, \"%s\", %d, %d, \"%s\", %d, %d, %i, %i, %d);",OName[playerid],ObjectID[playerid],
-					fX, fY, fZ, fRotX, fRotY, fRotZ, OName[playerid], Text[playerid], Index[playerid], Size[playerid], FontName[playerid],
-					FontSize[playerid], UseBold[playerid], TextColor[playerid], BackgColor[playerid], TextAlign[playerid]);
-			        fwrite(archivo,string);
-			        fclose(archivo);
-			    } else {
-					format(string, sizeof(string),"new %s = CreatePlayerObject(playerid, %d, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f);\
-					\r\nSetPlayerObjectMaterialText(playerid, %s, \"%s\", %d, %d, \"%s\", %d, %d, %i, %i, %d);",OName[playerid],ObjectID[playerid],
-					fX, fY, fZ, fRotX, fRotY, fRotZ, OName[playerid], Text[playerid], Index[playerid], Size[playerid], FontName[playerid],
-					FontSize[playerid], UseBold[playerid], TextColor[playerid], BackgColor[playerid], TextAlign[playerid]);
-			        fwrite(archivo,string); fclose(archivo);
-				}
-			} else {
-            	new File:archivo = fopen("textobjects.txt", io_append);
-            	if(ObjectType[playerid] == false) {
-			        format(string, sizeof(string),"\r\n\r\nnew %s = CreateObject(%d, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f);\
-					\r\nSetObjectMaterialText(%s, \"%s\", %d, %d, \"%s\", %d, %d, %i, %i, %d);",OName[playerid],ObjectID[playerid],
-					fX, fY, fZ, fRotX, fRotY, fRotZ, OName[playerid], Text[playerid], Index[playerid], Size[playerid], FontName[playerid],
-					FontSize[playerid], UseBold[playerid], TextColor[playerid], BackgColor[playerid], TextAlign[playerid]);
-			        fwrite(archivo,string); fclose(archivo);
-			    } else {
-					format(string, sizeof(string),"\r\n\r\nnew %s = CreatePlayerObject(playerid, %d, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f, %0.4f);\
-					\r\nSetPlayerObjectMaterialText(playerid, %s, \"%s\", %d, %d, \"%s\", %d, %d, %i, %i, %d);",OName[playerid],ObjectID[playerid],
-					fX, fY, fZ, fRotX, fRotY, fRotZ, OName[playerid], Text[playerid], Index[playerid], Size[playerid], FontName[playerid],
-					FontSize[playerid], UseBold[playerid], TextColor[playerid], BackgColor[playerid], TextAlign[playerid]);
-			        fwrite(archivo,string); fclose(archivo);
-				}
-			}
-			//---
-			CreatingTextO[playerid] = false, DestroyPlayerObject(playerid, Object[playerid]);
-			TextAlign[playerid] = 1, Text[playerid] = "Example", FontName[playerid] = "Arial",
-			TextColor[playerid] = HexToInt("0xFFFF8200"), BackgColor[playerid] = HexToInt("0xFF000000"),
-			Size[playerid] = 50, Index[playerid] = 0, UseBold[playerid] = 0,
-			FontSize[playerid] = 24, OName[playerid] = "0", ObjectID[playerid] = 19353;
-			//---
-			SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"INFO: "COLOR_Y"Script saved, check your "COLOR_G"textobjects.txt "COLOR_Y"in "COLOR_G"scriptfiles"COLOR_Y".");
-			SendClientMessage(playerid,-1,""COLOR_R"* "COLOR_B"INFO: "COLOR_Y"All settings have been reseted.");
-	    } else { ShowMainMenu(playerid); }
-	    return 1;
+	if (dialogid == DIALOG_ADBOARD_MATSIZE) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		if (listitem < 0 || listitem >= sizeof(g_MatSizes)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du hast keine gültige Auswahl getroffen.");
+		g_Werbebanner[werbetafel][W_iMaterialSize] = g_MatSizes[listitem][MAT_SIZE_VALUE];
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Materialgröße deiner Werbetafel auf %s (%i) geändert.",\
+			g_MatSizes[listitem][MAT_SIZE_NAME], g_MatSizes[listitem][MAT_SIZE_VALUE]);
+
+		return ShowWerbetafelMenu(playerid);
 	}
-	*/
+	if (dialogid == DIALOG_ADBOARD_FONT) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		format(g_Werbebanner[werbetafel][W_iFontFace], 32, inputtext);
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Schriftart deiner Werbetafel auf %s geändert.", g_Werbebanner[werbetafel][W_iFontFace]);
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_TEXTSIZE) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		new textSize;
+		if (sscanf(inputtext, "%i", textSize) || textSize < 1) {
+			SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Gebe eine positive Ganzzahl als Textgröße an.");
+			return ShowWerbetafelMenu(playerid);
+		}
+
+		g_Werbebanner[werbetafel][W_iFontSize] = textSize;
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Textgröße deiner Werbetafel auf %i geändert.", textSize);
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_BOLD) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		g_Werbebanner[werbetafel][W_iBold] = listitem ? 1 : 0;
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Einstellung deiner Werbetafel auf %s geändert.", listitem ? "Fettschrift" : "Keine Fettschrift");
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_TEXTCOLOR) {
+		if (!response) return ShowWerbetafelMenu(playerid);		
+		if (!listitem) {
+			new dialogText[256];
+			for (new i; i < sizeof(g_textColors); i++)
+				format(dialogText, sizeof(dialogText), "%s%s%s\n", dialogText, g_textColors[i][TEXT_COLOR_EMBEDDED], g_textColors[i][TEXT_COLOR_NAME]);
+			return ShowPlayerDialog(playerid, DIALOG_ADBOARD_TEXTCOLOR_LIST, DIALOG_STYLE_LIST, "Werbetafel - Textfarbe auswählen", 
+				dialogText, "Weiter", "Zurück");
+		}
+
+		return ShowPlayerDialog(playerid, DIALOG_ADBOARD_TEXTCOLOR_INPUT, DIALOG_STYLE_INPUT, "Werbetafel - Textfarbe eingeben", COLOR_B "Gebe einen ARGB Farbcode \
+			für die Textfarbe ein (z.B. 0xFFBB4400):", "Bestätigen", "Zurück");
+	}
+	if (dialogid == DIALOG_ADBOARD_BACKCOLOR) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		if (!listitem) {
+			new dialogText[256];
+			for (new i; i < sizeof(g_textColors); i++)
+				format(dialogText, sizeof(dialogText), "%s%s%s\n", dialogText, g_textColors[i][TEXT_COLOR_EMBEDDED], g_textColors[i][TEXT_COLOR_NAME]);
+			return ShowPlayerDialog(playerid, DIALOG_ADBOARD_BACKCOLOR_LIST, DIALOG_STYLE_LIST, "Werbetafel - Hintergrundfarbe auswählen", 
+				dialogText, "Weiter", "Zurück");
+		}
+
+		return ShowPlayerDialog(playerid, DIALOG_ADBOARD_BACKCOLOR_INPUT, DIALOG_STYLE_INPUT, "Werbetafel - Hintergrundfarbe eingeben", COLOR_B "Gebe einen ARGB Farbcode \
+			für die Textfarbe ein (z.B. 0xFFBB4400):", "Bestätigen", "Zurück");
+	}
+	if (dialogid == DIALOG_ADBOARD_RESET) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+	    format(g_Werbebanner[werbetafel][W_sText], 256, "{FF9900}Werbetafel zu vermieten\n\n{00FFFF}Dauer: {FFFFFF}4 Tage\n{00FF00}Kosten: {FFFFFF}$40.000");
+		g_Werbebanner[werbetafel][W_iMaterialIndex] = 0;
+		g_Werbebanner[werbetafel][W_iMaterialSize] = 130;
+		format(g_Werbebanner[werbetafel][W_iFontFace], 32, "Verdana");
+		g_Werbebanner[werbetafel][W_iFontSize] = 38;
+		g_Werbebanner[werbetafel][W_iBold] = 1;
+		g_Werbebanner[werbetafel][W_iFontColor] = 0xFFFFFFFF;
+		g_Werbebanner[werbetafel][W_iBackColor] = -16777216;
+		g_Werbebanner[werbetafel][W_iTextAlignment] = 1;
+		UpdateObject(werbetafel);
+		SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast deine Werbetafel auf die Standardeinstellungen zurückgesetzt.");
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_SELL) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		WerbetafelZuVermieten(werbetafel);
+		UpdateObject(werbetafel);
+		SaveWerbebannerEx(werbetafel);
+		return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast deine Werbetafel verkauft.");
+	}
+	if (dialogid == DIALOG_ADBOARD_ALIGN) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		if (listitem < 0 || listitem > 2) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du hast keine gültige Auswahl getroffen.");
+		g_Werbebanner[werbetafel][W_iTextAlignment] = listitem;
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Textausrichtung deiner Werbetafel auf %s geändert.", !listitem ? \
+			"Linksbündig" : (listitem == 1 ? "Zentriert" : "Rechtsbündig"));
+
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_TEXTCOLOR_INPUT) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		g_Werbebanner[werbetafel][W_iFontColor] = HexToInt(inputtext);
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Textfarbe deiner Werbetafel auf %s geändert.", inputtext);
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_BACKCOLOR_INPUT) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		g_Werbebanner[werbetafel][W_iBackColor] = HexToInt(inputtext);
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Hintergrundfarbe deiner Werbetafel auf %s geändert.", inputtext);
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_TEXTCOLOR_LIST) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		if (listitem < 0 || listitem >= sizeof(g_textColors)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du hast keine gültige Auswahl getroffen.");
+		g_Werbebanner[werbetafel][W_iFontColor] = g_textColors[listitem][TEXT_COLOR_VALUE];
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Textfarbe deiner Werbetafel auf %s geändert.", g_textColors[listitem][TEXT_COLOR_NAME]);
+		return ShowWerbetafelMenu(playerid);
+	}
+	if (dialogid == DIALOG_ADBOARD_BACKCOLOR_LIST) {
+		if (!response) return ShowWerbetafelMenu(playerid);
+		if (listitem < 0 || listitem >= sizeof(g_textColors)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du hast keine gültige Auswahl getroffen.");
+		g_Werbebanner[werbetafel][W_iBackColor] = g_textColors[listitem][TEXT_COLOR_VALUE];
+		UpdateObject(werbetafel);
+		SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Hintergrundfarbe deiner Werbetafel auf %s geändert.", g_textColors[listitem][TEXT_COLOR_NAME]);
+		return ShowWerbetafelMenu(playerid);
+	}	
     return 0;
 }
-stock HexToInt(string[]) //By Zamaroht, I think... =/
-{
-  if (string[0]==0) return 0;
-  new i;
-  new cur=1;
-  new res=0;
-  for (i=strlen(string);i>0;i--) {
-    if (string[i-1]<58) res=res+cur*(string[i-1]-48); else res=res+cur*(string[i-1]-65+10);
-    cur=cur*16;
-  }
-  return res;
+
+stock HexToInt(string[]) { //By Zamaroht, I think... =/
+	if (string[0] == 0) return 0;
+	new cur = 1, res = 0;
+	for (new i = strlen(string); i > 0; i--) {
+	if (string[i - 1] < 58) res = res + cur * (string[i - 1] - 48);
+	else res = res + cur * (string[i - 1] - 65 + 10);
+	cur = cur * 16;
+	}
+
+	return res;
 }
-stock UpdateObject(werbetafel)
-{
+
+stock UpdateObject(werbetafel) {
 	SetDynamicObjectMaterialText(
 		g_Werbebanner[werbetafel][W_iObjectID],
 		g_Werbebanner[werbetafel][W_iMaterialIndex],
@@ -805,13 +524,13 @@ stock UpdateObject(werbetafel)
 		g_Werbebanner[werbetafel][W_iBackColor],
 		g_Werbebanner[werbetafel][W_iTextAlignment]
 	);
+
 	return 1;
 }
 
-
 stock WerbetafelZuVermieten(werbetafel) {
-    format(g_Werbebanner[werbetafel][W_sText],256,"{FF9900}Werbetafel zu vermieten\n\n{00FFFF}Dauer: {FFFFFF}4 Tage\n{00FF00}Kosten: {FFFFFF}40.000$");
-	format(g_Werbebanner[werbetafel][W_sOwner],MAX_PLAYER_NAME,"Niemand");
+    format(g_Werbebanner[werbetafel][W_sText], 256, "{FF9900}Werbetafel zu vermieten\n\n{00FFFF}Dauer: {FFFFFF}4 Tage\n{00FF00}Kosten: {FFFFFF}$40.000");
+	format(g_Werbebanner[werbetafel][W_sOwner], MAX_PLAYER_NAME, "Niemand");
 	g_Werbebanner[werbetafel][W_unixBought] = 0;
 	g_Werbebanner[werbetafel][W_iMaterialIndex] = 0;
 	g_Werbebanner[werbetafel][W_iMaterialSize] = 130;
@@ -821,6 +540,6 @@ stock WerbetafelZuVermieten(werbetafel) {
 	g_Werbebanner[werbetafel][W_iFontColor] = 0xFFFFFFFF;
 	g_Werbebanner[werbetafel][W_iBackColor] = -16777216;
 	g_Werbebanner[werbetafel][W_iTextAlignment] = 1;
-	UpdateDynamic3DTextLabelText(g_Werbebanner[werbetafel][W_t3dLabel],0xFFFFFFFF,"Diese Werbetafel steht zum Verkauf!");
+	UpdateDynamic3DTextLabelText(g_Werbebanner[werbetafel][W_t3dLabel], 0x28C0D6FF, "Diese Werbetafel steht zum Verkauf!\n{FFFFFF}Benutze /Werbetafelkaufen");
 	return 1;
 }

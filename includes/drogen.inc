@@ -121,10 +121,10 @@ public Pulse_DrogenPflanzen() {
 
 new const PFLANZEN_HELP[][] = {
 	"/Pflanzen help{FFFFFF}\t\tDiese Liste anzeigen",
-	"/Pflanzen anzahl{FFFFFF}\t\tDie Anzahl der angebauten Pflanzen anzeigen",
+	"/Pflanzen anzahl{FFFFFF}\tDie Anzahl der angebauten Pflanzen anzeigen",
 	"/Pflanzen info{FFFFFF}\t\tInfo ¸ber n‰chstgelegene Pflanze (Reifezeit, Gieﬂzeit)",
 	"/Pflanzen anbauen{FFFFFF}\tEine Pflanze anbauen (maximal 200 Pflanzen gleichzeitig)",
-	"/Pflanzen giessen{FFFFFF}\t\tN‰chstgelegene Pflanze giessen (Zeit zum Gieﬂen: 600 Sekunden)",
+	"/Pflanzen giessen{FFFFFF}\tN‰chstgelegene Pflanze giessen (Zeit zum Gieﬂen: 600 Sekunden)",
 	"/Pflanzen verbrennen{FFFFFF}\tN‰chstgelegene Pflanze wird verbrannt",
 	"/Pflanzen abbauen{FFFFFF}\tN‰chstgelegene Pflanze wird geerntet",
 	"/Nimmspice{FFFFFF}\t\tEin Gramm Spice einnehmen (10 Sekunden Cooldown)",
@@ -153,8 +153,8 @@ COMMAND:pflanzen(playerid,params[]) {
 
 	if (!strcmp(params, "help", true) || isnull(params)) {
 		new dialogText[1024];
-		for (new i = 0; i < sizeof(PFLANZEN_HELP); i++) format(dialogText, sizeof(dialogText), "%s{FFFF00}%s\n", dialogText, PFLANZEN_HELP[i]);
-		return ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_LIST, "{b4c12e}Pflanzen Hilfe", dialogText, "Schlieﬂen", "");
+		for (new i = 0; i < sizeof(PFLANZEN_HELP); i++) format(dialogText, sizeof(dialogText), "%s{B4C12E}%s\n", dialogText, PFLANZEN_HELP[i]);
+		return ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_LIST, "{FFFFFF}Pflanzen Hilfe", dialogText, "Schlieﬂen", "");
 	}
 
 	if (!strcmp(params, "anzahl", true)) {
@@ -221,9 +221,9 @@ COMMAND:pflanzen(playerid,params[]) {
 		FreezePlayer(playerid);
 		SetTimerEx("TogglePlayerControllableEx", 2 * 1000, false, "dd", playerid, true);
 	 	g_FraktionsSafeBox[15][FSB_iSpice] += randomAmount;
-	 	format(message, sizeof(message), "%s hat %d Gramm Spice abgebaut. Es befinden sich nun %d Gramm Spice in der Fraktions-Safebox.", GetName(playerid), randomAmount, g_FraktionsSafeBox[15][FSB_iSpice]);
+	 	format(message, sizeof(message), "%s hat %d Gramm Spice abgebaut. Fraktions-Safebox: %d Gramm Spice", GetName(playerid), randomAmount, g_FraktionsSafeBox[15][FSB_iSpice]);
 		SendClientMessage(playerid, COLOR_YELLOW, "Die Spicepflanze wird von dir geerntet.");
-		return SendFraktionMessage(15, COLOR_RED, message);
+		return SendFraktionMessage(15, COLOR_LIME, message);
 	}
 
 	return SendClientMessage(playerid, COLOR_BLUE, "* Benutze: {00CC00}/Pflanzen f¸r eine ‹bersicht");
