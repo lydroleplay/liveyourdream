@@ -144,7 +144,8 @@ enum
 	VW_SAMDINTERIOR2, // First Floor
 	VW_CITYHALLINTERIOR,
 	VW_REGISTRATIONOFFICE,
-	VW_POOINTERIOR
+	VW_POOINTERIOR,
+	VW_LSPDINTERIOR
 }
 
 new gSQL;
@@ -796,7 +797,7 @@ enum e_ParkscheinAutomat {
 	Float:PA_fY,
 	Float:PA_fZ
 }
-#define MAX_PARKSCHEIN_AUTOMATEN 3
+#define MAX_PARKSCHEIN_AUTOMATEN 10
 new g_ParkscheinAutomat[MAX_PARKSCHEIN_AUTOMATEN][e_ParkscheinAutomat],
 	g_iParkscheinAutomat;
 
@@ -2178,18 +2179,6 @@ enum {
 
 #define RELEASED(%0) \
 	(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
-
-// MAPS
-#include <maps\samdExterior>
-#include <maps\samdInterior>
-#include <maps\samdInterior2>
-#include <maps\subway>
-#include <maps\sanaBase>
-#include <maps\cityhallExterior>
-#include <maps\cityhallInterior>
-#include <maps\impoundLot>
-#include <maps\pooExterior>
-#include <maps\pooInterior>
 
 enum GangFight
 {
@@ -3943,7 +3932,6 @@ new TazerTime[MAX_PLAYERS];
 new Tazered[MAX_PLAYERS];
 new Cuffed[MAX_PLAYERS];
 new fstor[6];
-new pdtor[3];
 new regtor[1];
 new alctor[3];
 new tresortuer[1];
@@ -4068,7 +4056,6 @@ new muell[6];
 new eismann[4];
 new hotdogcar[3];
 new pdeaccadmin[MAX_PLAYERS][MAX_PLAYER_NAME];
-new lspdcars[33];
 new fbicars[29];
 new ballascars[17];
 new grovecars[16];
@@ -4210,6 +4197,20 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 //#include <hausmoebel>
 //#include <gears>
 #include <robbing>
+
+// MAPS
+#include <maps\samdExterior>
+#include <maps\samdInterior>
+#include <maps\samdInterior2>
+#include <maps\subway>
+#include <maps\sanaBase>
+#include <maps\cityhallExterior>
+#include <maps\cityhallInterior>
+#include <maps\impoundLot>
+#include <maps\pooExterior>
+#include <maps\pooInterior>
+#include <maps\lspdExterior>
+#include <maps\lspdInterior>
 
 
 main()
@@ -4740,10 +4741,10 @@ OnGameModeInit2() {
 
 	g_tPulseBank = SetTimer("Pulse_Bankraub",( (BANKRAUB_ZEIT)*1000)+197,false);
 
-	g_aiNoDM[0] = CreateDynamicRectangle( 205.0 , 55.0 , 285.0 , 105.0 , .interiorid = 6 );
-	g_aiNoDM[1] = CreateDynamicRectangle( 355.0 , 135.0 , 395.0 , 230.0 , .interiorid = 3 );
-	g_aiNoDM[2] = CreateDynamicRectangle( 346.0 , -2006.0 , 415.0 , -2191.0, .interiorid = -1 );
-	g_aiNoDM[3] = CreateDynamicRectangle( 1284.0  ,  -1776.0 , 1157.0  , -1846.0, .interiorid = -1 );
+	g_aiNoDM[0] = CreateDynamicRectangle(346.0, -2006.0, 415.0, -2191.0, .interiorid = -1); // Freizeitpark
+	g_aiNoDM[1] = CreateDynamicRectangle(1284.0, -1776.0, 1157.0, -1846.0, .interiorid = -1); // Fahrschule
+	g_aiNoDM[2] = CreateDynamicRectangle(1614.3436, -1331.6265, 1671.4816, -1403.0798, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // LSPD Interior
+	g_aiNoDM[3] = CreateDynamicRectangle(882.1005, -1438.1812, 965.1881, -1483.2373, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Cityhall Interior
 
 	g_waiNoDM[0] = CreateDynamicRectangle( 1602.0 , -1864.0 , 1419.0 , -1581.0, .interiorid = -1 );
 	g_waiNoDM[1] = CreateDynamicRectangle( 788.0 , -1388.0 , 849.0 , -1331.0, .interiorid = -1 );
@@ -5059,42 +5060,20 @@ OnGameModeInit2() {
 		SetVehicleToRespawn(kfzcars[i]);
 		aiVehicles[ kfzcars[i] ] = VEH_KFZCARS;
 	}
-	lspdcars[0] =AddStaticVehicleEx(596,1528.4299,-1687.9207,5.6140,270.4305,0,1,-1); // LSPD Car
-	lspdcars[1] =AddStaticVehicleEx(596,1528.2825,-1683.8896,5.5490,270.3842,0,1,-1); // LSPD Car
-	lspdcars[2] =AddStaticVehicleEx(596,1545.9524,-1662.8696,5.6143,90.4385,0,1,-1); // LSPD Car
-	lspdcars[3] =AddStaticVehicleEx(596,1546.0703,-1667.8976,5.5649,90.8057,0,1,-1); // LSPD Car
-	lspdcars[4] =AddStaticVehicleEx(596,1546.0330,-1672.0170,5.6169,91.3575,0,1,-1); // LSPD Car
-	lspdcars[5] =AddStaticVehicleEx(596,1546.1219,-1676.2966,5.6273,89.5330,0,1,-1); // LSPD Car
-	lspdcars[6] =AddStaticVehicleEx(596,1545.9865,-1680.3679,5.6242,89.9553,0,1,-1); // LSPD Car
-	lspdcars[7] =AddStaticVehicleEx(596,1546.0947,-1684.7112,5.6432,90.0680,0,1,-1); // LSPD Car
-	lspdcars[8] =AddStaticVehicleEx(599,1545.7489,-1654.9480,6.0412,91.5033,0,1,-1); // LSPD Car
-	lspdcars[9] =AddStaticVehicleEx(599,1545.5995,-1651.1572,6.1338,90.4691,0,1,-1); // LSPD Car
-	lspdcars[10] =AddStaticVehicleEx(601,1526.5123,-1645.0170,5.6505,180.2056,0,0,-1); // LSPD Car
-	lspdcars[11] =AddStaticVehicleEx(601,1530.4579,-1644.8307,5.6505,180.4480,0,0,-1); // LSPD Car
-	lspdcars[12] =AddStaticVehicleEx(427,1534.6715,-1645.3245,6.0753,180.2538,0,1,-1); // LSPD Car
-	lspdcars[13] =AddStaticVehicleEx(427,1538.8650,-1645.3118,6.0313,179.3286,0,1,-1); // LSPD Car
-	lspdcars[14] =AddStaticVehicleEx(523,1557.6459,-1711.8093,5.4547,358.9671,0,1,-1); // LSPD Car
-	lspdcars[15] =AddStaticVehicleEx(523,1560.0575,-1711.6943,5.4626,359.3719,0,1,-1); // LSPD Car
-	lspdcars[16] =AddStaticVehicleEx(523,1562.6664,-1711.8098,5.4571,0.0017,0,0,-1); // LSPD Car
-	lspdcars[17] =AddStaticVehicleEx(523,1565.2008,-1711.7239,5.4261,0.0000,0,0,-1); // LSPD Car
-	lspdcars[18] =AddStaticVehicleEx(426,1570.2202,-1711.5258,5.6414,0.4911,0,0,-1); // LSPD Car
-	lspdcars[19] =AddStaticVehicleEx(426,1574.4232,-1711.5121,5.6292,0.0683,0,0,-1); // LSPD Car
-	lspdcars[20] =AddStaticVehicleEx(560,1578.7439,-1711.9764,5.5961,0.2463,0,0,-1); // LSPD Car
-	lspdcars[21] =AddStaticVehicleEx(560,1583.6493,-1711.9542,5.5968,0.3526,0,0,-1); // LSPD Car
- 	lspdcars[22] =AddStaticVehicleEx(430,961.4000200,-2050.1999500,0.0000000,0.0000000,0,1,-1);//LSPD Boot
- 	lspdcars[23] =AddStaticVehicleEx(497,1566.4242,-1699.6432,28.5816,90.0000,0,1,-1); //lspd Heli
- 	lspdcars[24] =AddStaticVehicleEx(497,1566.4246,-1650.8419,28.8459,90.0000,0,1,-1); //lspd Heli
-	lspdcars[25] = AddStaticVehicleEx(596,2869.2363,1945.4760,11.2655,239.8570,0,1,-1); // alca pdcar
+	
+	/*lspdcars[25] = AddStaticVehicleEx(596,2869.2363,1945.4760,11.2655,239.8570,0,1,-1); // alca pdcar
 	lspdcars[26] = AddStaticVehicleEx(596,2865.6960,1943.5454,11.2670,237.4763,0,1,-1); // alca pdcar
 	lspdcars[27] = AddStaticVehicleEx(599,2864.1147,1938.1427,11.7587,270.0002,0,1,-1); // alca pdcar
 	lspdcars[28] = AddStaticVehicleEx(599,2864.0491,1934.2194,11.7524,269.4765,0,1,-1); // alca pdcar
 	lspdcars[29] = AddStaticVehicleEx(601,2864.3555,1927.5724,11.3028,304.6344,0,0,-1); // alca pdcar
 	lspdcars[30] = AddStaticVehicleEx(601,2868.2207,1924.4236,11.3097,299.9103,0,0,-1); // alca pdcar
 	lspdcars[31] = AddStaticVehicleEx(497,2852.9485,1820.1101,11.7223,269.9985,0,1,-1); // alca heli
-	lspdcars[32] = AddStaticVehicleEx(497,2852.9485,1835.6248,11.7322,269.9992,0,1,-1); // alca heli
-	for(new i ; i < sizeof(lspdcars) ; i++) {
-		SetVehicleHealth(lspdcars[i],2000.0);
+	lspdcars[32] = AddStaticVehicleEx(497,2852.9485,1835.6248,11.7322,269.9992,0,1,-1); // alca heli*/
+
+	for (new i; i < sizeof(vehicle_lspdExterior); i++) {
+		SetVehicleHealth(vehicle_lspdExterior[i], 2000.0);
 	}
+
 	staatcars[0] = AddStaticVehicleEx(487,1114.5248,-2053.9150,74.6203,270.0741,1,1,-1); // Maverick2R
 	staatcars[1] = AddStaticVehicleEx(487,1115.0560,-2019.9536,74.5852,270.1370,1,1,-1); // Maverick1R
 	staatcars[2] = AddStaticVehicleEx(447,1143.4955,-2028.3813,69.0234,231.9276,1,1,-1); // SeaSparrowR1
@@ -5466,11 +5445,10 @@ OnGameModeInit2() {
         SetVehicleToRespawn(ballascars[i]);
 		aiVehicles[ ballascars[i] ] = VEH_BALLASCARS;
 	}
-	for(new i=0;i<sizeof(lspdcars);i++)
-	{
-	    SetVehicleNumberPlate(lspdcars[i], COLOR_HEX_BLACK"LSPD");
-        SetVehicleToRespawn(lspdcars[i]);
-		aiVehicles[ lspdcars[i] ] = VEH_LSPDCARS;
+	for (new i = 0; i < sizeof(vehicle_lspdExterior); i++) {
+	    SetVehicleNumberPlate(vehicle_lspdExterior[i], COLOR_HEX_BLACK"LSPD");
+        SetVehicleToRespawn(vehicle_lspdExterior[i]);
+		aiVehicles[vehicle_lspdExterior[i]] = VEH_LSPDCARS;
 	}
 	for(new i=0;i<sizeof(staatcars);i++)
 	{
@@ -5661,14 +5639,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 1249.2776,-14.6761,1001.0366, VW_EVIDENCEROOM, 18);//Asservaterkammer Innen
 	CreateDynamicPickup(19197, 1, 1798.3326,-1578.8495,14.0915, 0);//Asservaterkammer Außen
 	CreateDynamicPickup(19197, 1, 2305.8259,-16.1325,26.7496, 0);//KFZ-AMT Außen
-	CreateDynamicPickup(19197, 1, 246.8488,62.3274,1003.6406,0);//LSPD Innen
-	CreateDynamicPickup(19197, 1, 1555.3770,-1675.5115,16.1953,0 );//LSPD Außen
-	CreateDynamicPickup(19197, 1, 1524.4833,-1677.9269,6.2188,0);//LSPD Garage unten
-	CreateDynamicPickup(19197, 1, 246.3936,87.1938,1003.6406, 0);//LSPD Garage Oben
-	CreateDynamicPickup(19197, 1, 1564.9011,-1684.6796,28.3956,0);//LSPD Port zum Dach
-	CreateDynamicPickup(19197, 1, 242.8356,66.5052,1003.6406, 0);//Dach Port zum LSPD
-	//CreateDynamicPickup(19197, 1, 1568.6384,-1690.6914,5.8906,0);//LSPD Port zum Alka
-	//CreateDynamicPickup(19197, 1, 2892.2905,1965.5055,11.5441, 0);//Alka Port zum LSPD
 	CreateDynamicPickup(19197, 1, 264.3734,191.1904,1008.1719,0);//FBI Innen
 	CreateDynamicPickup(19197, 1, 1901.9264,742.8745,10.8198,0 );//FBI Außen
 	CreateDynamicPickup(1318, 1, 1022.5145,-1121.7628,23.8719, 0);//Clubmitglied enter in Los Santos
@@ -5723,13 +5693,10 @@ OnGameModeInit2() {
 	//CreateDynamicPickup(1239, 1, 358.2361,184.5094,1008.3828, 0);//Staatsamt Point 2
 	CreateDynamicPickup(1239, 1, 1432.2867,-997.2612,1639.7911, 500);//Bankschalter in Zentralbank
 	CreateDynamicPickup(1239, 1, 292.4491,180.1878,1007.1794, 200);//Bankschalter in LV Bank
-	CreateDynamicPickup(1239, 1, 249.1860,67.7020,1003.640, 0);//Wanted Ticket Points
 	CreateDynamicPickup(1239, 1, -2158.7920,642.9232,1052.3750, 0);//Clubzeichen
-	CreateDynamicPickup(1247, 1, 1561.4497,-1694.0126,5.8906, 0);//Arrest Point
 	CreateDynamicPickup(1247, 1, 2268.1128,2448.0073,3.5313, 0);//Arrest Point LV
 	// CreateDynamicPickup(1247, 1, 321.0334,315.3957,999.1484, 0);//Arrest Point Zoll
 	CreateDynamicPickup(1247, 1, 1898.5366,681.8521,10.8203, 0);//Arrest Point neue FBI Base LV
-	CreateDynamicPickup(1247, 1, 267.5511,79.9001,1001.0391, 0);//Arrest Point oben
 	CreateDynamicPickup(1239, 1, 817.4735,-1345.8376,13.5269, 0);//Info Point
 	CreateDynamicPickup(1239, 1, 2324.6904,-1014.0570,1050.2109, 0);//Waffenshop Club in Los Santos
 	CreateDynamicPickup(1239, 1, -2656.1047,1416.0248,906.2734, 0);//Waffenshop Club in Las Venturas
@@ -5749,7 +5716,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 2160.4111,-98.0815,2.8239, 0);//Gangjail Point
 	CreateDynamicPickup(1239, 1, 1234.3380,-1823.9462,13.5909, 0);//Auto. Fahrschule
 	CreateDynamicPickup(1239, 1, 1819.9427,-2400.1108,13.5547, 0);//Repair am Flughafen Los Santos
-	CreateDynamicPickup(1239, 1, 1585.9081,-1677.1216,5.8970, 0);//Staatsrepair von LSPD
 	CreateDynamicPickup(1239, 1, 1882.3618,718.3406,10.8203, 0);//Staatsrepair von FBI
 	// CreateDynamicPickup(1239, 1, 2288.5466,2444.9841,3.2734, 0);//Staatsrepair von LVPD
 	// CreateDynamicPickup(1239, 1, 621.3207,-584.6555,17.2330, 0);//Staatsrepair von Zollamt
@@ -5759,7 +5725,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 1438.3832,-997.3231,1639.7911, 500);//Kredit in LS Bank
 	CreateDynamicPickup(1239, 1, 298.9642,179.2220,1007.1719, 200);//Kredit in LV Bank
 	CreateDynamicPickup(1314, 1, 1310.1578,-1368.4930,13.5499, 0);//Hochzeit
-	CreateDynamicPickup(1242, 1, 255.3310,73.8178,1003.6406, 0);//LSPD Waffenspint
 	CreateDynamicPickup(1242, 1, 251.3374,188.2731,1008.1719, 0);//FBI Waffenspint
 	CreateDynamicPickup(1242, 1, 326.8095,308.8015,999.1484, 0);//Zollamt Waffenspint
 	/*CreateDynamicPickup(1550, 1, 2144.2129,1641.7505,993.5761, 500);//Bankraub
@@ -5800,7 +5765,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 508.3369,-84.9195,998.9609, 0);//Aztecas
 	CreateDynamicPickup(1240, 1, 902.5193,-1277.1499,14.5935, 0);//O-Amt /dienst
 	CreateDynamicPickup(1240, 1, -2033.1216,-117.4597,1035.1719, 0);//Dienst Fahrschule
-	CreateDynamicPickup(1240, 1, 257.4659,77.3020,1003.6406,0);//LSPD Duty
 	CreateDynamicPickup(1240, 1, 2280.1423,2423.6230,3.4766,0);//LVPD Duty
 	CreateDynamicPickup(1240, 1, 244.3387,192.4503,1008.1719,0);//Fbi Duty
 	CreateDynamicPickup(1240, 1, 350.1314,160.0231,1025.7891, 0);//Präsi Herz
@@ -5821,7 +5785,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 2770.6990,-1628.7225,12.1775, 0);//Vagos Eingang
 
 	//Fraktions Skinpoints
-	CreateDynamicPickup(1275, 1, 253.7036,76.8204,1003.6406, 0);//LSPD Skin
 	CreateDynamicPickup(1275, 1, 2284.2014,2423.4590,3.4766, 0);//LVPD Skin
 	//CreateDynamicPickup(1275, 1, 1213.5494,-1812.7568,16.5938, 0);//Fahrschulskin
 	CreateDynamicPickup(1275, 1, 814.9228,-1234.5846,14.9359, 0);//Oamtskin
@@ -5867,7 +5830,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1,1257.3746,-1334.1302,13.2733, 0);//Busfahrer
 	CreateDynamicPickup(1275, 1,43.5684,-261.4508,1.8305, 0);//Trucker
 	CreateDynamicPickup(1275, 1,1893.2450,-2328.8833,13.5469, 0);//Pilot
-	CreateDynamicPickup(1275, 1,237.2124,75.5008,1005.0391, 0);//Anwalt
 	CreateDynamicPickup(1275, 1,2046.2723,-1913.2064,13.5469, 0);//Straßenreiniger
 	CreateDynamicPickup(1275, 1,2118.6157,-2085.0828,13.5544, 0);//Müllmann
 	CreateDynamicPickup(1275, 1,1565.7582,23.2893,24.1641, 0);//Gärtner
@@ -5956,7 +5918,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1279, 1, 797.5535, -617.8438, 16.3359, 0);//Spice Drogenfarm Punkt 2
 	CreateDynamicPickup(1279, 1, 760.4858, 378.9008, 23.1683, 0);//Spice Drogenfarm Punkt 3
 
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1585.9081,-1677.1216,5.8970, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1882.3618,718.3406,10.8203, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 2288.5466,2444.9841,3.2734, 10.0);
 	// CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 621.3207,-584.6555,17.2330, 10.0);
@@ -5979,7 +5940,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Busfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1257.3746,-1334.1302,13.2733, 25.0);//BUSFAHRER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Trucker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 43.5684,-261.4508,1.8305, 25.0);//TRUCKER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Piloten\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1893.2450,-2328.8833,13.5469, 25.0);//PILOT
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Anwälte\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 237.2124,75.5008,1005.0391, 25.0, .worldid = 6);//ANWALT
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Straßenreiniger\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2046.2723,-1913.2064,13.5469, 25.0);//STRAßENREINIGER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Müllmann\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2118.6157,-2085.0828,13.5544, 25.0);//MÜLLMANN
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Gärtner\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1565.7582,23.2893,24.1641, 25.0);//GÄRTNER
@@ -6227,8 +6187,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE,  377.1597,-67.7632,1001.5151, 10.0, .worldid = 31);//BS 8
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Tierhandel\n"COLOR_HEX_WHITE"Tippe /Haustiershop", COLOR_WHITE, 1805.2650,-1709.8883,13.5630, 15.0);//Tierhandel
 	//CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Peilsender-Verkauf\n"COLOR_HEX_WHITE"Tippe /Peilsender", COLOR_WHITE,  1151.7448,-1203.0283,19.5159, 25.0);//
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"1-3 Wanteds freikaufen\n"COLOR_HEX_WHITE"Tippe /Wantedticket", COLOR_WHITE, 249.1860,67.7020,1003.640, 15.0);//im PD
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Für Gesuchte Straftäter, um sich zu stellen\n"COLOR_HEX_WHITE"Tippe /Ergeben", COLOR_WHITE, 267.4481,79.9377,1001.0391, 15.0);//im PD
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"ELEKTROMARKT\n"COLOR_HEX_WHITE"Tippe /Elektromarkt", COLOR_WHITE, 1228.1368,-1423.4741,13.5548, 15.0);//Handyshop
 
 
@@ -6504,10 +6462,8 @@ public OnPlayerConnect(playerid)
 	// OnPlayerCarLogin(playerid);
 	//ResetPlayerMoney(playerid);
 	// TODO: Peek anpassen.
-	SetPlayerMapIcon(playerid, 0, 1553.9722,-1675.2562,16.1953, 30, 0, 0);//LSPD
 	SetPlayerMapIcon(playerid, 1, 1329.4666,-1559.4634,13.5469, 31, 0, 0);//Hotel
 	SetPlayerMapIcon(playerid, 2, 1461.5116,-1019.0845,24.5987, 52, 0, 0);//Bank
-	SetPlayerMapIcon(playerid, 3, 1481.1418,-1770.6615,18.7958, 38, 0, 0);//SH
 	SetPlayerMapIcon(playerid, 5, 1786.8823,-1916.9739,13.3944, 55, 0, 0);//Intercars
 	SetPlayerMapIcon(playerid, 6, 550.6537,-1264.4824,16.9693, 55, 0, 0);//Grottis
 	SetPlayerMapIcon(playerid, 7, 1238.0809,-1814.2310,13.4292, 19, 0, 0);//Fahrschule
@@ -10613,9 +10569,10 @@ public SetPlayerSpawn(playerid)
 		//Polizeiknast
 		if(Spieler[playerid][pJailed] == 1)
 		{
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerInterior(playerid, 6);
-			SetPlayerPosEx(playerid, 264.1042, 77.8588, 1001.0391, 6, 0);
+			new randSpawn = random(sizeof(lspdInterior_jailSpawnPoints));
+			SetPlayerFacingAngle(playerid, 90.0);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPosEx(playerid, lspdInterior_jailSpawnPoints[randSpawn][0], lspdInterior_jailSpawnPoints[randSpawn][1], lspdInterior_jailSpawnPoints[randSpawn][2] + 0.5, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
 			SetPVarInt(playerid, "JAIL.TIMESTAMP", gettime());
 			SendClientMessage(playerid, COLOR_BLUE, "[INFO] Du kannst erst in 2 Minuten von einem Anwalt befreit werden.");
 		    return 1;
@@ -10671,11 +10628,9 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 1)
 			{
-				SetPlayerPos(playerid, 1525.2454,-1675.0402,5.8906);
-				SetPlayerFacingAngle(playerid, 237.3760);
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 1525.2454,-1675.0402,5.8906);
+				SetPlayerPosEx(playerid, LSPD_INTERIOR_SPAWN_POINT, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
+				SetPlayerFacingAngle(playerid, LSPD_INTERIOR_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 2)
 			{
@@ -10963,9 +10918,7 @@ public OnPlayerJail(playerid)
 		if( ( 0 < Spieler[playerid][pJailed] <= 3 ) )
 		{
 			if(Spieler[playerid][pJailTime] > 0)
-			{
-			   Spieler[playerid][pJailTime] -= 1;
-			}
+				Spieler[playerid][pJailTime] -= 1;
 			else
 			{
 			    Spieler[playerid][pJailed] = 0;
@@ -10973,11 +10926,11 @@ public OnPlayerJail(playerid)
 				AnwaltID[playerid] = 999;
 			    GameTextForPlayer(playerid, "~g~Freiheit! Benimm dich in Zukunft!", 4000, 1);
 				NeedAWALT[playerid] = 0;
-			    SetPlayerInterior(playerid, 0);
-			    SetPlayerPos(playerid, 1544.4935,-1675.8558,13.5585);
-			    SetPlayerVirtualWorld(playerid, 0);
+			    SetPlayerFacingAngle(playerid, LSPD_INTERIOR_ENTER_FACING);
+				SetCameraBehindPlayer(playerid);
+				SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
 				UnfreezePlayer(playerid);
-				paydaywait[playerid]=0;
+				paydaywait[playerid] = 0;
 			}
 		}
 	}
@@ -11285,7 +11238,7 @@ public OnVehicleSpawn(vehicleid)
 
 	if( GetVehicleModel(vehicleid) == 596 || GetVehicleModel(vehicleid) == 597 || GetVehicleModel(vehicleid) ==598 || GetVehicleModel(vehicleid) == 601 || GetVehicleModel(vehicleid) == 407
 	|| GetVehicleModel(vehicleid) == 599 || GetVehicleModel(vehicleid) == 497 || GetVehicleModel(vehicleid) == 490 || GetVehicleModel(vehicleid) ==433 || GetVehicleModel(vehicleid) == 427) {
-	    SetVehicleHealth(vehicleid,2000.0);// LSPDcars
+	    SetVehicleHealth(vehicleid, 2000.0); // LSPDcars
 	}
 	if( GetVehicleModel(vehicleid) == 520 ) {
 	    SetVehicleHealth(vehicleid,6000.0);// hydra
@@ -15601,10 +15554,10 @@ CMD:arrest(playerid, params[])
 	if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LSPD/FBI Mitglied.");
 	if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Arrest [SpielerID/Name]");
 	if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
-	if( IsPlayerInRangeOfPoint(pID, 10, 1561.4497,-1694.0126,5.8906) || IsPlayerInRangeOfPoint(pID, 10, 267.5511,79.9001,1001.0391) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313)
+	if( IsPlayerInRangeOfPoint(pID, 10, LSPD_ARREST_COORDS) || IsPlayerInRangeOfPoint(pID, 10, LSPD_INTERIOR_SURRENDER_POINT) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313)
 	|| IsPlayerInRangeOfPoint(pID, 10, 1898.5366,681.8521,10.8203) )
 	{
-	    if(IsPlayerInRangeOfPoint(playerid, 10, 1561.4497,-1694.0126,5.8906) || IsPlayerInRangeOfPoint(pID, 10, 267.5511,79.9001,1001.0391) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313) || IsPlayerInRangeOfPoint(pID, 10, 1898.5366,681.8521,10.8203))
+	    if(IsPlayerInRangeOfPoint(playerid, 10, LSPD_ARREST_COORDS) || IsPlayerInRangeOfPoint(pID, 10, LSPD_INTERIOR_SURRENDER_POINT) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313) || IsPlayerInRangeOfPoint(pID, 10, 1898.5366,681.8521,10.8203))
 	    {
 	        if(Spieler[pID][pWanteds] > 0)
 	        {
@@ -17438,6 +17391,24 @@ CMD:ipberkanbanlydadmin(playerid, params[])
 	return 1;
 }
 
+CMD:lspdbarrier(playerid, params[]) {
+	if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 3 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))
+		return SendClientMessage(playerid, COLOR_RED, "Du bist kein Staatsbeamter.");
+
+	if (!IsPlayerInRangeOfPoint(playerid, 20.0, LSPD_BARRIER_FOR_RANGE_COORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe der LSPD-Schranke.");
+
+	new Float:fX, Float:fY, Float:fZ, Float:fRX, Float:fRY, Float:fRZ;
+	GetDynamicObjectPos(object_lspdExterior_barrier, fX, fY, fZ);
+	GetDynamicObjectRot(object_lspdExterior_barrier, fRX, fRY, fRZ);
+
+	if (fRY == LSPD_BARRIER_OPEN_RY)
+		MoveDynamicObject(object_lspdExterior_barrier, fX, fY, fZ - 0.0001, 0.0002, fRX, LSPD_BARRIER_CLOSED_RY, fRZ);
+	else
+		MoveDynamicObject(object_lspdExterior_barrier, fX, fY, fZ + 0.0001, 0.0002, fRX, LSPD_BARRIER_OPEN_RY, fRZ);
+
+	return 1;
+}
+
 //Alca Tore
 CMD:atorauf(playerid, params[])
 {
@@ -17475,48 +17446,6 @@ CMD:atorzu(playerid, params[])
 	if(IsPlayerInRangeOfPoint(playerid,10, 2884.3974, 1979.0788, 13.2719))
 	{
 		MoveObject(alctor[2], 2884.3974, 1979.0788, 13.2719,2);
-		return 1;
-	}
- 	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der Nähe!");
-}
-
-//LSPD Tore
-CMD:torauf(playerid, params[])
-{
-    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 3 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Staatsbeamter.");
-	if(IsPlayerInRangeOfPoint(playerid,10, 1543.8254, -1622.1197, 13.5928))
-	{
-		MoveObject(pdtor[0], 1543.8254, -1622.1197, 13.5928-10,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 1584.4158, -1637.8710, 14.6134))
-	{
-		MoveObject(pdtor[1], 1584.4158, -1637.8710, 14.6134-10,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 1877.524658, 703.223693, 11.340308))
-	{
-		MoveObject(pdtor[2], 1877.524658, 703.223693, 11.340308-10,2);
-		return 1;
-	}
- 	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der Nähe!");
-}
-CMD:torzu(playerid, params[])
-{
-    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 3 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Staatsbeamter.");
-	if(IsPlayerInRangeOfPoint(playerid,10, 1543.8254, -1622.1197, 13.5928))
-	{
-		MoveObject(pdtor[0], 1543.8254, -1622.1197, 13.5928,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 1584.4158, -1637.8710, 14.6134))
-	{
-		MoveObject(pdtor[1], 1584.4158, -1637.8710, 14.6134,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 1877.524658, 703.223693, 11.340308))
-	{
-		MoveObject(pdtor[2], 1877.524658, 703.223693, 11.340308,2);
 		return 1;
 	}
  	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der Nähe!");
@@ -19081,7 +19010,7 @@ CMD:dienst(playerid)
 	}
 	else
 	{
-		if(IsPlayerInRangeOfPoint(playerid, 2.0, 257.4659,77.3020,1003.6406))//LSPD Duty
+		if(IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_INTERIOR_DUTY_POINT))//LSPD Duty
 		{
 		    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16))return SendClientMessage(playerid, COLOR_RED, "Nur für LSPD/FBI verfügbar.");
 		    Spieler[playerid][pDuty] = 1;
@@ -19206,7 +19135,7 @@ CMD:dienst(playerid)
 			SendFraktionMessage(22, COLOR_YELLOW, string);
 			GiveCopWeapons(playerid);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, -41.6871,-2501.5251,36.7248))//News Duty
+		else if(IsPlayerInRangeOfPoint(playerid, 2.0, SANABASE_DUTY_POINT))//News Duty
 		{
 		    if(!(Spieler[playerid][pFraktion] == 4))return SendClientMessage(playerid, COLOR_RED, "Nur für SA-NA verfügbar.");
 		    GiveNewsWeapons(playerid);
@@ -20308,13 +20237,10 @@ stock RespawnFactionCars(playerid, factionID) {
 	new string[128];
 	if (factionID == 1)
 	{
-		for(new i=0;i<sizeof(lspdcars);i++)
-		{
-			if(!IsVehicleOccupied(lspdcars[i]))
-			{
-				SetVehicleToRespawn(lspdcars[i]);
-			}
-		}
+		for (new i = 0; i < sizeof(vehicle_lspdExterior); i++)
+			if (!IsVehicleOccupied(vehicle_lspdExterior[i]))
+				SetVehicleToRespawn(vehicle_lspdExterior[i]);
+		
 		format(string, sizeof(string), "* Die LSPD Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(1, COLOR_DARKRED, string);
 		return 1;
@@ -29302,18 +29228,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerPos(playerid, 1424.4414,-1003.6353,1640.4742);
 		}
 		//EINGANG
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1555.3770,-1675.5115,16.1953))//LSPD Außen
-		{
-		    SetPlayerInterior(playerid, 6);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 246.8488,62.3274,1003.6406);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 246.8488,62.3274,1003.6406))//LSPD Innen
-		{
-		    SetPlayerInterior(playerid, 0);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 1555.3770,-1675.5115,16.1953);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, -1366.4780,500.7095,11.1953))//Army Außen
 		{
 		    if(!(Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Army Mitglied.");
@@ -29339,33 +29253,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerInterior(playerid, 0);
 		    SetPlayerVirtualWorld(playerid, 0);
 		    SetPlayerPos(playerid, 1901.9264,742.8745,10.8198);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0,242.8356,66.5052,1003.6406))//LSPD zum Dach
-		{
-		    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LSPD/FBI Mitglied.");
-		    SetPlayerInterior(playerid, 0);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 1564.9011,-1684.6796,28.3956);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1564.9011,-1684.6796,28.3956))//LSPD aus Dach
-		{
-      		if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LSPD/FBI Mitglied.");
-		    SetPlayerInterior(playerid,6);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 242.8356,66.5052,1003.6406);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0,1524.4833,-1677.9269,6.2188))//Garage unten LSPD
-		{
-		    SetPlayerInterior(playerid, 6);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 246.3936,87.1938,1003.6406);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 246.3936,87.1938,1003.6406))//Garage oben LSPD
-		{
-      		if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LSPD/FBI Mitglied.");
-		    SetPlayerInterior(playerid,0);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 1524.4833,-1677.9269,6.2188);
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0,2317.6533,-1026.3450,1050.2178))//Clubvilla in Los Santos
 		{
@@ -34112,7 +33999,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						SendClientMessage(playerid, COLOR_BLUE, "* LSPD VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzen verbennen, /Zollsperre, /Parkstrafe, /Strafzettel");
 						SendClientMessage(playerid, COLOR_BLUE, "* LSPD CHAT*: {FFFFFF}/Fc, /Bc, /Vk(VERSTÄRKUNG), /Pvk(VERSTÄRKUNG BEI EINZELNE PERSON), /Cpartner, /Ve");
 						SendClientMessage(playerid, COLOR_BLUE, "* LSPD KONTROLLEN*: {FFFFFF}/Kofferdurchsuchen, /Durchsuchen /Promille, /Pakte, /Gefangene, /Meldestelle, /Parkscheinkontrolle, /Vamt");
-						SendClientMessage(playerid, COLOR_BLUE, "* LSPD AUSRÜSTUNG*: {FFFFFF}/Copman, /Copfrau, /Rank, /Copcap, /Copcapf, /Copmuetze, /Pschild, /Copbrille, /Pswat,");
+						SendClientMessage(playerid, COLOR_BLUE, "* LSPD AUSRÜSTUNG*: {FFFFFF}/Copman, /Copfrau, /Rank, /Copcap, /Copcapf, /Copmuetze, /Pschild, /Copbrille, /Pswat, /Waffenspind");
 						SendClientMessage(playerid, COLOR_BLUE, "* LSPD SIGNALE*: {FFFFFF}/Vrk, /Hsirene, /Ermitteln, /Pein");
 
 					}
@@ -43745,7 +43632,7 @@ CMD:undercover(playerid)
 	}
 	else
 	{
-		if(IsPlayerInRangeOfPoint(playerid, 2.0, 244.3387,192.4503,1008.1719) || IsPlayerInRangeOfPoint(playerid, 2.0,  257.4659,77.3020,1003.6406))
+		if(IsPlayerInRangeOfPoint(playerid, 2.0, 244.3387,192.4503,1008.1719) || IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_INTERIOR_DUTY_POINT))
 		{
 			if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16))return SendClientMessage(playerid, COLOR_RED, "Nur für LSPD/FBI verfügbar!");
 			pUnderCover[playerid] = 1;
@@ -49244,9 +49131,9 @@ stock GetVehicleFraktion(vehicleid) {
 			}
 		}
 	}
-	else if( aiVehicles[vehicleid] == VEH_LSPDCARS ) {
-		for( i  = 0; i < sizeof(lspdcars) ; i++) {
-			if( lspdcars[i] == vehicleid ) {
+	else if(aiVehicles[vehicleid] == VEH_LSPDCARS) {
+		for(i = 0; i < sizeof(vehicle_lspdExterior); i++) {
+			if(vehicle_lspdExterior[i] == vehicleid) {
 			    return 1;
 			}
 		}
@@ -50385,7 +50272,7 @@ enum e_FraktionsSkins {
 
 new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	// X    Y       Z     Frak  { Skin 1-7 }
-	{ 253.7036, 76.8204, 1003.6406,	    1, { 300 , 301 , 281 , 283 , 267 , 265 , 266 , 265 , 306 , 285 , 284 , 303 , 304 , 192 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{ LSPD_INTERIOR_FSKIN_POINT,	    1, { 300 , 301 , 281 , 283 , 267 , 265 , 266 , 265 , 306 , 285 , 284 , 303 , 304 , 192 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ SAMD_INTERIOR_FSKIN_POINT,		3, { 70 , 274, 275, 276, 277, 278, 279, 308 , 59 , 60 , 29 , 72 , 188 , 229 , 93 , 233 , 226 } },
 	{ POO_INTERIOR_FSKIN_POINT,		    5, { 71 , 44 , 305 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ 244.9089,	188.2697,	1008.1719,	2, { 286 , 285 , 309 , 59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
@@ -53707,20 +53594,12 @@ COMMAND:startbonus(playerid,params[]) {
 	return 1;
 }
 
-COMMAND:staatsangehorigkeit(playerid,params[]) {
-	if(!IsPlayerInRangeOfPoint(playerid, 5.0, 255.3310,73.8178,1003.6406) ) {
-		return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Waffenspint der Polizei!");
-	}
-	if( !IsCop(playerid)) {
-		return SendClientMessage(playerid, COLOR_RED, "Du bist kein Polizist/FBI!");
-	}
-	ShowPlayerDialog(playerid,DIALOG_WLAGERCOP,DIALOG_STYLE_LIST,"Waffenspint","Deutschland\nSchweiz\nÖsterreich\nUSA\nKanada\nAustralien\nMexiko\nEngland\nTürkei\nBosnien\nAfrika\nNord/Südkorea\nChina\nJapan\nIndien\nRussland\nBulgarien\nNiederlande\nFrankreich\nItalien\nAlbanien\nPolen\nChile\nSyrien\nSaudi Arabien\nLibanon\nIran\nIrak\nIsrael\nPakistan","Annehmen","Abbruch");
-	return 1;
+COMMAND:waffenspind(playerid, params[]) {
+	return cmd_waffenspint(playerid, params);
 }
 
-
 COMMAND:waffenspint(playerid,params[]) {
-	if(!IsPlayerInRangeOfPoint(playerid, 5.0, 255.3310,73.8178,1003.6406) && !IsPlayerInRangeOfPoint(playerid, 5.0, 251.3374,188.2731,1008.1719) ) {
+	if(!IsPlayerInRangeOfPoint(playerid, 5.0, LSPD_INTERIOR_WEAPONS_LOCKER_POINT) && !IsPlayerInRangeOfPoint(playerid, 5.0, 251.3374,188.2731,1008.1719) ) {
 		return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Waffenspint der Polizei!");
 	}
 	if( !IsCop(playerid)) {
@@ -55888,7 +55767,7 @@ public CreateFireworkEx(Float:x,Float:y,Float:z,Float:face,obj) {
 #endif
 // TODO: Peek make dynamic 3DTexts and Pickups for Staterepair
 new const Float:g_StaatRepair[][] = {
-	{1585.9081, -1677.1216, 5.8970}, 	// PD
+	{ LSPD_STATEREPAIR_COORDS }, 	// PD
 	{ SAMD_STATEREPAIR_COORDS }, 	// Medic
 	{ POO_STATEREPAIR_COORDS }, 	// Oamt
 	{1882.3618, 718.3406, 	10.8203}, 	// FBI
@@ -60723,9 +60602,9 @@ COMMAND:haube(playerid,params[]) {
 }
 COMMAND:wantedticket(playerid,params[]) {
 	#pragma unused params
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,249.1860,67.7020,1003.640) ) {
+	if (!IsPlayerInRangeOfPoint(playerid, 3.0, LSPD_INTERIOR_WANTED_TICKET_POINT))
  		return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keine Wanted-Tickets kaufen");
-	}
+
 	ShowWantedTicketList(playerid);
 	return 1;
 }
@@ -61287,7 +61166,7 @@ new const g_JobSkins[][e_JobSkins] = {
 	{43.5684,  -261.4508,  1.8305,	3, 32 }, //Trucker
 	{1893.2450,  -2328.8833,  13.5469,	4, 61 }, //Pilot
 	{-77.6301,  -1135.9799,  1.0781,  5, 50 }, //Mechaniker
-	{237.2124,  75.5008,  1005.0391,  6, 57 }, //Anwalt
+	{ LSPD_INTERIOR_LAWYER_SKIN_POINT,  6, 57 }, // Lawyer (Anwalt)
 	{2046.2723,  -1913.2064,  13.5469,  7, 260 }, //Straßenreiniger
 	{2118.6157,  -2085.0828,  13.5544,	8, 260 }, //Müllmann
 	{1565.7582,  23.2893,  24.1641,	9, 35 }, //Gärtner
@@ -69767,18 +69646,15 @@ COMMAND:snacksshop(playerid,params[]) {
 }
 COMMAND:ergeben(playerid,params[]) {
 	#pragma unused params
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,267.4481,79.9377,1001.0391)) {
+	if (!IsPlayerInRangeOfPoint(playerid, 3.0, LSPD_INTERIOR_SURRENDER_POINT))
 	    return SendClientMessage(playerid, COLOR_RED, "Du kannst dich hier nicht ergeben");
-	}
-	if( Spieler[playerid][pJailed] ) {
+	else if (Spieler[playerid][pJailed])
 		return SendClientMessage(playerid, COLOR_RED, "Du kannst dich nicht ergeben, wenn du schon im Knast bist!");
-	}
-	if( Spieler[playerid][pWanteds] < 1 ) {
+	else if (Spieler[playerid][pWanteds] < 1)
 	    return SendClientMessage(playerid, COLOR_RED, "Du hast keine Wanteds.");
-	}
-	new
-	    String[128];
-	format(String,sizeof(String)," >> Straftäter %s hat sich der Polizei gestellt. <<",GetName(playerid));
+	
+	new String[128];
+	format(String, sizeof(String), " >> Straftäter %s hat sich der Polizei gestellt. <<", GetName(playerid));
 	SendFraktionMessage(1, COLOR_RED, String);
 	SendFraktionMessage(2, COLOR_RED, String);
 	SendFraktionMessage(16, COLOR_RED, String);
@@ -69786,7 +69662,7 @@ COMMAND:ergeben(playerid,params[]) {
 
 	Spieler[playerid][pJailed] = 1;
 	Spieler[playerid][pTot] = 0;
-	Spieler[playerid][pJailTime] = 150*Spieler[playerid][pWanteds];
+	Spieler[playerid][pJailTime] = 150 * Spieler[playerid][pWanteds];
 	Spieler[playerid][pTotTime] = 0;
 	Spieler[playerid][pTotX] = 0.0;
 	Spieler[playerid][pTotY] = 0.0;
@@ -69795,8 +69671,8 @@ COMMAND:ergeben(playerid,params[]) {
 	Cuffed[playerid] = 0;
 	SpawnPlayerEx(playerid);
 
-	format(String,sizeof(String),"Du hast dich ergeben! Pro Wanted werden dir 150 Sekunden Haftstrafe angerechnet.(Summe: %d)", Spieler[playerid][pJailTime] );
-	SendClientMessage(playerid,COLOR_ORANGE,String);
+	format(String, sizeof(String), "Du hast dich ergeben! Pro Wanted werden dir 150 Sekunden Haftstrafe angerechnet. (Summe: %d)", Spieler[playerid][pJailTime]);
+	SendClientMessage(playerid, COLOR_ORANGE, String);
 	return 1;
 }
 
@@ -70170,6 +70046,7 @@ stock InitParkscheibe() {
 	CreateDynamicObject(963, 1350.57544, -1269.46570, 13.78736,   0.00000, 0.00000, 0.00000); //Hauptammu Parkscheinautomat
 	CreateDynamicObject(963, 1445.02282, -1772.52527, 13.57012, 90.00000, 90.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
 	CreateDynamicObject(963, 1429.53638, -1755.35925, 13.56855, 90.00000, 0.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
+	CreateDynamicObject(963, 929.452576, -1589.62305, 13.64268, 90.00000, 0.00000, 0.00000); // LSPD Parkscheinautomat
 
 	for(new i , j = Streamer_GetUpperBound(STREAMER_TYPE_OBJECT) ; i < j ; i++) {
 	    if( IsValidDynamicObject(i) ) {

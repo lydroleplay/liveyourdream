@@ -101,13 +101,10 @@ hook OnPlayerConnect(playerid) {
 	RemoveBuildingForPlayer(playerid, 620, 1533.2656, -1749.0234, 12.8047, 0.25);
 	RemoveBuildingForPlayer(playerid, 673, 1522.1641, -1748.5703, 13.0234, 0.25);
 	RemoveBuildingForPlayer(playerid, 700, 1553.7031, -1747.9375, 13.4063, 0.25);
-
-	// Map Icon // TODO: Peek add coords here
-    // SetPlayerMapIcon(playerid, 9, CITYHALL_INTERIOR_ENTER_COORDS, 10, 0, 0);
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if (newkeys == KEY_SECONDARY_ATTACK) {
+	if (newkeys & KEY_SECONDARY_ATTACK) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_ENTER_COORDS)) { // Cityhall Entrance
 			SetPlayerFacingAngle(playerid, CITYHALL_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
@@ -132,6 +129,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+	// Map Icon
+    CreateDynamicMapIcon(CITYHALL_INTERIOR_ENTER_COORDS, 38, 0, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR);
+
 	// Pickups
     pickup_cityhallExterior[0] = CreateDynamicPickup(19197, 1, CITYHALL_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall
     pickup_cityhallExterior[1] = CreateDynamicPickup(19197, 1, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR); // Registration office

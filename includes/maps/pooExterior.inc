@@ -31,13 +31,10 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 4857, 1942.6797, -1986.7500, 14.8984, 0.25);
     RemoveBuildingForPlayer(playerid, 1226, 1957.3359, -1982.3984, 16.3828, 0.25);
     // TODO: peek remove old poo exterior hangars, so towed vehicles can still spawn on the old base
-
-	// Map Icon
-    SetPlayerMapIcon(playerid, 32, POO_INTERIOR_ENTER_COORDS, 11, 0, 0);
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if (newkeys == KEY_SECONDARY_ATTACK) {
+	if (newkeys & KEY_SECONDARY_ATTACK) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, POO_INTERIOR_ENTER_COORDS)) { // Entrance
 			SetPlayerFacingAngle(playerid, POO_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
@@ -50,6 +47,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Map Icon
+    CreateDynamicMapIcon(POO_INTERIOR_ENTER_COORDS, 11, 0, VW_MAIN, MAPS_POOEXTERIOR_INTERIOR);
+    
 	// Pickups
 	pickup_pooExterior[0] = CreateDynamicPickup(19197, 1, POO_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_POOEXTERIOR_INTERIOR); // Entrance
     pickup_pooExterior[1] = CreateDynamicPickup(1239, 1, POO_STATEREPAIR_COORDS, VW_MAIN, MAPS_POOEXTERIOR_INTERIOR); // Staterepair

@@ -34,7 +34,7 @@ hook OnPlayerConnect(playerid) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if (newkeys == KEY_SECONDARY_ATTACK) {
+	if (newkeys & KEY_SECONDARY_ATTACK) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_EXIT_COORDS)) { // Exit
             SetPlayerFacingAngle(playerid, CITYHALL_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);

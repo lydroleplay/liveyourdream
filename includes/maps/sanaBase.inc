@@ -40,7 +40,7 @@ hook OnPlayerConnect(playerid) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if (newkeys == KEY_SECONDARY_ATTACK) {
+	if (newkeys & KEY_SECONDARY_ATTACK) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, SANABASE_HELICOPTER_DOWN_POINT) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Down
 			SetPlayerFacingAngle(playerid, SANABASE_HELICOPTER_UP_FACING);
 			SetCameraBehindPlayer(playerid);

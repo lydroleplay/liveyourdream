@@ -20,7 +20,7 @@ hook OnPlayerConnect(playerid) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if (newkeys == KEY_SECONDARY_ATTACK) {
+	if (newkeys & KEY_SECONDARY_ATTACK) {
         /*if (IsPlayerInRangeOfPoint(playerid, 1.0, SAMD_INTERIOR_ELEVATOR_1_UP_COORDS) && GetPlayerVirtualWorld(playerid) == VW_SAMDINTERIOR2) { // Elevator 1
             SetPlayerFacingAngle(playerid, SAMD_INTERIOR_ELEVATOR_DOWN_FACING);
             SetCameraBehindPlayer(playerid);

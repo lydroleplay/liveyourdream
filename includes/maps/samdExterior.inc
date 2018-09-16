@@ -32,13 +32,10 @@ hook OnPlayerConnect(playerid) {
 	RemoveBuildingForPlayer(playerid, 4743, 1451.9922, -1067.3984, 112.5391, 0.25);
 	RemoveBuildingForPlayer(playerid, 1294, 1453.5000, -1038.1484, 27.3516, 0.25);
 	RemoveBuildingForPlayer(playerid, 1294, 1477.5313, -1070.1406, 27.1797, 0.25);
-
-	// Map Icon
-	SetPlayerMapIcon(playerid, 4, SAMD_INTERIOR_ENTER_COORDS, 22, 0, 0);
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if (newkeys == KEY_SECONDARY_ATTACK) {
+	if (newkeys & KEY_SECONDARY_ATTACK) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, SAMD_INTERIOR_ENTER_COORDS)) { // Entrance
 			SetPlayerFacingAngle(playerid, SAMD_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
@@ -51,6 +48,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+	// Map Icon
+    CreateDynamicMapIcon(SAMD_INTERIOR_ENTER_COORDS, 22, 0, VW_MAIN, MAPS_SAMDINTERIOR_INTERIOR);
+
 	// Pickups
 	pickup_samdExterior[0] = CreateDynamicPickup(19197, 1, SAMD_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR); // Entrance
 	pickup_samdExterior[1] = CreateDynamicPickup(1239, 1, SAMD_STATEREPAIR_COORDS, VW_MAIN, MAPS_SAMDEXTERIOR_INTERIOR); // Staterepair
