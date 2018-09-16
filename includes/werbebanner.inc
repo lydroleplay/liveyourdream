@@ -240,6 +240,14 @@ COMMAND:atafelentmieten(playerid, params[]) {
 	return 1;
 }
 
+COMMAND:werbetafelfinden(playerid, params[]) {
+	if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+	new werbetafel = GetPlayerWerbetafel(playerid);
+	if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du besitzt keine Werbetafel.");
+	SetPlayerCheckpointEx(playerid, g_Werbebanner[werbetafel][W_fX], g_Werbebanner[werbetafel][W_fY], g_Werbebanner[werbetafel][W_fZ], 2.0, CP_NAVI1);
+	return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Deine Werbetafel wurde auf der Map rot markiert.");
+}
+
 COMMAND:werbetafel(playerid, params[]) {
 	if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
 	new werbetafel = IsPlayerAtWerbetafel(playerid);
