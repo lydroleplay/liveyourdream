@@ -206,7 +206,7 @@ public SaveWerbebanner() {
 stock AddWerbebanner(index) {
 	new String[128];
 	g_Werbebanner[index][W_iPickup] = CreateDynamicPickup(1239, 1, g_Werbebanner[index][W_fX], g_Werbebanner[index][W_fY], g_Werbebanner[index][W_fZ]);
-	if (!strcmp(g_Werbebanner[index][W_sOwner], "Niemand")) format(String, sizeof(String), "Diese Werbetafel steht zum Verkauf!\n{FFFFFF}Benutze /Werbetafelkaufen");
+	if (!strcmp(g_Werbebanner[index][W_sOwner], "Niemand", true)) format(String, sizeof(String), "Diese Werbetafel steht zum Verkauf!\n{FFFFFF}Benutze /Werbetafelkaufen");
 	else format(String, sizeof(String), "Besitzer der Werbetafel:\n{FFFFFF}%s", g_Werbebanner[index][W_sOwner]);
 	g_Werbebanner[index][W_t3dLabel] = CreateDynamic3DTextLabel(String, 0x28C0D6FF, g_Werbebanner[index][W_fX], g_Werbebanner[index][W_fY] ,g_Werbebanner[index][W_fZ], 30.0);
 	g_Werbebanner[index][W_iObjectID] = CreateDynamicObject(g_Werbebanner[index][W_iModelID], g_Werbebanner[index][W_fObjX], g_Werbebanner[index][W_fObjY], 
@@ -252,7 +252,7 @@ COMMAND:werbetafel(playerid, params[]) {
 	if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
 	new werbetafel = IsPlayerAtWerbetafel(playerid);
 	if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht in der Nähe einer Werbetafel.");
-	if (!strcmp(g_Werbebanner[werbetafel][W_sOwner], GetName(playerid))) return ShowWerbetafelMenu(playerid);
+	if (!strcmp(g_Werbebanner[werbetafel][W_sOwner], GetName(playerid), true)) return ShowWerbetafelMenu(playerid);
 
 	return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel gehört nicht dir.");
 }
@@ -261,9 +261,9 @@ COMMAND:werbetafelkaufen(playerid, params[]) {
 	if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
 	new werbetafel = IsPlayerAtWerbetafel(playerid);
 	if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht in der Nähe einer Werbetafel.");
-	if (!strcmp(g_Werbebanner[werbetafel][W_sOwner], GetName(playerid))) return ShowWerbetafelMenu(playerid);
+	if (!strcmp(g_Werbebanner[werbetafel][W_sOwner], GetName(playerid), true)) return ShowWerbetafelMenu(playerid);
 	if (GetPlayerWerbetafel(playerid) != 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du besitzt bereits eine Werbetafel.");
-	if (strcmp(g_Werbebanner[werbetafel][W_sOwner], "Niemand") != 0) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel steht nicht zum Verkauf.");
+	if (strcmp(g_Werbebanner[werbetafel][W_sOwner], "Niemand", true) != 0) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel steht nicht zum Verkauf.");
 	return ShowPlayerDialog(playerid, DIALOG_ADBOARD_BUY, DIALOG_STYLE_MSGBOX, "Werbetafel Kaufen",\
 		"{FFFFFF}Möchtest du diese Werbetafel kaufen?\n{00FFFF}Dauer: {FFFFFF}4 Tage\n{00FF00}Kosten: {FFFFFF}$40.000", "Kaufen", "Abbrechen");
 }
@@ -271,7 +271,7 @@ COMMAND:werbetafelkaufen(playerid, params[]) {
 stock GetPlayerWerbetafel(playerid) {
 	new name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, sizeof(name));
-	for (new x = 0; x < g_iWerbebanner; x++) if (!strcmp(g_Werbebanner[x][W_sOwner], name)) return x;
+	for (new x = 0; x < g_iWerbebanner; x++) if (!strcmp(g_Werbebanner[x][W_sOwner], name, true)) return x;
 	return 999;
 }
 
@@ -292,7 +292,7 @@ stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, input
         if (Spieler[playerid][pCash] < 40000) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du besitzt keine $40.000 um die Werbetafel zu kaufen.");
         new String[128];
         if (werbetafel == 999) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht in der Nähe einer Werbetafel.");
-        if (strcmp(g_Werbebanner[werbetafel][W_sOwner], "Niemand") != 0) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel steht nicht zum Verkauf.");
+        if (strcmp(g_Werbebanner[werbetafel][W_sOwner], "Niemand", true) != 0) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Diese Werbetafel steht nicht zum Verkauf.");
         format(g_Werbebanner[werbetafel][W_sOwner], MAX_PLAYER_NAME, GetName(playerid));
         SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Diese Werbetafel gehört nun 96 Stunden lang dir.");
         SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Benutze /Werbetafel um sie einzustellen.");
