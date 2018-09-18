@@ -136,6 +136,8 @@ Yakuza:
 
 #define VW_ALL -1
 #define VW_MAIN 0
+#define VW_CASINOINTERIOR 50
+
 enum
 {
 	VW_EVIDENCEROOM = 2000,
@@ -4215,6 +4217,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\lspdInterior>
 #include <maps\fbiExterior>
 #include <maps\fbiInterior>
+#include <maps\casinoExterior>
+#include <maps\casinoInterior>
 
 main()
 {
@@ -5873,7 +5877,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1985, 1, 660.1712,-1869.5763,7.5781, 0);//Kampfstyle
 	CreateDynamicPickup(1239, 1, 1805.2650,-1709.8883,13.5630, 0);//Tierhandel
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
-	CreateDynamicPickup(1239, 1, 2000.9895,1009.9491,994.4688, 50);//Casino Bar
 	CreateDynamicPickup(1239, 1, 1228.1368,-1423.4741,13.5548, 0);//Handyladen
 
 	//Jobpoints
@@ -5970,19 +5973,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waren-Vergabe Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadwaren", COLOR_WHITE, 577.4390,1221.7273,11.2689, 20.0);//Loadware in LV
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Öl-Raffinerie Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadbenzin", COLOR_WHITE, 268.9609,1384.2981,10.1610, 20.0);//Loadbenzin in LV
 
-    //Casino
-    CreateDynamic3DTextLabel(COLOR_HEX_LIGHTBLUE"V.I.P Tisch\n"COLOR_HEX_ORANGE"Würfeltisch\n"COLOR_HEX_YELLOW"Tippe /VIPWuerfelspiel", COLOR_WHITE, 1991.1782,1006.7980,994.4688, 10.0, .worldid = 50);
-    CreateDynamic3DTextLabel(COLOR_HEX_LIGHTBLUE"V.I.P Tisch\n"COLOR_HEX_ORANGE"Kartentisch\n"COLOR_HEX_YELLOW"Tippe /VIPKartenspiel", COLOR_WHITE, 1982.6292,1010.0441,994.4688, 10.0, .worldid = 50);
-    CreateDynamic3DTextLabel(COLOR_HEX_LIGHTBLUE"V.I.P Tisch\n"COLOR_HEX_ORANGE"Roulettetisch\n"COLOR_HEX_YELLOW"Tippe /VIPRoulette", COLOR_WHITE, 1995.1270,1027.1958,994.4688, 10.0, .worldid = 50);
-    CreateDynamic3DTextLabel(COLOR_HEX_LIGHTBLUE"V.I.P Tisch\n"COLOR_HEX_ORANGE"Wett-Tisch\n"COLOR_HEX_YELLOW"Tippe /VIPGluecksrad", COLOR_WHITE, 1982.1996,1023.4893,994.4688, 10.0, .worldid = 50);
-    CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Roulettetisch\n"COLOR_HEX_YELLOW"Tippe /Roulette", COLOR_WHITE, 1988.2083,1027.1948,994.4688, 10.0, .worldid = 50);
-    CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Würfeltisch\n"COLOR_HEX_YELLOW"Tippe /Wuerfelspiel", COLOR_WHITE, 1985.4709,1006.7885,994.4688, 10.0, .worldid = 50);
-    CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Kartentisch\n"COLOR_HEX_YELLOW"Tippe /Kartenspiel", COLOR_WHITE, 1982.6289,1014.0380,994.4688, 10.0, .worldid = 50);
-	CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Wett-Tisch\n"COLOR_HEX_YELLOW"Tippe /Gluecksrad", COLOR_WHITE, 1982.2947,1018.9531,994.4688, 10.0, .worldid = 50);
-	CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Spielautomat\n"COLOR_HEX_YELLOW"Tippe /Spielautomat", COLOR_WHITE, 1993.8497,1020.7951,994.8906, 10.0, .worldid = 50); //CASINO
-	CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Spielautomat\n"COLOR_HEX_YELLOW"Tippe /Spielautomat", COLOR_WHITE, 1993.4406,1014.6566,994.8906, 10.0, .worldid = 50); //CASINO
-	CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Spielautomat\n"COLOR_HEX_YELLOW"Tippe /Spielautomat", COLOR_WHITE, 1831.1814,-1274.4622,120.2656, 10.0); //SHISHABAR
-
     //Spawn 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Grove Street Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2496.0542,-1709.4050,1014.7422, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ballas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 331.0788,1128.5469,1083.8828, 15.0, .worldid = 0);
@@ -6007,6 +5997,7 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ü18 - Bereich\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Preis: 40.000$", COLOR_WHITE, 1783.8965,-1296.5836,120.2656, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"SHISHA - LOUNGE\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Eintrittspreis: 500$", COLOR_WHITE, 1786.6959,-1299.6388,13.4341, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"SHISHA - LOUNGE\n"COLOR_HEX_WHITE"Verlassen mit 'Enter'", COLOR_WHITE, 1786.4310,-1300.1693,120.2656, 10.0);
+	CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Spielautomat\n"COLOR_HEX_YELLOW"Tippe /Spielautomat", COLOR_WHITE, 1831.1814,-1274.4622,120.2656, 10.0); //SHISHABAR
 
 	//Fraktionssafebox 3d Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der NineDemons\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 195.4771,-226.3883,1.7786, 8.0);
@@ -6058,7 +6049,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 2\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.3318,-9.9532,26.7422, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 1", COLOR_WHITE, 359.0863,210.2258,1008.3828, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 2", COLOR_WHITE, 358.2361,184.5094,1008.3828, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"-> LS - GROßES CASINO <-", COLOR_WHITE, 1498.3309,-1585.8683,13.5469, 25.0);//Casino
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - FAHRSCHULE", COLOR_WHITE, 1270.0138,-1846.0366,13.3906, 20.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.3948,-1379.4574,13.2933, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.0052,-1297.3274,13.2804, 20.0);
@@ -6089,7 +6079,7 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 2313.3645,-1013.3300,1050.2109, 10.0); //in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, -2653.6023,1407.0844,906.2734, 10.0); //in Las Venturas
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"SHISHA - BAR\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1814.7477,-1294.2003,120.2656, 10.0); //Shishabar
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Casino Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 2000.9895,1009.9491,994.4688, 15.0, .worldid = 50);
+
     //CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Getränkestand\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1455.8802,-1741.8704,13.5469, 10.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Discobar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 499.7624,-20.8934,1000.6797, 17.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, 2324.6904,-1014.0570,1050.2109, 8.0); // in Los Santos
@@ -53099,7 +53089,7 @@ COMMAND:starttaxi(playerid,params[]) {
 COMMAND:getraenk(playerid,params[]) {
 	//if( !IsPlayerInRangeOfPoint(playerid,15.0,499.4468,-20.7656,1000.6797) ) {
 	if (!IsPlayerInRangeOfPoint(playerid, 4.0, 1814.7477,-1294.2003,120.2656) && !IsPlayerInRangeOfPoint(playerid,4.0,499.7624,-20.8934,1000.6797) && !IsPlayerInRangeOfPoint(playerid,4.0,2313.3645,-1013.3300,1050.2109) && !IsPlayerInRangeOfPoint(playerid,4.0,1455.8802,-1741.8704,13.5469)
- 		&& !IsPlayerInRangeOfPoint(playerid,4.0,1215.3011,-13.0128,1000.9219) && !IsPlayerInRangeOfPoint(playerid,4.0,2000.9895,1009.9491,994.4688) && !IsPlayerInRangeOfPoint(playerid,4.0,-2653.6023,1407.0844,906.2734) ) {
+ 		&& !IsPlayerInRangeOfPoint(playerid,4.0,1215.3011,-13.0128,1000.9219) && !IsPlayerInRangeOfPoint(playerid,4.0, CASINO_INTERIOR_BUYDRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,-2653.6023,1407.0844,906.2734) ) {
 		return SendClientMessage(playerid,COLOR_ORANGE,"Du befindest dich nicht in der Bar");
 	}
 	showDrinks(playerid);
@@ -63511,7 +63501,7 @@ COMMAND:roulette(playerid,params[])
  	//new einsatz;
 	//if(sscanf(params,"d",einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /Gluecksrad [Einsatz($300 - $20.000)]");
 	//SendClientMessage(playerid,COLOR_GREEN, "CASINO-INFO: Der Einsatz wird bei Gewinn in diesem Spiel Einsatz verdoppelt!");
-	SendClientMessage(playerid,COLOR_WHITE, "Croupier sagt: Der Roulettetisch ist für heute geschlossen!");
+	if (IsPlayerInRangeOfPoint(playerid, 5.0, CASINO_INTERIOR_ROULETTE_POINT)) SendClientMessage(playerid,COLOR_WHITE, "Croupier sagt: Der Roulettetisch ist für heute geschlossen!");
 	/*if( !IsPlayerInRangeOfPoint(playerid,5.0,1982.5961,1019.0432,994.4688) && !IsPlayerInRangeOfPoint(playerid,5.0,1982.4845,1023.5238,994.4688)) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
@@ -63555,7 +63545,7 @@ COMMAND:viproulette(playerid,params[])
  	//new einsatz;
 	//if(sscanf(params,"d",einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /Gluecksrad [Einsatz($300 - $20.000)]");
 	//SendClientMessage(playerid,COLOR_GREEN, "CASINO-INFO: Der Einsatz wird bei Gewinn in diesem Spiel Einsatz verdoppelt!");
-	SendClientMessage(playerid,COLOR_WHITE, "Croupier sagt: Der Roulettetisch ist für heute geschlossen!");
+	if (IsPlayerInRangeOfPoint(playerid, 5.0, CASINO_INTERIOR_VIPROULETTE_POINT)) SendClientMessage(playerid,COLOR_WHITE, "Croupier sagt: Der Roulettetisch ist für heute geschlossen!");
 	/*if( !IsPlayerInRangeOfPoint(playerid,5.0,1982.5961,1019.0432,994.4688) && !IsPlayerInRangeOfPoint(playerid,5.0,1982.4845,1023.5238,994.4688)) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
@@ -63599,7 +63589,7 @@ COMMAND:gluecksrad(playerid,params[])
 {
  	new zahl,einsatz;
 	if(sscanf(params,"dd",zahl,einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /Gluecksrad [Zahl] [Einsatz($800 - $25.000)]");
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1982.1996,1023.4893,994.4688)) {
+	if( !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_WHEEL_POINT)) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
 	if( Spieler[playerid][pCash] >= einsatz)
@@ -63649,7 +63639,7 @@ COMMAND:vipgluecksrad(playerid,params[])
 {
  	new zahl,einsatz;
 	if(sscanf(params,"dd",zahl,einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /VIPGluecksrad [Zahl] [Einsatz($80.000 - $500.000)]");
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1982.1996,1023.4893,994.4688)) {
+	if( !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_VIPWHEEL_POINT)) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
 	if( Spieler[playerid][pCash] >= einsatz)
@@ -63702,7 +63692,7 @@ COMMAND:kartenspiel(playerid,params[])
 		einsatz;
 	if(sscanf(params,"s[16]d",farbe,einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /Kartenspiel [Schwarz/Rot/Gelb/Blau/Pink] [Einsatz($600 - $20.000)]");
 
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1982.6289,1014.0380,994.4688) ) {
+	if( !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_CARDS_POINT) ) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
 
@@ -63764,7 +63754,7 @@ COMMAND:vipkartenspiel(playerid,params[])
 		einsatz;
 	if(sscanf(params,"s[16]d",farbe,einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /VIPKartenspiel [Dame/König/Bube/Ass/10] [Einsatz($100.000 - $500.000)]");
 
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1982.6292,1010.0441,994.4688) ) {
+	if( !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_VIPCARDS_POINT) ) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
 
@@ -63824,7 +63814,7 @@ COMMAND:vipwuerfelspiel(playerid,params[])
 {
  	new zahl,einsatz;
 	if(sscanf(params,"dd",zahl,einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /VIPWuerfelspiel [1/2/3/4/5/6] [Einsatz($150.000 - $650.000)]");
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1991.1782,1006.7980,994.4688)) {
+	if( !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_VIPDICE_POINT)) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
 	if( Spieler[playerid][pCash] >= einsatz)
@@ -63874,7 +63864,7 @@ COMMAND:wuerfelspiel(playerid,params[])
 {
  	new zahl,einsatz;
 	if(sscanf(params,"dd",zahl,einsatz)) return SendClientMessage(playerid,COLOR_ORANGE, "* Benutze:"COLOR_HEX_GREENA" /Wuerfelspiel [1/2/3/4/5/6] [Einsatz($8.000 - $35.000)]");
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1985.3549,1005.6428,995.3957)) {
+	if( !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_DICE_POINT)) {
 		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht im Casino!");
 	}
 	if( Spieler[playerid][pCash] >= einsatz)
@@ -64026,9 +64016,9 @@ stock AimbotLog(text[])
 }
 
 COMMAND:spielautomat(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1998.4296,1014.8951,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.2943,1014.8025,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1993.4028,1014.7576,994.8906)
+	if( !IsPlayerInRangeOfPoint(playerid,5.0,1998.4296,1014.8951,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.2943,1014.8025,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_SLOT2_POINT)
 		&& !IsPlayerInRangeOfPoint(playerid,5.0,1989.8939,1014.8328,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1988.7532,1020.4262,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1991.1975,1020.7736,994.8906)
-		&& !IsPlayerInRangeOfPoint(playerid,5.0,1993.7916,1020.7392,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.0505,1020.6999,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1831.3458,-1274.4265,120.2656) && !IsPlayerInRangeOfPoint(playerid,5.0,1998.2787,1020.6613,994.8906)) {
+		&& !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_SLOT1_POINT) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.0505,1020.6999,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0, 1831.1814,-1274.4622,120.2656) && !IsPlayerInRangeOfPoint(playerid,5.0,1998.2787,1020.6613,994.8906)) {
 		return SendClientMessage(playerid,COLOR_RED,"Hier befindet sich kein Spielautomat!");
     }
     if( Spieler[playerid][pCash] < OAB_MONEY_AT_PLAYCOST ) {
@@ -64048,8 +64038,10 @@ COMMAND:spielautomat(playerid,params[]) {
 }
 
 COMMAND:spielautomatstop(playerid,params[]) {
-    StopOnArmedBanditForPlayer(playerid);
-    TogglePlayerControllable(playerid,true);
+	if (_OAB_PlayerPlays[playerid]) {
+	    StopOnArmedBanditForPlayer(playerid);
+	    TogglePlayerControllable(playerid,true);
+	}
 	return 1;
 }
 
