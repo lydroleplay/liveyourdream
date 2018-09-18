@@ -3253,9 +3253,9 @@ new Kaufliste[82][aHaus] = {
     {"Bike", 5, 509, 1, 1500, 689.2124, -1186.1840, 15.2118, 48.4005, 0},
     {"BMX", 5, 481, 1, 1800, 693.5145, -1179.3686, 15.1269, 80.6211, 0},
 //Oldtimer-Autohaus
-	{"Stafford", 6, 580, 1, 30000000, 895.3710, -937.9694, 43.7478, 93.5958, 60},
-	{"Hustler", 6, 545, 1, 26000000, 894.9079, -934.4525, 43.0327, 92.4652, 60},
-	{"Broadway", 6, 575, 1, 28000000, 895.5701, -941.4047, 42.8155, 92.7796, 60},
+	{"Stafford", 6, 580, 1, 30000000, 895.8816, -937.5002, 42.4149, 93.5958, 60},
+	{"Hustler", 6, 545, 1, 26000000, 895.8915, -934.3734, 42.4119, 92.4652, 60},
+	{"Broadway", 6, 575, 1, 28000000, 896.3578, -941.3626, 42.2687, 92.7796, 60},
 	{"Voodoo", 6, 412, 1, 450000, 905.7409, -922.1875, 42.4787, 182.3283, 60},
 	{"Majestic", 6, 517, 1, 480000, 911.0039, -921.3837, 42.4051, 183.7384, 60},
 	{"Slamvan", 6, 535, 1, 1300000, 883.6339, -941.2964, 42.7489, 304.0722, 60},
@@ -4219,6 +4219,9 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\casinoExterior>
 #include <maps\casinoInterior>
 #include <maps\evidenceroomInterior>
+#include <maps\shishaBar>
+#include <maps\wedding>
+#include <maps\oldtimerDealership>
 
 main()
 {
@@ -5652,12 +5655,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 316.42,-169.41,999.59, 40);//Ausgang Ammu LS Ballas
 	CreateDynamicPickup(19197, 1, 286.14,-40.63,1001.52, 53);//Ausgang Ammu LV
 	CreateDynamicPickup(19197, 1, 238.6129,139.4004,1003.0234, 0);//Ausgang Krankenhaus
-	CreateDynamicPickup(19197, 1, 1805.3219,-1307.5023,120.2586, 0);//Shishabar VIP Eingang
-	CreateDynamicPickup(19197, 1, 1807.8176,-1307.3773,120.3193, 0);//Shishabar VIP Ausgang
-	CreateDynamicPickup(19197, 1, 1786.4310,-1300.1693,120.2656, 0);//Shishabar INNEN Ausgang
-	CreateDynamicPickup(19197, 1, 1786.6959,-1299.6388,13.4341, 0);//Shishabar draußen Eingang
-	CreateDynamicPickup(19197, 1, 1783.8965,-1296.5836,120.2656, 0);//Shishabar Strip Eingang
-	CreateDynamicPickup(19197, 1, 1781.4067,-1296.5382,120.2656, 0);//Shishabar Strip Ausgang
 
 
 	//Info Position
@@ -5698,7 +5695,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 1441.9353,-992.0976,1639.7843, 500);//Bank Überweisung
 	CreateDynamicPickup(1239, 1, 1438.3832,-997.3231,1639.7911, 500);//Kredit in LS Bank
 	CreateDynamicPickup(1239, 1, 298.9642,179.2220,1007.1719, 200);//Kredit in LV Bank
-	CreateDynamicPickup(1314, 1, 1310.1578,-1368.4930,13.5499, 0);//Hochzeit
 	CreateDynamicPickup(1242, 1, 326.8095,308.8015,999.1484, 0);//Zollamt Waffenspint
 	/*CreateDynamicPickup(1550, 1, 2144.2129,1641.7505,993.5761, 500);//Bankraub
 	CreateDynamicPickup(1550, 1, 299.4320,191.2753,1007.1794, 200);//Bankraub in LV*/
@@ -5864,7 +5860,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1, 2316.5325,-1010.7850,1054.7188, 0);//Club Shop
 	CreateDynamicPickup(1239, 1, 2313.3645,-1013.3300,1050.2109, 0);//Getränke Clubvilla in Los Santos
 	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//Getränke Clubvilla in Las Venturas
-	CreateDynamicPickup(1239, 1, 1814.7477,-1294.2003,120.2656, 0);//SHISHA BAR GETRÄNK
 	CreateDynamicPickup(1239, 1, 499.7624,-20.8934,1000.6797, 0);//Getränke Disco
 	CreateDynamicPickup(1239, 1, 2309.3276,-8.2968,26.7422, 0);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
@@ -5893,7 +5888,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1248.3843,-1833.8750,13.3930, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1138.9730,-1820.9103,33.6354, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Flugzeug-Reparatur\n"COLOR_HEX_WHITE"Tippe /Flugzeugrepair", COLOR_WHITE, 1819.9427,-2400.1108,13.5547, 20.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"San Andreas Standesamt\n"COLOR_HEX_GREEN"Tippe /Heiraten um zu heiraten\n"COLOR_HEX_RED"Tippe /Scheiden um dich zu scheiden", COLOR_WHITE, 1310.1578,-1368.4930,13.5499, 15.0, .worldid = 0);
 
 	//Fahrtticket 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgeschäft: Fallturm\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 374.6658,-2121.6416,7.8820, 10.0);//Fallturm
@@ -5991,11 +5985,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Zentralbank Las Venturas\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1952.5675,1342.9261,15.3672, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrschule\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1216.5732,-1812.2876,16.5938, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1738.5869,-1586.3961,13.5555, 8.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"VIP - Bereich\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Preis: 25.000$", COLOR_WHITE, 1805.3219,-1307.5023,120.2586, 10.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ü18 - Bereich\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Preis: 40.000$", COLOR_WHITE, 1783.8965,-1296.5836,120.2656, 10.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"SHISHA - LOUNGE\n"COLOR_HEX_WHITE"Betreten mit 'Enter'\n"COLOR_HEX_YELLOW"Eintrittspreis: 500$", COLOR_WHITE, 1786.6959,-1299.6388,13.4341, 20.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"SHISHA - LOUNGE\n"COLOR_HEX_WHITE"Verlassen mit 'Enter'", COLOR_WHITE, 1786.4310,-1300.1693,120.2656, 10.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_ORANGE"Spielautomat\n"COLOR_HEX_YELLOW"Tippe /Spielautomat", COLOR_WHITE, 1831.1814,-1274.4622,120.2656, 10.0); //SHISHABAR
 
 	//Fraktionssafebox 3d Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der NineDemons\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 195.4771,-226.3883,1.7786, 8.0);
@@ -6050,7 +6039,6 @@ OnGameModeInit2() {
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.3948,-1379.4574,13.2933, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.0052,-1297.3274,13.2804, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"TÜV-WERKSTATT", COLOR_WHITE, 556.9567,-1258.7034,17.2422, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"SHISHA - LOUNGE\n"COLOR_HEX_BLUE"Befehl: /Shisha", COLOR_WHITE, 1833.2488,-1285.7264,120.2656, 10.0);// Shisha Lounge
    	/*CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof NORD\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1433.3264,2640.8018,11.3926, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof OST\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 2859.5542,1290.5511,11.3906, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"San Fierro - Hauptbahnhof\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, -1952.0848,137.6278,26.2813, 18.0);
@@ -6074,7 +6062,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel("{33EE55}Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", COLOR_WHITE, 1496.3137,-1719.4701,13.7969, 10.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 2313.3645,-1013.3300,1050.2109, 10.0); //in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, -2653.6023,1407.0844,906.2734, 10.0); //in Las Venturas
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"SHISHA - BAR\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1814.7477,-1294.2003,120.2656, 10.0); //Shishabar
 
     //CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Getränkestand\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1455.8802,-1741.8704,13.5469, 10.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Discobar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 499.7624,-20.8934,1000.6797, 17.0);
@@ -6090,7 +6077,6 @@ OnGameModeInit2() {
    	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten für 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Günstig\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!.", COLOR_WHITE, 1808.0851,-1889.7792,13.4073, 30.0);//Billig Autohaus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Luxus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 1142.3765,-1619.0011,13.9445, 30.0);//Luxus Autohaus
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Oldtimer\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 902.5354,-945.0310,40.9409, 30.0);//Oldtimer Autohaus
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Motorradhaus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Motorrad deiner Wahl ein!", COLOR_WHITE, 1662.1256,-1884.3601,13.5469, 30.0);//Bike haus
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootshaus -  Los Santos\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, 994.1482,-1975.4965,8.1708, 30.0);//Bootverkauf haus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrradladen\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrrad deiner Wahl ein!", COLOR_WHITE, 690.6381,-1182.3875,15.4783, 30.0);//Fahrradladen haus
@@ -12180,21 +12166,6 @@ CMD:wmenu(playerid)
 	}
 	return 1;
 }
-
-new const Float:g_shishaPoints[][3] = {
-	{1833.4843, -1289.0989, 120.7427},
-	{1833.4807, -1296.9984, 120.7427},
-	{1833.2511, -1303.0813, 120.7427},
-	{2491.7261, -1701.2618, 1018.3438},
-	{-791.3092, 508.1032, 	1367.3672},
-	{308.2954,  1120.7721, 	1083.8828},
-	{1833.5000, -1310.5891,	120.7427},
-	{1826.6648, -1306.8662,	120.7427},
-	{1826.5094, -1299.6204,	120.7427},
-	{1826.7908, -1292.8218,	120.7427},
-	{1819.6852, -1314.7180,	120.7515},
-	{1822.8683, -1314.5635,	120.3193}
-};
 
 CMD:shisha(playerid, params[]) {
 	if (isnull(params)) {
@@ -22178,10 +22149,10 @@ CMD:accept(playerid, params[])
 	    if( IsPlayerInAnyVehicle(giveid) ) {
 			return SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Spieler in einem Fahrzeug heiraten.");
 	    }
-	    if( !IsPlayerInRangeOfPoint(playerid,5.0,1310.1578,-1368.4930,13.5499) ) {
+	    if( !IsPlayerInRangeOfPoint(playerid,5.0, WEDDING_COORDS) ) {
 			return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Trau-Platz.");
 	    }
-	    if( !IsPlayerInRangeOfPoint(giveid,5.0,1310.1578,-1368.4930,13.5499) ) {
+	    if( !IsPlayerInRangeOfPoint(giveid,5.0, WEDDING_COORDS) ) {
 			return SendClientMessage(playerid, COLOR_RED, "Dein Partner befindet sich nicht am Trau-Platz.");
 	    }
 	    new
@@ -29235,30 +29206,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		{
 			SetPlayerPos(playerid, 2870.938965, 1906.032227, 11.551001);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1805.3219,-1307.5023,120.2586)) {//Shishabar VIP Eingang
-			if (GetPlayerMoney(playerid) < 25000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei, um den VIP-Bereich zu betreten.");
-			GivePlayerCash(playerid, -25000);
-			Biz[11][bKasse] += 25000;
-			SetPlayerPos(playerid, 1807.8176,-1307.3773,120.3193);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1807.8176,-1307.3773,120.3193))//Shishabar VIP Ausgang
-			SetPlayerPos(playerid, 1805.3219,-1307.5023,120.2586);
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1786.4310,-1300.1693,120.2656))//Shishabar INNEN Ausgang
-			SetPlayerPos(playerid, 1786.6959,-1299.6388,13.4341);
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1786.6959,-1299.6388,13.4341)) {//Shishabar draußen Eingang
-			if (GetPlayerMoney(playerid) < Biz[11][bEintritt]) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld, um die Shisha-Bar zu betreten.");
-			GivePlayerCash(playerid, Biz[11][bEintritt] * -1);
-			Biz[11][bKasse] += Biz[11][bEintritt];
-			SetPlayerPos(playerid, 1786.4310,-1300.1693,120.2656);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1783.8965,-1296.5836,120.2656)) {//Shishabar Strip Eingang
-			if (GetPlayerMoney(playerid) < 40000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei, um den Ü18-Bereich zu betreten.");
-			GivePlayerCash(playerid, -40000);
-			Biz[11][bKasse] += 40000;
-			SetPlayerPos(playerid, 1781.4067, -1296.5382, 120.2656);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1781.4067,-1296.5382,120.2656))//Shishabar Strip Ausgang
-			SetPlayerPos(playerid, 1783.8965,-1296.5836,120.2656);
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1571.2114,-1336.6027,16.4844))//startower unten
 		{
 		    SetPlayerInterior(playerid, 0);
@@ -48909,7 +48856,7 @@ COMMAND:heiraten(playerid,params[]) {
     if( IsPlayerInAnyVehicle(giveid) ) {
 		return SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Spieler in einem Fahrzeug einen Heiratsantrag machen.");
     }
-    if( !IsPlayerInRangeOfPoint(playerid,5.0,1310.1578,-1368.4930,13.5499) ) {
+    if( !IsPlayerInRangeOfPoint(playerid,5.0, WEDDING_COORDS) ) {
 		return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Trau-Platz.");
     }
     format(String,sizeof(String),"%s hat dir einen Heiratsantrag gemacht, du kannst diesen mit /accept Antrag annehmen!",GetName(playerid));
@@ -48930,7 +48877,7 @@ COMMAND:scheiden(playerid,params[]) {
 		return SendClientMessage(playerid, COLOR_RED, "Du bist nicht verheiratet.");
 	}
 	giveid_root = Spieler[playerid][pMarriage];
-    if( !IsPlayerInRangeOfPoint(playerid,5.0,1310.1578,-1368.4930,13.5499) ) {
+    if( !IsPlayerInRangeOfPoint(playerid,5.0, WEDDING_COORDS) ) {
 		return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Trau-Platz.");
     }
     giveid = GetPlayerIDByUnique(giveid_root);
@@ -53061,7 +53008,7 @@ COMMAND:starttaxi(playerid,params[]) {
 
 COMMAND:getraenk(playerid,params[]) {
 	//if( !IsPlayerInRangeOfPoint(playerid,15.0,499.4468,-20.7656,1000.6797) ) {
-	if (!IsPlayerInRangeOfPoint(playerid, 4.0, 1814.7477,-1294.2003,120.2656) && !IsPlayerInRangeOfPoint(playerid,4.0,499.7624,-20.8934,1000.6797) && !IsPlayerInRangeOfPoint(playerid,4.0,2313.3645,-1013.3300,1050.2109) && !IsPlayerInRangeOfPoint(playerid,4.0,1455.8802,-1741.8704,13.5469)
+	if (!IsPlayerInRangeOfPoint(playerid, 4.0, SHISHABAR_DRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,499.7624,-20.8934,1000.6797) && !IsPlayerInRangeOfPoint(playerid,4.0,2313.3645,-1013.3300,1050.2109) && !IsPlayerInRangeOfPoint(playerid,4.0,1455.8802,-1741.8704,13.5469)
  		&& !IsPlayerInRangeOfPoint(playerid,4.0,1215.3011,-13.0128,1000.9219) && !IsPlayerInRangeOfPoint(playerid,4.0, CASINO_INTERIOR_BUYDRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,-2653.6023,1407.0844,906.2734) ) {
 		return SendClientMessage(playerid,COLOR_ORANGE,"Du befindest dich nicht in der Bar");
 	}
@@ -63989,9 +63936,9 @@ stock AimbotLog(text[])
 }
 
 COMMAND:spielautomat(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1998.4296,1014.8951,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.2943,1014.8025,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_SLOT2_POINT)
+	if( !IsPlayerInRangeOfPoint(playerid,5.0,1998.4296,1014.8951,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.2943,1014.8025,994.8906) && !IsPlayerInRangeOfPoint(playerid, 5.0, CASINO_INTERIOR_SLOT2_POINT)
 		&& !IsPlayerInRangeOfPoint(playerid,5.0,1989.8939,1014.8328,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1988.7532,1020.4262,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0,1991.1975,1020.7736,994.8906)
-		&& !IsPlayerInRangeOfPoint(playerid,5.0, CASINO_INTERIOR_SLOT1_POINT) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.0505,1020.6999,994.8906) && !IsPlayerInRangeOfPoint(playerid,5.0, 1831.1814,-1274.4622,120.2656) && !IsPlayerInRangeOfPoint(playerid,5.0,1998.2787,1020.6613,994.8906)) {
+		&& !IsPlayerInRangeOfPoint(playerid, 5.0, CASINO_INTERIOR_SLOT1_POINT) && !IsPlayerInRangeOfPoint(playerid,5.0,1996.0505,1020.6999,994.8906) && !IsPlayerInRangeOfPoint(playerid, 5.0, SHISHABAR_SLOTS_POINT) && !IsPlayerInRangeOfPoint(playerid,5.0,1998.2787,1020.6613,994.8906)) {
 		return SendClientMessage(playerid,COLOR_RED,"Hier befindet sich kein Spielautomat!");
     }
     if( Spieler[playerid][pCash] < OAB_MONEY_AT_PLAYCOST ) {
