@@ -145,7 +145,9 @@ enum
 	VW_CITYHALLINTERIOR,
 	VW_REGISTRATIONOFFICE,
 	VW_POOINTERIOR,
-	VW_LSPDINTERIOR
+	VW_LSPDINTERIOR,
+	VW_FBIINTERIOR,
+
 }
 
 new gSQL;
@@ -4056,7 +4058,6 @@ new muell[6];
 new eismann[4];
 new hotdogcar[3];
 new pdeaccadmin[MAX_PLAYERS][MAX_PLAYER_NAME];
-new fbicars[29];
 new ballascars[17];
 new grovecars[16];
 new fscars[22];
@@ -4211,6 +4212,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\pooInterior>
 #include <maps\lspdExterior>
 #include <maps\lspdInterior>
+#include <maps\fbiExterior>
 
 
 main()
@@ -5099,38 +5101,10 @@ OnGameModeInit2() {
 	staatcars[22] = AddStaticVehicleEx(596,1277.4084,-2040.2709,58.7408,88.5071,1,0,-1); // PDCarR2
 	staatcars[23] = AddStaticVehicleEx(596,1277.0834,-2045.0055,58.7637,88.9386,1,0,-1); // PDCarR1
 
-	fbicars[0]=AddStaticVehicleEx(523,1898.4823,720.6070,10.3905,271.9332,0,0,-1); // FBIMotorrad1
-	fbicars[1]=AddStaticVehicleEx(523,1898.5605,722.6526,10.3913,271.5622,0,0,-1); // FBIMotorrad2
-	fbicars[2]=AddStaticVehicleEx(523,1898.2538,724.8604,10.3901,270.4993,0,0,-1); // FBIMotorrad3
-	fbicars[3]=AddStaticVehicleEx(523,1898.3014,727.3496,10.3901,269.3506,0,0,-1); // FBIMotorrad4
-	fbicars[4]=AddStaticVehicleEx(560,1909.9938,708.0081,10.5265,0.0000,0,0,-1); // FBISultan1
-	fbicars[5]=AddStaticVehicleEx(560,1916.2933,708.0099,10.5327,359.3907,0,0,-1); // FBISultan2
-	fbicars[6]=AddStaticVehicleEx(560,1922.6940,708.0628,10.5299,0.5165,0,0,-1); // FBISultan3
-	fbicars[7]=AddStaticVehicleEx(598,1929.2278,708.2212,10.6145,0.4616,0,0,-1); // FBIPDCar1
-	fbicars[8]=AddStaticVehicleEx(598,1935.5248,708.2570,10.6133,359.9110,0,0,-1); // FBIPDCar2
-	fbicars[9]=AddStaticVehicleEx(598,1942.0066,708.4412,10.5905,359.6378,0,0,-1); // FBIPDCar3
-	fbicars[10]=AddStaticVehicleEx(597,1942.0570,698.3959,10.6099,180.3381,0,0,-1); // FBIPDCar4
-	fbicars[11]=AddStaticVehicleEx(599,1935.5797,698.5533,11.0176,179.6054,0,0,-1); // FBIPDRanger1
-	fbicars[12]=AddStaticVehicleEx(599,1929.2791,698.4995,11.0202,180.6479,0,0,-1); // FBIPDRanger2
-	fbicars[13]=AddStaticVehicleEx(490,1922.6265,698.3480,10.9633,180.4432,0,0,-1); // FBIRanger1
-	fbicars[14]=AddStaticVehicleEx(490,1916.4125,698.2446,10.9479,180.7977,0,0,-1); // FBIRanger2
-	fbicars[15]=AddStaticVehicleEx(490,1909.7554,698.1930,10.9433,179.5954,0,0,-1); // FBIRanger3
-	fbicars[16]=AddStaticVehicleEx(601,1920.1407,738.2609,10.5791,181.0959,0,0,-1); // FBIWasserwerfer
-	fbicars[17]=AddStaticVehicleEx(427,1926.9146,738.3283,10.9536,175.2241,0,0,-1); // EnforcerFBI1
-	fbicars[18]=AddStaticVehicleEx(427,1935.4410,738.0777,10.9531,177.9978,0,0,-1); // EnforcerFBI2
-	fbicars[19]=AddStaticVehicleEx(528,1942.4806,739.8932,10.8982,181.8614,0,0,-1); // FBITruck1
-	fbicars[20]=AddStaticVehicleEx(528,1948.0559,739.5679,10.8638,180.5453,0,0,-1); // FBITruck2
-	fbicars[21]=AddStaticVehicleEx(447,1887.8113,671.3311,19.3851,270.7577,0,0,-1); // FBISeasparrow1
-	fbicars[22]=AddStaticVehicleEx(447,1887.8379,653.7224,19.4047,270.8672,0,0,-1); // FBISeasparrow2
-	fbicars[23]=AddStaticVehicleEx(497,1887.1563,734.1370,19.5620,269.1373,0,1,-1); // FBIMaverick1
-	fbicars[24]=AddStaticVehicleEx(497,1887.2302,753.8856,19.5664,270.6569,0,1,-1); // FBIMaverick2
-	fbicars[25]=AddStaticVehicleEx(597,1899.6368,731.8348,10.5908,270.1892,37,1,-1); // FBIPDCar5
-	fbicars[26]=AddStaticVehicleEx(541,1954.2128,727.6370,10.4458,93.2108,0,0,-1); // FBIPDCar5
-	fbicars[27]=AddStaticVehicleEx(597,1602.3794,-1687.8632,5.6507,90.0919,0,0,-1); // im PD FBI
-	fbicars[28]=AddStaticVehicleEx(490,1602.0638,-1692.0166,6.0252,90.9180,0,0,-1); // im PD FBI
-	for(new i ; i < sizeof(fbicars) ; i++) {
-		SetVehicleHealth(fbicars[i],2000.0);
+	for (new i; i < sizeof(vehicle_fbiExterior); i++) {
+		SetVehicleHealth(vehicle_fbiExterior[i],2000.0);
 	}
+
 	zollcars[0]=AddStaticVehicleEx(560,611.0714,-609.5248,16.9444,358.2168,3,1,-1); // sultan zoll
 	zollcars[1]=AddStaticVehicleEx(560,615.0045,-609.6320,16.9468,359.6290,4,1,-1); // sultan zoll
 	zollcars[2]=AddStaticVehicleEx(598,611.3314,-601.3384,16.9871,271.9958,154,1,-1); // cop zoll
@@ -5433,11 +5407,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(vehicle_pooExterior[i]);
 		aiVehicles[vehicle_pooExterior[i]] = VEH_OAMTCARS;
 	}
-	for(new i=0;i<sizeof(fbicars);i++)
+	for (new i = 0; i < sizeof(vehicle_fbiExterior); i++)
 	{
-		SetVehicleNumberPlate(fbicars[i], COLOR_HEX_BLACK"FBI");
-        SetVehicleToRespawn(fbicars[i]);
-		aiVehicles[ fbicars[i] ] = VEH_FBICARS;
+		SetVehicleNumberPlate(vehicle_fbiExterior[i], COLOR_HEX_BLACK"FBI");
+        SetVehicleToRespawn(vehicle_fbiExterior[i]);
+		aiVehicles[vehicle_fbiExterior[i]] = VEH_FBICARS;
 	}
 	for(new i=0;i<sizeof(ballascars);i++)
 	{
@@ -5640,7 +5614,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 1798.3326,-1578.8495,14.0915, 0);//Asservaterkammer Außen
 	CreateDynamicPickup(19197, 1, 2305.8259,-16.1325,26.7496, 0);//KFZ-AMT Außen
 	CreateDynamicPickup(19197, 1, 264.3734,191.1904,1008.1719,0);//FBI Innen
-	CreateDynamicPickup(19197, 1, 1901.9264,742.8745,10.8198,0 );//FBI Außen
 	CreateDynamicPickup(1318, 1, 1022.5145,-1121.7628,23.8719, 0);//Clubmitglied enter in Los Santos
 	CreateDynamicPickup(1318, 1, 2127.5486,2378.9626,10.8203, 0);//Clubmitglied enter in Las Venturas
 	CreateDynamicPickup(1239, 1, 1424.0088,-1003.9194,1639.7843, 0);//Bankraub enter
@@ -5696,7 +5669,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, -2158.7920,642.9232,1052.3750, 0);//Clubzeichen
 	CreateDynamicPickup(1247, 1, 2268.1128,2448.0073,3.5313, 0);//Arrest Point LV
 	// CreateDynamicPickup(1247, 1, 321.0334,315.3957,999.1484, 0);//Arrest Point Zoll
-	CreateDynamicPickup(1247, 1, 1898.5366,681.8521,10.8203, 0);//Arrest Point neue FBI Base LV
 	CreateDynamicPickup(1239, 1, 817.4735,-1345.8376,13.5269, 0);//Info Point
 	CreateDynamicPickup(1239, 1, 2324.6904,-1014.0570,1050.2109, 0);//Waffenshop Club in Los Santos
 	CreateDynamicPickup(1239, 1, -2656.1047,1416.0248,906.2734, 0);//Waffenshop Club in Las Venturas
@@ -5716,7 +5688,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 2160.4111,-98.0815,2.8239, 0);//Gangjail Point
 	CreateDynamicPickup(1239, 1, 1234.3380,-1823.9462,13.5909, 0);//Auto. Fahrschule
 	CreateDynamicPickup(1239, 1, 1819.9427,-2400.1108,13.5547, 0);//Repair am Flughafen Los Santos
-	CreateDynamicPickup(1239, 1, 1882.3618,718.3406,10.8203, 0);//Staatsrepair von FBI
 	// CreateDynamicPickup(1239, 1, 2288.5466,2444.9841,3.2734, 0);//Staatsrepair von LVPD
 	// CreateDynamicPickup(1239, 1, 621.3207,-584.6555,17.2330, 0);//Staatsrepair von Zollamt
 	CreateDynamicPickup(1239, 1, 1248.3843,-1833.8750,13.3930, 0);//Staatsrepair von Army
@@ -5918,7 +5889,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1279, 1, 797.5535, -617.8438, 16.3359, 0);//Spice Drogenfarm Punkt 2
 	CreateDynamicPickup(1279, 1, 760.4858, 378.9008, 23.1683, 0);//Spice Drogenfarm Punkt 3
 
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1882.3618,718.3406,10.8203, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 2288.5466,2444.9841,3.2734, 10.0);
 	// CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 621.3207,-584.6555,17.2330, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1248.3843,-1833.8750,13.3930, 10.0);
@@ -15554,10 +15524,9 @@ CMD:arrest(playerid, params[])
 	if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LSPD/FBI Mitglied.");
 	if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Arrest [SpielerID/Name]");
 	if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
-	if( IsPlayerInRangeOfPoint(pID, 10, LSPD_ARREST_COORDS) || IsPlayerInRangeOfPoint(pID, 10, LSPD_INTERIOR_SURRENDER_POINT) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313)
-	|| IsPlayerInRangeOfPoint(pID, 10, 1898.5366,681.8521,10.8203) )
+	if( IsPlayerInRangeOfPoint(pID, 10, LSPD_ARREST_COORDS) || IsPlayerInRangeOfPoint(pID, 10, LSPD_INTERIOR_SURRENDER_POINT) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313))
 	{
-	    if(IsPlayerInRangeOfPoint(playerid, 10, LSPD_ARREST_COORDS) || IsPlayerInRangeOfPoint(pID, 10, LSPD_INTERIOR_SURRENDER_POINT) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313) || IsPlayerInRangeOfPoint(pID, 10, 1898.5366,681.8521,10.8203))
+	    if(IsPlayerInRangeOfPoint(playerid, 10, LSPD_ARREST_COORDS) || IsPlayerInRangeOfPoint(pID, 10, LSPD_INTERIOR_SURRENDER_POINT) || IsPlayerInRangeOfPoint(pID, 10, 2268.1128,2448.0073,3.5313))
 	    {
 	        if(Spieler[pID][pWanteds] > 0)
 	        {
@@ -20247,13 +20216,10 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 2)
 	{
-		for(new i=0;i<sizeof(fbicars);i++)
-		{
-			if(!IsVehicleOccupied(fbicars[i]))
-			{
-				SetVehicleToRespawn(fbicars[i]);
-			}
-		}
+		for (new i = 0; i < sizeof(vehicle_fbiExterior); i++)
+			if (!IsVehicleOccupied(vehicle_fbiExterior[i]))
+				SetVehicleToRespawn(vehicle_fbiExterior[i]);
+		
 		format(string, sizeof(string), "* Die FBI Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(2, COLOR_DARKRED, string);
 		return 1;
@@ -29242,12 +29208,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerVirtualWorld(playerid, 0);
 		    SetPlayerPos(playerid, -1366.4780,500.7095,11.1953);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1901.9264,742.8745,10.8198))//FBI Außen
-		{
-		    SetPlayerInterior(playerid, 3);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 264.3734,191.1904,1008.1719);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 264.3734,191.1904,1008.1719))//FBI Innen
 		{
 		    SetPlayerInterior(playerid, 0);
@@ -29283,24 +29243,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerInterior(playerid,0);
 		    SetPlayerVirtualWorld(playerid, 0);
 		    SetPlayerPos(playerid, 2127.5486,2378.9626,10.8203);
-		}
-		else if (IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_ENTER_COORDS)) { // Cityhall Entrance
-			if(pCheckpoint[playerid] == CP_TUTORIAL3) {
-				SetPlayerCheckpointEx(playerid, CITYHALL_INTERIOR_STADTHALLE, 5.0, CP_TUTORIAL4);
-				SendClientMessage(playerid, COLOR_GREEN, "Gehe nun zum Informations-Punkt und beantrage einen Personalausweis und suche dir ein Job aus.");
-			}
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 389.6256,173.6593,1008.3828))//SH Innen
-		{
-			if(pCheckpoint[playerid] == CP_TUTORIAL5)
-			{
-				SetPlayerCheckpointEx(playerid, 1480.7660,-1805.3538,15.3578, 5.0, CP_TUTORIAL6);
-				SendClientMessage(playerid, COLOR_GREEN, "Bitte fahre nun zur Fahrschule. Diese wurde dir auf der Karte angezeigt!");
-			}
-			SendClientMessage(playerid, COLOR_WHITE, "Sachbearbeiter sagt: Vielen Dank für Ihr Besuch! Wir wünschen Ihnen einen schönen Tag.");
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 1480.7660,-1805.3538,15.3578);
 		}
 		else if(IsPlayerExecutive(playerid) && IsPlayerInRangeOfPoint(playerid, 2.0, 2870.938965, 1906.032227, 11.551001))//Alca ENTER
 		{
@@ -49131,16 +49073,16 @@ stock GetVehicleFraktion(vehicleid) {
 			}
 		}
 	}
-	else if(aiVehicles[vehicleid] == VEH_LSPDCARS) {
-		for(i = 0; i < sizeof(vehicle_lspdExterior); i++) {
-			if(vehicle_lspdExterior[i] == vehicleid) {
+	else if (aiVehicles[vehicleid] == VEH_LSPDCARS) {
+		for (i = 0; i < sizeof(vehicle_lspdExterior); i++) {
+			if (vehicle_lspdExterior[i] == vehicleid) {
 			    return 1;
 			}
 		}
 	}
-	else if( aiVehicles[vehicleid] == VEH_SANICARS ) {
-		for( i  = 0; i < sizeof(vehicle_samdExterior) ; i++) {
-			if( vehicle_samdExterior[i] == vehicleid ) {
+	else if (aiVehicles[vehicleid] == VEH_SANICARS) {
+		for (i = 0; i < sizeof(vehicle_samdExterior); i++) {
+			if (vehicle_samdExterior[i] == vehicleid) {
 			    return 3;
 			}
 		}
@@ -49151,9 +49093,9 @@ stock GetVehicleFraktion(vehicleid) {
 			    return 5;
 		}
 	}
-	else if( aiVehicles[vehicleid] == VEH_FBICARS ) {
-		for( i  = 0; i < sizeof(fbicars) ; i++) {
-			if( fbicars[i] == vehicleid ) {
+	else if (aiVehicles[vehicleid] == VEH_FBICARS) {
+		for (i = 0; i < sizeof(vehicle_fbiExterior); i++) {
+			if (vehicle_fbiExterior[i] == vehicleid) {
 			    return 2;
 			}
 		}
@@ -55770,7 +55712,7 @@ new const Float:g_StaatRepair[][] = {
 	{ LSPD_STATEREPAIR_COORDS }, 	// PD
 	{ SAMD_STATEREPAIR_COORDS }, 	// Medic
 	{ POO_STATEREPAIR_COORDS }, 	// Oamt
-	{1882.3618, 718.3406, 	10.8203}, 	// FBI
+	{ FBI_STATEREPAIR_COORDS }, 	// FBI
 	{2288.5466, 2444.9841, 	3.2734}, 	// LVPD
 	{1248.3843, -1833.8750, 13.3930}, 	// Fahrschule
 	{1138.9730, -1820.9103, 33.6354} 	// Fahrschule Dach

@@ -36,6 +36,10 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if (newkeys & KEY_SECONDARY_ATTACK) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_EXIT_COORDS)) { // Exit
+            if(pCheckpoint[playerid] == CP_TUTORIAL3) {
+				SetPlayerCheckpointEx(playerid, CITYHALL_INTERIOR_STADTHALLE, 5.0, CP_TUTORIAL4);
+				SendClientMessage(playerid, COLOR_GREEN, "Gehe nun zum Informations-Punkt und beantrage einen Personalausweis und suche dir ein Job aus.");
+			}
             SetPlayerFacingAngle(playerid, CITYHALL_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
 			SetPlayerPosEx(playerid, CITYHALL_INTERIOR_ENTER_COORDS + 0.5, MAPS_CITYHALLEXTERIOR_INTERIOR, VW_MAIN);
