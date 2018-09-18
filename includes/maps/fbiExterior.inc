@@ -19,7 +19,7 @@ static Float:DRAWDISTANCE   = 350.0;
 #define FBI_GATE_CLOSED_Z			    11.3403
 
 // Map variables
-new object_fbiExterior[54];
+new object_fbiExterior[49];
 new pickup_fbiExterior[2];
 new text3D_fbiExterior[1];
 new vehicle_fbiExterior[27];
@@ -65,7 +65,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, FBI_INTERIOR_ENTER_COORDS)) { // Entrance
 			SetPlayerFacingAngle(playerid, FBI_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, FBI_INTERIOR_EXIT_COORDS + 0.5, MAPS_FBIINTERIOR_INTERIOR, VW_FBIINTERIOR);
+			SetPlayerPosEx(playerid, FBI_INTERIOR_EXIT_COORDS, MAPS_FBIINTERIOR_INTERIOR, VW_FBIINTERIOR);
 			return 1;
 		}
 	}
@@ -159,12 +159,7 @@ hook OnGameModeInit() {
 	object_fbiExterior[45] = CreateDynamicObject(19121, 1901.056274, 728.420715, 10.362812, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
 	object_fbiExterior[46] = CreateDynamicObject(19121, 1900.846069, 743.070739, 10.362812, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
 	object_fbiExterior[47] = CreateDynamicObject(19121, 1902.856567, 743.070739, 10.362812, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-	object_fbiExterior[48] = CreateDynamicObject(19860, 264.88489, 190.44450, 1008.42548, 0.00000, 0.00000, 90.00000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-	object_fbiExterior[49] = CreateDynamicObject(19439, 264.99011, 191.09171, 1008.89130, 90.00000, 0.00000, 0.00000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-	object_fbiExterior[50] = CreateDynamicObject(19439, 264.99011, 191.09171, 1007.28528, 90.00000, 0.00000, 0.00000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-	object_fbiExterior[51] = CreateDynamicObject(19464, 237.58881, 193.96500, 1009.47888, 0.00000, 0.00000, 90.00000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-	object_fbiExterior[52] = CreateDynamicObject(19464, 268.08679, 193.96500, 1009.47888, 0.00000, 0.00000, 90.00000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_fbiExterior[53] = CreateDynamicObject(980, 1877.524658, 703.223693, 11.3403, 0.000000, 0.000000, 90.00000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    object_fbiExterior[48] = CreateDynamicObject(980, 1877.524658, 703.223693, 11.3403, 0.000000, 0.000000, 90.00000, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
 
-    object_fbiExterior_gate = object_fbiExterior[53];
+    object_fbiExterior_gate = object_fbiExterior[48];
 }

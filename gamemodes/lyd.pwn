@@ -134,6 +134,7 @@ Yakuza:
 
 #define HAUSTIER_OFFSET 1.5
 
+#define VW_ALL -1
 #define VW_MAIN 0
 enum
 {
@@ -4213,7 +4214,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\lspdExterior>
 #include <maps\lspdInterior>
 #include <maps\fbiExterior>
-
+#include <maps\fbiInterior>
 
 main()
 {
@@ -5696,7 +5697,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 1438.3832,-997.3231,1639.7911, 500);//Kredit in LS Bank
 	CreateDynamicPickup(1239, 1, 298.9642,179.2220,1007.1719, 200);//Kredit in LV Bank
 	CreateDynamicPickup(1314, 1, 1310.1578,-1368.4930,13.5499, 0);//Hochzeit
-	CreateDynamicPickup(1242, 1, 251.3374,188.2731,1008.1719, 0);//FBI Waffenspint
 	CreateDynamicPickup(1242, 1, 326.8095,308.8015,999.1484, 0);//Zollamt Waffenspint
 	/*CreateDynamicPickup(1550, 1, 2144.2129,1641.7505,993.5761, 500);//Bankraub
 	CreateDynamicPickup(1550, 1, 299.4320,191.2753,1007.1794, 200);//Bankraub in LV*/
@@ -5737,7 +5737,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 902.5193,-1277.1499,14.5935, 0);//O-Amt /dienst
 	CreateDynamicPickup(1240, 1, -2033.1216,-117.4597,1035.1719, 0);//Dienst Fahrschule
 	CreateDynamicPickup(1240, 1, 2280.1423,2423.6230,3.4766,0);//LVPD Duty
-	CreateDynamicPickup(1240, 1, 244.3387,192.4503,1008.1719,0);//Fbi Duty
 	CreateDynamicPickup(1240, 1, 350.1314,160.0231,1025.7891, 0);//Präsi Herz
 	CreateDynamicPickup(1240, 1, 309.2354,-135.8690,999.6016,0);//Army Duty
 	CreateDynamicPickup(1240, 1, -795.0400,1557.1365,27.1244,0);//Terror Herz
@@ -5759,7 +5758,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1, 2284.2014,2423.4590,3.4766, 0);//LVPD Skin
 	//CreateDynamicPickup(1275, 1, 1213.5494,-1812.7568,16.5938, 0);//Fahrschulskin
 	CreateDynamicPickup(1275, 1, 814.9228,-1234.5846,14.9359, 0);//Oamtskin
-	CreateDynamicPickup(1275, 1, 244.9089,188.2697,1008.1719, 0);//FBI Skin
 	CreateDynamicPickup(1275, 1, 221.7282,183.1214,1003.0313, 0);//Medic Skin
 	CreateDynamicPickup(1275, 1, 307.6244,-131.3671,999.6083, 0);//Army Skin'
 	CreateDynamicPickup(1275, 1, 326.9853,306.7588,999.1484, -1);//Zollamt Skin
@@ -10604,10 +10602,9 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 2)
 			{
-				SetPlayerPos(playerid, 244.9948,184.8684,1008.1719);
-				SetPlayerInterior(playerid, 3);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 244.9948,184.8684,1008.1719);
+				SetPlayerPosEx(playerid, FBI_INTERIOR_SPAWN_POINT, MAPS_FBIINTERIOR_INTERIOR, VW_FBIINTERIOR);
+				SetPlayerFacingAngle(playerid, FBI_INTERIOR_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 3)
 			{
@@ -19052,7 +19049,7 @@ CMD:dienst(playerid)
 				Spieler[playerid][pDuty] = 1;
 			}
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 244.3387,192.4503,1008.1719))//FBI Duty
+		else if(IsPlayerInRangeOfPoint(playerid, 2.0, FBI_INTERIOR_DUTY_POINT))//FBI Duty
 		{
 		    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16))return SendClientMessage(playerid, COLOR_RED, "Nur für LSPD/FBI verfügbar.");
 		    Spieler[playerid][pDuty] = 1;
@@ -50217,7 +50214,7 @@ new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	{ LSPD_INTERIOR_FSKIN_POINT,	    1, { 300 , 301 , 281 , 283 , 267 , 265 , 266 , 265 , 306 , 285 , 284 , 303 , 304 , 192 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ SAMD_INTERIOR_FSKIN_POINT,		3, { 70 , 274, 275, 276, 277, 278, 279, 308 , 59 , 60 , 29 , 72 , 188 , 229 , 93 , 233 , 226 } },
 	{ POO_INTERIOR_FSKIN_POINT,		    5, { 71 , 44 , 305 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{ 244.9089,	188.2697,	1008.1719,	2, { 286 , 285 , 309 , 59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{ FBI_INTERIOR_FSKIN_POINT,	        2, { 286 , 285 , 309 , 59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ -2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
 	{ 300.8034,	311.0651,	1003.3047,	14, { 2 , 29 , 229 , 294 , 171 , 23 , 19 , 35 , 22 , 11, 8 } },
 	{ 195.1181, -232.7614, 1.7786,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
@@ -53541,7 +53538,7 @@ COMMAND:waffenspind(playerid, params[]) {
 }
 
 COMMAND:waffenspint(playerid,params[]) {
-	if(!IsPlayerInRangeOfPoint(playerid, 5.0, LSPD_INTERIOR_WEAPONS_LOCKER_POINT) && !IsPlayerInRangeOfPoint(playerid, 5.0, 251.3374,188.2731,1008.1719) ) {
+	if(!IsPlayerInRangeOfPoint(playerid, 5.0, LSPD_INTERIOR_WEAPONS_LOCKER_POINT) && !IsPlayerInRangeOfPoint(playerid, 5.0, FBI_INTERIOR_WEAPONS_LOCKER_POINT) ) {
 		return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Waffenspint der Polizei!");
 	}
 	if( !IsCop(playerid)) {
