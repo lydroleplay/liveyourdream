@@ -140,7 +140,7 @@ Yakuza:
 
 enum
 {
-	VW_EVIDENCEROOM = 2000,
+	VW_EVIDENCEROOMINTERIOR = 2000,
 	VW_ADMINPRISON,
 	VW_LSPD,
 	VW_SAMDINTERIOR, // Lobby
@@ -3940,7 +3940,6 @@ new fstor[6];
 new regtor[1];
 new alctor[3];
 new tresortuer[1];
-new assertuer;
 new Refueling[MAX_PLAYERS];
 new RefuelType[MAX_PLAYERS];
 new MakeAnimation[MAX_PLAYERS];
@@ -4219,6 +4218,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\fbiInterior>
 #include <maps\casinoExterior>
 #include <maps\casinoInterior>
+#include <maps\evidenceroomInterior>
 
 main()
 {
@@ -5615,8 +5615,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 1384.1174,-1661.3926,13.4622, 0);//Donatladen enter
 	CreateDynamicPickup(19197, 1, 1038.3171,-1339.7793,13.7266, -1);//Donatladen exit
 	CreateDynamicPickup(19197, 1, 389.6256,173.6593,1008.3828, 0);//Stadthalle Innen
-	CreateDynamicPickup(19197, 1, 1249.2776,-14.6761,1001.0366, VW_EVIDENCEROOM, 18);//Asservaterkammer Innen
-	CreateDynamicPickup(19197, 1, 1798.3326,-1578.8495,14.0915, 0);//Asservaterkammer Auﬂen
 	CreateDynamicPickup(19197, 1, 2305.8259,-16.1325,26.7496, 0);//KFZ-AMT Auﬂen
 	CreateDynamicPickup(19197, 1, 264.3734,191.1904,1008.1719,0);//FBI Innen
 	CreateDynamicPickup(1318, 1, 1022.5145,-1121.7628,23.8719, 0);//Clubmitglied enter in Los Santos
@@ -6011,7 +6009,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der OutlawZ\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, -2170.3828,635.3927,1052.3750, 8.0);
 
 	//3D Infotext
-	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen ‹berfall mit\n"COLOR_HEX_RED"/Kammerausrauben", COLOR_WHITE, 1253.3943,-14.9542,1001.0326, 13.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"SERVER - EXPERTE\nFreischalten mit:"COLOR_HEX_WHITE"/Experte", COLOR_WHITE, 814.4642,-1345.7327,13.5320, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OSTER-AKTION im LyD-Shop\n"COLOR_HEX_GREEN"Es erwarten dich tolle Preise!\n"COLOR_HEX_WHITE"Weitere Informationen im Forum!", COLOR_WHITE, 1480.9296,-1613.7988,14.0979, 25.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"POSTHAUS - Eingang\n"COLOR_HEX_WHITE"Betreten mit 'Enter'", COLOR_WHITE, 914.3174,-1004.0942,37.9902, 25.0);
@@ -6054,7 +6051,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.0052,-1297.3274,13.2804, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"T‹V-WERKSTATT", COLOR_WHITE, 556.9567,-1258.7034,17.2422, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"SHISHA - LOUNGE\n"COLOR_HEX_BLUE"Befehl: /Shisha", COLOR_WHITE, 1833.2488,-1285.7264,120.2656, 10.0);// Shisha Lounge
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"ASSERVATENKAMMER\nDER BEH÷RDEN\n"COLOR_HEX_BLUE"Betreten mit 'Enter'", COLOR_WHITE, 1798.3326,-1578.8495,14.0915, 15.0);//Asservatenkammer Eingang
    	/*CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof NORD\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1433.3264,2640.8018,11.3926, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof OST\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 2859.5542,1290.5511,11.3906, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"San Fierro - Hauptbahnhof\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, -1952.0848,137.6278,26.2813, 18.0);
@@ -29502,30 +29498,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, 899.5109,-901.7924,45.7656);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1798.3326,-1578.8495,14.0915))// Asservaten auﬂen
-		{
-		    if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING)
-		        if (!IsPlayerExecutive(playerid) && Spieler[playerid][pFraktion] != 3 && Spieler[playerid][pFraktion] != 5)
-					return SendClientMessage(playerid,COLOR_RED,"Du kannst die Asservatenkammer nicht betreten, weil die Polizei aufgrund eines ‹berfalles die Kammer gesperrt hat!");
-
-		    SetPlayerInterior(playerid, 18);
-		    SetPlayerVirtualWorld(playerid, VW_EVIDENCEROOM);
-		    SetPlayerPos(playerid, 1249.2776,-14.6761,1001.0366);
-			SetPlayerFacingAngle(playerid, 0.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1249.2776,-14.6761,1001.0366))// Asservaten innen
-		{
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
-				SetPlayerPos(playerid, 1798.3326,-1578.8495,14.0915);
-				SetPlayerFacingAngle(playerid, 0.0);
-
-				if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING && g_evidenceRoomHeist[EVIDENCEROOM_HEIST_RAIDER] == playerid) {
-					KillTimer(g_evidenceRoomHeist[EVIDENCEROOM_HEIST_TIMER]);
-					g_evidenceRoomHeist[EVIDENCEROOM_HEIST_TIMER] = INVALID_TIMER_ID;
-					EvidenceRoomHeistFinished();
-				}
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1462.6464,-1011.3412,26.8438))// Bank LS auﬂen
 		{
 		    if( g_iBankraubStatus == Bankraub_Aktiv ) {
@@ -49583,7 +49555,7 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
 forward ResetEvidenceRoomHeist();
 public ResetEvidenceRoomHeist() {
 		g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] = EVIDENCEROOM_STATUS_IDLE;
-		MoveDynamicObject(assertuer, 1254.1525, -14.1255, 999.9403, 999.0, 0.0000, 0.0000, -90.8999);
+		MoveDynamicObject(object_door_evroomInterior, 1254.1525, -14.1255, 999.9403, 999.0, 0.0000, 0.0000, -90.8999);
 		return SendClientMessageToAll(COLOR_RED, "Die Asservatenkammer kann nun wieder ausgeraubt werden.");
 }
 
@@ -49617,7 +49589,7 @@ public EvidenceRoomHeistFinished() {
 }
 
 COMMAND:kammerausrauben(playerid, params[]) {
-	if (!(IsPlayerInRangeOfPoint(playerid, 2.0, 1253.3943, -14.9542, 1001.0326) && GetPlayerInterior(playerid) == 18 && GetPlayerVirtualWorld(playerid) == VW_EVIDENCEROOM)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Asservatenkammer.");
+	if (!(IsPlayerInRangeOfPoint(playerid, 2.0, EVIDENCEROOM_INTERIOR_HEIST_P) && GetPlayerInterior(playerid) == 18 && GetPlayerVirtualWorld(playerid) == VW_EVIDENCEROOMINTERIOR)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Asservatenkammer.");
 	if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "Du bist noch zu frisch auf dem Server.");
 	if (IsPlayerExecutive(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du bist Teil der Exekutive.");
 	if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING) return SendClientMessage(playerid, COLOR_RED, "Es l‰uft bereits ein ‹berfall auf die Asservatenkammer.");
@@ -49643,7 +49615,7 @@ COMMAND:kammerausrauben(playerid, params[]) {
 	SendFraktionMessage(16, COLOR_LIGHTRED, breakingNewsMessage);
 	SendFraktionMessage(18, COLOR_LIGHTRED, breakingNewsMessage);
 
-	MoveDynamicObject(assertuer, 1254.1525, -14.1255, 999.9403, 999.0, -90.0000, 0.0000, -90.8999);
+	MoveDynamicObject(object_door_evroomInterior, 1254.1525, -14.1255, 999.9403, 999.0, -90.0000, 0.0000, -90.8999);
 
 	format(breakingNewsMessage, sizeof(breakingNewsMessage), "[EILMELDUNG] R‰uber %s raubt die Asservatenkammer aus!", GetName(playerid));
 	SendClientMessageToAll(COLOR_RED, breakingNewsMessage);
@@ -52790,6 +52762,7 @@ public SetPlayerPosEx(playerid, Float:x, Float:y, Float:z, interior, virtualworl
 	SetTimerEx("TogglePlayerControllableEx", 1500, false, "ii", playerid, 1);
 	return 1;
 }
+
 /* Taschendieb 1x pro Minute
 	Nachricht beim einsteigen falls nicht angemeldet
 	Taschendieb bei Jail verbieten
