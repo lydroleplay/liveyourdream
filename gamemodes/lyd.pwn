@@ -4229,6 +4229,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\yakuzaInterior>
 #include <maps\cheapCarDealerShipLv>
 #include <maps\boatDealershipLs>
+#include <maps\electronicsShop>
 
 main()
 {
@@ -5873,7 +5874,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
 	CreateDynamicPickup(1985, 1, 660.1712,-1869.5763,7.5781, 0);//Kampfstyle
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
-	CreateDynamicPickup(1239, 1, 1228.1368,-1423.4741,13.5548, 0);//Handyladen
 
 	//Jobpoints
 	CreateDynamicPickup(1276, 1, 645.3646,-521.5663,16.3359, 0);//Geld entladen
@@ -6122,8 +6122,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Pizza Stack\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE,  375.5368,-119.2299,1001.4995, 10.0, .worldid = 30);//Pizza Stack 6
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE,  377.1597,-67.7632,1001.5151, 10.0, .worldid = 31);//BS 8
 	//CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Peilsender-Verkauf\n"COLOR_HEX_WHITE"Tippe /Peilsender", COLOR_WHITE,  1151.7448,-1203.0283,19.5159, 25.0);//
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"ELEKTROMARKT\n"COLOR_HEX_WHITE"Tippe /Elektromarkt", COLOR_WHITE, 1228.1368,-1423.4741,13.5548, 15.0);//Handyshop
-
 
 	g_iBankraubPickup = CreateDynamicPickup(1550, 1, 2144.2129,1641.7505,993.5761,0); //BANK LS
 	g_iBankraubPickup = CreateDynamicPickup(1550, 1, 299.4320,191.2753,1007.1794,0); //BANK LV
@@ -66630,7 +66628,7 @@ stock BuyCar(playerid,paymethod) {
 
 CMD:elektromarkt(playerid)
 {
-	if( IsPlayerInRangeOfPoint(playerid,5.0, 1228.1368,-1423.4741,13.5548) )
+	if( IsPlayerInRangeOfPoint(playerid,5.0, ELECTRONICSSHOP_COORDS) )
 	{
 		if( Spieler[playerid][pHandyGeld] == HANDY_VERTRAG ) {
 			ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy Kaufen\nHandyvertrag kündigen\nKamera kaufen (750$)\nMP3-Player (1500$)", "Kaufen", "Abbrechen");
