@@ -4232,6 +4232,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\electronicsShop>
 #include <maps\fishingShop>
 #include <maps\boatRental>
+#include <maps\busStops>
 
 main()
 {
@@ -6400,7 +6401,6 @@ public OnPlayerConnect(playerid)
 	SetPlayerMapIcon(playerid, 8, 805.7107,-1335.6899,13.5469, 56, 0, 0);//Neulingsspawn
     SetPlayerMapIcon(playerid, 10, 1662.1256,-1884.3601,13.5469, 55, 0, 0);//Motorradhaus
     SetPlayerMapIcon(playerid, 11, 1841.7158,-2568.3242,13.5469, 55, 0, 0);//Flugzeughaus
-    SetPlayerMapIcon(playerid, 12, 1364.3768,-1280.3932,13.5469, 18, 0, 0);//Ammunation
     SetPlayerMapIcon(playerid, 13, 1038.5304,-1339.6097,13.7266, 17, 0, 0);//Donatladen
     SetPlayerMapIcon(playerid, 14, 1833.2742,-1681.8307,13.4802, 49, 0, 0);//Bar
     SetPlayerMapIcon(playerid, 15, 1006.6136,-942.5633,42.0423, 42, 0, 0);//Tankstelle
