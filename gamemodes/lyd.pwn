@@ -4233,6 +4233,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\busStops>
 #include <maps\hitmanBase>
 #include <maps\governmentExterior>
+#include <maps\bikeRental>
 
 main()
 {
@@ -5830,9 +5831,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 499.7624,-20.8934,1000.6797, 0);//Getränke Disco
 	CreateDynamicPickup(1239, 1, 2309.3276,-8.2968,26.7422, 0);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
-	CreateDynamicPickup(1274, 1, 791.4501,-1341.0048,13.5469, 0);//Neuling Verleih Neulingsspawn
-	CreateDynamicPickup(1274, 1, 1242.3182,-1857.9050,13.5469, 0);//Neuling Verleih Fahrschule
-	CreateDynamicPickup(1274, 1, 1496.3137,-1719.4701,13.7969, 0);//Neuling Verleih Stadthalle
 	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
 	CreateDynamicPickup(1985, 1, 660.1712,-1869.5763,7.5781, 0);//Kampfstyle
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
@@ -6015,9 +6013,6 @@ OnGameModeInit2() {
 	//Verkaufs 3D Infotext
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"TÜV-WERKSTATT\n"COLOR_HEX_WHITE"Tippe /Wartungen", COLOR_WHITE, 547.7603,-1285.7424,17.5821, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"TÜV-WERKSTATT\n"COLOR_HEX_WHITE"Tippe /Wartungen", COLOR_WHITE, 2113.1296,-2423.3569,13.6150, 15.0);
-	CreateDynamic3DTextLabel("{33EE55}Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", COLOR_WHITE, 1242.3182,-1857.9050,13.5469, 10.0);
-	CreateDynamic3DTextLabel("{33EE55}Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", COLOR_WHITE, 791.4501,-1341.0048,13.5469, 10.0);
-	CreateDynamic3DTextLabel("{33EE55}Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", COLOR_WHITE, 1496.3137,-1719.4701,13.7969, 10.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 2313.3645,-1013.3300,1050.2109, 10.0); //in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, -2653.6023,1407.0844,906.2734, 10.0); //in Las Venturas
 
@@ -13755,7 +13750,7 @@ CMD:mieten(playerid)
 {
 	if(Spieler[playerid][pLevel] > 3)return SendClientMessage(playerid, COLOR_RED, "Du bist nicht unter Level 3.");
 	if(pCar[playerid] != INVALID_VEHICLE_ID)return SendClientMessage(playerid, COLOR_WHITE, "Du hast bereits ein Fahrzeug gemietet. Tippe /Entmieten.");
-	if(!IsPlayerInRangeOfPoint(playerid, 2.0, 1242.3182,-1857.9050,13.5469) && !IsPlayerInRangeOfPoint(playerid, 2.0, 791.4501,-1341.0048,13.5469) && !IsPlayerInRangeOfPoint(playerid, 2.0, 1496.3137,-1719.4701,13.7969))
+	if(!IsPlayerInRangeOfPoint(playerid, 2.0, BIKERENTAL_NOOBSPAWN_COORDS) && !IsPlayerInRangeOfPoint(playerid, 2.0, BIKERENTAL_DRIVINGSCHOOL_COORDS) && !IsPlayerInRangeOfPoint(playerid, 2.0, BIKERENTAL_CITYHALL_COORDS))
 	{
 		return SendClientMessage(playerid, COLOR_RED, "Du bist nicht am Verleih.");
 	}
