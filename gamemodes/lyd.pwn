@@ -4234,6 +4234,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\hitmanBase>
 #include <maps\governmentExterior>
 #include <maps\bikeRental>
+#include <maps\noobSpawn>
 
 main()
 {
@@ -5644,7 +5645,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, -2158.7920,642.9232,1052.3750, 0);//Clubzeichen
 	CreateDynamicPickup(1247, 1, 2268.1128,2448.0073,3.5313, 0);//Arrest Point LV
 	// CreateDynamicPickup(1247, 1, 321.0334,315.3957,999.1484, 0);//Arrest Point Zoll
-	CreateDynamicPickup(1239, 1, 817.4735,-1345.8376,13.5269, 0);//Info Point
 	CreateDynamicPickup(1239, 1, 2324.6904,-1014.0570,1050.2109, 0);//Waffenshop Club in Los Santos
 	CreateDynamicPickup(1239, 1, -2656.1047,1416.0248,906.2734, 0);//Waffenshop Club in Las Venturas
 	CreateDynamicPickup(1239, 1, 2321.2417,-1005.3172,1054.7188, 0);//Pee Club
@@ -5654,7 +5654,6 @@ OnGameModeInit2() {
     CreateDynamicPickup(1240, 1, -2653.5183,1413.5085,906.2734, 0);//Heal Club in Las Venturas
    	CreateDynamicPickup(1239, 1, -1857.4130,-1618.9630,21.9022, 0);//Unloadpunkt Waffendealer
 	CreateDynamicPickup(1239, 1, -258.9534,-2181.9905,29.0150, 0);//Unloadpunkt Drogendealer
-	CreateDynamicPickup(1239, 1, 809.3212,-1339.9855,13.5408, 0);//Startbonus
 	//CreateDynamicPickup(1239, 1, 1481.7039,-1740.6183,13.5469, 0);//Stadtamt-Information
 	CreateDynamicPickup(1254, 1, -1510.6661,1975.3440,48.4219, 0);//Wanted-Hacker point
 	CreateDynamicPickup(1318, 1, -1548.0554,125.1203,3.5547, 0);//Autodieb kran
@@ -5971,8 +5970,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Entladungspunkt\n"COLOR_HEX_WHITE"Tippe /Paketentladen", COLOR_WHITE, -258.9534,-2181.9905,29.0150, 10.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Kein Fahrlehrer da?\n"COLOR_HEX_WHITE"Tippe /Ruflehrer\n"COLOR_HEX_GRAU"----------\n"COLOR_HEX_YELLOW"Automatische Fahrschule\n"COLOR_HEX_WHITE"Tippe /Fahrpruefung", COLOR_WHITE, 1234.3380,-1823.9462,13.5909, 40.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\nGebäude verlassen mit 'Enter'", COLOR_BLUE, 2169.8208,1618.7504,999.9766, 15.0, .worldid = 0);
-	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Benötigst du eine Einführung?\n"COLOR_HEX_BLUE"Tippe: /Einfuehrung"COLOR_HEX_BLACK"\n---------\n"COLOR_HEX_GREEN"Startbonus\n"COLOR_HEX_RED"Tippe: /Startbonus", COLOR_WHITE, 809.3212,-1339.9855,13.5408, 20.0,.worldid = 0);
-	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"Startbonus\n"COLOR_HEX_RED"Tippe: /Startbonus", COLOR_WHITE, 809.3212,-1339.9855,13.5408, 20.0,.worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Gangjail\n"COLOR_HEX_WHITE"Tippe /Gangjail um einzusperren\nTippe /Aufbrechen um zu befreien", COLOR_WHITE, 2160.4111,-98.0815,2.8239, 13.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur für Clubmitglieder", COLOR_WHITE, 2127.5486,2378.9626,10.8203, 20.0, .worldid = 0); // Clubvilla in Las Venturas
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur für Clubmitglieder", COLOR_WHITE, 1022.4622,-1121.5886,23.8720, 20.0, .worldid = 0); // Clubvilla in Los Santos
@@ -5983,7 +5980,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bankservice\n"COLOR_HEX_WHITE"Tippe /Bank", COLOR_WHITE, 292.4491,180.1878,1007.1794, 15.0, .worldid = 200);
 	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen Banküberfall mit\n"COLOR_HEX_RED"/Bankausrauben", COLOR_WHITE, 2144.1055,1641.6750,993.5761, 13.0, .worldid = 500);
 	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen Banküberfall mit\n"COLOR_HEX_RED"/Tresoraufbrechen", COLOR_WHITE, 296.8997,188.5367,1007.1719, 10.0, .worldid = 200);
-    CreateDynamic3DTextLabel(COLOR_HEX_GREEN"Server Informationen\n"COLOR_HEX_WHITE"Tippe /Info", COLOR_WHITE, 817.4735,-1345.8376,13.5269, 15.0, .worldid = 0);
     //CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Informationen zum Stadtamt\n"COLOR_HEX_WHITE"Tippe /Stadtamtinfo", COLOR_WHITE, 1481.7039,-1740.6183,13.5469, 30.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Los Santos 4 Sterne Hotel\n"COLOR_HEX_WHITE"Miete Dir günstig ein schönes Hotelzimmer", COLOR_WHITE, 1722.5425,-1650.1168,20.2289, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"VISUM-AMT\n"COLOR_HEX_WHITE"Tippe /Visumbeantragen", COLOR_WHITE, 359.0354,180.4977,1008.3828, 15.0);
@@ -6351,7 +6347,6 @@ public OnPlayerConnect(playerid)
 	SetPlayerMapIcon(playerid, 5, 1786.8823,-1916.9739,13.3944, 55, 0, 0);//Intercars
 	SetPlayerMapIcon(playerid, 6, 550.6537,-1264.4824,16.9693, 55, 0, 0);//Grottis
 	SetPlayerMapIcon(playerid, 7, 1238.0809,-1814.2310,13.4292, 19, 0, 0);//Fahrschule
-	SetPlayerMapIcon(playerid, 8, 805.7107,-1335.6899,13.5469, 56, 0, 0);//Neulingsspawn
     SetPlayerMapIcon(playerid, 10, 1662.1256,-1884.3601,13.5469, 55, 0, 0);//Motorradhaus
     SetPlayerMapIcon(playerid, 11, 1841.7158,-2568.3242,13.5469, 55, 0, 0);//Flugzeughaus
     SetPlayerMapIcon(playerid, 13, 1038.5304,-1339.6097,13.7266, 17, 0, 0);//Donatladen
@@ -6374,7 +6369,6 @@ public OnPlayerConnect(playerid)
     SetPlayerMapIcon(playerid, 30, 2244.6521,-1664.0035,15.4766, 45, 0, 0);//Skin Shop Grove
     SetPlayerMapIcon(playerid, 31, 912.2803,-999.1210,38.0857, 36, 0, 0);//normale Bank
     SetPlayerMapIcon(playerid, 33, 817.6655,-1618.9307,13.7034, 10, 0, 0);//süd bsn
-    SetPlayerMapIcon(playerid, 34, -1617.0315,672.2584,7.1875, 30, 0, 0);//FBI
     SetPlayerMapIcon(playerid, 35, 1411.5352,-1699.5714,13.5395, 46, 0, 0);//Werbung in LS
     SetPlayerMapIcon(playerid, 36, 2400.5369,-1981.5837,13.5469, 18, 0, 0);//Nähe Ballasbase Ammunastion
     SetPlayerMapIcon(playerid, 38, 689.4661,-1181.7947,15.3834, 55, 0, 0);//Fahrradladen
@@ -10387,7 +10381,7 @@ public SetPlayerSpawn(playerid)
 	    //gSpawned{playerid} = 1;
 		if(pMakeTutorial[playerid] == 1)
 		{
-			SetPlayerCheckpointEx(playerid,809.5807,-1340.0255,13.5404, 5.0, CP_TUTORIAL1);
+			SetPlayerCheckpointEx(playerid, NOOBSPAWN_STARTBONUS_POINT, 5.0, CP_TUTORIAL1);
 			SendClientMessage(playerid, COLOR_WHITE, " ");
 			SendClientMessage(playerid, COLOR_WHITE, " ");
 			SendClientMessage(playerid, COLOR_WHITE, " ");
@@ -18639,7 +18633,7 @@ CMD:info8(playerid)
 //INFOCENTER-HELP END
 CMD:info(playerid)
 {
-	if(IsPlayerInRangeOfPoint(playerid, 2.0, 817.4735,-1345.8376,13.5269))//Info
+	if(IsPlayerInRangeOfPoint(playerid, 2.0, NOOBSPAWN_SERVERINFO_POINT))//Info
 	{
 		SendClientMessage(playerid, COLOR_BLUE, "================INFORMATIONEN================");
 		SendClientMessage(playerid, COLOR_WHITE, "Dieser Server ist ein Roleplay Server!");
@@ -53346,7 +53340,7 @@ public AFK_Check() {
 }
 
 COMMAND:startbonus(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,809.5491,-1340.0630,13.5404) ) {
+	if( !IsPlayerInRangeOfPoint(playerid,3.0, NOOBSPAWN_STARTBONUS_POINT) ) {
 		return SendClientMessage(playerid,COLOR_RED,"Den Startbonus gibt es hier nicht.");
 	}
 	if( Spieler[playerid][pStartbonus] ) {

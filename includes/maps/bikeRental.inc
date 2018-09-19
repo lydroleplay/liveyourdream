@@ -27,18 +27,18 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
-    pickup_bikeRental[0] = CreateDynamicPickup(1274, 1, BIKERENTAL_NOOBSPAWN_COORDS, 0); // Bike rental noob spawn
-    pickup_bikeRental[1] = CreateDynamicPickup(1274, 1, BIKERENTAL_DRIVINGSCHOOL_COORDS, 0); // Bike rental driving school
-    pickup_bikeRental[2] = CreateDynamicPickup(1274, 1, BIKERENTAL_CITYHALL_COORDS, 0); // Bike rental city hall
+    pickup_bikeRental[0] = CreateDynamicPickup(1274, 1, BIKERENTAL_NOOBSPAWN_COORDS, VW_MAIN, MAPS_BIKERENTAL_INTERIOR); // Bike rental noob spawn
+    pickup_bikeRental[1] = CreateDynamicPickup(1274, 1, BIKERENTAL_DRIVINGSCHOOL_COORDS, VW_MAIN, MAPS_BIKERENTAL_INTERIOR); // Bike rental driving school
+    pickup_bikeRental[2] = CreateDynamicPickup(1274, 1, BIKERENTAL_CITYHALL_COORDS, VW_MAIN, MAPS_BIKERENTAL_INTERIOR); // Bike rental city hall
 
     // 3DTextLabels
     text3D_bikeRental[0] = _:CreateDynamic3DTextLabel("Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", 0x33EE55FF, BIKERENTAL_NOOBSPAWN_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR);
     text3D_bikeRental[1] = _:CreateDynamic3DTextLabel("Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", 0x33EE55FF, BIKERENTAL_DRIVINGSCHOOL_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR);
     text3D_bikeRental[2] = _:CreateDynamic3DTextLabel("Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", 0x33EE55FF, BIKERENTAL_CITYHALL_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR);
 
-    actor_bikeRental[0] = CreateDynamicActor(51, 1496.1652, -1716.4005, 14.0469, 183.0903, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // Black bike guy
+    actor_bikeRental[0] = CreateDynamicActor(99, 1496.1652, -1716.4005, 14.0469, 183.0903, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // White bike guy
     ApplyDynamicActorAnimation(actor_bikeRental[0], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);
-    actor_bikeRental[1] = CreateDynamicActor(52, 1242.4252, -1860.8560, 13.5469, 359.4532, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // White bike guy
+    actor_bikeRental[1] = CreateDynamicActor(52, 1242.4252, -1860.8560, 13.5469, 359.4532, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // Other bike guy
     ApplyDynamicActorAnimation(actor_bikeRental[1], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);
     actor_bikeRental[2] = CreateDynamicActor(51, 788.2233, -1341.1628, 13.5469, 267.0804, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // Black bike guy
     ApplyDynamicActorAnimation(actor_bikeRental[2], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);

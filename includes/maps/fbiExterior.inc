@@ -73,7 +73,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	return 1;
 }
 
-hook OnGameModeInit() {    
+hook OnGameModeInit() {
+    // Map Icon
+    CreateDynamicMapIcon(FBI_INTERIOR_ENTER_COORDS, 30, 0, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR); // Police siren icon
+
 	// Pickups
 	pickup_fbiExterior[0] = CreateDynamicPickup(19197, 1, FBI_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR); // Entrance
     pickup_fbiExterior[1] = CreateDynamicPickup(1239, 1, FBI_STATEREPAIR_COORDS, VW_MAIN, MAPS_FBIEXTERIOR_INTERIOR); // Staterepair
