@@ -150,6 +150,7 @@ enum
 	VW_POOINTERIOR,
 	VW_LSPDINTERIOR,
 	VW_FBIINTERIOR,
+	VW_YAKUZAINTERIOR
 
 }
 
@@ -4224,6 +4225,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\oldtimerDealership>
 #include <maps\petShop>
 #include <maps\ammuStreet>
+#include <maps\yakuzaExterior>
+#include <maps\yakuzaInterior>
 
 main()
 {
@@ -5716,7 +5719,6 @@ OnGameModeInit2() {
 	//Fraktionssafebox
 	CreateDynamicPickup(1279, 1, 195.4771,-226.3883,1.7786, 0);//Fsavebox Ninedemons
 	CreateDynamicPickup(1279, 1, 333.7054,1121.7754,1083.8903, 0);//Fsavebox Ballas
-	CreateDynamicPickup(1279, 1, 2225.8369,1697.4304,1008.3594, 0);//Fsavebox Yakuza
 	CreateDynamicPickup(1279, 1, 2498.2847,-1710.8126,1014.7422, 0);//Fsavebox Grove Street
 	CreateDynamicPickup(1279, 1, -788.7941,496.9221,1371.7422, 0);//Fsavebox LCN
 	CreateDynamicPickup(1279, 1, 765.3478,-39.7774,1000.6865, 0);//Fsavebox Triaden
@@ -5729,7 +5731,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 938.7240,1733.3646,8.8516, 0);//Wheelman
 	CreateDynamicPickup(1240, 1, 2496.0542,-1709.4050,1014.7422, 0);//Grove Herz
 	CreateDynamicPickup(1240, 1, -789.5930,510.1159,1367.3745, 0);//LCN Herz
-	CreateDynamicPickup(1240, 1, 2235.7871,1676.2056,1008.3594, 0);//Yakuza
+
 	CreateDynamicPickup(1240, 1, 195.1181,-232.7614,1.7786, 0);//NineDemons
 	CreateDynamicPickup(1240, 1, 2807.4153,-1165.1274,1025.5703, 0);//Vagos
 	CreateDynamicPickup(1240, 1, 300.6684,305.8593,1003.5391, 0);//Hitman
@@ -5746,7 +5748,7 @@ OnGameModeInit2() {
 
 	//Gang Interior Eingang
 	CreateDynamicPickup(19197, 1, 1083.0183,-1226.5609,15.8203, 0);//LCN Eingang
-	CreateDynamicPickup(19197, 1, 2773.5256,-2456.0720,13.6371, 0);//Yakuza Eingang
+
 	CreateDynamicPickup(19197, 1, 1999.9869,-1114.0542,27.1250, 0);//Ballas Eingang
 	CreateDynamicPickup(19197, 1, 2495.3547,-1690.6273,14.7656, 0);//Grove Eingang
 	CreateDynamicPickup(19197, 1, 1804.1870,-2124.9021,13.9424, 0);//Aztecas Eingang
@@ -5766,7 +5768,6 @@ OnGameModeInit2() {
 	//Waffenlager Gang
 	CreateDynamicPickup(1254, 1, 331.9387,1119.7072,1083.8903, 0);//Ballas Waffenlager
 	CreateDynamicPickup(1254, 1, 2491.1003,-1699.9390,1014.7416, 0);//Grove Waffenlager
-	CreateDynamicPickup(1254, 1, 2246.1025,1698.0223,1008.3594, 0);//Yakuza Waffenlager
 	CreateDynamicPickup(1254, 1, 506.0543,-81.1208,998.9609, 0);//Aztecas Waffenlager
 	CreateDynamicPickup(1254, 1, -778.2419,496.2420,1368.5304, 0);//LCN Waffenlager
 	CreateDynamicPickup(1254, 1, 2809.7944,-1171.9598,1025.5703, 0);//Vagos Waffenlager
@@ -5785,7 +5786,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 359.5758,-2107.5520,74.8357, 0);//Springbrett oben
 
 	//Gangitem Points
-	CreateDynamicPickup(1275, 1, 2245.9250,1696.2772,1008.3594, 0);//YAKUZA Skin
 	CreateDynamicPickup(1275, 1, -791.3092,508.1032,1367.3672, 0);//LCN Skin
 	CreateDynamicPickup(1275, 1, 2491.7261,-1701.2618,1018.3438, 0);//GS Skin
 	CreateDynamicPickup(1275, 1, 308.2954,1120.7721,1083.8828, 0);//BALLAS Skin
@@ -5923,7 +5923,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -93.9144,-1196.9713,2.4775, 25.0);//MECHANIKER
 
     //Gang Interior Eingang
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_GRAU"YAKUZA", COLOR_WHITE, 2773.5256,-2456.0720,13.6371, 25.0);//Yakuza
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_BLACK"LCN", COLOR_WHITE, 1083.0183,-1226.5609,15.8203, 25.0);//LCN
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_PINK"BALLAS", COLOR_WHITE, 1999.9869,-1114.0542,27.1250, 25.0);//Ballas
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_GREEN"GROVE STREET", COLOR_WHITE, 2495.3547,-1690.6273,14.7656, 25.0);//Grove
@@ -5934,7 +5933,6 @@ OnGameModeInit2() {
 
    	//Gangshop 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LCN - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE, -791.3092,508.1032,1367.3672, 15.0);//LCN
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Yakuza - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE ,2245.9250,1696.2772,1008.3594, 15.0);//YAKUZA
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"GroveStreet - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE, 2491.7261,-1701.2618,1018.3438, 15.0);//GS
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Ballas - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE,308.2954,1120.7721,1083.8828, 15.0);//BALLAS
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE, 2805.5723,-1170.7960,1025.5703, 15.0, .worldid = 6);//VAGOS
@@ -5945,7 +5943,6 @@ OnGameModeInit2() {
 	//Gangwaffenlager 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Ballas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 331.9387,1119.7072,1083.8903, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"GroveStreet - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2491.1003,-1699.9390,1014.7416, 15.0);//Waffenlager
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Yakuza - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2246.1025,1698.0223,1008.3594, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Aztecas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 506.0543,-81.1208,998.9609, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LCN - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -778.2419,496.2420,1368.5304, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2809.7944,-1171.9598,1025.5703, 15.0);//Waffenlager
@@ -5969,7 +5966,6 @@ OnGameModeInit2() {
     //Spawn 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Grove Street Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2496.0542,-1709.4050,1014.7422, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ballas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 331.0788,1128.5469,1083.8828, 15.0, .worldid = 0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Yakuza Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2235.7871,1676.2056,1008.3594, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wheelman Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 938.7240,1733.3646,8.8516, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"NineDemons Spawn\n"COLOR_HEX_WHITE"Tippe /Ninowaffen zum Ausrüsten\nTippe /Gheilen zum heilen\nTippe /Fskin für Skins", COLOR_WHITE, 195.1181,-232.7614,1.7786, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Hitman Spawn\n"COLOR_HEX_WHITE"Tippe /Hitmanwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 300.6684,305.8593,1003.5391, 15.0);
@@ -5991,7 +5987,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der NineDemons\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 195.4771,-226.3883,1.7786, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Ballas\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 333.7054,1121.7754,1083.8903, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Grove Street\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 2498.2847,-1710.8126,1014.7422, 8.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Yakuza\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 2225.8369,1697.4304,1008.3594, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der LCN\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, -788.7941,496.9221,1371.7422, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Triaden\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 765.3478,-39.7774,1000.6865, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Aztecas\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 505.9030,-79.8864,998.9609, 8.0);
@@ -10626,10 +10621,9 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 10)
 			{
-				SetPlayerPos(playerid, 2235.7871,1676.2056,1008.3594);
-				SetPlayerInterior(playerid, 1);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 2235.7871,1676.2056,1008.3594);
+				SetPlayerPosEx(playerid, YAKUZA_INTERIOR_SPAWN_POINT, MAPS_YAKUZAINTERIOR_INTERIOR, VW_YAKUZAINTERIOR);
+				SetPlayerFacingAngle(playerid, YAKUZA_INTERIOR_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 11)
 			{
@@ -18274,7 +18268,7 @@ CMD:gangwaffen(playerid)
 	    GivePlayerCash(playerid, -800);
 	    GivePlayerWeapon(playerid, 5, 1);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0,2235.7871,1676.2056,1008.3594))//Yakuza
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, YAKUZA_INTERIOR_SPAWN_POINT))//Yakuza
 	{
 	    //if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
 	    if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
@@ -18470,7 +18464,7 @@ CMD:gheilen(playerid)
 	    SetPlayerHealth(playerid, 100);
 	    SetTimerEx("HeilReady", 60000, 0, "i", playerid);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0, 2235.7871,1676.2056,1008.3594))//Yakuza
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, YAKUZA_INTERIOR_SPAWN_POINT))//Yakuza
 	{
 	    if(!(Spieler[playerid][pFraktion] == 10))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Yakuza Mitglied.");
 	    Spieler[playerid][pHeilReady] = 0;
@@ -29419,19 +29413,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, -49.8745,-269.3627,6.6332);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 2773.5256,-2456.0720,13.6371))//Yakuza außen
-		{
-		    if(!(Spieler[playerid][pFraktion] == 10))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Mitglied der YAKUZA");
-		    SetPlayerInterior(playerid, 1);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 2234.0027,1713.4369,1012.1367);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 2234.0027,1713.4369,1012.1367))//Yakuza innen
-		{
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 2773.5256,-2456.0720,13.6371);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 899.5109,-901.7924,45.7656))//LCN außen
 		{
 		    if(!(Spieler[playerid][pFraktion] == 12))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Mitglied der LCN");
@@ -34347,7 +34328,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            if( GetPlayerMoney(playerid) < g_GangShopItems[listitem][GSI_iPrice] ) {
 	                return SendClientMessage(playerid,COLOR_YELLOW,"Du besitzt nicht genug Geld für dieses Item!");
 	            }
-				if( !IsPlayerInRangeOfPoint(playerid,5.0,1798.4584,-2124.5525,13.5469) && !IsPlayerInRangeOfPoint(playerid,5.0,2805.5723,-1170.7960,1025.5703) && !IsPlayerInRangeOfPoint(playerid,5.0,2245.9250,1696.2772,1008.3594)
+				if( !IsPlayerInRangeOfPoint(playerid,5.0,1798.4584,-2124.5525,13.5469) && !IsPlayerInRangeOfPoint(playerid,5.0,2805.5723,-1170.7960,1025.5703) && !IsPlayerInRangeOfPoint(playerid,5.0, YAKUZA_INTERIOR_GANGSHOP_POINT)
 					&& !IsPlayerInRangeOfPoint(playerid,5.0,2491.7261,-1701.2618,1018.3438) && !IsPlayerInRangeOfPoint(playerid,5.0,-791.3092,508.1032,1367.3672) && !IsPlayerInRangeOfPoint(playerid,5.0,308.2954,1120.7721,1083.8828)
 					&& !IsPlayerInRangeOfPoint(playerid,5.0,772.5916,-50.4404,1000.5859)  && !IsPlayerInRangeOfPoint(playerid,5.0,-2159.0173,640.3590,1052.3817)) {
 					return SendClientMessage(playerid,COLOR_RED,"Hier kannst du diesen Befehl nicht ausführen!");
@@ -51725,7 +51706,7 @@ COMMAND:clubshop(playerid,params[]) {
 }
 
 COMMAND:gangitem(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1798.4584,-2124.5525,13.5469) && !IsPlayerInRangeOfPoint(playerid,5.0,2805.5723,-1170.7960,1025.5703) && !IsPlayerInRangeOfPoint(playerid,5.0,2245.9250,1696.2772,1008.3594)
+	if( !IsPlayerInRangeOfPoint(playerid,5.0,1798.4584,-2124.5525,13.5469) && !IsPlayerInRangeOfPoint(playerid,5.0,2805.5723,-1170.7960,1025.5703) && !IsPlayerInRangeOfPoint(playerid,5.0, YAKUZA_INTERIOR_GANGSHOP_POINT)
 	&& !IsPlayerInRangeOfPoint(playerid,5.0,2491.7261,-1701.2618,1018.3438) && !IsPlayerInRangeOfPoint(playerid,5.0,-791.3092,508.1032,1367.3672) && !IsPlayerInRangeOfPoint(playerid,5.0,308.2954,1120.7721,1083.8828)
 	&& !IsPlayerInRangeOfPoint(playerid,5.0,772.5916,-50.4404,1000.5859) && !IsPlayerInRangeOfPoint(playerid,5.0,-2159.0173,640.3590,1052.3817)) {
 		return SendClientMessage(playerid,COLOR_RED,"Hier kannst du diesen Befehl nicht ausführen!");
@@ -52014,7 +51995,7 @@ new g_FraktionsSafeBoxLocation[][e_FraktionsSafeBoxLocation] = {
 	{15,195.4771,-226.3883,1.7786},
 	{6,2498.2847,-1710.8126,1014.7422},
 	{7,333.7054,1121.7754,1083.8903},
-	{10,2225.8369,1697.4304,1008.3594},
+	{10, YAKUZA_INTERIOR_SAFEBOX_POINT},
 	{11,505.9030,-79.8864,998.9609},
 	{12,-788.7941,496.9221,1371.7422},
 	{21,765.3478,-39.7774,1000.6865},
