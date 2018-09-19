@@ -4223,6 +4223,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\wedding>
 #include <maps\oldtimerDealership>
 #include <maps\petShop>
+#include <maps\ammuStreet>
 
 main()
 {
@@ -69893,7 +69894,7 @@ stock InitParkscheibe() {
 
 	// TODO: Peek parkscheiben map file?
 
-	CreateDynamicObject(963, 1350.57544, -1269.46570, 13.78736,   0.00000, 0.00000, 0.00000); //Hauptammu Parkscheinautomat
+	CreateDynamicObject(963, 1351.64575, -1270.84008, 13.41868, 90.00000, 0.00000, 0.00000); //Hauptammu Parkscheinautomat
 	CreateDynamicObject(963, 1445.02282, -1772.52527, 13.57012, 90.00000, 90.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
 	CreateDynamicObject(963, 1429.53638, -1755.35925, 13.56855, 90.00000, 0.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
 	CreateDynamicObject(963, 929.452576, -1589.62305, 13.64268, 90.00000, 0.00000, 0.00000); // LSPD Parkscheinautomat

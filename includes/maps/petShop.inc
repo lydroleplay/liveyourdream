@@ -7,14 +7,14 @@
 static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
-// Oldtimer dealership points
+// Pet shop points
 #define PETSHOP_COORDS  1805.2650, -1709.8883, 13.5630
 
 // Map variables
 new object_petShop[166];
 new pickup_petShop[1];
 new text3D_petShop[1];
-// new actor_petShop[1];
+new actor_petShop[1];
 
 hook OnPlayerConnect(playerid) {
     // ---
@@ -32,8 +32,7 @@ hook OnGameModeInit() {
     text3D_petShop[0] = _:CreateDynamic3DTextLabel("Tierhandel\n" COLOR_HEX_WHITE "Tippe /Haustiershop", COLOR_BLUE, PETSHOP_COORDS, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_PETSHOP_INTERIOR);
     
     // Actors
-    // actor_oldtimerDealership[0] = CreateDynamicActor(76, 884.4954, -926.4102, 42.4216, 188.5966, .worldid = VW_MAIN, .interiorid = MAPS_OLDTIMERDEALERSHIP_INTERIOR); // Rich saleswoman
-    // ApplyDynamicActorAnimation(actor_oldtimerDealership[0], "PED", "SEAT_idle", 4.0, 1, 0, 0, 0, 0);
+    actor_petShop[0] = CreateDynamicActor(233, 1805.9585, -1707.3210, 13.5630, 175.6588, .worldid = VW_MAIN, .interiorid = MAPS_PETSHOP_INTERIOR); // Pet shop saleswoman
 
 	// Objects
 	object_petShop[0] = CreateDynamicObject(19464, 1808.6805, -1721.7884, 13.7718, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_PETSHOP_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
