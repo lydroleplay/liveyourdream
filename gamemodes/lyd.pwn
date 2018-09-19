@@ -4227,6 +4227,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\ammuStreet>
 #include <maps\yakuzaExterior>
 #include <maps\yakuzaInterior>
+#include <maps\cheapCarDealerShipLv>
 
 main()
 {
@@ -6079,7 +6080,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootshaus - San Fierro\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, -1489.6615,712.7635,7.1807, 30.0);//Bootsverkauf SF
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Count And Schutz\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2126.9578,-1124.4517,25.4636, 30.0);//Autohaus günstig 2 LS
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2107.6689,1386.0609,10.8203, 30.0);//Autohaus günstig LV
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootsverleih\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, -69.6897,-552.7130,3.7063, 30.0);//Bootsverleih
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"Kampfstil - lernen\n"COLOR_HEX_WHITE"Tippe /Kampfstil", COLOR_WHITE, 660.3523,-1869.5139,5.5537, 20.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"FISCHE GRILLEN\n"COLOR_HEX_WHITE"Tippe /Grillen", COLOR_WHITE, 847.1649,-2043.4889,13.7553, 20.0, .worldid = 0);
