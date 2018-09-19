@@ -4222,6 +4222,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\shishaBar>
 #include <maps\wedding>
 #include <maps\oldtimerDealership>
+#include <maps\petShop>
 
 main()
 {
@@ -5868,7 +5869,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1274, 1, 1496.3137,-1719.4701,13.7969, 0);//Neuling Verleih Stadthalle
 	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
 	CreateDynamicPickup(1985, 1, 660.1712,-1869.5763,7.5781, 0);//Kampfstyle
-	CreateDynamicPickup(1239, 1, 1805.2650,-1709.8883,13.5630, 0);//Tierhandel
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
 	CreateDynamicPickup(1239, 1, 1228.1368,-1423.4741,13.5548, 0);//Handyladen
 
@@ -6125,7 +6125,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Cluckin Bell\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 369.8342,-6.2002,1001.8589, 10.0, .worldid = 29);//Cluckin Bell 8
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Pizza Stack\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE,  375.5368,-119.2299,1001.4995, 10.0, .worldid = 30);//Pizza Stack 6
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE,  377.1597,-67.7632,1001.5151, 10.0, .worldid = 31);//BS 8
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Tierhandel\n"COLOR_HEX_WHITE"Tippe /Haustiershop", COLOR_WHITE, 1805.2650,-1709.8883,13.5630, 15.0);//Tierhandel
 	//CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Peilsender-Verkauf\n"COLOR_HEX_WHITE"Tippe /Peilsender", COLOR_WHITE,  1151.7448,-1203.0283,19.5159, 25.0);//
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"ELEKTROMARKT\n"COLOR_HEX_WHITE"Tippe /Elektromarkt", COLOR_WHITE, 1228.1368,-1423.4741,13.5548, 15.0);//Handyshop
 
@@ -62680,8 +62679,8 @@ COMMAND:haustiershop(playerid,params[]) {
     if( b != index ) {
          return SendClientMessage(playerid, COLOR_RED, "Nicht am Haustier Geschäft");
     }*/
-   	if( !IsPlayerInRangeOfPoint(playerid,5.0,1804.9391,-1709.8826,13.5630)) {
-		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht am Haustier Geschäft");
+   	if( !IsPlayerInRangeOfPoint(playerid,3.0, PETSHOP_COORDS)) {
+		return SendClientMessage(playerid,COLOR_RED,"Du bist nicht am Haustier Geschäft.");
 	}
     ShowPlayerDialog(playerid,DIALOG_HAUSTIER,DIALOG_STYLE_LIST,"Haustier Geschäft","Hund - 100.000$\nPapagei - 80.000$\n1x Futter - 300$","Kaufen","Abbruch");
 	return 1;
