@@ -4232,6 +4232,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\boatRental>
 #include <maps\busStops>
 #include <maps\hitmanBase>
+#include <maps\governmentExterior>
 
 main()
 {
