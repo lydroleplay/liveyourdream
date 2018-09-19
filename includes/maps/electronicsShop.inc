@@ -389,7 +389,7 @@ hook OnGameModeInit() {
 	object_electronicsShop[202] = CreateDynamicObject(2684, 1231.8481, -1423.3631, 13.3236, -18.8000, 0.0000, -90.0000, VW_MAIN, MAPS_ELECTRONICSSHOP_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_food_post
 	SetDynamicObjectMaterialText(object_electronicsShop[202], 0,"$", 0, "Arial", 100, 1, 0xFFFFFFFF, 0x0, 2);
 	object_electronicsShop[203] = CreateDynamicObject(2684, 1231.8481, -1423.3232, 13.3236, -18.8000, 0.0000, -90.0000, VW_MAIN, MAPS_ELECTRONICSSHOP_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_food_post
-	SetDynamicObjectMaterialText(object_electronicsShop[203], 0,"10000", 90, "Arial", 100, 1, 0xFFFFFFFF, 0x0, 0);
+	SetDynamicObjectMaterialText(object_electronicsShop[203], 0,"10000$", 90, "Arial", 100, 1, 0xFFFFFFFF, 0x0, 0);
 	object_electronicsShop[204] = CreateDynamicObject(19172, 1231.9523, -1423.3642, 14.7227, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_ELECTRONICSSHOP_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
 	SetDynamicObjectMaterial(object_electronicsShop[204], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 	SetDynamicObjectMaterialText(object_electronicsShop[204], 1,"Guthaben", 90, "Calibri", 40, 1, 0xFFFFFFFF, 0x0, 1);

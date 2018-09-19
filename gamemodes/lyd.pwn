@@ -4230,6 +4230,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\cheapCarDealerShipLv>
 #include <maps\boatDealershipLs>
 #include <maps\electronicsShop>
+#include <maps\fishingShop>
 
 main()
 {
@@ -5858,7 +5859,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 206.3740,-8.2494,1001.2109, 36);//Victim LS (Strand)
 	CreateDynamicPickup(1239, 1, 161.4726,-83.2517,1001.8047, 35);//ZIP LS (Bank)
 	CreateDynamicPickup(1239, 1, 207.7187,-100.5032,1005.2578, 37);//Binco (GS)
-	CreateDynamicPickup(1239, 1, 825.6833,-2038.6458,12.8684, 0);//Angelshop Lil
 	CreateDynamicPickup(1239, 1, 1702.9427,-1470.3704,13.5469, 0);//Motorradfärbe point
 	CreateDynamicPickup(1239, 1, 1763.4915,2080.2959,10.8203, 0);//Autofärbe point
 	CreateDynamicPickup(1239, 1, 1798.4768,-2423.4924,13.5547, 0);//Flugzeugfärbe point
@@ -6071,7 +6071,6 @@ OnGameModeInit2() {
   	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Toilette\n"COLOR_HEX_WHITE"Tippe /Pee", COLOR_WHITE, 2321.2417,-1005.3172,1054.7188, 8.0);
   	//CreateDynamic3DTextLabel(COLOR_HEX_RED"** BIS ZUM 24.02.2015 FÜR ALLE **\n"COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
   	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Angelshop\n"COLOR_HEX_WHITE"Tippe /Angelshop", COLOR_WHITE, 825.6833,-2038.6458,12.8684, 15.0, .worldid = 0);//Angelshop Lil Probeinn
    	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten für 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Günstig\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!.", COLOR_WHITE, 1808.0851,-1889.7792,13.4073, 30.0);//Billig Autohaus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Luxus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 1142.3765,-1619.0011,13.9445, 30.0);//Luxus Autohaus
@@ -6082,7 +6081,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Count And Schutz\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2126.9578,-1124.4517,25.4636, 30.0);//Autohaus günstig 2 LS
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootsverleih\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, -69.6897,-552.7130,3.7063, 30.0);//Bootsverleih
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"Kampfstil - lernen\n"COLOR_HEX_WHITE"Tippe /Kampfstil", COLOR_WHITE, 660.3523,-1869.5139,5.5537, 20.0, .worldid = 0);
-	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"FISCHE GRILLEN\n"COLOR_HEX_WHITE"Tippe /Grillen", COLOR_WHITE, 847.1649,-2043.4889,13.7553, 20.0, .worldid = 0);
 
 	//Verkaus 3D Infotext 2
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kleidungs Shop\n"COLOR_HEX_WHITE"Tippe /Kleidung", COLOR_WHITE, 206.3740,-8.2494,1001.2109, 11.0, .worldid = 36);//Victim LS (Strand)
@@ -8975,7 +8973,7 @@ CMD:namechange(playerid,params[])
 }
 CMD:angelshop(playerid)
 {
-	if(IsPlayerInRangeOfPoint(playerid, 3.0, 825.6833,-2038.6458,12.8684))
+	if(IsPlayerInRangeOfPoint(playerid, 3.0, FISHINGSHOP_COORDS))
 	{
 		ShowPlayerDialog(playerid, DIALOG_ASHOP, DIALOG_STYLE_LIST, "Angelshop", COLOR_HEX_WHITE"Angel kaufen "COLOR_HEX_ORANGE"($750)"COLOR_HEX_WHITE"\n10 Köder kaufen "COLOR_HEX_ORANGE"($100)"COLOR_HEX_WHITE"\nAngelschein kaufen "COLOR_HEX_ORANGE"($1.000)"COLOR_HEX_WHITE"\nFische verkaufen "COLOR_HEX_ORANGE"(40$ pro Fisch)", "Auswählen", "Abbrechen");
 	}
@@ -9119,7 +9117,7 @@ public AngelTimer(playerid)
 
 CMD:grillen(playerid, params[])
 {
-	if(IsPlayerInRangeOfPoint(playerid, 5.0, 847.1649,-2043.4889,13.7553))
+	if(IsPlayerInRangeOfPoint(playerid, 5.0, FISHINGSHOP_GRILL_POINT))
 	{
 		if(Spieler[playerid][pFische] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast keine Fische.");
 		Spieler[playerid][pFische] --;
