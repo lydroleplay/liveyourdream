@@ -20,7 +20,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Map Icon
-    CreateDynamicMapIcon(1364.3768, -1280.3932, 13.5469, 12, 0, VW_MAIN, MAPS_AMMUSTREET_INTERIOR);
+    CreateDynamicMapIcon(1364.3768, -1280.3932, 13.5469, 6, 0, VW_MAIN, MAPS_AMMUSTREET_INTERIOR);
 
     // Pickups
     
