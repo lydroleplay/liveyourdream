@@ -4228,6 +4228,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\yakuzaExterior>
 #include <maps\yakuzaInterior>
 #include <maps\cheapCarDealerShipLv>
+#include <maps\boatDealershipLs>
 
 main()
 {
@@ -6075,7 +6076,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Günstig\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!.", COLOR_WHITE, 1808.0851,-1889.7792,13.4073, 30.0);//Billig Autohaus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Luxus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 1142.3765,-1619.0011,13.9445, 30.0);//Luxus Autohaus
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Motorradhaus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Motorrad deiner Wahl ein!", COLOR_WHITE, 1662.1256,-1884.3601,13.5469, 30.0);//Bike haus
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootshaus -  Los Santos\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, 994.1482,-1975.4965,8.1708, 30.0);//Bootverkauf haus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrradladen\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrrad deiner Wahl ein!", COLOR_WHITE, 690.6381,-1182.3875,15.4783, 30.0);//Fahrradladen haus
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootshaus - San Fierro\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, -1489.6615,712.7635,7.1807, 30.0);//Bootsverkauf SF
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
@@ -6429,7 +6429,6 @@ public OnPlayerConnect(playerid)
     SetPlayerMapIcon(playerid, 34, -1617.0315,672.2584,7.1875, 30, 0, 0);//FBI
     SetPlayerMapIcon(playerid, 35, 1411.5352,-1699.5714,13.5395, 46, 0, 0);//Werbung in LS
     SetPlayerMapIcon(playerid, 36, 2400.5369,-1981.5837,13.5469, 18, 0, 0);//Nähe Ballasbase Ammunastion
-    SetPlayerMapIcon(playerid, 37, 994.1482,-1975.4965,8.1708, 55, 0, 0);//Bootshaus
     SetPlayerMapIcon(playerid, 38, 689.4661,-1181.7947,15.3834, 55, 0, 0);//Fahrradladen
     SetPlayerMapIcon(playerid, 39, 1380.9908,457.3878,19.9316, 42, 0, 0);//Tankstelle
 	SetPlayerMapIcon(playerid, 40, 2423.8147,-1742.4226,13.1120, 25, 0, 0);//247 grove street

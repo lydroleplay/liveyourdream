@@ -28,7 +28,7 @@ hook OnGameModeInit() {
     text3D_cheapCarDealership_lv[0] = _:CreateDynamic3DTextLabel("Autohaus Günstig - Las Venturas\n" COLOR_HEX_WHITE "Steige in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_BLUE, CHEAPCARDEALERSHIPLV_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLV_INTERIOR);
 
     // Actors
-    actor_cheapCarDealership_lv[0] = CreateDynamicActor(34, 2091.4482, 1391.3041, 10.8203,5.1027, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLV_INTERIOR); // Cowboy salesman
+    actor_cheapCarDealership_lv[0] = CreateDynamicActor(34, 2091.4482, 1391.3041, 10.8203, 5.1027, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLV_INTERIOR); // Cowboy salesman
     ApplyDynamicActorAnimation(actor_cheapCarDealership_lv[0], "SMOKING", "M_smklean_loop", 4.0, 1, 0, 0, 0, 0);
 
 	// Objects
