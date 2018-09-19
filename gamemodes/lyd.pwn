@@ -4065,12 +4065,10 @@ new ballascars[17];
 new grovecars[16];
 new fscars[22];
 new fsacars[2];
-new yakucars[19];
 new staatcars[24];
 new aztcars[18];
 new lcncars[17];
 new vagoscars[16];
-new hitmanc[15];
 new bikercars[17];
 new lvpdcars[30];
 new wheelcars[14];
@@ -4233,6 +4231,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\fishingShop>
 #include <maps\boatRental>
 #include <maps\busStops>
+#include <maps\hitmanBase>
 
 main()
 {
@@ -5167,22 +5166,6 @@ OnGameModeInit2() {
 	wheelcars[12] = AddStaticVehicleEx(487,952.3722,1692.2795,15.9515,270.6660,19,19,-1); // wheelmen car
 	wheelcars[13] = AddStaticVehicleEx(487,951.6595,1680.0258,15.9471,268.2809,19,19,-1); // wheelmen car
 
-	hitmanc[0] = AddStaticVehicleEx(411,2372.3718,-658.5972,127.9560,330.2289,0,135,-1); //
-	hitmanc[1] = AddStaticVehicleEx(411,2367.5996,-658.5694,127.9796,327.5251,24,54,-1); //
-	hitmanc[2] = AddStaticVehicleEx(560,2362.9316,-658.6074,127.8473,329.3056,3,42,-1); //
-	hitmanc[3] = AddStaticVehicleEx(560,2358.1252,-658.8730,127.7961,331.7310,24,160,-1); //
-	hitmanc[4] = AddStaticVehicleEx(522,2351.4402,-652.8424,127.6191,270.0950,3,0,-1); //
-	hitmanc[5] = AddStaticVehicleEx(522,2351.4395,-649.3209,127.6168,272.1009,1,86,-1); //
-	hitmanc[6] = AddStaticVehicleEx(522,2351.4421,-651.0299,127.6145,272.9963,2,1,-1); //
-	hitmanc[7] = AddStaticVehicleEx(522,2351.4836,-647.5111,127.6158,269.8090,0,6,-1); //
-	hitmanc[8] = AddStaticVehicleEx(482,2353.7390,-644.3858,128.3561,270.9044,173,160,-1); //
-	hitmanc[9] = AddStaticVehicleEx(429,2365.4507,-646.1355,127.4975,212.3533,160,15,-1); //
-	hitmanc[10] = AddStaticVehicleEx(480,2369.0754,-645.2191,127.3247,212.8215,181,120,-1); //
-	hitmanc[11] = AddStaticVehicleEx(475,2373.0977,-644.3788,127.3207,215.9722,208,52,-1); //
-	hitmanc[12] = AddStaticVehicleEx(487,2343.5774,-647.9556,135.0048,179.3664,1,1,-1); //
-	hitmanc[13] = AddStaticVehicleEx(487,2344.8491,-659.8137,134.9823,268.8246,0,0,-1); //
-	hitmanc[14] = AddStaticVehicleEx(451,2361.3916,-646.0732,127.8456,214.6273,53,45,-1); //
-
 	grovecars[0]=AddStaticVehicleEx(451,2473.2583,-1694.4656,13.2400,0.1565,86,86,-1); // NEUE GROVE CARS
 	grovecars[1]=AddStaticVehicleEx(541,2473.2947,-1703.3059,13.0748,0.0540,86,86,-1); // NEUE GROVE CARS
 	grovecars[2]=AddStaticVehicleEx(482,2459.6746,-1673.9707,13.5140,35.1171,86,86,-1); // NEUE GROVE CARS
@@ -5225,26 +5208,6 @@ OnGameModeInit2() {
 
 	fsacars[0] = AddStaticVehicleEx(435,1172.6271,-1789.8167,14.0381,179.9523,1,1,-1); // fslkwhange
 	fsacars[1] = AddStaticVehicleEx(435,1181.6830,-1791.7823,14.0243,179.5749,1,1,-1); // fslkwhanger
-
-	yakucars[0] = AddStaticVehicleEx(560,2743.6606,-2484.9607,13.3486,270.1384,13,13,-1); // Yakuza
-	yakucars[1] = AddStaticVehicleEx(560,2743.6531,-2480.4849,13.3187,270.4067,13,13,-1); // Yakuza
-	yakucars[2] = AddStaticVehicleEx(560,2743.6936,-2475.9502,13.3236,269.4127,13,13,-1); // Yakuza
-	yakucars[3] = AddStaticVehicleEx(560,2743.6990,-2471.4214,13.3117,270.9428,13,13,-1); // Yakuza
-	yakucars[4] = AddStaticVehicleEx(579,2744.1951,-2466.8997,13.5454,269.9771,13,13,-1); // Yakuza
-	yakucars[5] = AddStaticVehicleEx(579,2744.1501,-2462.2371,13.6388,270.7501,13,13,-1); // Yakuza
-	yakucars[6] = AddStaticVehicleEx(482,2743.7214,-2458.0906,13.8047,270.1640,13,13,-1); // Yakuza
-	yakucars[7] = AddStaticVehicleEx(545,2743.3945,-2453.3953,13.3842,269.6862,13,13,-1); // Yakuza
-	yakucars[8] = AddStaticVehicleEx(545,2743.5171,-2448.6790,13.4819,268.5097,13,13,-1); // Yakuza
-	yakucars[9] = AddStaticVehicleEx(480,2743.7922,-2444.3933,13.4345,270.5973,13,13,-1); // Yakuza
-	yakucars[10] = AddStaticVehicleEx(415,2743.5889,-2439.9407,13.4066,270.6160,13,13,-1); // Yakuza
-	yakucars[11] = AddStaticVehicleEx(451,2744.2544,-2435.1064,13.3574,268.1396,13,13,-1); // Yakuza
-	yakucars[12] = AddStaticVehicleEx(541,2743.4214,-2430.5688,13.2749,269.5439,13,13,-1); // Yakuza
-	yakucars[13] = AddStaticVehicleEx(411,2743.6772,-2426.0400,13.3612,270.3381,13,13,-1); // Yakuza
-	yakucars[14] = AddStaticVehicleEx(411,2743.7966,-2421.4761,13.3691,270.4832,13,13,-1); // Yakuza
-	yakucars[15] = AddStaticVehicleEx(522,2764.7441,-2442.4272,13.0668,0.4309,13,13,-1); // Yakuza
-	yakucars[16] = AddStaticVehicleEx(522,2764.7520,-2446.7861,13.0772,1.8060,13,13,-1); // Yakuza
-	yakucars[17] = AddStaticVehicleEx(468,2764.9683,-2466.6001,13.1484,0.9250,13,13,-1); // Yakuza
-	yakucars[18] = AddStaticVehicleEx(468,2765.1653,-2470.3794,13.1384,2.3488,13,13,-1); // Yakuza
 
 	triadencars[0] = AddStaticVehicleEx(409,896.7750,-1655.9691,13.3472,178.9410,79,79,-1); // StretchT
 	triadencars[1] = AddStaticVehicleEx(411,892.4311,-1657.7754,13.2748,179.8933,79,79,-1); // InfernusT1
@@ -5461,11 +5424,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(fscars[i]);
 		aiVehicles[ fscars[i] ] = VEH_FSCARS;
 	}
-	for(new i=0;i<sizeof(yakucars);i++)
+	for(new i=0;i<sizeof(vehicle_yakuzaExterior);i++)
 	{
-		SetVehicleNumberPlate(yakucars[i], COLOR_HEX_BLACK"YAKUZA");
-        SetVehicleToRespawn(yakucars[i]);
-		aiVehicles[ yakucars[i] ] = VEH_YAKUCARS;
+		SetVehicleNumberPlate(vehicle_yakuzaExterior[i], COLOR_HEX_BLACK"YAKUZA");
+        SetVehicleToRespawn(vehicle_yakuzaExterior[i]);
+		aiVehicles[ vehicle_yakuzaExterior[i] ] = VEH_YAKUCARS;
 	}
 	for(new i=0;i<sizeof(aztcars);i++)
 	{
@@ -5485,11 +5448,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(vagoscars[i]);
 		aiVehicles[ vagoscars[i] ] = VEH_VAGOSCARS;
 	}
-	for(new i=0;i<sizeof(hitmanc);i++)
+	for(new i=0;i<sizeof(vehicle_hitmanBase);i++)
 	{
-		SetVehicleNumberPlate(hitmanc[i], COLOR_HEX_BLACK"LS-1920");
-        SetVehicleToRespawn(hitmanc[i]);
-		aiVehicles[ hitmanc[i] ] = VEH_HITMANC;
+		SetVehicleNumberPlate(vehicle_hitmanBase[i], COLOR_HEX_BLACK"LS-1920");
+        SetVehicleToRespawn(vehicle_hitmanBase[i]);
+		aiVehicles[ vehicle_hitmanBase[i] ] = VEH_HITMANC;
 	}
 	for(new i=0;i<sizeof(bikercars);i++)
 	{
@@ -5659,7 +5622,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 1234.1289,-1784.0337,33.6312, 0);//Fahrschule Flugschein  exit
 	CreateDynamicPickup(19197, 1, 627.5951,-571.8589,17.6345, -1);//Zollamt enter
 	CreateDynamicPickup(19197, 1, 322.2221,302.7604,999.1484, -1);//Zollamt  exit
-	CreateDynamicPickup(19197, 1, 2350.2043,-656.2620, 131.40, 0);//Hitmaneinngang
 	CreateDynamicPickup(18635, 1, -382.0342,-1426.4521,26.0822, 0);//zerbrechen
 	// CreateDynamicPickup(18635, 1, -1632.7894,-2239.3267,31.4766, 0);//Wheelman befreien
 	CreateDynamicPickup(19197, 1, 285.79,-85.8,1001.52, 1);//Ausgang Ammu LS
@@ -5711,7 +5673,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1550, 1, 299.4320,191.2753,1007.1794, 200);//Bankraub in LV*/
 	CreateDynamicPickup(1279, 1, 2349.7061,-1246.4760,22.5000, 0);//Safebox in LS
 	CreateDynamicPickup(1279, 1, 1685.7469,1746.1523,10.8251, 0);//Safebox in LV
-	CreateDynamicPickup(1239, 1, 2338.4551,-656.2542,131.4021, 0);//Hitman Werbung
+
     //CreateDynamicPickup(1239, 1, 2004.6497,1018.1676,994.4688, 50);//Casino Info
    	CreateDynamicPickup(1239, 1, 2041.3099,-1408.8322,17.1641, 0);//Zollamt oben
 	CreateDynamicPickup(1239, 1, 610.4565,-583.6769,18.1342, 0);//Zollamt unten
@@ -5737,10 +5699,8 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 938.7240,1733.3646,8.8516, 0);//Wheelman
 	CreateDynamicPickup(1240, 1, 2496.0542,-1709.4050,1014.7422, 0);//Grove Herz
 	CreateDynamicPickup(1240, 1, -789.5930,510.1159,1367.3745, 0);//LCN Herz
-
 	CreateDynamicPickup(1240, 1, 195.1181,-232.7614,1.7786, 0);//NineDemons
 	CreateDynamicPickup(1240, 1, 2807.4153,-1165.1274,1025.5703, 0);//Vagos
-	CreateDynamicPickup(1240, 1, 300.6684,305.8593,1003.5391, 0);//Hitman
 	CreateDynamicPickup(1240, 1, 508.3369,-84.9195,998.9609, 0);//Aztecas
 	CreateDynamicPickup(1240, 1, 902.5193,-1277.1499,14.5935, 0);//O-Amt /dienst
 	CreateDynamicPickup(1240, 1, -2033.1216,-117.4597,1035.1719, 0);//Dienst Fahrschule
@@ -5769,7 +5729,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1, 221.7282,183.1214,1003.0313, 0);//Medic Skin
 	CreateDynamicPickup(1275, 1, 307.6244,-131.3671,999.6083, 0);//Army Skin'
 	CreateDynamicPickup(1275, 1, 326.9853,306.7588,999.1484, -1);//Zollamt Skin
-	CreateDynamicPickup(1275, 1, 300.8034,311.0651,1003.3047, 0);//Hitman Skin
+
 
 	//Waffenlager Gang
 	CreateDynamicPickup(1254, 1, 331.9387,1119.7072,1083.8903, 0);//Ballas Waffenlager
@@ -5779,7 +5739,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1254, 1, 2809.7944,-1171.9598,1025.5703, 0);//Vagos Waffenlager
 	CreateDynamicPickup(1254, 1, 771.2057,-39.4471,1000.6865, 0);//Triaden Waffenlager
 	CreateDynamicPickup(1254, 1, -2165.1348,644.2082,1052.3750, 0);//Outlawz Waffenlager
-	CreateDynamicPickup(1254, 1, 309.9749,309.3802,1003.3047, 0);//Hitman Waffenlager
 
 	//Fahrtticket
 	CreateDynamicPickup(1274, 1, 374.6658,-2121.6416,7.8820, 0);//Fallturm
@@ -5952,7 +5911,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2809.7944,-1171.9598,1025.5703, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Triaden - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 771.2057,-39.4471,1000.6865, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -2165.1348,644.2082,1052.3750, 15.0);//Waffenlager
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Hitman - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 309.9749,309.3802,1003.3047, 15.0);//Waffenlager
 
 	//Job 3D Text
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Schiffsfahrer\n"COLOR_HEX_WHITE"Tippe /Frachtladen", COLOR_WHITE, 2615.2017,-2322.4878,1.8984, 10.0, .worldid = 0);
@@ -5972,7 +5930,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ballas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 331.0788,1128.5469,1083.8828, 15.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wheelman Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 938.7240,1733.3646,8.8516, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"NineDemons Spawn\n"COLOR_HEX_WHITE"Tippe /Ninowaffen zum Ausrüsten\nTippe /Gheilen zum heilen\nTippe /Fskin für Skins", COLOR_WHITE, 195.1181,-232.7614,1.7786, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Hitman Spawn\n"COLOR_HEX_WHITE"Tippe /Hitmanwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 300.6684,305.8593,1003.5391, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Vagos Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2807.4153,-1165.1274,1025.5703, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Aztecas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 508.3369,-84.9195,998.9609, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"LCN Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, -789.5930,510.1159,1367.3745, 15.0);
@@ -10642,10 +10599,9 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 14)
 			{
-				SetPlayerPos(playerid, 305.5128,304.0464,1003.3047);
-				SetPlayerInterior(playerid, 4);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 305.5128,304.0464,1003.3047);
+				SetPlayerPos(playerid, HITMANBASE_SPAWN_POINT);
+				SetPlayerFacingAngle(playerid, HITMANBASE_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 15)
 			{
@@ -18381,7 +18337,7 @@ stock GiveTerrorWeapons(playerid)
 
 CMD:hitmanwaffen(playerid)
 {
-	if(IsPlayerInRangeOfPoint(playerid, 2.0, 300.6684,305.8593,1003.5391))//Hitman
+	if(IsPlayerInRangeOfPoint(playerid, 2.0, HITMANBASE_SPAWN_POINT))//Hitman
 	{
 	    if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
 	    if(GetPlayerMoney(playerid) < 5500)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $5500.");
@@ -18486,7 +18442,7 @@ CMD:gheilen(playerid)
 	    SetPlayerHealth(playerid, 100);
 	    SetTimerEx("HeilReady", 60000, 0, "i", playerid);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0, 300.6684,305.8593,1003.5391))//Hitman
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, HITMANBASE_SPAWN_POINT))//Hitman
 	{
 	    if(!(Spieler[playerid][pFraktion] == 14))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Hitman Mitglied.");
 	    Spieler[playerid][pHeilReady] = 0;
@@ -20266,11 +20222,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 10)
 	{
-		for(new i=0;i<sizeof(yakucars);i++)
+		for(new i=0;i<sizeof(vehicle_yakuzaExterior);i++)
 		{
-			if(!IsVehicleOccupied(yakucars[i]))
+			if(!IsVehicleOccupied(vehicle_yakuzaExterior[i]))
 			{
-				SetVehicleToRespawn(yakucars[i]);
+				SetVehicleToRespawn(vehicle_yakuzaExterior[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die Yakuza Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -20318,11 +20274,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 14)
 	{
-		for(new i=0;i<sizeof(hitmanc);i++)
+		for(new i=0;i<sizeof(vehicle_hitmanBase);i++)
 		{
-			if(!IsVehicleOccupied(hitmanc[i]))
+			if(!IsVehicleOccupied(vehicle_hitmanBase[i]))
 			{
-				SetVehicleToRespawn(hitmanc[i]);
+				SetVehicleToRespawn(vehicle_hitmanBase[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die Hitman Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -29245,20 +29201,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, 1123.0570,-2036.8217,69.8937);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 302.1405,300.7604,999.1484))//Hitman außen
-		{
-			if(!(Spieler[playerid][pFraktion] == 14))return SendClientMessage(playerid, COLOR_RED, "Die Tür ist zu.");
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 2350.204346, -656.262024, 131.399994);
-		}
-  		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 2350.204346, -656.262024, 131.399994))//Hitman innen
-		{
-			if(!(Spieler[playerid][pFraktion] == 14))return SendClientMessage(playerid, COLOR_RED, "Die Tür ist zu.");
-		    SetPlayerInterior(playerid, 4);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 302.1405,300.7604,999.1484);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 993.4795,-1459.6665,13.5469))//newsbase unten
 		{
       		if(!(Spieler[playerid][pFraktion] == 4))return SendClientMessage(playerid, COLOR_RED, "Du bist kein News Reporter!");
@@ -34449,7 +34391,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			        preis;
 				len = strlen(inputtext);
 
-				if(!IsPlayerInRangeOfPoint(playerid, 5.0, 2338.4551, -656.2542, 131.4021)) {
+				if(!IsPlayerInRangeOfPoint(playerid, 5.0, HITMANBASE_AD_POINT)) {
 					return SendClientMessage(playerid, COLOR_RED, "Du bist nicht am Werbeplatz.");
 				}
 				if( g_unixWerbungHitman > tick ) {
@@ -48927,8 +48869,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_YAKUCARS ) {
-		for( i  = 0; i < sizeof(yakucars) ; i++) {
-			if( yakucars[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_yakuzaExterior) ; i++) {
+			if( vehicle_yakuzaExterior[i] == vehicleid ) {
 			    return 10;
 			}
 		}
@@ -48996,8 +48938,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_HITMANC ) {
-		for( i  = 0; i < sizeof(hitmanc) ; i++) {
-			if( hitmanc[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_hitmanBase) ; i++) {
+			if( vehicle_hitmanBase[i] == vehicleid ) {
 			    return 14;
 			}
 		}
@@ -49633,7 +49575,7 @@ COMMAND:werbung(playerid,params[]) {
 COMMAND:hwerbung(playerid,params[]) {
 	new tick = gettime();
 
-	if(!IsPlayerInRangeOfPoint(playerid, 5.0, 2338.4551, -656.2542, 131.4021)) {
+	if(!IsPlayerInRangeOfPoint(playerid, 5.0, HITMANBASE_AD_POINT)) {
 		return SendClientMessage(playerid, COLOR_RED, "Du bist nicht am Hitman-Werbeplatz.");
 	}
 	if( !(( Spieler[playerid][pFraktion] == 14)) ) {
@@ -50100,7 +50042,7 @@ new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	{ POO_INTERIOR_FSKIN_POINT,		    5, { 71 , 44 , 305 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ FBI_INTERIOR_FSKIN_POINT,	        2, { 286 , 285 , 309 , 59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ -2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
-	{ 300.8034,	311.0651,	1003.3047,	14, { 2 , 29 , 229 , 294 , 171 , 23 , 19 , 35 , 22 , 11, 8 } },
+	{ HITMANBASE_FSKIN_POINT,	14, { 2 , 29 , 229 , 294 , 171 , 23 , 19 , 35 , 22 , 11, 8 } },
 	{ 195.1181, -232.7614, 1.7786,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
 	{ 2284.1960,	2423.7107,	3.4766,		16, { 282 , 285 , 303 , 305 , 304 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ 307.6244,  -131.3671,  999.6083,	18, { 287 , 303 , 305 , 304 , 44 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },

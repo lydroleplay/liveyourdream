@@ -18,6 +18,7 @@ static Float:DRAWDISTANCE   = 350.0;
 new object_yakuzaExterior[109];
 new pickup_yakuzaExterior[1];
 new text3D_yakuzaExterior[1];
+new vehicle_yakuzaExterior[19];
 
 hook OnPlayerConnect(playerid) {
     // Remove RenderWare objects
@@ -92,6 +93,27 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Vehicles
+    vehicle_yakuzaExterior[0] = AddStaticVehicleEx(560, 2743.6606, -2484.9607, 13.3486, 270.1384, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[1] = AddStaticVehicleEx(560, 2743.6531, -2480.4849, 13.3187, 270.4067, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[2] = AddStaticVehicleEx(560, 2743.6936, -2475.9502, 13.3236, 269.4127, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[3] = AddStaticVehicleEx(560, 2743.6990, -2471.4214, 13.3117, 270.9428, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[4] = AddStaticVehicleEx(579, 2744.1951, -2466.8997, 13.5454, 269.9771, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[5] = AddStaticVehicleEx(579, 2744.1501, -2462.2371, 13.6388, 270.7501, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[6] = AddStaticVehicleEx(482, 2743.7214, -2458.0906, 13.8047, 270.1640, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[7] = AddStaticVehicleEx(545, 2743.3945, -2453.3953, 13.3842, 269.6862, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[8] = AddStaticVehicleEx(545, 2743.5171, -2448.6790, 13.4819, 268.5097, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[9] = AddStaticVehicleEx(480, 2743.7922, -2444.3933, 13.4345, 270.5973, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[10] = AddStaticVehicleEx(415, 2743.5889, -2439.9407, 13.4066, 270.6160, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[11] = AddStaticVehicleEx(451, 2744.2544, -2435.1064, 13.3574, 268.1396, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[12] = AddStaticVehicleEx(541, 2743.4214, -2430.5688, 13.2749, 269.5439, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[13] = AddStaticVehicleEx(411, 2743.6772, -2426.0400, 13.3612, 270.3381, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[14] = AddStaticVehicleEx(411, 2743.7966, -2421.4761, 13.3691, 270.4832, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[15] = AddStaticVehicleEx(522, 2764.7441, -2442.4272, 13.0668, 0.4309, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[16] = AddStaticVehicleEx(522, 2764.7520, -2446.7861, 13.0772, 1.8060, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[17] = AddStaticVehicleEx(468, 2764.9683, -2466.6001, 13.1484, 0.9250, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[18] = AddStaticVehicleEx(468, 2765.1653, -2470.3794, 13.1384, 2.3488, 13, 13, -1); // Yakuza
+
     // Pickups
     pickup_yakuzaExterior[0] = CreateDynamicPickup(19197, 1, YAKUZA_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_YAKUZAEXTERIOR_INTERIOR); // Yakuza Entrance
     
