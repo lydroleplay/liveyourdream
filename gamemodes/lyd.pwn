@@ -4047,7 +4047,6 @@ new combines[6];
 new zugb[3];
 new pizzacar[8];
 new Text3D:t3dBus[4];
-new bus[4];
 new flug[4];
 new truck[18];
 new kfzcars[6];
@@ -4239,6 +4238,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\speedCameras>
 #include <maps\safeBoxes>
 #include <maps\gasPumps>
+#include <maps\busStation>
 
 main()
 {
@@ -4870,10 +4870,6 @@ OnGameModeInit2() {
 	pizzacar[7] = AddStaticVehicleEx(448,2105.5789,-1784.8358,12.9815,20.0102,3,5,60*10); // Pizza
 
 	//Busse
-	bus[0] =AddStaticVehicleEx(431,1252.5062,-1306.5398,13.2808,179.3419,3,3,60*10); //Bus
-	bus[1] =AddStaticVehicleEx(431,1252.2013,-1323.8386,13.2532,179.7427,3,3,60*10); //Bus
-	bus[2] =AddStaticVehicleEx(431,1252.2871,-1350.3728,13.2473,180.2377,3,3,60*10); //Bus
-	bus[3] =AddStaticVehicleEx(431,1252.2953,-1367.1998,13.2963,180.0122,3,3,60*10); //Bus
 	t3dBus[0] = Text3D:INVALID_3DTEXT_ID;
 	t3dBus[1] = Text3D:INVALID_3DTEXT_ID;
 	t3dBus[2] = Text3D:INVALID_3DTEXT_ID;
@@ -4986,11 +4982,11 @@ OnGameModeInit2() {
 		SetVehicleToRespawn(truck[i]);
 		aiVehicles[ truck[i] ] = VEH_TRUCK;
 	}
-	for(new i=0;i<sizeof(bus);i++)
+	for(new i=0;i<sizeof(vehicle_busStation);i++)
 	{
-		SetVehicleNumberPlate(bus[i], COLOR_HEX_BLACK"BUS");
-		SetVehicleToRespawn(bus[i]);
-		aiVehicles[ bus[i] ] = VEH_BUS;
+		SetVehicleNumberPlate(vehicle_busStation[i], COLOR_HEX_BLACK"BUS");
+		SetVehicleToRespawn(vehicle_busStation[i]);
+		aiVehicles[ vehicle_busStation[i] ] = VEH_BUS;
 	}
 	for(new i=0;i<sizeof(drogen);i++)
 	{
@@ -5753,7 +5749,6 @@ OnGameModeInit2() {
 
 	//Job Skinpoints
 	CreateDynamicPickup(1275, 1,-90.4999,-10.3628,3.1094, 0);//Bauer
-	CreateDynamicPickup(1275, 1,1257.3746,-1334.1302,13.2733, 0);//Busfahrer
 	CreateDynamicPickup(1275, 1,43.5684,-261.4508,1.8305, 0);//Trucker
 	CreateDynamicPickup(1275, 1,1893.2450,-2328.8833,13.5469, 0);//Pilot
 	CreateDynamicPickup(1275, 1,2046.2723,-1913.2064,13.5469, 0);//Straßenreiniger
@@ -5851,7 +5846,6 @@ OnGameModeInit2() {
 
 	//Job Skin 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Bauern\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -90.4999,-10.3628,3.1094, 25.0);//BAUER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Busfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1257.3746,-1334.1302,13.2733, 25.0);//BUSFAHRER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Trucker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 43.5684,-261.4508,1.8305, 25.0);//TRUCKER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Piloten\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1893.2450,-2328.8833,13.5469, 25.0);//PILOT
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Straßenreiniger\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2046.2723,-1913.2064,13.5469, 25.0);//STRAßENREINIGER
@@ -5973,8 +5967,6 @@ OnGameModeInit2() {
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 1", COLOR_WHITE, 359.0863,210.2258,1008.3828, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 2", COLOR_WHITE, 358.2361,184.5094,1008.3828, 15.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - FAHRSCHULE", COLOR_WHITE, 1270.0138,-1846.0366,13.3906, 20.0);
-   	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.3948,-1379.4574,13.2933, 20.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - BUSBAHNHOF", COLOR_WHITE, 1257.0052,-1297.3274,13.2804, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"TÜV-WERKSTATT", COLOR_WHITE, 556.9567,-1258.7034,17.2422, 15.0);
    	/*CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof NORD\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1433.3264,2640.8018,11.3926, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof OST\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 2859.5542,1290.5511,11.3906, 18.0);
@@ -20042,7 +20034,7 @@ CMD:respawnanhanger(playerid)
 stock RespawnJobCars(jobID) {
 	switch (jobID) {
 		case 1:		{ for (new i = 0; i < sizeof(combines); i++) if (!IsVehicleOccupied(combines[i])) SetVehicleToRespawn(combines[i]); }
-		case 2:		{ for (new i = 0; i < sizeof(bus); i++) if (!IsVehicleOccupied(bus[i])) SetVehicleToRespawn(bus[i]); }
+		case 2:		{ for (new i = 0; i < sizeof(vehicle_busStation); i++) if (!IsVehicleOccupied(vehicle_busStation[i])) SetVehicleToRespawn(vehicle_busStation[i]); }
 		case 3:		{ for (new i = 0; i < sizeof(truck); i++) if (!IsVehicleOccupied(truck[i])) SetVehicleToRespawn(truck[i]); }
 		case 4:		{ for (new i = 0; i < sizeof(flug); i++) if (!IsVehicleOccupied(flug[i])) SetVehicleToRespawn(flug[i]); }
 		case 5:		{ for (new i = 0; i < sizeof(kfzcars); i++) if (!IsVehicleOccupied(kfzcars[i])) SetVehicleToRespawn(kfzcars[i]); }
@@ -22494,10 +22486,10 @@ CMD:startlinie(playerid)
 	    //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
 	}
 	if(!(GetPlayerState(playerid) == PLAYER_STATE_DRIVER))return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Bus!");
-	for(new i=0;i<sizeof(bus);i++)
+	for(new i=0;i<sizeof(vehicle_busStation);i++)
 	{
 	    new vID = GetPlayerVehicleID(playerid);
-	    if(vID == bus[i])
+	    if(vID == vehicle_busStation[i])
 	    {
 			ShowPlayerDialog(playerid, DIALOG_LINIE, DIALOG_STYLE_LIST, COLOR_HEX_ORANGE"Busfahrer Linien Auswahl", "Linie 1\nLinie 2\nLinie 3\nLinie 4", "Starten", "Abbrechen");
 
@@ -22508,8 +22500,8 @@ CMD:startlinie(playerid)
 }
 
 stock GetBusIndex(vehicleid){
-    for(new i=0;i<sizeof(bus);i++) {
-        if( bus[i] == vehicleid) {
+    for(new i=0;i<sizeof(vehicle_busStation);i++) {
+        if( vehicle_busStation[i] == vehicleid) {
             return i;
 		}
     }
@@ -22986,9 +22978,9 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			    pjvar=1;
 			}
 		}
-		for(new jh;jh<sizeof(bus);jh++)
+		for(new jh;jh<sizeof(vehicle_busStation);jh++)
 		{
-			if(vehicleid==bus[jh])
+			if(vehicleid==vehicle_busStation[jh])
 			{
 			    pjvar=1;
 			}
@@ -23115,9 +23107,9 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 			    UnLockCar(vehicleid);
 			}
 		}
-	    for(new l;l<sizeof(bus);l++)
+	    for(new l;l<sizeof(vehicle_busStation);l++)
 	    {
-			if(vehicleid==bus[l])
+			if(vehicleid==vehicle_busStation[l])
 			{
 			    UnLockCar(vehicleid);
 			}
@@ -23663,9 +23655,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 		else if( aiVehicles[vehicleid] == VEH_BUS ) {
-			for(new i=0;i<sizeof(bus);i++)
+			for(new i=0;i<sizeof(vehicle_busStation);i++)
 			{
-			    if(vehicleid == bus[i])
+			    if(vehicleid == vehicle_busStation[i])
 			    {
 					for(new pID=0;pID<MAX_PLAYERS;pID++)
 					{
@@ -24474,11 +24466,11 @@ public OnPlayerWaitLinie(playerid)
 		KillTimer(buswait[playerid]);
 		buswait[playerid] = INVALID_TIMER_ID;
 
-		for(new i=0;i<sizeof(bus);i++)
+		for(new i=0;i<sizeof(vehicle_busStation);i++)
 		{
 		    new vID = GetPlayerVehicleID(playerid);
      		if(!(GetPlayerState(playerid) == PLAYER_STATE_DRIVER))return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Bus!");
-			if(vID == bus[i])
+			if(vID == vehicle_busStation[i])
 			{
 			    new ort[24], string[128];
 				GetPlayer2DZone(playerid, ort, 24);
@@ -25814,10 +25806,10 @@ public OnPlayerEnterCheckpoint(playerid)
 	}
 	else if( CP_BUSLINIE1CP1 <= pCheckpoint[playerid] <= CP_BUSLINIE1CP7)
 	{
-	    for(new i=0;i<sizeof(bus);i++)
+	    for(new i=0;i<sizeof(vehicle_busStation);i++)
 	    {
 			new vID = GetPlayerVehicleID(playerid);
-			if(vID == bus[i])
+			if(vID == vehicle_busStation[i])
 			{
 			    BusTime[playerid] = 0;
 				FreezePlayer(playerid);
@@ -25834,10 +25826,10 @@ public OnPlayerEnterCheckpoint(playerid)
 	}
 	else if(CP_BUSLINIE2CP1 <= pCheckpoint[playerid] <= CP_BUSLINIE2CP8)
 	{
-	    for(new i=0;i<sizeof(bus);i++)
+	    for(new i=0;i<sizeof(vehicle_busStation);i++)
 	    {
 			new vID = GetPlayerVehicleID(playerid);
-			if(vID == bus[i])
+			if(vID == vehicle_busStation[i])
 			{
 			    BusTime[playerid] = 0;
 				FreezePlayer(playerid);
@@ -25854,10 +25846,10 @@ public OnPlayerEnterCheckpoint(playerid)
 	}
 	else if(CP_BUSLINIE3CP1 <= pCheckpoint[playerid] <= CP_BUSLINIE3CP8)
 	{
-	    for(new i=0;i<sizeof(bus);i++)
+	    for(new i=0;i<sizeof(vehicle_busStation);i++)
 	    {
 			new vID = GetPlayerVehicleID(playerid);
-			if(vID == bus[i])
+			if(vID == vehicle_busStation[i])
 			{
 			    BusTime[playerid] = 0;
 				FreezePlayer(playerid);
@@ -25874,10 +25866,10 @@ public OnPlayerEnterCheckpoint(playerid)
 	}
 	else if(CP_BUSLINIE4CP1 <= pCheckpoint[playerid] <= CP_BUSLINIE4CP7)
 	{
-	    for(new i=0;i<sizeof(bus);i++)
+	    for(new i=0;i<sizeof(vehicle_busStation);i++)
 	    {
 			new vID = GetPlayerVehicleID(playerid);
-			if(vID == bus[i])
+			if(vID == vehicle_busStation[i])
 			{
 			    BusTime[playerid] = 0;
 				FreezePlayer(playerid);
@@ -44037,7 +44029,7 @@ CMD:showjob(playerid)
 	}
 	else if(Spieler[playerid][pJob] == 2)
 	{
-		SetPlayerCheckpointEx(playerid, 1257.3746,-1334.1302,13.2733, 7.0, CP_SHOWJOB2);
+		SetPlayerCheckpointEx(playerid, BUSSTATION_JOBSKIN_POINT, 2.0, CP_SHOWJOB2);
 	}
 	else if(Spieler[playerid][pJob] == 3)
 	{
@@ -60894,7 +60886,7 @@ enum e_JobSkins {
 new const g_JobSkins[][e_JobSkins] = {
 	// X    Y       Z     Job , SkinID
 	{-90.4999,  -10.3628,  3.1094,  1, 161 }, //Bauer
-	{1257.3746,  -1334.1302,  13.2733,	2, 255 }, //Busfahrer
+	{BUSSTATION_JOBSKIN_POINT,	2, 255 }, //Busfahrer
 	{43.5684,  -261.4508,  1.8305,	3, 32 }, //Trucker
 	{1893.2450,  -2328.8833,  13.5469,	4, 61 }, //Pilot
 	{-77.6301,  -1135.9799,  1.0781,  5, 50 }, //Mechaniker
