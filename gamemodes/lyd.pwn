@@ -4235,6 +4235,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\bikeRental>
 #include <maps\noobSpawn>
 #include <maps\taxiStations>
+#include <maps\carRentalStations>
 
 main()
 {
@@ -5981,15 +5982,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"San Fierro - Hauptbahnhof\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, -1952.0848,137.6278,26.2813, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Los Santos - Bahnhof NORD\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 816.9464,-1362.2501,-0.5078, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Los Santos - Hauptbahnhof\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1738.0658,-1949.8571,14.1172, 18.0);*/
-
-	//CarSharing Station
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CarSharing-Station\n"COLOR_HEX_WHITE"Steig zum Mieten in ein beliebiges Fahrzeug ein!", COLOR_WHITE, 2079.6814,-1772.0012,14.5999, 30.0);//Fahrzeugverleih an der Ballas Base
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CarSharing-Station\n"COLOR_HEX_WHITE"Steig zum Mieten in ein beliebiges Fahrzeug ein!!", COLOR_WHITE, 766.9273,-1338.6477,13.5313, 30.0);//Fahrzeugverleih am Neulingsspawn
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CarSharing-Station\n"COLOR_HEX_WHITE"Steig zum Mieten in ein beliebiges Fahrzeug ein!", COLOR_WHITE, 949.5546,-1770.8784,15.1941, 30.0);//Fahrzeugverleih am LS Strand
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CarSharing-Station\n"COLOR_HEX_WHITE"Steig zum Mieten in ein beliebiges Fahrzeug ein!", COLOR_WHITE, 894.4424,-1413.3195,14.2623, 30.0);//Fahrzeugverleih nähe Neulingsspawn
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CarSharing-Station\n"COLOR_HEX_WHITE"Steig zum Mieten in ein beliebiges Fahrzeug ein!", COLOR_WHITE, 1335.2418,-1250.3275,14.5218, 30.0);//Fahrzeugverleih am Hauptammu
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CarSharing-Station\n"COLOR_HEX_WHITE"Steig zum Mieten in ein beliebiges Fahrzeug ein!", COLOR_WHITE, 1187.8488,-1046.9332,32.8951, 30.0);//Fahrzeugverleih Wohngegend nähe BSN
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CarSharing-Station\n"COLOR_HEX_WHITE"Steig zum Mieten in ein beliebiges Fahrzeug ein!", COLOR_WHITE, 1580.6417,2610.4766,11.8126, 30.0);//Fahrzeugverleih in LV
 
 	//Verkaufs 3D Infotext
 	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"TÜV-WERKSTATT\n"COLOR_HEX_WHITE"Tippe /Wartungen", COLOR_WHITE, 547.7603,-1285.7424,17.5821, 15.0);
