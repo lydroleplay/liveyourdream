@@ -4237,6 +4237,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\taxiStations>
 #include <maps\carRentalStations>
 #include <maps\speedCameras>
+#include <maps\safeBoxes>
 
 main()
 {
@@ -5663,8 +5664,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1242, 1, 326.8095,308.8015,999.1484, 0);//Zollamt Waffenspint
 	/*CreateDynamicPickup(1550, 1, 2144.2129,1641.7505,993.5761, 500);//Bankraub
 	CreateDynamicPickup(1550, 1, 299.4320,191.2753,1007.1794, 200);//Bankraub in LV*/
-	CreateDynamicPickup(1279, 1, 2349.7061,-1246.4760,22.5000, 0);//Safebox in LS
-	CreateDynamicPickup(1279, 1, 1685.7469,1746.1523,10.8251, 0);//Safebox in LV
 
     //CreateDynamicPickup(1239, 1, 2004.6497,1018.1676,994.4688, 50);//Casino Info
    	CreateDynamicPickup(1239, 1, 2041.3099,-1408.8322,17.1641, 0);//Zollamt oben
@@ -5951,8 +5950,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Autolackiererei\n"COLOR_HEX_ORANGE"Preis: 1.500$\n"COLOR_HEX_WHITE"Tippe /Autofarbe", COLOR_WHITE, 1763.4915,2080.2959,10.8203, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Abbauwerkstatt\nfür Auto- u. Motorradtuning\n"COLOR_HEX_ORANGE"Preis: 3.000$\n"COLOR_HEX_WHITE"Tippe /Tuningabbauen", COLOR_WHITE, 1782.8275,-1702.7240,13.5096, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Flugzeuglackiererei\n"COLOR_HEX_ORANGE"Preis: 5.000$\n"COLOR_HEX_WHITE"Tippe /Flugzeugfarbe", COLOR_WHITE, 1798.4768,-2423.4924,13.5547, 20.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox Drogen/Waffenteile\n"COLOR_HEX_WHITE"Tippe /Safebox", COLOR_WHITE, 2349.7061,-1246.4760,22.5000, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox Drogen/Waffenteile\n"COLOR_HEX_WHITE"Tippe /Safebox", COLOR_WHITE, 1685.7469,1746.1523,10.8251, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Entladungspunkt\n"COLOR_HEX_WHITE"Tippe /Paketentladen", COLOR_WHITE, -1857.4130,-1618.9630,21.9022, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Entladungspunkt\n"COLOR_HEX_WHITE"Tippe /Paketentladen", COLOR_WHITE, -258.9534,-2181.9905,29.0150, 10.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Kein Fahrlehrer da?\n"COLOR_HEX_WHITE"Tippe /Ruflehrer\n"COLOR_HEX_GRAU"----------\n"COLOR_HEX_YELLOW"Automatische Fahrschule\n"COLOR_HEX_WHITE"Tippe /Fahrpruefung", COLOR_WHITE, 1234.3380,-1823.9462,13.5909, 40.0);
@@ -50129,7 +50126,7 @@ stock IsVehicleInUse(vehicleid) { //By Sacky
 }
 
 COMMAND:safebox(playerid,params[]) {
-	if (!IsPlayerInRangeOfPoint(playerid,3.0,2349.7061,-1246.4760,22.5000) && !IsPlayerInRangeOfPoint(playerid,3.0,1685.7469,1746.1523,10.8251))
+	if (!IsPlayerInRangeOfPoint(playerid,3.0, SAFEBOX_COORDS_LS) && !IsPlayerInRangeOfPoint(playerid,3.0, SAFEBOX_COORDS_LV))
 		return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der Nähe der Safebox! /Navi -> Illegale Orte -> Safebox");
 
 	if (IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du darfst dafür nicht im Fahrzeug sein.");
