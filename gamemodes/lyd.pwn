@@ -4236,6 +4236,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\noobSpawn>
 #include <maps\taxiStations>
 #include <maps\carRentalStations>
+#include <maps\speedCameras>
 
 main()
 {
