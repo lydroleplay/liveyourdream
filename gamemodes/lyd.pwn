@@ -4042,7 +4042,6 @@ new CurWeather;
 
 new drogen[6];
 new wdealer[6];
-new wantedcar[3];
 new combines[6];
 new zugb[3];
 new pizzacar[8];
@@ -4239,6 +4238,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\safeBoxes>
 #include <maps\gasPumps>
 #include <maps\busStation>
+#include <maps\wantedHackerBase>
 
 main()
 {
@@ -4838,11 +4838,6 @@ OnGameModeInit2() {
 	wdealer[4] = AddStaticVehicleEx(482,2283.5171,-2337.6597,13.6266,227.1544,108,108,60*10); // WDealer5
 	wdealer[5] = AddStaticVehicleEx(482,2276.0869,-2345.1609,13.6405,225.8990,3,38,60*10); // WDealer6
 
-	//Wantedhacker Fahrzeuge
-	wantedcar[0] = AddStaticVehicleEx(459,-1493.4634,1958.9503,48.3757,2.6407,1,1,60*10); // wantedhacker
-	wantedcar[1] = AddStaticVehicleEx(482,-1500.8882,1973.8467,48.4035,179.9305,1,1,60*10); // wantedhacker
-	wantedcar[2] = AddStaticVehicleEx(459,-1505.4424,1958.8423,48.3728,359.6167,3,3,60*10); // wantedhacker
-
 	//Farmer Combines
 	combines[0] =AddStaticVehicleEx(532,-29.79999924,-1.29999995,4.19999981,66.24993896,-1,-1,60*10); //Combine
 	combines[1] =AddStaticVehicleEx(532,-34.09999847,-10.39999962,4.19999981,66.24755859,-1,-1,60*10); //Combine
@@ -5000,11 +4995,11 @@ OnGameModeInit2() {
 		SetVehicleToRespawn(wdealer[i]);
 		aiVehicles[ wdealer[i] ] = VEH_WDEALER;
 	}
-	for(new i=0;i<sizeof(wantedcar);i++)
+	for(new i=0;i<sizeof(vehicle_wantedHackerBase);i++)
 	{
-		SetVehicleNumberPlate(wantedcar[i], COLOR_HEX_BLACK"LS-87492");
-		SetVehicleToRespawn(wantedcar[i]);
-		aiVehicles[ wantedcar[i] ] = VEH_WANTEDCAR;
+		SetVehicleNumberPlate(vehicle_wantedHackerBase[i], COLOR_HEX_BLACK"LS-87492");
+		SetVehicleToRespawn(vehicle_wantedHackerBase[i]);
+		aiVehicles[ vehicle_wantedHackerBase[i] ] = VEH_WANTEDCAR;
 	}
 	for(new i=0;i<sizeof(gartencars);i++)
 	{
@@ -5644,7 +5639,6 @@ OnGameModeInit2() {
    	CreateDynamicPickup(1239, 1, -1857.4130,-1618.9630,21.9022, 0);//Unloadpunkt Waffendealer
 	CreateDynamicPickup(1239, 1, -258.9534,-2181.9905,29.0150, 0);//Unloadpunkt Drogendealer
 	//CreateDynamicPickup(1239, 1, 1481.7039,-1740.6183,13.5469, 0);//Stadtamt-Information
-	CreateDynamicPickup(1254, 1, -1510.6661,1975.3440,48.4219, 0);//Wanted-Hacker point
 	CreateDynamicPickup(1318, 1, -1548.0554,125.1203,3.5547, 0);//Autodieb kran
 	CreateDynamicPickup(1239, 1, 1412.1915,-1700.3817,13.5395, 0);//Werbeagentur LS
 	CreateDynamicPickup(1239, 1, 2008.1722,1169.3364,10.8203, 0);//Werbeagentur LV
@@ -5900,7 +5894,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, -85.5813,2.2551,3.1172, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, 797.5535, -617.8438, 16.3359, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, 760.4858, 378.9008, 23.1683, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wanted-Hacker Codes\n"COLOR_HEX_WHITE"Tippe /Wcodes", COLOR_WHITE, -1510.6661, 1975.3440, 48.4219, 10.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waren-Vergabe Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadwaren", COLOR_WHITE, 577.4390,1221.7273,11.2689, 20.0);//Loadware in LV
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Öl-Raffinerie Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadbenzin", COLOR_WHITE, 268.9609,1384.2981,10.1610, 20.0);//Loadbenzin in LV
 
@@ -20049,7 +20042,7 @@ stock RespawnJobCars(jobID) {
 		case 16:	{ for (new i = 0; i < sizeof(vehicle_taxiStations); i++) if (!IsVehicleOccupied(vehicle_taxiStations[i])) SetVehicleToRespawn(vehicle_taxiStations[i]); }
 		case 17:	{ for (new i = 0; i < sizeof(drogen); i++) if (!IsVehicleOccupied(drogen[i])) SetVehicleToRespawn(drogen[i]); }
 		case 18:	{ for (new i = 0; i < sizeof(wdealer); i++) if (!IsVehicleOccupied(wdealer[i])) SetVehicleToRespawn(wdealer[i]); }
-		case 21:	{ for (new i = 0; i < sizeof(wantedcar); i++) if (!IsVehicleOccupied(wantedcar[i])) SetVehicleToRespawn(wantedcar[i]); }
+		case 21:	{ for (new i = 0; i < sizeof(vehicle_wantedHackerBase); i++) if (!IsVehicleOccupied(vehicle_wantedHackerBase[i])) SetVehicleToRespawn(vehicle_wantedHackerBase[i]); }
 		case 23:	{ for (new i = 0; i < sizeof(zugb); i++) if (!IsVehicleOccupied(zugb[i])) SetVehicleToRespawn(zugb[i]); }
 		case 24:	{ for (new i = 0; i < sizeof(hotdogcar); i++) if (!IsVehicleOccupied(hotdogcar[i])) SetVehicleToRespawn(hotdogcar[i]); }
 		default: 	{ return 0; }
@@ -23006,9 +22999,9 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			    pjvar=1;
 			}
 		}
-		for(new jc;jc<sizeof(wantedcar);jc++)
+		for(new jc;jc<sizeof(vehicle_wantedHackerBase);jc++)
 		{
-			if(vehicleid==wantedcar[jc])
+			if(vehicleid==vehicle_wantedHackerBase[jc])
 			{
 			    pjvar=1;
 			}
@@ -23072,9 +23065,9 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 			    UnLockCar(vehicleid);
 			}
 		}
-	    for(new q;q<sizeof(wantedcar);q++)
+	    for(new q;q<sizeof(vehicle_wantedHackerBase);q++)
 	    {
-			if(vehicleid==wantedcar[q])
+			if(vehicleid==vehicle_wantedHackerBase[q])
 			{
 			    UnLockCar(vehicleid);
 			}
@@ -23625,9 +23618,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 		else if( aiVehicles[vehicleid] == VEH_WANTEDCAR ) {
-			for(new i=0;i<sizeof(wantedcar);i++)
+			for(new i=0;i<sizeof(vehicle_wantedHackerBase);i++)
 			{
-				if(vehicleid == wantedcar[i])
+				if(vehicleid == vehicle_wantedHackerBase[i])
 				{
 					for(new pID=0;pID<MAX_PLAYERS;pID++)
 					{
@@ -44098,7 +44091,7 @@ CMD:showjob(playerid)
 	}
 	else if(Spieler[playerid][pJob] == 21)
 	{
-		SetPlayerCheckpointEx(playerid, -1510.6661,1975.3440,48.4219, 7.0, CP_SHOWJOB7);
+		SetPlayerCheckpointEx(playerid, WANTEDHACKERBASE_POINT, 2.0, CP_SHOWJOB7);
 	}
 	/*else if(Spieler[playerid][pJob] == 24)
 	{
@@ -52912,7 +52905,7 @@ COMMAND:wcodes(playerid,params[]) {
 	    SendClientMessage(playerid, COLOR_RED, "Du bist kein WantedHacker");
 	    return 1;
     }
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,-1510.6661,1975.3440,48.4219) ) {
+	if( !IsPlayerInRangeOfPoint(playerid,3.0, WANTEDHACKERBASE_POINT) ) {
 		return SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht am WantedHacker Platz");
 	}
 	if( gettime() < Spieler[playerid][punixWantedCodes] ) {
