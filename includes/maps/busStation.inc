@@ -16,8 +16,8 @@ static Float:DRAWDISTANCE   = 350.0;
 new object_busStation[22];
 new pickup_busStation[1];
 new text3D_busStation[3];
-new vehicle_busStation[4];
 new actor_busStation[4];
+new vehicle_busStation[4];
 
 hook OnPlayerConnect(playerid) {
     // ---
@@ -36,6 +36,7 @@ hook OnGameModeInit() {
     text3D_busStation[1] = _:CreateDynamic3DTextLabel("LOS SANTOS - BUSBAHNHOF", COLOR_YELLOW, BUSSTATION_INFO_POINT1, 20.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BUSSTATION_INTERIOR); // Info point
     text3D_busStation[2] = _:CreateDynamic3DTextLabel("LOS SANTOS - BUSBAHNHOF", COLOR_YELLOW, BUSSTATION_INFO_POINT2, 20.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BUSSTATION_INTERIOR); // Info point
     
+    // Actors
     actor_busStation[0] = CreateDynamicActor(7, 1256.5770, -1369.8331, 13.2933, 90.4237, .worldid = VW_MAIN, .interiorid = MAPS_BUSSTATION_INTERIOR); // Watch guy
     ApplyDynamicActorAnimation(actor_busStation[0], "MISC", "SEAT_watch", 0.2, 1, 0, 0, 0, 0);
     actor_busStation[1] = CreateDynamicActor(56, 1256.5248, -1349.7919, 13.2933, 93.1852, .worldid = VW_MAIN, .interiorid = MAPS_BUSSTATION_INTERIOR); // Leaning woman

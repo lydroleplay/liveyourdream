@@ -14,8 +14,8 @@ static Float:DRAWDISTANCE   = 350.0;
 new object_wantedHackerBase[9];
 new pickup_wantedHackerBase[1];
 new text3D_wantedHackerBase[1];
-new vehicle_wantedHackerBase[3];
 new actor_wantedHackerBase[1];
+new vehicle_wantedHackerBase[3];
 
 hook OnPlayerConnect(playerid) {
     // ---
@@ -32,7 +32,8 @@ hook OnGameModeInit() {
     // 3DTextLabels
     text3D_wantedHackerBase[0] = _:CreateDynamic3DTextLabel("Wanted-Hacker Codes\n" COLOR_HEX_WHITE "Tippe /Wcodes", COLOR_BLUE, WANTEDHACKERBASE_POINT, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_WANTEDHACKERBASE_INTERIOR); // Job clothes point
     
-    actor_wantedHackerBase[0] = CreateDynamicActor(112, -1511.4948, 1978.6263, 48.4171, 345.9610, .worldid = VW_MAIN, .interiorid = MAPS_WANTEDHACKERBASE_INTERIOR); // Watch guy
+    // Actors
+    actor_wantedHackerBase[0] = CreateDynamicActor(112, -1511.4948, 1978.6263, 48.4171, 345.9610, .worldid = VW_MAIN, .interiorid = MAPS_WANTEDHACKERBASE_INTERIOR); // sitting guy
     ApplyDynamicActorAnimation(actor_wantedHackerBase[0], "PED", "SEAT_idle", 4.0, 1, 0, 0, 0, 0);
     
     // Vehicles

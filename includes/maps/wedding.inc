@@ -34,7 +34,7 @@ hook OnGameModeInit() {
     
     // Actors
     actor_wedding[0] = CreateDynamicActor(68, 1310.0942, -1367.0007, 13.5150, 181.1954, .worldid = VW_MAIN, .interiorid = MAPS_WEDDING_INTERIOR); // Preacher
-    ApplyDynamicActorAnimation(actor_wedding[0], "CASINO", "cards_in", 4.0, 0, 0, 0, 1, 0);
+    ApplyDynamicActorAnimation(actor_wedding[0], "GRAVEYARD", "prst_loopa", 4.0, 0, 0, 0, 1, 0);
 
 	// Objects
     object_wedding[0] = CreateDynamicObject(870, 1314.0999755859, -1369, 12.800000190735, 0, 0, 0, VW_MAIN, MAPS_WEDDING_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);

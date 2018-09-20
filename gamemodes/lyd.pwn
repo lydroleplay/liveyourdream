@@ -4051,7 +4051,6 @@ new truck[18];
 new kfzcars[6];
 new bauarb[8];
 new schiff[5];
-new gartencars[7];
 new reinigung[8];
 new geldt[8];
 new muell[6];
@@ -4239,6 +4238,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\gasPumps>
 #include <maps\busStation>
 #include <maps\wantedHackerBase>
+#include <maps\gardenerBase>
 
 main()
 {
@@ -4923,15 +4923,6 @@ OnGameModeInit2() {
 	hotdogcar[1] = AddStaticVehicleEx(588,2377.0818,-1928.0540,13.3332,359.5819,8,8,60*10); // Hotdogwagen
 	hotdogcar[2] = AddStaticVehicleEx(588,2383.5793,-1928.1016,13.3400,359.5818,8,8,60*10); // Hotdogwagen
 
-	//Garten
-	gartencars[0] = AddStaticVehicleEx(572,1564.8389,43.1613,24.2453,136.5115,129,129,60*10); // rasenmäher
-	gartencars[1] = AddStaticVehicleEx(572,1584.8051,45.1839,24.6418,112.7617,129,129,60*10); // rasenmäher
-	gartencars[2] = AddStaticVehicleEx(572,1583.4629,49.1419,24.9340,112.6888,129,129,60*10); // rasenmäher
-	gartencars[3] = AddStaticVehicleEx(572,1570.1069,31.8921,23.8003,93.6875,129,129,60*10); // rasenmäher
-	gartencars[4] = AddStaticVehicleEx(572,1566.6692,31.6986,23.7482,93.6835,129,129,60*10); // rasenmäher
-	gartencars[5] = AddStaticVehicleEx(572,1547.3218,23.9317,23.7289,282.9243,129,129,60*10); // rasenmäher
-	gartencars[6] = AddStaticVehicleEx(572,1563.2639,48.7524,24.7672,137.0455,129,129,60*10); // rasenmäher
-
 	//Bauarbeiter
 	bauarb[0] = AddStaticVehicleEx(486,823.8465,886.6324,13.5834,276.7267,1,1,60*10); // bauarba
 	bauarb[1] = AddStaticVehicleEx(486,823.3401,890.9330,13.5920,276.7213,1,1,60*10); // bauarba
@@ -5001,11 +4992,11 @@ OnGameModeInit2() {
 		SetVehicleToRespawn(vehicle_wantedHackerBase[i]);
 		aiVehicles[ vehicle_wantedHackerBase[i] ] = VEH_WANTEDCAR;
 	}
-	for(new i=0;i<sizeof(gartencars);i++)
+	for(new i=0;i<sizeof(vehicle_gardenerBase);i++)
 	{
-		SetVehicleNumberPlate(gartencars[i], COLOR_HEX_BLACK"GÄRTNER");
-		SetVehicleToRespawn(gartencars[i]);
-		aiVehicles[ gartencars[i] ] = VEH_GARTENCARS;
+		SetVehicleNumberPlate(vehicle_gardenerBase[i], COLOR_HEX_BLACK"GÄRTNER");
+		SetVehicleToRespawn(vehicle_gardenerBase[i]);
+		aiVehicles[ vehicle_gardenerBase[i] ] = VEH_GARTENCARS;
 	}
 	for(new i=0;i<sizeof(bauarb);i++)
 	{
@@ -5747,7 +5738,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1,1893.2450,-2328.8833,13.5469, 0);//Pilot
 	CreateDynamicPickup(1275, 1,2046.2723,-1913.2064,13.5469, 0);//Straßenreiniger
 	CreateDynamicPickup(1275, 1,2118.6157,-2085.0828,13.5544, 0);//Müllmann
-	CreateDynamicPickup(1275, 1,1565.7582,23.2893,24.1641, 0);//Gärtner
+
 	CreateDynamicPickup(1275, 1,831.2045,865.6005,12.5911, 0);//Bauarbeiter
 	CreateDynamicPickup(1275, 1,2487.6289,-2250.2695,3.0000, 0);//Schiffsfahrer
 	CreateDynamicPickup(1275, 1,1551.5492,-1005.0830,24.0781, 0);//Geldtransportfahrer
@@ -5844,7 +5835,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Piloten\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1893.2450,-2328.8833,13.5469, 25.0);//PILOT
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Straßenreiniger\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2046.2723,-1913.2064,13.5469, 25.0);//STRAßENREINIGER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Müllmann\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2118.6157,-2085.0828,13.5544, 25.0);//MÜLLMANN
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Gärtner\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1565.7582,23.2893,24.1641, 25.0);//GÄRTNER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 831.2045,865.6005,12.5911, 25.0);//BAUARBEITER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Schiffsfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2487.6289,-2250.2695,3.0000, 25.0);//SCHIFFSFAHRER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Geldtransportfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1551.5492,-1005.0830,24.0781, 25.0);//GELDTRANSPORTFAHRER
@@ -20033,7 +20023,7 @@ stock RespawnJobCars(jobID) {
 		case 5:		{ for (new i = 0; i < sizeof(kfzcars); i++) if (!IsVehicleOccupied(kfzcars[i])) SetVehicleToRespawn(kfzcars[i]); }
 		case 7:		{ for (new i = 0; i < sizeof(reinigung); i++) if (!IsVehicleOccupied(reinigung[i])) SetVehicleToRespawn(reinigung[i]); }
 		case 8:		{ for (new i = 0; i < sizeof(muell); i++) if (!IsVehicleOccupied(muell[i])) SetVehicleToRespawn(muell[i]); }
-		case 9:		{ for (new i = 0; i < sizeof(gartencars); i++) if (!IsVehicleOccupied(gartencars[i])) SetVehicleToRespawn(gartencars[i]); }
+		case 9:		{ for (new i = 0; i < sizeof(vehicle_gardenerBase); i++) if (!IsVehicleOccupied(vehicle_gardenerBase[i])) SetVehicleToRespawn(vehicle_gardenerBase[i]); }
 		case 10:	{ for (new i = 0; i < sizeof(bauarb); i++) if (!IsVehicleOccupied(bauarb[i])) SetVehicleToRespawn(bauarb[i]); }
 		case 11:	{ for (new i = 0; i < sizeof(schiff); i++) if (!IsVehicleOccupied(schiff[i])) SetVehicleToRespawn(schiff[i]); }
 		case 12:	{ for (new i = 0; i < sizeof(geldt); i++) if (!IsVehicleOccupied(geldt[i])) SetVehicleToRespawn(geldt[i]); }
@@ -22922,9 +22912,9 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			    pjvar=1;
 			}
 		}
-		for(new jp;jp<sizeof(gartencars);jp++)
+		for(new jp;jp<sizeof(vehicle_gardenerBase);jp++)
 		{
-			if(vehicleid==gartencars[jp])
+			if(vehicleid==vehicle_gardenerBase[jp])
 			{
 			    pjvar=1;
 			}
@@ -23149,9 +23139,9 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 			    UnLockCar(vehicleid);
 			}
 		}
-	    for(new d;d<sizeof(gartencars);d++)
+	    for(new d;d<sizeof(vehicle_gardenerBase);d++)
 	    {
-			if(vehicleid==gartencars[d])
+			if(vehicleid==vehicle_gardenerBase[d])
 			{
 			    UnLockCar(vehicleid);
 			}
@@ -23820,9 +23810,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 		else if( aiVehicles[vehicleid] == VEH_GARTENCARS ) {
-			for(new i=0;i<sizeof(gartencars);i++)
+			for(new i=0;i<sizeof(vehicle_gardenerBase);i++)
 			{
-			    if(vehicleid == gartencars[i])
+			    if(vehicleid == vehicle_gardenerBase[i])
 			    {
 					for(new pID=0;pID<MAX_PLAYERS;pID++)
 					{
@@ -26519,9 +26509,9 @@ public OnPlayerEnterCheckpoint(playerid)
 		new vID = GetPlayerVehicleID(playerid);
 		if(vID) {
 			if( aiVehicles[vID] == VEH_GARTENCARS) {
-				for(new i=0;i<sizeof(gartencars);i++)
+				for(new i=0;i<sizeof(vehicle_gardenerBase);i++)
 				{
-					if(vID == gartencars[i])
+					if(vID == vehicle_gardenerBase[i])
 					{
 					    if(pCheckpoint[playerid] == CP_GARTEN1)
 					    {
@@ -44050,7 +44040,7 @@ CMD:showjob(playerid)
 	}
 	else if(Spieler[playerid][pJob] == 9)
 	{
-		SetPlayerCheckpointEx(playerid, 1565.7582,23.2893,24.1641, 7.0, CP_SHOWJOB9);
+		SetPlayerCheckpointEx(playerid, GARDENERBASE_JOBSKIN_POINT, 2.0, CP_SHOWJOB9);
 	}
 	else if(Spieler[playerid][pJob] == 10)
 	{
@@ -60886,7 +60876,7 @@ new const g_JobSkins[][e_JobSkins] = {
 	{ LSPD_INTERIOR_LAWYER_SKIN_POINT,  6, 57 }, // Lawyer (Anwalt)
 	{2046.2723,  -1913.2064,  13.5469,  7, 260 }, //Straßenreiniger
 	{2118.6157,  -2085.0828,  13.5544,	8, 260 }, //Müllmann
-	{1565.7582,  23.2893,  24.1641,	9, 35 }, //Gärtner
+	{GARDENERBASE_JOBSKIN_POINT,	9, 35 }, //Gärtner
 	{831.2045,  865.6005,  12.5911,	 10, 27 }, //Bauarbeiter
 	{2487.6289,  -2250.2695,  3.0000,  11, 37 }, //Schiffsfahrer
 	{1551.5492,  -1005.0830,  24.0781,	12, 202 }, //Geldtransport
