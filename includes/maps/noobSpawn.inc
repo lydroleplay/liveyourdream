@@ -7,7 +7,7 @@
 static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
-// Bike rental in LS points
+// Noob spawn in LS points
 #define NOOBSPAWN_STARTBONUS_POINT   809.3212, -1339.9855, 13.5408
 #define NOOBSPAWN_SERVERINFO_POINT   817.4735, -1345.8376, 13.5269
 
@@ -37,6 +37,7 @@ hook OnGameModeInit() {
     text3D_noobSpawn[0] = _:CreateDynamic3DTextLabel("Server Informationen\n" COLOR_HEX_WHITE "Tippe /Info", COLOR_GREEN, NOOBSPAWN_SERVERINFO_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_NOOBSPAWN_INTERIOR);
     text3D_noobSpawn[1] = _:CreateDynamic3DTextLabel("Startbonus\n" COLOR_HEX_RED "Tippe: /Startbonus", COLOR_GREEN, NOOBSPAWN_STARTBONUS_POINT, 20.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_NOOBSPAWN_INTERIOR);
 
+    // Actors
     actor_noobSpawn[0] = CreateDynamicActor(150, 809.7925, -1338.9929, 13.5400, 255.5065, .worldid = VW_MAIN, .interiorid = MAPS_NOOBSPAWN_INTERIOR); // Greeting woman
     ApplyDynamicActorAnimation(actor_noobSpawn[0], "PED", "endchat_03", 4.0, 1, 0, 0, 0, 0);
     actor_noobSpawn[1] = CreateDynamicActor(141, 816.6170, -1345.5221, 13.5283, 271.2476, .worldid = VW_MAIN, .interiorid = MAPS_NOOBSPAWN_INTERIOR); // Information woman

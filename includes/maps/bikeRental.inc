@@ -36,7 +36,8 @@ hook OnGameModeInit() {
     text3D_bikeRental[1] = _:CreateDynamic3DTextLabel("Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", 0x33EE55FF, BIKERENTAL_DRIVINGSCHOOL_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR);
     text3D_bikeRental[2] = _:CreateDynamic3DTextLabel("Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", 0x33EE55FF, BIKERENTAL_CITYHALL_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR);
 
-    actor_bikeRental[0] = CreateDynamicActor(99, 1496.1652, -1716.4005, 14.0469, 183.0903, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // White bike guy
+    // Actors
+    actor_bikeRental[0] = CreateDynamicActor(51, 1496.1652, -1716.4005, 14.0469, 183.0903, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // White bike guy
     ApplyDynamicActorAnimation(actor_bikeRental[0], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);
     actor_bikeRental[1] = CreateDynamicActor(52, 1242.4252, -1860.8560, 13.5469, 359.4532, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // Other bike guy
     ApplyDynamicActorAnimation(actor_bikeRental[1], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);

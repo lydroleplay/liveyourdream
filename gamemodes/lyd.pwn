@@ -4046,7 +4046,6 @@ new wantedcar[3];
 new combines[6];
 new zugb[3];
 new pizzacar[8];
-new taxicar[9];
 new Text3D:t3dBus[4];
 new bus[4];
 new flug[4];
@@ -4235,6 +4234,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\governmentExterior>
 #include <maps\bikeRental>
 #include <maps\noobSpawn>
+#include <maps\taxiStations>
 
 main()
 {
@@ -4865,17 +4865,6 @@ OnGameModeInit2() {
 	pizzacar[6] = AddStaticVehicleEx(448,2108.7300,-1784.7393,12.9869,20.0269,3,5,60*10); // Pizza
 	pizzacar[7] = AddStaticVehicleEx(448,2105.5789,-1784.8358,12.9815,20.0102,3,5,60*10); // Pizza
 
-	//Taxicars
-	taxicar[0] = AddStaticVehicleEx(420,1276.6396,-1375.7363,13.0149,179.8286,6,6,60*10); // Taxicar1
-	taxicar[1] = AddStaticVehicleEx(438,1276.5221,-1365.5522,13.2643,180.2328,6,6,60*10); // Taxicar1
-	taxicar[2] = AddStaticVehicleEx(420,1276.4287,-1355.7947,13.1203,179.3606,6,6,60*10); // Taxicar1
-	taxicar[3] = AddStaticVehicleEx(420,1276.6139,-1320.3938,13.1200,180.2275,6,6,60*10); // Taxicar1
-	taxicar[4] = AddStaticVehicleEx(438,1276.5392,-1310.1168,13.3321,180.3863,6,6,60*10); // Taxicar1
-	taxicar[5] = AddStaticVehicleEx(420,1276.4485,-1299.5356,13.1214,180.5707,6,6,60*10); // Taxicar1
-	taxicar[6] = AddStaticVehicleEx(420,1435.9677,-1698.9344,13.3256,359.5016,6,6,60*10); // Taxicar1
-	taxicar[7] = AddStaticVehicleEx(438,1435.9534,-1706.5477,13.5496,0.0620,6,6,60*10); // Taxicar1
-	taxicar[8] = AddStaticVehicleEx(420,1436.0543,-1713.8870,13.3349,0.2145,6,6,60*10); // Taxicar1
-
 	//Busse
 	bus[0] =AddStaticVehicleEx(431,1252.5062,-1306.5398,13.2808,179.3419,3,3,60*10); //Bus
 	bus[1] =AddStaticVehicleEx(431,1252.2013,-1323.8386,13.2532,179.7427,3,3,60*10); //Bus
@@ -5071,11 +5060,11 @@ OnGameModeInit2() {
 		SetVehicleToRespawn(pizzacar[i]);
 		aiVehicles[ pizzacar[i] ] = VEH_PIZZACAR;
 	}
-	for(new i=0;i<sizeof(taxicar);i++)
+	for(new i=0;i<sizeof(vehicle_taxiStations);i++)
 	{
-		SetVehicleNumberPlate(taxicar[i], COLOR_HEX_BLACK"TAXI");
-		SetVehicleToRespawn(taxicar[i]);
-		aiVehicles[ taxicar[i] ] = VEH_TAXICAR;
+		SetVehicleNumberPlate(vehicle_taxiStations[i], COLOR_HEX_BLACK"TAXI");
+		SetVehicleToRespawn(vehicle_taxiStations[i]);
+		aiVehicles[ vehicle_taxiStations[i] ] = VEH_TAXICAR;
 	}
 	for(new i=0;i<sizeof(kfzcars);i++)
 	{
@@ -5773,11 +5762,9 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1,1551.5492,-1005.0830,24.0781, 0);//Geldtransportfahrer
 	CreateDynamicPickup(1275, 1,1021.9334,-1371.0099,13.5585, 0);//Eisverkäufer
 	CreateDynamicPickup(1275, 1,2117.3662,-1790.0100,13.5547, 0);//Pizzalieferrant
-	CreateDynamicPickup(1275, 1,1272.3879,-1353.3357,13.5069, 0);//Taxifahrer
 	CreateDynamicPickup(1275, 1,2417.1555,-1220.1472,25.3914, 0);//Hure
 	CreateDynamicPickup(1275, 1,1735.0045,-1944.0450,13.5681, 0);//Zugfahrer
 	CreateDynamicPickup(1275, 1,2384.0181,-1915.5509,13.5469, 0);//Hotdog
-	CreateDynamicPickup(1275, 1,1437.4211,-1694.0231,13.5469, 0);//Taxifahrer2
 	CreateDynamicPickup(1275, 1,980.6174,-933.2461,41.3419, 0);//Mechaniker
 	CreateDynamicPickup(1275, 1,1945.9237,-1793.6355,13.5469, 0);//Mechaniker
 	CreateDynamicPickup(1275, 1,662.6830,-579.0665,16.3359, 0);//Mechaniker
@@ -5873,8 +5860,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Geldtransportfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1551.5492,-1005.0830,24.0781, 25.0);//GELDTRANSPORTFAHRER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Eisverkäufer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1021.9334,-1371.0099,13.5585, 25.0);//EISVERKÄUFER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Pizzalieferrant\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2117.3662,-1790.0100,13.5547, 25.0);//PIZZALIEGERRANT
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Taxifahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1272.3879,-1353.3357,13.5069, 25.0);//TAXIFAHRER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Taxifahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1437.4211,-1694.0231,13.5469, 25.0);//TAXIFAHRER2
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Prostituierte\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2417.1555,-1220.1472,25.3914, 25.0);//HURE
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Zugfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1735.0045,-1944.0450,13.5681, 25.0);//ZUFAHRER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Hotdog Verkäufer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2384.0181,-1915.5509,13.5469, 25.0);//Hotdog
@@ -20078,7 +20063,7 @@ stock RespawnJobCars(jobID) {
 		case 12:	{ for (new i = 0; i < sizeof(geldt); i++) if (!IsVehicleOccupied(geldt[i])) SetVehicleToRespawn(geldt[i]); }
 		case 13:	{ for (new i = 0; i < sizeof(eismann); i++) if (!IsVehicleOccupied(eismann[i])) SetVehicleToRespawn(eismann[i]); }
 		case 15:	{ for (new i = 0; i < sizeof(pizzacar); i++) if (!IsVehicleOccupied(pizzacar[i])) SetVehicleToRespawn(pizzacar[i]); }
-		case 16:	{ for (new i = 0; i < sizeof(taxicar); i++) if (!IsVehicleOccupied(taxicar[i])) SetVehicleToRespawn(taxicar[i]); }
+		case 16:	{ for (new i = 0; i < sizeof(vehicle_taxiStations); i++) if (!IsVehicleOccupied(vehicle_taxiStations[i])) SetVehicleToRespawn(vehicle_taxiStations[i]); }
 		case 17:	{ for (new i = 0; i < sizeof(drogen); i++) if (!IsVehicleOccupied(drogen[i])) SetVehicleToRespawn(drogen[i]); }
 		case 18:	{ for (new i = 0; i < sizeof(wdealer); i++) if (!IsVehicleOccupied(wdealer[i])) SetVehicleToRespawn(wdealer[i]); }
 		case 21:	{ for (new i = 0; i < sizeof(wantedcar); i++) if (!IsVehicleOccupied(wantedcar[i])) SetVehicleToRespawn(wantedcar[i]); }
@@ -23003,9 +22988,9 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			    pjvar=1;
 			}
 		}
-		for(new ji;ji<sizeof(taxicar);ji++)
+		for(new ji;ji<sizeof(vehicle_taxiStations);ji++)
 		{
-			if(vehicleid==taxicar[ji])
+			if(vehicleid==vehicle_taxiStations[ji])
 			{
 			    pjvar=1;
 			}
@@ -23132,9 +23117,9 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 			    UnLockCar(vehicleid);
 			}
 		}
-	    for(new m;m<sizeof(taxicar);m++)
+	    for(new m;m<sizeof(vehicle_taxiStations);m++)
 	    {
-			if(vehicleid==taxicar[m])
+			if(vehicleid==vehicle_taxiStations[m])
 			{
 			    UnLockCar(vehicleid);
 			}
@@ -24119,9 +24104,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 		else if( aiVehicles[vehicleid] == VEH_TAXICAR ) {
-			for(new i=0;i<sizeof(taxicar);i++)
+			for(new i=0;i<sizeof(vehicle_taxiStations);i++)
 			{
-			    if(vehicleid == taxicar[i])
+			    if(vehicleid == vehicle_taxiStations[i])
 			    {
 					for(new pID=0;pID<MAX_PLAYERS;pID++)
 					{
@@ -60931,7 +60916,8 @@ new const g_JobSkins[][e_JobSkins] = {
 	{1551.5492,  -1005.0830,  24.0781,	12, 202 }, //Geldtransport
 	{1021.9334,  -1371.0099,  13.5585,	13, 264 }, //Eisfahrer
 	{2117.3662,  -1790.0100,  13.5547,	15, 155 }, //Pizzalieferant
-	{1272.3879,  -1353.3357,  13.5069,	16, 189 }, //Taxifahrer
+	{TAXISTATIONS_JOBSKIN_POINT_CITYHALL, 16, 189 }, //Taxifahrer
+	{TAXISTATIONS_JOBSKIN_POINT_BUSSTATION,	16, 189 }, //Taxifahrer
 	{1735.0045,	 -1944.0450,  13.5681,	23, 253 }, //Zugfahrer
 	{2417.1555,  -1220.1472,  25.3914,	20, 63 }, //Hure
 	{2390.9146,	 -1920.6163,  13.3828,	25, 168 } //Hotdog
