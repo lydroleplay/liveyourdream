@@ -4065,7 +4065,6 @@ new staatcars[24];
 new aztcars[18];
 new lcncars[17];
 new vagoscars[16];
-new bikercars[17];
 new lvpdcars[30];
 new wheelcars[14];
 new armycars[1];
@@ -4239,6 +4238,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\busStation>
 #include <maps\wantedHackerBase>
 #include <maps\gardenerBase>
+#include <maps\nineDemonsBase>
 
 main()
 {
@@ -5257,24 +5257,6 @@ OnGameModeInit2() {
 	aztcars[15] = AddStaticVehicleEx(411,1803.5897,-2107.4424,13.1890,269.9739,2,2,-1); // InfernusA2
 	aztcars[16] = AddStaticVehicleEx(480,1773.2216,-2092.1753,13.3215,179.8830,2,2,-1); // CometA
 
-	bikercars[0] = AddStaticVehicleEx(541,217.9363,-227.8569,1.3853,92.5174,245,245,-1); // BulletND
-	bikercars[1] = AddStaticVehicleEx(480,218.0209,-232.5769,1.5525,91.4395,245,245,-1); // CometND
-	bikercars[2] = AddStaticVehicleEx(522,213.0874,-234.8764,1.3403,90.3355,245,245,-1); // NRGND
-	bikercars[3] = AddStaticVehicleEx(468,209.7309,-234.8420,1.4437,88.0967,245,245,-1); // SanchezND
-	bikercars[4] = AddStaticVehicleEx(478,195.6311,-238.7896,1.5743,179.6374,245,245,-1); // BauernCarND
-	bikercars[5] = AddStaticVehicleEx(415,210.5283,-249.6457,1.3624,90.4343,245,245,-1); // CheetahND
-	bikercars[6] = AddStaticVehicleEx(463,220.9234,-238.1276,1.1187,85.3139,245,245,-1); // Freeway3ND
-	bikercars[7] = AddStaticVehicleEx(463,221.0327,-241.4651,1.1187,87.9480,245,245,-1); // Freeway2ND
-	bikercars[8] = AddStaticVehicleEx(463,220.9090,-244.5990,1.1186,91.1105,245,245,-1); // Freeway1ND
-	bikercars[9] = AddStaticVehicleEx(489,219.4961,-250.9043,1.7208,118.7248,245,245,-1); // RancherND
-	bikercars[10] = AddStaticVehicleEx(487,215.3044,-229.1679,8.2553,180.0780,245,245,-1); // NineDemonsHELI
-	bikercars[11] = AddStaticVehicleEx(482,219.9123,-255.2900,1.6960,121.6129,245,245,-1); // BurritoND
-	bikercars[12] = AddStaticVehicleEx(411,220.1589,-260.3581,1.3074,87.8231,245,245,-1); // InfernusND2
-	bikercars[13] = AddStaticVehicleEx(411,220.1015,-265.4549,1.3063,90.8219,245,245,-1); // InfernusND
-	bikercars[14] = AddStaticVehicleEx(560,209.3702,-269.2930,1.2907,2.0122,245,245,-1); // SultanND3
-	bikercars[15] = AddStaticVehicleEx(560,205.2984,-269.1839,1.2935,359.4737,245,245,-1); // SultanND2
-	bikercars[16] = AddStaticVehicleEx(560,201.5378,-269.1252,1.2845,1.3342,245,245,-1); // SultanND
-
 	lcncars[0] = AddStaticVehicleEx(411,1093.5651,-1225.2573,15.5453,179.6005,75,75,-1); // LCNInfernus1
 	lcncars[1] = AddStaticVehicleEx(411,1097.7482,-1225.2493,15.5518,178.5437,75,75,-1); // LCNInfernus2
 	lcncars[2] = AddStaticVehicleEx(541,1101.8160,-1224.9753,15.4502,180.5087,75,75,-1); // LCNBullet
@@ -5432,11 +5414,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(vehicle_hitmanBase[i]);
 		aiVehicles[ vehicle_hitmanBase[i] ] = VEH_HITMANC;
 	}
-	for(new i=0;i<sizeof(bikercars);i++)
+	for(new i=0;i<sizeof(vehicle_nineDemonsBase);i++)
 	{
-		SetVehicleNumberPlate(bikercars[i], COLOR_HEX_BLACK"NINEDEMONS");
-        SetVehicleToRespawn(bikercars[i]);
-		aiVehicles[ bikercars[i] ] = VEH_BIKERCARS;
+		SetVehicleNumberPlate(vehicle_nineDemonsBase[i], COLOR_HEX_BLACK"NINEDEMONS");
+        SetVehicleToRespawn(vehicle_nineDemonsBase[i]);
+		aiVehicles[ vehicle_nineDemonsBase[i] ] = VEH_BIKERCARS;
 	}
 	for(new i=0;i<sizeof(lvpdcars);i++)
 	{
@@ -5658,7 +5640,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1650, 1, 268.9609,1384.2981,10.1610, 0);//Loadbenzin in LV
 
 	//Fraktionssafebox
-	CreateDynamicPickup(1279, 1, 195.4771,-226.3883,1.7786, 0);//Fsavebox Ninedemons
 	CreateDynamicPickup(1279, 1, 333.7054,1121.7754,1083.8903, 0);//Fsavebox Ballas
 	CreateDynamicPickup(1279, 1, 2498.2847,-1710.8126,1014.7422, 0);//Fsavebox Grove Street
 	CreateDynamicPickup(1279, 1, -788.7941,496.9221,1371.7422, 0);//Fsavebox LCN
@@ -5672,7 +5653,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 938.7240,1733.3646,8.8516, 0);//Wheelman
 	CreateDynamicPickup(1240, 1, 2496.0542,-1709.4050,1014.7422, 0);//Grove Herz
 	CreateDynamicPickup(1240, 1, -789.5930,510.1159,1367.3745, 0);//LCN Herz
-	CreateDynamicPickup(1240, 1, 195.1181,-232.7614,1.7786, 0);//NineDemons
 	CreateDynamicPickup(1240, 1, 2807.4153,-1165.1274,1025.5703, 0);//Vagos
 	CreateDynamicPickup(1240, 1, 508.3369,-84.9195,998.9609, 0);//Aztecas
 	CreateDynamicPickup(1240, 1, 902.5193,-1277.1499,14.5935, 0);//O-Amt /dienst
@@ -5891,7 +5871,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Grove Street Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2496.0542,-1709.4050,1014.7422, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ballas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 331.0788,1128.5469,1083.8828, 15.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wheelman Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 938.7240,1733.3646,8.8516, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"NineDemons Spawn\n"COLOR_HEX_WHITE"Tippe /Ninowaffen zum Ausrüsten\nTippe /Gheilen zum heilen\nTippe /Fskin für Skins", COLOR_WHITE, 195.1181,-232.7614,1.7786, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Vagos Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2807.4153,-1165.1274,1025.5703, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Aztecas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 508.3369,-84.9195,998.9609, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"LCN Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, -789.5930,510.1159,1367.3745, 15.0);
@@ -5907,7 +5886,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1738.5869,-1586.3961,13.5555, 8.0);
 
 	//Fraktionssafebox 3d Text
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der NineDemons\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 195.4771,-226.3883,1.7786, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Ballas\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 333.7054,1121.7754,1083.8903, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Grove Street\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 2498.2847,-1710.8126,1014.7422, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der LCN\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, -788.7941,496.9221,1371.7422, 8.0);
@@ -10542,14 +10520,17 @@ public SetPlayerSpawn(playerid)
 			{
 				SetPlayerPos(playerid, HITMANBASE_SPAWN_POINT);
 				SetPlayerFacingAngle(playerid, HITMANBASE_SPAWN_POINT_FACING);
+				SetPlayerInterior(playerid, 0);
+				SetPlayerVirtualWorld(playerid, 0);
 				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 15)
 			{
-				SetPlayerPos(playerid, 195.1181,-232.7614,1.7786);
+				SetPlayerPos(playerid, NINEDEMONSBASE_SPAWN_POINT);
+				SetPlayerFacingAngle(playerid, NINEDEMONSBASE_SPAWN_POINT_FACING);
 				SetPlayerInterior(playerid, 0);
 				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 195.1181,-232.7614,1.7786);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 16)
 			{
@@ -18307,7 +18288,7 @@ CMD:ninowaffen(playerid)
 	    SendClientMessage(playerid,COLOR_RED,"Du kannst diesen Befehl nicht ausführen");
 		return SendWeaponBlockInfo(playerid);
 	}
-	if(IsPlayerInRangeOfPoint(playerid, 2.0, 195.1181,-232.7614,1.7786))//Biker
+	if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONSBASE_SPAWN_POINT)) //Biker
 	{
 	    if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
 	    if(GetPlayerMoney(playerid) < 2300)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $2300.");
@@ -18390,7 +18371,7 @@ CMD:gheilen(playerid)
 	    SetPlayerHealth(playerid, 100);
 	    SetTimerEx("HeilReady", 60000, 0, "i", playerid);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0, 195.1181,-232.7614,1.7786))//Ninedemons
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONSBASE_SPAWN_POINT))//Ninedemons
 	{
 	    if(!(Spieler[playerid][pFraktion] == 15))return SendClientMessage(playerid, COLOR_RED, "Du bist kein NineDemons Mitglied.");
 	    Spieler[playerid][pHeilReady] = 0;
@@ -20228,11 +20209,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 15)
 	{
-		for(new i=0;i<sizeof(bikercars);i++)
+		for(new i=0;i<sizeof(vehicle_nineDemonsBase);i++)
 		{
-			if(!IsVehicleOccupied(bikercars[i]))
+			if(!IsVehicleOccupied(vehicle_nineDemonsBase[i]))
 			{
-				SetVehicleToRespawn(bikercars[i]);
+				SetVehicleToRespawn(vehicle_nineDemonsBase[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die NineDemons Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -48886,8 +48867,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_BIKERCARS ) {
-		for( i  = 0; i < sizeof(bikercars) ; i++) {
-			if( bikercars[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_nineDemonsBase) ; i++) {
+			if( vehicle_nineDemonsBase[i] == vehicleid ) {
 			    return 15;
 			}
 		}
@@ -49984,7 +49965,7 @@ new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	{ FBI_INTERIOR_FSKIN_POINT,	        2, { 286 , 285 , 309 , 59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ -2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
 	{ HITMANBASE_FSKIN_POINT,	14, { 2 , 29 , 229 , 294 , 171 , 23 , 19 , 35 , 22 , 11, 8 } },
-	{ 195.1181, -232.7614, 1.7786,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
+	{ NINEDEMONSBASE_SPAWN_POINT,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
 	{ 2284.1960,	2423.7107,	3.4766,		16, { 282 , 285 , 303 , 305 , 304 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ 307.6244,  -131.3671,  999.6083,	18, { 287 , 303 , 305 , 304 , 44 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{ 326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } }
@@ -51869,7 +51850,7 @@ enum e_FraktionsSafeBoxLocation {
 }
 
 new g_FraktionsSafeBoxLocation[][e_FraktionsSafeBoxLocation] = {
-	{15,195.4771,-226.3883,1.7786},
+	{15, NINEDEMONSBASE_SAFEBOX_POINT},
 	{6,2498.2847,-1710.8126,1014.7422},
 	{7,333.7054,1121.7754,1083.8903},
 	{10, YAKUZA_INTERIOR_SAFEBOX_POINT},
