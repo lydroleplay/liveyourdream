@@ -7627,8 +7627,79 @@ public OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
+#define MAX_CUSTOM_OBJECTS		20
+
+new customObject[MAX_CUSTOM_OBJECTS];
+
+stock DestroyAllCustomObjects() {
+	for (new i; i < sizeof(customObject); i++)
+		DestroyDynamicObject(customObject[i]);
+
+	return 1;
+}
+
+stock GetCustomObjectFreeIndex() {
+	for (new i; i < sizeof(customObject); i++)
+		if (customObject[i] == 0) return i;
+
+	return MAX_CUSTOM_OBJECTS;
+}
+
+stock GetCustomObjectIDIndex(objectID) {
+	for (new i; i < sizeof(customObject); i++)
+		if (customObject[i] == objectID) return i;
+
+	return MAX_CUSTOM_OBJECTS;
+}
+
+CMD:destroyallobjects(playerid) {
+	if (Spieler[playerid][pAdmin] < 6) return 1;
+
+	DestroyAllCustomObjects();
+	return SendClientMessage(playerid, COLOR_WHITE, "All custom objects destroyed.");
+}
+
+CMD:destroyobject(playerid, params[]) {
+	if (Spieler[playerid][pAdmin] < 6) return 1;
+
+	new objectID;
+	if (sscanf(params, "i", objectID)) return SendClientMessage(playerid, COLOR_WHITE, "Usage: /destroyobject [Object-ID]");
+	new index = GetCustomObjectIDIndex(objectID);
+	if (index == MAX_CUSTOM_OBJECTS) return SendClientMessage(playerid, COLOR_RED, "Invalid object id.");
+	customObject[index] = 0;
+	DestroyDynamicObject(objectID);
+	return SendClientMessage(playerid, COLOR_WHITE, "Custom object destroyed.");
+}
+
+CMD:editobject(playerid, params[]) {
+	if (Spieler[playerid][pAdmin] < 6) return 1;
+
+	new objectID;
+	if (sscanf(params, "i", objectID)) return SendClientMessage(playerid, COLOR_WHITE, "Usage: /Editobject [Object-ID]");
+	EditDynamicObject(playerid, objectID);
+	return 1;
+}
+
+CMD:createobject(playerid, params[]) {
+	if (Spieler[playerid][pAdmin] < 6) return 1;
+
+	new modelID;
+	if (sscanf(params, "i", modelID)) return SendClientMessage(playerid, COLOR_WHITE, "Usage: /Createobj [Model-ID]");
+
+	new Float:x, Float:y, Float:z, message[128];
+	GetPlayerPos(playerid, x, y, z);
+	new index = GetCustomObjectFreeIndex();
+	if (index == MAX_CUSTOM_OBJECTS) return SendClientMessage(playerid, COLOR_RED, "Max custom objects exceeded.");
+
+	customObject[index] = CreateDynamicObject(modelID, x, y + 1.0, z + 1.0, 0.000000, 0.000000, 0.000000, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+	format(message, sizeof(message), "Object ID: %i, model: %i", customObject[index], modelID);
+	SendClientMessage(playerid, COLOR_WHITE, message);
+	EditObject(playerid, customObject[index]);
+	return 1;
+}
+
 CMD:debug(playerid, params[]) {
-	if (Spieler[playerid][pAdmin] != 7) return 1;
+	if (Spieler[playerid][pAdmin] < 6) return 1;
 
 	new animlib[32], animname[32];
 	if (sscanf(params, "s[32]s[32]", animlib, animname)) return SendClientMessage(playerid, COLOR_WHITE, "Usage: /debug [animlib] [animname]");
