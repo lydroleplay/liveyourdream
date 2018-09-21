@@ -136,7 +136,9 @@ Yakuza:
 
 #define VW_ALL -1
 #define VW_MAIN 0
+#define VW_ALHAMBRAINTERIOR 41
 #define VW_CASINOINTERIOR 50
+
 
 enum
 {
@@ -4216,6 +4218,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\gardenerBase>
 #include <maps\nineDemonsBase>
 #include <maps\beach>
+#include <maps\alhambraExterior>
+#include <maps\alhambraInterior>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5776,7 +5780,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1, 2316.5325,-1010.7850,1054.7188, 0);//Club Shop
 	CreateDynamicPickup(1239, 1, 2313.3645,-1013.3300,1050.2109, 0);//Getränke Clubvilla in Los Santos
 	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//Getränke Clubvilla in Las Venturas
-	CreateDynamicPickup(1239, 1, 499.7624,-20.8934,1000.6797, 0);//Getränke Disco
 	CreateDynamicPickup(1239, 1, 2309.3276,-8.2968,26.7422, 0);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
 	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
@@ -5941,7 +5944,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, -2653.6023,1407.0844,906.2734, 10.0); //in Las Venturas
 
     //CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Getränkestand\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1455.8802,-1741.8704,13.5469, 10.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Discobar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 499.7624,-20.8934,1000.6797, 17.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, 2324.6904,-1014.0570,1050.2109, 8.0); // in Los Santos
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, -2656.1047,1416.0248,906.2734, 8.0); // in Las Venturas
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Kueche\n"COLOR_HEX_WHITE"Tippe /Clubheal", COLOR_WHITE, 2313.5750,-1008.9286,1050.2109, 8.0); // in Los Santos
@@ -52845,7 +52847,7 @@ COMMAND:starttaxi(playerid,params[]) {
 
 COMMAND:getraenk(playerid,params[]) {
 	//if( !IsPlayerInRangeOfPoint(playerid,15.0,499.4468,-20.7656,1000.6797) ) {
-	if (!IsPlayerInRangeOfPoint(playerid, 4.0, SHISHABAR_DRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,499.7624,-20.8934,1000.6797) && !IsPlayerInRangeOfPoint(playerid,4.0,2313.3645,-1013.3300,1050.2109) && !IsPlayerInRangeOfPoint(playerid,4.0,1455.8802,-1741.8704,13.5469)
+	if (!IsPlayerInRangeOfPoint(playerid, 4.0, SHISHABAR_DRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0, ALHAMBRAINTERIOR_BUYDRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,2313.3645,-1013.3300,1050.2109) && !IsPlayerInRangeOfPoint(playerid,4.0,1455.8802,-1741.8704,13.5469)
  		&& !IsPlayerInRangeOfPoint(playerid,4.0,1215.3011,-13.0128,1000.9219) && !IsPlayerInRangeOfPoint(playerid,4.0, CASINO_INTERIOR_BUYDRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,-2653.6023,1407.0844,906.2734) ) {
 		return SendClientMessage(playerid,COLOR_ORANGE,"Du befindest dich nicht in der Bar");
 	}
