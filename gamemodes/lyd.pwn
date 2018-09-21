@@ -2820,30 +2820,6 @@ new const g_Drinks[][e_Drinks] = {
 	{"Jack Daniels",150,250,SPECIAL_ACTION_DRINK_WINE}
 };
 
-enum e_KampfShop {
-	Float:KS_fX,
-	Float:KS_fY,
-	Float:KS_fZ,
-	KS_iInterior,
-	KS_iVirtualWorld
-}
-new const g_KampfShop[][e_KampfShop] = {
-	{660.3523,-1869.5139,5.5537,0,0}
-};
-
-enum e_KampfStyle {
-	KS_sName[16],
-	KS_iStyle,
-	KS_iPrice
-}
-new const g_KampfStyle[][e_KampfStyle] = {
-	{"Normal", FIGHT_STYLE_NORMAL , 1},
-	{"Boxen", FIGHT_STYLE_BOXING , 5000},
-	{"Kung-Fu", FIGHT_STYLE_KUNGFU , 5000},
-	{"Wrestling", FIGHT_STYLE_GRABKICK , 2500 }
-};
-
-
 enum AngelDaten
 {
 	aID,
@@ -4239,6 +4215,30 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\wantedHackerBase>
 #include <maps\gardenerBase>
 #include <maps\nineDemonsBase>
+#include <maps\beach>
+
+enum e_KampfShop {
+	Float:KS_fX,
+	Float:KS_fY,
+	Float:KS_fZ,
+	KS_iInterior,
+	KS_iVirtualWorld
+}
+new const g_KampfShop[][e_KampfShop] = {
+	{BEACH_FIGHTINGSTYLE_POINT, 0, 0}
+};
+
+enum e_KampfStyle {
+	KS_sName[16],
+	KS_iStyle,
+	KS_iPrice
+}
+new const g_KampfStyle[][e_KampfStyle] = {
+	{"Normal", FIGHT_STYLE_NORMAL , 1},
+	{"Boxen", FIGHT_STYLE_BOXING , 5000},
+	{"Kung-Fu", FIGHT_STYLE_KUNGFU , 5000},
+	{"Wrestling", FIGHT_STYLE_GRABKICK , 2500 }
+};
 
 main()
 {
@@ -5780,7 +5780,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 2309.3276,-8.2968,26.7422, 0);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
 	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
-	CreateDynamicPickup(1985, 1, 660.1712,-1869.5763,7.5781, 0);//Kampfstyle
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
 
 	//Jobpoints
@@ -5959,7 +5958,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootshaus - San Fierro\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, -1489.6615,712.7635,7.1807, 30.0);//Bootsverkauf SF
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Count And Schutz\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2126.9578,-1124.4517,25.4636, 30.0);//Autohaus günstig 2 LS
-	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"Kampfstil - lernen\n"COLOR_HEX_WHITE"Tippe /Kampfstil", COLOR_WHITE, 660.3523,-1869.5139,5.5537, 20.0, .worldid = 0);
 
 	//Verkaus 3D Infotext 2
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kleidungs Shop\n"COLOR_HEX_WHITE"Tippe /Kleidung", COLOR_WHITE, 206.3740,-8.2494,1001.2109, 11.0, .worldid = 36);//Victim LS (Strand)
