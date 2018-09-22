@@ -3152,7 +3152,7 @@ enum ahSpawn
 new const Autospawns[11][ahSpawn] = {
 	{1795.1863,-1884.0706,13.5724,264.0573}, // Los Santos - Intercars
 	{1131.9783,-1675.7164,13.6739,268.5765}, // Los Santos - Luxusautohaus
-	{1657.3574,-1898.1019,13.5521,359.1012}, // Los Santos - Motorradhaus
+	{ 2535.8975, -1520.9816, 23.5721 }, // Los Santos - Motorradhaus // BIKEDEALERSHIP_VEHICLE_SPAWN // TODO: can't use define here
 	{1849.2611,-2545.6445,13.5469,90.8000}, // Los Santos Air Shop
 	{946.9811,-1933.6057,-0.3639,92.2507}, //Bootshaus
 	{679.9109,-1191.3190,16.2637,127.9095}, //Fahrradhaus
@@ -3162,6 +3162,7 @@ new const Autospawns[11][ahSpawn] = {
 	{2147.5896,-1138.6252,25.3605,270.5095}, //Autohaus g�nstig in Los Santos 2
  	{2146.2273,1386.4047,10.6953,89.2722} //Autohaus g�nstig in Las Venturas
 };
+// TODO: peek auslagern ^
 
 enum aHaus
 {
@@ -3178,7 +3179,7 @@ enum aHaus
 };
 
 
-new Kaufliste[82][aHaus] = {
+new Kaufliste[84][aHaus] = {
 
 //Normal-Karosserien - Intercars
 	{"Camper", 0, 483 , 1 , 620000 ,1777.8184,-1890.2344,13.3802,310.2503, 65},
@@ -3209,13 +3210,15 @@ new Kaufliste[82][aHaus] = {
 	{"Jester", 1, 559, 1, 2500000, 1100.2247, -1612.1229, 13.8717, 139.7872, 60},
 	{"Comet", 1, 480, 1, 2500000, 1129.6069, -1636.3497, 18.7811, 326.4321, 60},
 	{"Super GT", 1, 506, 1, 1800000, 1131.9493, -1612.7506, 14.2391, 224.2687, 60},
-//Motorrad - Coutt and Schutz
-	{"FCR-900", 2, 521, 1,450000, 1669.3651,-1893.6563,13.8118,359.1000, 30},
-	{"NRG-500", 2, 522, 1,1800000, 1666.8237,-1893.6974,13.8831,36.4389, 30},
-	{"Freeway", 2, 463, 1,400000, 1673.2313,-1890.7827,13.5436,359.3857, 30},
-	{"Wayfarer", 2, 586, 1,280000, 1671.7772,-1885.0264,13.5204,98.0377, 30},
-	{"Sanchez", 2, 468,1,180000, 1669.9884,-1886.1282,13.6654,183.2256, 35},
-	{"Faggio", 2, 462,1,8000, 1672.2913,-1899.5696,13.6035,62.9238, 15},
+//Motorradhaus
+	{"FCR-900", 2, 521, 1, 450000, 2505.6293, -1523.6760, 23.9423, 298.8435, 30},
+	{"NRG-500", 2, 522, 1, 1800000, 2512.8532, -1524.5207, 23.9801, 131.1481, 30},
+	{"Freeway", 2, 463, 1, 400000, 2518.4553, -1532.6268, 23.8086, 34.2093, 30},
+	{"Wayfarer", 2, 586, 1, 280000, 2520.3647, -1532.3806, 23.7693, 37.8446, 30},
+	{"Sanchez", 2, 468, 1, 180000, 2514.4797, -1532.7170, 23.9379, 28.4829, 35},
+	{"Faggio", 2, 462, 1, 8000, 2512.8576, -1532.8160, 23.8680, 30.4016, 15},
+	{"PCJ-600", 2, 461, 1, 430000, 2505.8344, -1527.1131, 23.9552, 300.1329, 30},
+	{"BF-400", 2, 581, 1, 350000, 2516.2883, -1532.6101, 23.8641, 30.8514, 30},
 //Flugzeug - Los Santos Air Shop
 	{"Maverick", 3, 487, 1,15000000, 1888.7319,-2622.7720,13.7253,359.7918, 300},
 	{"Dodo", 3, 593, 1,7000000, 1821.9655,-2621.8706,14.0082,2.6027, 100},
@@ -3273,7 +3276,7 @@ new Kaufliste[82][aHaus] = {
 	{"Solair", 10, 458, 1 , 39000, 2113.5535,1408.5975,10.7417,0.0542, 60},
 	{"Majestic", 10, 517, 1 , 38000, 2107.0940,1408.7985,10.7135,0.0514, 60},
 	{"Primo", 10, 547, 1 , 42000, 2100.7742,1408.9865,10.6122,0.0102, 60}
-	};
+};
 
 #define MAX_ATM 106
 new Float:ATM[][MAX_ATM] = {
@@ -4227,6 +4230,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\cheapCarDealershipLs>
 #include <maps\lcnExterior>
 #include <maps\lcnInterior>
+#include <maps\tuev>
+#include <maps\bikeDealership>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5708,10 +5713,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1,662.6830,-579.0665,16.3359, 0);//Mechaniker
 	CreateDynamicPickup(1275, 1,-93.9144,-1196.9713,2.4775, 0);//Mechaniker
 
-	//Verkaufspoints
-	CreateDynamicPickup(19627, 1, 547.7603,-1285.7424,17.5821,0);//T�V f�r Auto und Motorr�der
-	CreateDynamicPickup(19627, 1, 2113.1296,-2423.3569,13.6150,0);//T�V f�r Flugzeuge
-	CreateDynamicPickup(19627, 1, 1782.8275,-1702.7240,13.5096,0);//Tuningabbaue f�r Autos und Motorr�der
+	//Verkaufspoints	CreateDynamicPickup(19627, 1, 1782.8275,-1702.7240,13.5096,0);//Tuningabbaue fÃƒÆ’Ã‚Â¼r Autos und MotorrÃƒÆ’Ã‚Â¤der
 	CreateDynamicPickup(1240, 1, 377.1597,-67.7632,1001.5151,2);//BSN (BS 1)
 	CreateDynamicPickup(1240, 1, 369.8342,-6.2002,1001.8589,3);//Cluckin Bell 1
 	CreateDynamicPickup(1240, 1, 377.1597,-67.7632,1001.5151,4);//BSS (BS 2)
@@ -5746,12 +5748,12 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 206.3740,-8.2494,1001.2109, 36);//Victim LS (Strand)
 	CreateDynamicPickup(1239, 1, 161.4726,-83.2517,1001.8047, 35);//ZIP LS (Bank)
 	CreateDynamicPickup(1239, 1, 207.7187,-100.5032,1005.2578, 37);//Binco (GS)
-	CreateDynamicPickup(1239, 1, 1702.9427,-1470.3704,13.5469, 0);//Motorradf�rbe point
-	CreateDynamicPickup(1239, 1, 1763.4915,2080.2959,10.8203, 0);//Autof�rbe point
-	CreateDynamicPickup(1239, 1, 1798.4768,-2423.4924,13.5547, 0);//Flugzeugf�rbe point
+	CreateDynamicPickup(1239, 1, 1702.9427,-1470.3704,13.5469, 0);//MotorradfÃƒÂ¤rbe point
+	CreateDynamicPickup(1239, 1, 1763.4915,2080.2959,10.8203, 0);//AutofÃƒÂ¤rbe point
+	CreateDynamicPickup(1239, 1, 1798.4768,-2423.4924,13.5547, 0);//FlugzeugfÃƒÂ¤rbe point
 	CreateDynamicPickup(1275, 1, 2316.5325,-1010.7850,1054.7188, 0);//Club Shop
-	CreateDynamicPickup(1239, 1, 2313.3645,-1013.3300,1050.2109, 0);//Getr�nke Clubvilla in Los Santos
-	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//Getr�nke Clubvilla in Las Venturas
+	CreateDynamicPickup(1239, 1, 2313.3645,-1013.3300,1050.2109, 0);//GetrÃƒÂ¤nke Clubvilla in Los Santos
+	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//GetrÃƒÂ¤nke Clubvilla in Las Venturas
 	CreateDynamicPickup(1239, 1, 2309.3276,-8.2968,26.7422, 0);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
 	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
@@ -5775,32 +5777,32 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Flugzeug-Reparatur\n"COLOR_HEX_WHITE"Tippe /Flugzeugrepair", COLOR_WHITE, 1819.9427,-2400.1108,13.5547, 20.0);
 
 	//Fahrtticket 3D Text
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgesch�ft: Fallturm\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 374.6658,-2121.6416,7.8820, 10.0);//Fallturm
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgesch�ft: Autosscooter\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 373.8057,-2056.3586,7.9260, 10.0);//Autosscooter
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgesch�ft: Kartbahn\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, -2036.0660,-98.3114,35.1641, 10.0);//Kartbahn
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgesch�ft: Breakdancer\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 356.7114,-2149.5613,7.8779, 10.0);//Breakdancer
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgesch�ft: Schaukelschiff\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 382.0282,-2165.8818,7.8511, 10.0);//Schaukelschiff
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgesch�ft: Wasserbahn\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 396.3516,-2152.5928,7.8399, 10.0);//Wasserbahn
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Sprungturm\n"COLOR_HEX_BLUE"Dr�ck 'Enter'\n", COLOR_WHITE, 361.7136,-2107.5913,7.8340, 10.0);//Sprungbrett
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"FahrgeschÃƒÂ¤ft: Fallturm\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 374.6658,-2121.6416,7.8820, 10.0);//Fallturm
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"FahrgeschÃƒÂ¤ft: Autosscooter\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 373.8057,-2056.3586,7.9260, 10.0);//Autosscooter
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"FahrgeschÃƒÂ¤ft: Kartbahn\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, -2036.0660,-98.3114,35.1641, 10.0);//Kartbahn
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"FahrgeschÃƒÂ¤ft: Breakdancer\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 356.7114,-2149.5613,7.8779, 10.0);//Breakdancer
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"FahrgeschÃƒÂ¤ft: Schaukelschiff\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 382.0282,-2165.8818,7.8511, 10.0);//Schaukelschiff
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"FahrgeschÃƒÂ¤ft: Wasserbahn\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 396.3516,-2152.5928,7.8399, 10.0);//Wasserbahn
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Sprungturm\n"COLOR_HEX_BLUE"DrÃƒÂ¼ck 'Enter'\n", COLOR_WHITE, 361.7136,-2107.5913,7.8340, 10.0);//Sprungbrett
 
 	//Job Skin 3D Text
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Bauern\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -90.4999,-10.3628,3.1094, 25.0);//BAUER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Trucker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 43.5684,-261.4508,1.8305, 25.0);//TRUCKER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Piloten\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1893.2450,-2328.8833,13.5469, 25.0);//PILOT
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Stra�enreiniger\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2046.2723,-1913.2064,13.5469, 25.0);//STRA�ENREINIGER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r M�llmann\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2118.6157,-2085.0828,13.5544, 25.0);//M�LLMANN
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 831.2045,865.6005,12.5911, 25.0);//BAUARBEITER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Schiffsfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2487.6289,-2250.2695,3.0000, 25.0);//SCHIFFSFAHRER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Geldtransportfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1551.5492,-1005.0830,24.0781, 25.0);//GELDTRANSPORTFAHRER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Eisverk�ufer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1021.9334,-1371.0099,13.5585, 25.0);//EISVERK�UFER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Pizzalieferrant\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2117.3662,-1790.0100,13.5547, 25.0);//PIZZALIEGERRANT
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Prostituierte\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2417.1555,-1220.1472,25.3914, 25.0);//HURE
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Zugfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1735.0045,-1944.0450,13.5681, 25.0);//ZUFAHRER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Hotdog Verk�ufer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2384.0181,-1915.5509,13.5469, 25.0);//Hotdog
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 980.6174,-933.2461,41.3419, 25.0);//MECHANIKER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1945.9237,-1793.6355,13.5469, 25.0);//MECHANIKER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 662.6830,-579.0665,16.3359, 25.0);//MECHANIKER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung f�r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -93.9144,-1196.9713,2.4775, 25.0);//MECHANIKER
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Bauern\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -90.4999,-10.3628,3.1094, 25.0);//BAUER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Trucker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 43.5684,-261.4508,1.8305, 25.0);//TRUCKER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Piloten\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1893.2450,-2328.8833,13.5469, 25.0);//PILOT
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r StraÃƒÅ¸enreiniger\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2046.2723,-1913.2064,13.5469, 25.0);//STRAÃƒÅ¸ENREINIGER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r MÃƒÂ¼llmann\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2118.6157,-2085.0828,13.5544, 25.0);//MÃƒÅ“LLMANN
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 831.2045,865.6005,12.5911, 25.0);//BAUARBEITER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Schiffsfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2487.6289,-2250.2695,3.0000, 25.0);//SCHIFFSFAHRER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Geldtransportfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1551.5492,-1005.0830,24.0781, 25.0);//GELDTRANSPORTFAHRER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r EisverkÃƒÂ¤ufer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1021.9334,-1371.0099,13.5585, 25.0);//EISVERKÃƒâ€žUFER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Pizzalieferrant\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2117.3662,-1790.0100,13.5547, 25.0);//PIZZALIEGERRANT
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Prostituierte\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2417.1555,-1220.1472,25.3914, 25.0);//HURE
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Zugfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1735.0045,-1944.0450,13.5681, 25.0);//ZUFAHRER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Hotdog VerkÃƒÂ¤ufer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2384.0181,-1915.5509,13.5469, 25.0);//Hotdog
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 980.6174,-933.2461,41.3419, 25.0);//MECHANIKER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1945.9237,-1793.6355,13.5469, 25.0);//MECHANIKER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 662.6830,-579.0665,16.3359, 25.0);//MECHANIKER
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -93.9144,-1196.9713,2.4775, 25.0);//MECHANIKER
 
     //Gang Interior Eingang
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_PINK"BALLAS", COLOR_WHITE, 1999.9869,-1114.0542,27.1250, 25.0);//Ballas
@@ -5837,25 +5839,25 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, 797.5535, -617.8438, 16.3359, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, 760.4858, 378.9008, 23.1683, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waren-Vergabe Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadwaren", COLOR_WHITE, 577.4390,1221.7273,11.2689, 20.0);//Loadware in LV
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"�l-Raffinerie Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadbenzin", COLOR_WHITE, 268.9609,1384.2981,10.1610, 20.0);//Loadbenzin in LV
+    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ãƒâ€“l-Raffinerie Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadbenzin", COLOR_WHITE, 268.9609,1384.2981,10.1610, 20.0);//Loadbenzin in LV
 
     //Spawn 3D Text
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Grove Street Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2496.0542,-1709.4050,1014.7422, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ballas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 331.0788,1128.5469,1083.8828, 15.0, .worldid = 0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wheelman Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 938.7240,1733.3646,8.8516, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Vagos Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2807.4153,-1165.1274,1025.5703, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Aztecas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 508.3369,-84.9195,998.9609, 15.0);
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Grove Street Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2496.0542,-1709.4050,1014.7422, 15.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ballas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 331.0788,1128.5469,1083.8828, 15.0, .worldid = 0);
+    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wheelman Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 938.7240,1733.3646,8.8516, 15.0);
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Vagos Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2807.4153,-1165.1274,1025.5703, 15.0);
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Aztecas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 508.3369,-84.9195,998.9609, 15.0);
 	
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Staat Dienst\n"COLOR_HEX_WHITE"Tippe /Dienst um in den Dienst zu gehen", COLOR_WHITE, 350.0831,160.1326,1025.7891, 15.0 , .worldid = 1);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Terroristenlager\n"COLOR_HEX_WHITE"Tippe /Terrorwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, -795.0400,1557.1365,27.1244, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Triaden Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 768.1578,-36.6934,1000.6865, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"OutlawZ Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausr�sten\nTippe /Gheilen zum heilen", COLOR_WHITE, -2170.3818,641.4621,1052.3817, 15.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Terroristenlager\n"COLOR_HEX_WHITE"Tippe /Terrorwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, -795.0400,1557.1365,27.1244, 15.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Triaden Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 768.1578,-36.6934,1000.6865, 15.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"OutlawZ Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, -2170.3818,641.4621,1052.3817, 15.0);
 
-	//3D Geb�ude mit Enter betreten
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Zentralbank Los Santos\n"COLOR_HEX_WHITE"Geb�ude betreten mit 'Enter'", COLOR_WHITE, 1462.6464,-1011.3412,26.8438, 20.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Zentralbank Las Venturas\n"COLOR_HEX_WHITE"Geb�ude betreten mit 'Enter'", COLOR_WHITE, 1952.5675,1342.9261,15.3672, 20.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrschule\n"COLOR_HEX_WHITE"Geb�ude betreten mit 'Enter'", COLOR_WHITE, 1216.5732,-1812.2876,16.5938, 20.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\n"COLOR_HEX_WHITE"Geb�ude betreten mit 'Enter'", COLOR_WHITE, 1738.5869,-1586.3961,13.5555, 8.0);
+	//3D GebÃƒÂ¤ude mit Enter betreten
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Zentralbank Los Santos\n"COLOR_HEX_WHITE"GebÃƒÂ¤ude betreten mit 'Enter'", COLOR_WHITE, 1462.6464,-1011.3412,26.8438, 20.0);
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Zentralbank Las Venturas\n"COLOR_HEX_WHITE"GebÃƒÂ¤ude betreten mit 'Enter'", COLOR_WHITE, 1952.5675,1342.9261,15.3672, 20.0);
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrschule\n"COLOR_HEX_WHITE"GebÃƒÂ¤ude betreten mit 'Enter'", COLOR_WHITE, 1216.5732,-1812.2876,16.5938, 20.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\n"COLOR_HEX_WHITE"GebÃƒÂ¤ude betreten mit 'Enter'", COLOR_WHITE, 1738.5869,-1586.3961,13.5555, 8.0);
 
 	//Fraktionssafebox 3d Text
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Ballas\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 333.7054,1121.7754,1083.8903, 8.0);
@@ -5876,31 +5878,30 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Werbeagentur\n"COLOR_HEX_WHITE"Tippe /Werbung", COLOR_WHITE, 2008.1722,1169.3364,10.8203, 15.0); // in LV
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Motorradlackiererei\n"COLOR_HEX_ORANGE"Preis: 2.000$\n"COLOR_HEX_WHITE"Tippe /Motorradfarbe", COLOR_WHITE, 1702.9427,-1470.3704,13.5469, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Autolackiererei\n"COLOR_HEX_ORANGE"Preis: 1.500$\n"COLOR_HEX_WHITE"Tippe /Autofarbe", COLOR_WHITE, 1763.4915,2080.2959,10.8203, 20.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Abbauwerkstatt\nf�r Auto- u. Motorradtuning\n"COLOR_HEX_ORANGE"Preis: 3.000$\n"COLOR_HEX_WHITE"Tippe /Tuningabbauen", COLOR_WHITE, 1782.8275,-1702.7240,13.5096, 20.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Abbauwerkstatt\nfÃƒÂ¼r Auto- u. Motorradtuning\n"COLOR_HEX_ORANGE"Preis: 3.000$\n"COLOR_HEX_WHITE"Tippe /Tuningabbauen", COLOR_WHITE, 1782.8275,-1702.7240,13.5096, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Flugzeuglackiererei\n"COLOR_HEX_ORANGE"Preis: 5.000$\n"COLOR_HEX_WHITE"Tippe /Flugzeugfarbe", COLOR_WHITE, 1798.4768,-2423.4924,13.5547, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Entladungspunkt\n"COLOR_HEX_WHITE"Tippe /Paketentladen", COLOR_WHITE, -1857.4130,-1618.9630,21.9022, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Entladungspunkt\n"COLOR_HEX_WHITE"Tippe /Paketentladen", COLOR_WHITE, -258.9534,-2181.9905,29.0150, 10.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Kein Fahrlehrer da?\n"COLOR_HEX_WHITE"Tippe /Ruflehrer\n"COLOR_HEX_GRAU"----------\n"COLOR_HEX_YELLOW"Automatische Fahrschule\n"COLOR_HEX_WHITE"Tippe /Fahrpruefung", COLOR_WHITE, 1234.3380,-1823.9462,13.5909, 40.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\nGeb�ude verlassen mit 'Enter'", COLOR_BLUE, 2169.8208,1618.7504,999.9766, 15.0, .worldid = 0);
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\nGebÃƒÂ¤ude verlassen mit 'Enter'", COLOR_BLUE, 2169.8208,1618.7504,999.9766, 15.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Gangjail\n"COLOR_HEX_WHITE"Tippe /Gangjail um einzusperren\nTippe /Aufbrechen um zu befreien", COLOR_WHITE, 2160.4111,-98.0815,2.8239, 13.0, .worldid = 0);
-	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur f�r Clubmitglieder", COLOR_WHITE, 2127.5486,2378.9626,10.8203, 20.0, .worldid = 0); // Clubvilla in Las Venturas
-	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur f�r Clubmitglieder", COLOR_WHITE, 1022.4622,-1121.5886,23.8720, 20.0, .worldid = 0); // Clubvilla in Los Santos
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"�berweisung\n"COLOR_HEX_WHITE"Tippe /Ueberweisen", COLOR_WHITE, 1441.9353,-992.0976,1639.7843, 10.0, .worldid = 500);
+	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur fÃƒÂ¼r Clubmitglieder", COLOR_WHITE, 2127.5486,2378.9626,10.8203, 20.0, .worldid = 0); // Clubvilla in Las Venturas
+	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur fÃƒÂ¼r Clubmitglieder", COLOR_WHITE, 1022.4622,-1121.5886,23.8720, 20.0, .worldid = 0); // Clubvilla in Los Santos
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"ÃƒÅ“berweisung\n"COLOR_HEX_WHITE"Tippe /Ueberweisen", COLOR_WHITE, 1441.9353,-992.0976,1639.7843, 10.0, .worldid = 500);
  	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kredit aufnehmen\n"COLOR_HEX_WHITE"Tippe /Kredit", COLOR_WHITE, 1438.3832,-997.3231,1639.7911, 10.0, .worldid = 500);
  	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kredit aufnehmen\n"COLOR_HEX_WHITE"Tippe /Kredit", COLOR_WHITE, 298.9642,179.2220,1007.1719, 10.0, .worldid = 200);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bankservice\n"COLOR_HEX_WHITE"Tippe /Bank", COLOR_WHITE, 1432.2247,-997.1177,1639.7843, 15.0, .worldid = 500);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bankservice\n"COLOR_HEX_WHITE"Tippe /Bank", COLOR_WHITE, 292.4491,180.1878,1007.1794, 15.0, .worldid = 200);
-	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen Bank�berfall mit\n"COLOR_HEX_RED"/Bankausrauben", COLOR_WHITE, 2144.1055,1641.6750,993.5761, 13.0, .worldid = 500);
-	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen Bank�berfall mit\n"COLOR_HEX_RED"/Tresoraufbrechen", COLOR_WHITE, 296.8997,188.5367,1007.1719, 10.0, .worldid = 200);
+	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen BankÃƒÂ¼berfall mit\n"COLOR_HEX_RED"/Bankausrauben", COLOR_WHITE, 2144.1055,1641.6750,993.5761, 13.0, .worldid = 500);
+	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen BankÃƒÂ¼berfall mit\n"COLOR_HEX_RED"/Tresoraufbrechen", COLOR_WHITE, 296.8997,188.5367,1007.1719, 10.0, .worldid = 200);
     //CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Informationen zum Stadtamt\n"COLOR_HEX_WHITE"Tippe /Stadtamtinfo", COLOR_WHITE, 1481.7039,-1740.6183,13.5469, 30.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Los Santos 4 Sterne Hotel\n"COLOR_HEX_WHITE"Miete Dir g�nstig ein sch�nes Hotelzimmer", COLOR_WHITE, 1722.5425,-1650.1168,20.2289, 20.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Los Santos 4 Sterne Hotel\n"COLOR_HEX_WHITE"Miete Dir gÃƒÂ¼nstig ein schÃƒÂ¶nes Hotelzimmer", COLOR_WHITE, 1722.5425,-1650.1168,20.2289, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"VISUM-AMT\n"COLOR_HEX_WHITE"Tippe /Visumbeantragen", COLOR_WHITE, 359.0354,180.4977,1008.3828, 15.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 1\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.4529,-12.6540,26.7422, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 2\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.3318,-9.9532,26.7422, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 1", COLOR_WHITE, 359.0863,210.2258,1008.3828, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 2", COLOR_WHITE, 358.2361,184.5094,1008.3828, 15.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LOS SANTOS - FAHRSCHULE", COLOR_WHITE, 1270.0138,-1846.0366,13.3906, 20.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"T�V-WERKSTATT", COLOR_WHITE, 556.9567,-1258.7034,17.2422, 15.0);
    	/*CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof NORD\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1433.3264,2640.8018,11.3926, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Las Venturas - Bahnhof OST\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 2859.5542,1290.5511,11.3906, 18.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"San Fierro - Hauptbahnhof\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, -1952.0848,137.6278,26.2813, 18.0);
@@ -5908,22 +5909,19 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Los Santos - Hauptbahnhof\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1738.0658,-1949.8571,14.1172, 18.0);*/
 
 	//Verkaufs 3D Infotext
-	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"T�V-WERKSTATT\n"COLOR_HEX_WHITE"Tippe /Wartungen", COLOR_WHITE, 547.7603,-1285.7424,17.5821, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_GREEN"T�V-WERKSTATT\n"COLOR_HEX_WHITE"Tippe /Wartungen", COLOR_WHITE, 2113.1296,-2423.3569,13.6150, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 2313.3645,-1013.3300,1050.2109, 10.0); //in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, -2653.6023,1407.0844,906.2734, 10.0); //in Las Venturas
 
-    //CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Getr�nkestand\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1455.8802,-1741.8704,13.5469, 10.0);
+    //CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"GetrÃƒÂ¤nkestand\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1455.8802,-1741.8704,13.5469, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, 2324.6904,-1014.0570,1050.2109, 8.0); // in Los Santos
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, -2656.1047,1416.0248,906.2734, 8.0); // in Las Venturas
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Kueche\n"COLOR_HEX_WHITE"Tippe /Clubheal", COLOR_WHITE, 2313.5750,-1008.9286,1050.2109, 8.0); // in Los Santos
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Kueche\n"COLOR_HEX_WHITE"Tippe /Clubheal", COLOR_WHITE, -2653.5183,1413.5085,906.2734, 8.0); //in Las Venturas
  	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Tanzflaeche\n"COLOR_HEX_WHITE"Tippe /Clubdance 1-7", COLOR_WHITE, 2325.3647,-1021.1942,1050.2109, 8.0);
   	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Toilette\n"COLOR_HEX_WHITE"Tippe /Pee", COLOR_WHITE, 2321.2417,-1005.3172,1054.7188, 8.0);
-  	//CreateDynamic3DTextLabel(COLOR_HEX_RED"** BIS ZUM 24.02.2015 F�R ALLE **\n"COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
+  	//CreateDynamic3DTextLabel(COLOR_HEX_RED"** BIS ZUM 24.02.2015 FÃƒÅ“R ALLE **\n"COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
   	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
-   	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten f�r 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = 0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Motorradhaus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Motorrad deiner Wahl ein!", COLOR_WHITE, 1662.1256,-1884.3601,13.5469, 30.0);//Bike haus
+   	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten fÃƒÂ¼r 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 
 	//Verkaus 3D Infotext 2
@@ -6240,7 +6238,6 @@ public OnPlayerConnect(playerid)
 	SetPlayerMapIcon(playerid, 2, 1461.5116,-1019.0845,24.5987, 52, 0, 0);//Bank
 	SetPlayerMapIcon(playerid, 6, 550.6537,-1264.4824,16.9693, 55, 0, 0);//Grottis
 	SetPlayerMapIcon(playerid, 7, 1238.0809,-1814.2310,13.4292, 19, 0, 0);//Fahrschule
-    SetPlayerMapIcon(playerid, 10, 1662.1256,-1884.3601,13.5469, 55, 0, 0);//Motorradhaus
     SetPlayerMapIcon(playerid, 11, 1841.7158,-2568.3242,13.5469, 55, 0, 0);//Flugzeughaus
     SetPlayerMapIcon(playerid, 13, 1038.5304,-1339.6097,13.7266, 17, 0, 0);//Donatladen
     SetPlayerMapIcon(playerid, 14, 1833.2742,-1681.8307,13.4802, 49, 0, 0);//Bar
@@ -43928,7 +43925,7 @@ CMD:navi(playerid)
 
 CMD:werkstattplatz(playerid)
 {
-	SetPlayerCheckpointEx(playerid, 547.7603,-1285.7424,17.5821, 7.0, CP_SHOWJOB1);
+	SetPlayerCheckpointEx(playerid, TUEV_AUTO_POINT, 2.0, CP_SHOWJOB1);
 	SendClientMessage(playerid, COLOR_GREEN, "Die T�V-Werkstatt f�r Autos und Motorr�der wurde dir auf der Karte markiert!");
  	return 1;
 }
@@ -70690,7 +70687,7 @@ COMMAND:wartungen(playerid,params[]) {
 	    slot,
 	    besitzer,
 	    vehicleid;
-	if( !IsPlayerInRangeOfPoint(playerid, 10,547.7603,-1285.7424,17.5821) && !IsPlayerInRangeOfPoint(playerid, 10,2113.1296,-2423.3569,13.6150)) return SendClientMessage(playerid,COLOR_RED,"Du bist nicht an der T�V-Werkstatt");
+	if( !IsPlayerInRangeOfPoint(playerid, 10, TUEV_AUTO_POINT) && !IsPlayerInRangeOfPoint(playerid, 10, TUEV_AIRCRAFT_POINT)) return SendClientMessage(playerid,COLOR_RED,"Du bist nicht an der T�V-Werkstatt");
 	vehicleid = GetPlayerVehicleID(playerid);
 	if(!vehicleid) {
 	    return SendClientMessage(playerid,COLOR_RED,"Du musst in deinem Fahrzeug sitzen!");
