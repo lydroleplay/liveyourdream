@@ -27,8 +27,26 @@ static Float:DRAWDISTANCE   = 350.0;
 new object_lspdExterior[523];
 new pickup_lspdExterior[4];
 new text3D_lspdExterior[2];
-new vehicle_lspdExterior[26];
+new vehicle_lspdExterior[34]; // using vehicle_lspdExterior for the alcatraz vehicles
 new object_lspdExterior_barrier;
+
+CMD:lspdbarrier(playerid, params[]) {
+	if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 3 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))
+		return SendClientMessage(playerid, COLOR_RED, "Du bist kein Staatsbeamter.");
+
+	if (!IsPlayerInRangeOfPoint(playerid, 20.0, LSPD_BARRIER_FOR_RANGE_COORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe der LSPD-Schranke.");
+
+	new Float:fX, Float:fY, Float:fZ, Float:fRX, Float:fRY, Float:fRZ;
+	GetDynamicObjectPos(object_lspdExterior_barrier, fX, fY, fZ);
+	GetDynamicObjectRot(object_lspdExterior_barrier, fRX, fRY, fRZ);
+
+	if (fRY == LSPD_BARRIER_OPEN_RY)
+		MoveDynamicObject(object_lspdExterior_barrier, fX, fY, fZ - 0.0001, 0.0002, fRX, LSPD_BARRIER_CLOSED_RY, fRZ);
+	else
+		MoveDynamicObject(object_lspdExterior_barrier, fX, fY, fZ + 0.0001, 0.0002, fRX, LSPD_BARRIER_OPEN_RY, fRZ);
+
+	return 1;
+}
 
 hook OnPlayerConnect(playerid) {
 	// Remove RenderWare objects

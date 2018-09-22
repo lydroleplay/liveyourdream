@@ -3917,7 +3917,6 @@ new Tazered[MAX_PLAYERS];
 new Cuffed[MAX_PLAYERS];
 new fstor[6];
 new regtor[1];
-new alctor[3];
 new tresortuer[1];
 new Refueling[MAX_PLAYERS];
 new RefuelType[MAX_PLAYERS];
@@ -4220,6 +4219,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\beach>
 #include <maps\alhambraExterior>
 #include <maps\alhambraInterior>
+#include <maps\alcatraz>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5062,15 +5062,6 @@ OnGameModeInit2() {
 		SetVehicleToRespawn(kfzcars[i]);
 		aiVehicles[ kfzcars[i] ] = VEH_KFZCARS;
 	}
-	
-	/*lspdcars[25] = AddStaticVehicleEx(596,2869.2363,1945.4760,11.2655,239.8570,0,1,-1); // alca pdcar
-	lspdcars[26] = AddStaticVehicleEx(596,2865.6960,1943.5454,11.2670,237.4763,0,1,-1); // alca pdcar
-	lspdcars[27] = AddStaticVehicleEx(599,2864.1147,1938.1427,11.7587,270.0002,0,1,-1); // alca pdcar
-	lspdcars[28] = AddStaticVehicleEx(599,2864.0491,1934.2194,11.7524,269.4765,0,1,-1); // alca pdcar
-	lspdcars[29] = AddStaticVehicleEx(601,2864.3555,1927.5724,11.3028,304.6344,0,0,-1); // alca pdcar
-	lspdcars[30] = AddStaticVehicleEx(601,2868.2207,1924.4236,11.3097,299.9103,0,0,-1); // alca pdcar
-	lspdcars[31] = AddStaticVehicleEx(497,2852.9485,1820.1101,11.7223,269.9985,0,1,-1); // alca heli
-	lspdcars[32] = AddStaticVehicleEx(497,2852.9485,1835.6248,11.7322,269.9992,0,1,-1); // alca heli*/
 
 	for (new i; i < sizeof(vehicle_lspdExterior); i++) {
 		SetVehicleHealth(vehicle_lspdExterior[i], 2000.0);
@@ -5550,8 +5541,6 @@ OnGameModeInit2() {
 
 	/*CreateDynamicPickup(19346, 23, 1782.0698,-2087.7612,13.5469, 0);//Bratwurst
 	Create3DTextLabel(COLOR_HEX_GREEN"Bratwurst Tag, 29.07.2015\n"COLOR_HEX_RED"Mach ein Screen und poste es!", COLOR_WHITE, 1782.0698,-2087.7612,13.5469, 10.0, 0,0);*/
-	CreateDynamicPickup(19197, 1, 2870.938965, 1906.032227, 11.551001, 0);//Alca ENTER
-	CreateDynamicPickup(19197, 1, 2871.016602, 1902.781982, 11.551001, -1);//Alca EXIT
 
 	CreateDynamicPickup(19197, 1, 1384.1174,-1661.3926,13.4622, 0);//Donatladen enter
 	CreateDynamicPickup(19197, 1, 1038.3171,-1339.7793,13.7266, -1);//Donatladen exit
@@ -10456,11 +10445,11 @@ public SetPlayerSpawn(playerid)
 		//Hochsicherheitsgefängnis
 		else if(Spieler[playerid][pJailed] == 2)
 		{
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerInterior(playerid, 0);
-			SetPlayerPosEx(playerid, 2871.1125, 1898.9609, 11.5510, 0, 0);
-			SetTimerEx("SetPlayerPosEx", 131, false, "dfffdd", playerid, 2871.1125, 1898.9609, 11.5510, 0, 0);
+			SetPlayerFacingAngle(playerid, ALCATRAZ_JAIL_SPAWN_FACING);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPosEx(playerid, ALCATRAZ_JAIL_SPAWN_POINT + 0.5, MAPS_ALCATRAZ_INTERIOR, VW_MAIN);
 			SendClientMessage(playerid, COLOR_RED, "Du wurdest aufgrund deiner schweren Verbrechen in das Alcatraz eingesperrt!");
+			return 1;
 		}
 		// Admin Prison
 		else if(Spieler[playerid][pJailed] == 3)
@@ -17249,66 +17238,6 @@ CMD:ipberkanbanlydadmin(playerid, params[])
 
 	//Kick(pID); -> Threaded
 	return 1;
-}
-
-CMD:lspdbarrier(playerid, params[]) {
-	if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 3 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))
-		return SendClientMessage(playerid, COLOR_RED, "Du bist kein Staatsbeamter.");
-
-	if (!IsPlayerInRangeOfPoint(playerid, 20.0, LSPD_BARRIER_FOR_RANGE_COORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe der LSPD-Schranke.");
-
-	new Float:fX, Float:fY, Float:fZ, Float:fRX, Float:fRY, Float:fRZ;
-	GetDynamicObjectPos(object_lspdExterior_barrier, fX, fY, fZ);
-	GetDynamicObjectRot(object_lspdExterior_barrier, fRX, fRY, fRZ);
-
-	if (fRY == LSPD_BARRIER_OPEN_RY)
-		MoveDynamicObject(object_lspdExterior_barrier, fX, fY, fZ - 0.0001, 0.0002, fRX, LSPD_BARRIER_CLOSED_RY, fRZ);
-	else
-		MoveDynamicObject(object_lspdExterior_barrier, fX, fY, fZ + 0.0001, 0.0002, fRX, LSPD_BARRIER_OPEN_RY, fRZ);
-
-	return 1;
-}
-
-//Alca Tore
-CMD:atorauf(playerid, params[])
-{
-    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Fahrlehrer oder Polizist!");
-	if(IsPlayerInRangeOfPoint(playerid,10, 2882.0168, 1878.5587, 10.3259))
-	{
-		MoveObject(alctor[0], 2882.0168, 1878.5587, 10.3259-10,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 2876.6022, 1934.2126, 12.2278))
-	{
-		MoveObject(alctor[1], 2876.6022, 1934.2126, 12.2278-10,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 2884.3974, 1979.0788, 13.2719))
-	{
-		MoveObject(alctor[2], 2884.3974, 1979.0788, 13.2719-10,2);
-		return 1;
-	}
- 	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der Nähe!");
-}
-CMD:atorzu(playerid, params[])
-{
-    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Fahrlehrer oder Polizist!");
-	if(IsPlayerInRangeOfPoint(playerid,10, 2882.0168, 1878.5587, 10.3259))
-	{
-		MoveObject(alctor[0], 2882.0168, 1878.5587, 10.3259,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 2876.6022, 1934.2126, 12.2278))
-	{
-		MoveObject(alctor[1], 2876.6022, 1934.2126, 12.2278,2);
-		return 1;
-	}
-	if(IsPlayerInRangeOfPoint(playerid,10, 2884.3974, 1979.0788, 13.2719))
-	{
-		MoveObject(alctor[2], 2884.3974, 1979.0788, 13.2719,2);
-		return 1;
-	}
- 	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der Nähe!");
 }
 
 //Präsidenten Tore
@@ -29135,14 +29064,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerVirtualWorld(playerid, 0);
 		    SetPlayerPos(playerid, 2127.5486,2378.9626,10.8203);
 		}
-		else if(IsPlayerExecutive(playerid) && IsPlayerInRangeOfPoint(playerid, 2.0, 2870.938965, 1906.032227, 11.551001))//Alca ENTER
-		{
-			SetPlayerPos(playerid, 2871.016602, 1902.781982, 11.551001);
-		}
-		else if(IsPlayerExecutive(playerid) && IsPlayerInRangeOfPoint(playerid, 2.0, 2871.016602, 1902.781982, 11.551001))//Alca EXIT
-		{
-			SetPlayerPos(playerid, 2870.938965, 1906.032227, 11.551001);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1571.2114,-1336.6027,16.4844))//startower unten
 		{
 		    SetPlayerInterior(playerid, 0);
@@ -29557,8 +29478,8 @@ public WHEELMAN_escaping_pulse(customer, wheelman, unixtime) {
 		SetPVarInt(customer, "WHEELMAN.STATUS", WHEELMAN_STATUS_NONE);
 		Spieler[customer][pJailed] = 0;
 		Spieler[customer][pJailTime] = 0;
-		SetPlayerPos(customer, 2885.09, 1875.39, 11.55);
-		SetPlayerFacingAngle(customer, 270.0);
+		SetPlayerPos(customer, ALCATRAZ_FREED_COORDS);
+		SetPlayerFacingAngle(customer, ALCATRAZ_FREED_FACING);
 		GivePlayerCash(customer, -50000);
 
 		new message[128];
@@ -29581,7 +29502,7 @@ public WHEELMAN_escaping_pulse(customer, wheelman, unixtime) {
 		return SendClientMessage(wheelman, COLOR_RED, "Du bist gestorben und konntest deshalb deinen Kunden nicht befreien.");
 	}
 
-	if (!(IsPlayerInRangeOfPoint(customer, 10.0, 2882.55, 1875.32, 12.15) && IsPlayerInRangeOfPoint(wheelman, 10.0, 2882.55, 1875.32, 12.15))) {
+	if (!(IsPlayerInRangeOfPoint(customer, 10.0, ALCATRAZ_JAILEDGATE_COORDS) && IsPlayerInRangeOfPoint(wheelman, 10.0, ALCATRAZ_JAILEDGATE_COORDS))) {
 		SetPVarInt(customer, "WHEELMAN.STATUS", WHEELMAN_STATUS_NONE);
 		SendClientMessage(customer, COLOR_RED, "Ihr seid beide nicht mehr in der Nähe des Tores. Die Befreiung wurde abgebrochen.");
 		return SendClientMessage(wheelman, COLOR_RED, "Ihr seid beide nicht mehr in der Nähe des Tores. Die Befreiung wurde abgebrochen.");
@@ -29637,7 +29558,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return SendClientMessage(playerid, COLOR_RED, "Der Wheelman ist jetzt dein Zellengenosse, daher kann er dir nicht mehr helfen.");
 			}
 
-			if (!(IsPlayerInRangeOfPoint(playerid, 10.0, 2882.55, 1875.32, 12.15) && IsPlayerInRangeOfPoint(myWheelman, 10.0, 2882.55, 1875.32, 12.15))) {
+			if (!(IsPlayerInRangeOfPoint(playerid, 10.0, ALCATRAZ_JAILEDGATE_COORDS) && IsPlayerInRangeOfPoint(myWheelman, 10.0, ALCATRAZ_JAILEDGATE_COORDS))) {
 				SetPVarInt(playerid, "WHEELMAN.STATUS", WHEELMAN_STATUS_NONE);
 				return SendClientMessage(playerid, COLOR_RED, "Ihr seid nicht beide nahe genug am Alcatraz-Tor.");
 			}
@@ -43897,7 +43818,7 @@ CMD:knastbefreien(playerid, params[]) {
 	if (pID == playerid) return SendClientMessage(playerid, COLOR_RED, "Du kannst dir selber keine Befreiung anbieten.");
 	if (Spieler[pID][pJailed] != 2) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht im Alcatraz gefangen.");
 	if (Spieler[playerid][pJailed] == 2) return SendClientMessage(playerid, COLOR_RED, "Du bist selber im Alcatraz gefangen.");
-	if (!(IsPlayerInRangeOfPoint(playerid, 10.0, 2882.55, 1875.32, 12.15) && IsPlayerInRangeOfPoint(pID, 10.0, 2882.55, 1875.32, 12.15))) return SendClientMessage(playerid, COLOR_RED, "Ihr seid nicht beide nahe genug am Alcatraz-Tor.");
+	if (!(IsPlayerInRangeOfPoint(playerid, 10.0, ALCATRAZ_JAILEDGATE_COORDS) && IsPlayerInRangeOfPoint(pID, 10.0, ALCATRAZ_JAILEDGATE_COORDS))) return SendClientMessage(playerid, COLOR_RED, "Ihr seid nicht beide nahe genug am Alcatraz-Tor.");
 	if (GetPVarInt(GetPVarInt(playerid, "WHEELMAN.CUSTOMER"), "WHEELMAN.STATUS") == WHEELMAN_STATUS_ESCAPING) return SendClientMessage(playerid, COLOR_RED, "Du befreist bereits jemanden aus dem Alcatraz.");
 	if (GetPVarInt(pID, "WHEELMAN.STATUS") == WHEELMAN_STATUS_HAS_OFFER) return SendClientMessage(playerid, COLOR_RED, "Der Gefangene hat bereits ein Befreiungsangebot erhalten.");
 	if (GetPVarInt(pID, "WHEELMAN.STATUS") == WHEELMAN_STATUS_ESCAPING) return SendClientMessage(playerid, COLOR_RED, "Der Gefangene wird bereits von einem Wheelman befreit.");
@@ -43917,16 +43838,16 @@ new alcatrazGateHackTimestamp = 0;
  
 CMD:atorhacken(playerid, params[]) {
     if (Spieler[playerid][pFraktion] != 17) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Wheelman!");
-    if (!IsPlayerInRangeOfPoint(playerid, 10.0, 2884.3974, 1979.0788, 13.2719)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Alcatraz-Tors.");
+    if (!IsPlayerInRangeOfPoint(playerid, 10.0, ALCATRAZ_ENTRANCEGATE_FOR_RANGE_COORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Alcatraz-Tors.");
     if (gettime() < alcatrazGateHackTimestamp) return SendClientMessage(playerid, COLOR_RED, "Das Tor wird bereits gehackt!");
    
-    new message[128], Float:x, Float:y, Float:z;
-    GetObjectPos(alctor[2], x, y, z);
-    if (z < 13.2719) return SendClientMessage(playerid, COLOR_RED, "Das Tor ist bereits offen.");  
+    new message[128], Float:fX, Float:fY, Float:fZ;
+    GetDynamicObjectPos(object_alcatraz_entranceGate, fX, fY, fZ);
+    if (fZ == ALCATRAZ_ENTRANCEGATE_OPEN_Z) return SendClientMessage(playerid, COLOR_RED, "Das Tor ist bereits offen.");  
  
-    GetPlayerPos(playerid, x, y, z);
+    GetPlayerPos(playerid, fX, fY, fZ);
     format(message, sizeof(message), "** %s beginnt das Alcatraz-Tor zu hacken **", GetName(playerid));
-    SendRoundMessage(x, y, z, COLOR_ORANGE, message, 20.0);
+    SendRoundMessage(fX, fY, fZ, COLOR_ORANGE, message, 20.0);
  
     if (random(2)) {
         SendFraktionMessage(1, COLOR_LIGHTRED, "[HOCHSICHERHEITSTRAKT] Ein Wheelman versucht das Alcatraz-Tor zu hacken!");
@@ -43945,7 +43866,11 @@ forward WHEELMAN_gateHack_pulse(playerid, unixtime);
 public WHEELMAN_gateHack_pulse(playerid, unixtime) {
     if (gettime() >= unixtime) {
         alcatrazGateHackTimestamp = 0;
-        MoveObject(alctor[2], 2884.3974, 1979.0788, 13.2719-10, 2);
+
+		new Float:fX, Float:fY, Float:fZ;
+        GetDynamicObjectPos(object_alcatraz_entranceGate, fX, fY, fZ);
+
+        MoveDynamicObject(object_alcatraz_entranceGate, fX, fY, ALCATRAZ_ENTRANCEGATE_OPEN_Z, 2);
         return SendClientMessage(playerid, COLOR_GREEN, "Du hast es geschafft, das Alcatraz-Tor zu hacken.");
     }
  
@@ -43954,7 +43879,7 @@ public WHEELMAN_gateHack_pulse(playerid, unixtime) {
         return SendClientMessage(playerid, COLOR_RED, "Du bist gestorben und hast es nicht geschafft, das Alcatraz-Tor zu hacken.");
     }
  
-    if (!IsPlayerInRangeOfPoint(playerid, 10.0, 2884.3974, 1979.0788, 13.2719)) {
+    if (!IsPlayerInRangeOfPoint(playerid, 10.0, ALCATRAZ_ENTRANCEGATE_FOR_RANGE_COORDS)) {
         alcatrazGateHackTimestamp = 0;
         return SendClientMessage(playerid, COLOR_RED, "Du bist zu weit vom Alcatraz-Tor entfernt. Das Hacken wurde abgebrochen.");
     }
@@ -53782,7 +53707,7 @@ stock SendFahrgeschaeftMessage(fahrgeschaeft,color,msg[]) {
 }
 stock IsPlayerExecutive(playerid) {
     if( IsPlayerConnected(playerid)) {
-		return ( Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22);
+		return ( Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22);
 	}
     return 0;
 }
