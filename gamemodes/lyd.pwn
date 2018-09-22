@@ -4224,6 +4224,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\boatDealershipSf>
 #include <maps\luxuryCarDealership>
 #include <maps\cheapCarDealershipLs2>
+#include <maps\cheapCarDealershipLs>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5946,7 +5947,6 @@ OnGameModeInit2() {
   	//CreateDynamic3DTextLabel(COLOR_HEX_RED"** BIS ZUM 24.02.2015 FÜR ALLE **\n"COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
   	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten für 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = 0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Günstig\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!.", COLOR_WHITE, 1808.0851,-1889.7792,13.4073, 30.0);//Billig Autohaus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Motorradhaus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Motorrad deiner Wahl ein!", COLOR_WHITE, 1662.1256,-1884.3601,13.5469, 30.0);//Bike haus
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 
@@ -6262,7 +6262,6 @@ public OnPlayerConnect(playerid)
 	// TODO: Peek anpassen.
 	SetPlayerMapIcon(playerid, 1, 1329.4666,-1559.4634,13.5469, 31, 0, 0);//Hotel
 	SetPlayerMapIcon(playerid, 2, 1461.5116,-1019.0845,24.5987, 52, 0, 0);//Bank
-	SetPlayerMapIcon(playerid, 5, 1786.8823,-1916.9739,13.3944, 55, 0, 0);//Intercars
 	SetPlayerMapIcon(playerid, 6, 550.6537,-1264.4824,16.9693, 55, 0, 0);//Grottis
 	SetPlayerMapIcon(playerid, 7, 1238.0809,-1814.2310,13.4292, 19, 0, 0);//Fahrschule
     SetPlayerMapIcon(playerid, 10, 1662.1256,-1884.3601,13.5469, 55, 0, 0);//Motorradhaus
@@ -6289,7 +6288,6 @@ public OnPlayerConnect(playerid)
     SetPlayerMapIcon(playerid, 33, 817.6655,-1618.9307,13.7034, 10, 0, 0);//süd bsn
     SetPlayerMapIcon(playerid, 35, 1411.5352,-1699.5714,13.5395, 46, 0, 0);//Werbung in LS
     SetPlayerMapIcon(playerid, 36, 2400.5369,-1981.5837,13.5469, 18, 0, 0);//Nähe Ballasbase Ammunastion
-    SetPlayerMapIcon(playerid, 38, 689.4661,-1181.7947,15.3834, 55, 0, 0);//Fahrradladen
     SetPlayerMapIcon(playerid, 39, 1380.9908,457.3878,19.9316, 42, 0, 0);//Tankstelle
 	SetPlayerMapIcon(playerid, 40, 2423.8147,-1742.4226,13.1120, 25, 0, 0);//247 grove street
  	SetPlayerMapIcon(playerid, 41, 1257.1144,-1339.0963,12.9213, 8, 0, 0);//Busbahnhof

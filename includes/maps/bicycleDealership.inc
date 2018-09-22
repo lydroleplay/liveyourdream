@@ -8,7 +8,7 @@ static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
 // Bicycle dealership points
-#define BICYCLEDEALERSHIP_COORDS  902.5354, -945.0310, 40.9409
+#define BICYCLEDEALERSHIP_COORDS    688.2108, -1181.0293, 15.3516
 
 // Map variables
 new object_bicycleDealership[132];
@@ -24,6 +24,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Map Icons
+    CreateDynamicMapIcon(MAPS_BICYCLEDEALERSHIP_INTERIOR, 55, 0, VW_MAIN, MAPS_BICYCLEDEALERSHIP_INTERIOR);
+
     // 3DTextLabels
     text3D_bicycleDealership[0] = _:CreateDynamic3DTextLabel("Fahrradladen\n" COLOR_HEX_WHITE "Steig in ein beliebiges Fahrrad deiner Wahl ein!", COLOR_BLUE, BICYCLEDEALERSHIP_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BICYCLEDEALERSHIP_INTERIOR);
 
