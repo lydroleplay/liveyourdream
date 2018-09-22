@@ -19,7 +19,7 @@ static Float:DRAWDISTANCE   = 350.0;
 new object_pooExterior[297];
 new pickup_pooExterior[2];
 new text3D_pooExterior[1];
-new vehicle_pooExterior[20];
+new vehicle_pooExterior[19];
 
 hook OnPlayerConnect(playerid) {
 	// Remove RenderWare objects
@@ -58,26 +58,25 @@ hook OnGameModeInit() {
     text3D_pooExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Staats-Reparatur\n" COLOR_HEX_WHITE "Tippe /Staatrepair", COLOR_WHITE, POO_STATEREPAIR_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_POOEXTERIOR_INTERIOR); // Staterepair
 
 	// Vehicles
-	vehicle_pooExterior[0] = AddStaticVehicleEx(599, 926.3336, -1286.4506, 14.4465, 91.0184, 158, 8, -1);
-    vehicle_pooExterior[1] = AddStaticVehicleEx(487, 1941.9177, -2038.4310, 21.4681, 1.1817, 158, 158, -1);
-    vehicle_pooExterior[2] = AddStaticVehicleEx(599, 1939.1571, -2018.3842, 13.8958, 180.0897, 158, 8, -1);
-    vehicle_pooExterior[3] = AddStaticVehicleEx(599, 1935.4164, -2018.4231, 13.8964, 180.1137, 158, 8, -1);
-    vehicle_pooExterior[4] = AddStaticVehicleEx(598, 1931.8282, -2018.5294, 13.4154, 180.1284, 158, 8, -1);
-    vehicle_pooExterior[5] = AddStaticVehicleEx(598, 1927.9823, -2018.4670, 13.4384, 179.7811, 158, 8, -1);
-    vehicle_pooExterior[6] = AddStaticVehicleEx(426, 1928.0767, -2012.4497, 13.4215, 359.8296, 158, 158, -1);
-    vehicle_pooExterior[7] = AddStaticVehicleEx(426, 1931.8129, -2012.4203, 13.4234, 0.3709, 158, 158, -1);
-    vehicle_pooExterior[8] = AddStaticVehicleEx(560, 1935.4600, -2012.7880, 13.3687, 359.3246, 158, 158, -1);
-    vehicle_pooExterior[9] = AddStaticVehicleEx(560, 1939.1714, -2012.7667, 13.3612, 0.1307, 158,  158, -1);
-    vehicle_pooExterior[10] = AddStaticVehicleEx(525, 1939.2173, -2000.0000, 13.5433, 179.1260, 8, 158, -1);
-    vehicle_pooExterior[11] = AddStaticVehicleEx(525, 1935.5348, -2000.0933, 13.5318, 180.2231, 8, 158, -1);
-    vehicle_pooExterior[12] = AddStaticVehicleEx(525, 1931.8230, -2000.1855, 13.5318, 180.2053, 8, 158, -1);
-    vehicle_pooExterior[13] = AddStaticVehicleEx(525, 1928.0831, -2000.1741, 13.5356, 180.4330, 8, 158, -1);
-    vehicle_pooExterior[14] = AddStaticVehicleEx(525, 1928.0310, -1993.6702, 13.5356, 0.0585, 8, 158, -1);
-    vehicle_pooExterior[15] = AddStaticVehicleEx(525, 1931.7048, -1993.7336, 13.5317, 0.0398, 8, 158, -1);
-    vehicle_pooExterior[16] = AddStaticVehicleEx(525, 1935.5032, -1993.5992, 13.5295, 359.5856, 8, 158, -1);
-    vehicle_pooExterior[17] = AddStaticVehicleEx(525, 1939.2357, -1993.5378, 13.5433, 359.6217, 8, 158, -1);
-    vehicle_pooExterior[18] = AddStaticVehicleEx(461, 1949.1188, -2038.0056, 13.2458, 0.6688, 158, 8, -1);
-    vehicle_pooExterior[19] = AddStaticVehicleEx(461, 1945.7896, -2037.8665, 13.2437, 359.0446, 158, 8, -1);
+    vehicle_pooExterior[0] = AddStaticVehicleEx(487, 1941.9177, -2038.4310, 21.4681, 1.1817, 158, 158, -1);
+    vehicle_pooExterior[1] = AddStaticVehicleEx(599, 1939.1571, -2018.3842, 13.8958, 180.0897, 158, 8, -1);
+    vehicle_pooExterior[2] = AddStaticVehicleEx(599, 1935.4164, -2018.4231, 13.8964, 180.1137, 158, 8, -1);
+    vehicle_pooExterior[3] = AddStaticVehicleEx(598, 1931.8282, -2018.5294, 13.4154, 180.1284, 158, 8, -1);
+    vehicle_pooExterior[4] = AddStaticVehicleEx(598, 1927.9823, -2018.4670, 13.4384, 179.7811, 158, 8, -1);
+    vehicle_pooExterior[5] = AddStaticVehicleEx(426, 1928.0767, -2012.4497, 13.4215, 359.8296, 158, 158, -1);
+    vehicle_pooExterior[6] = AddStaticVehicleEx(426, 1931.8129, -2012.4203, 13.4234, 0.3709, 158, 158, -1);
+    vehicle_pooExterior[7] = AddStaticVehicleEx(560, 1935.4600, -2012.7880, 13.3687, 359.3246, 158, 158, -1);
+    vehicle_pooExterior[8] = AddStaticVehicleEx(560, 1939.1714, -2012.7667, 13.3612, 0.1307, 158,  158, -1);
+    vehicle_pooExterior[9] = AddStaticVehicleEx(525, 1939.2173, -2000.0000, 13.5433, 179.1260, 8, 158, -1);
+    vehicle_pooExterior[10] = AddStaticVehicleEx(525, 1935.5348, -2000.0933, 13.5318, 180.2231, 8, 158, -1);
+    vehicle_pooExterior[11] = AddStaticVehicleEx(525, 1931.8230, -2000.1855, 13.5318, 180.2053, 8, 158, -1);
+    vehicle_pooExterior[12] = AddStaticVehicleEx(525, 1928.0831, -2000.1741, 13.5356, 180.4330, 8, 158, -1);
+    vehicle_pooExterior[13] = AddStaticVehicleEx(525, 1928.0310, -1993.6702, 13.5356, 0.0585, 8, 158, -1);
+    vehicle_pooExterior[14] = AddStaticVehicleEx(525, 1931.7048, -1993.7336, 13.5317, 0.0398, 8, 158, -1);
+    vehicle_pooExterior[15] = AddStaticVehicleEx(525, 1935.5032, -1993.5992, 13.5295, 359.5856, 8, 158, -1);
+    vehicle_pooExterior[16] = AddStaticVehicleEx(525, 1939.2357, -1993.5378, 13.5433, 359.6217, 8, 158, -1);
+    vehicle_pooExterior[17] = AddStaticVehicleEx(461, 1949.1188, -2038.0056, 13.2458, 0.6688, 158, 8, -1);
+    vehicle_pooExterior[18] = AddStaticVehicleEx(461, 1945.7896, -2037.8665, 13.2437, 359.0446, 158, 8, -1);
 
 	// Objects
 	object_pooExterior[0] = CreateDynamicObject(18762, 1951.2010, -2040.0041, 13.0562, 0.0000, 90.0000, 90.0000, VW_MAIN, MAPS_POOEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx1mx5m

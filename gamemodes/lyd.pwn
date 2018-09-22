@@ -3915,7 +3915,6 @@ new ZettelPreis[MAX_PLAYERS];
 new TazerTime[MAX_PLAYERS];
 new Tazered[MAX_PLAYERS];
 new Cuffed[MAX_PLAYERS];
-new fstor[6];
 new regtor[1];
 new tresortuer[1];
 new Refueling[MAX_PLAYERS];
@@ -4220,6 +4219,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\alhambraExterior>
 #include <maps\alhambraInterior>
 #include <maps\alcatraz>
+#include <maps\drivingSchoolExterior>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -17268,32 +17268,32 @@ CMD:fstorauf(playerid, params[])
     if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 8 || Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Fahrlehrer oder Polizist!");
 	if(IsPlayerInRangeOfPoint(playerid,10, 1185.3404, -1842.3459, 13.1983))
 	{
-		MoveObject(fstor[0], 1185.3404, -1842.3459, 13.1983,1, 0.0000, 0.0000, 0.0000);
+		MoveDynamicObject(fstor[0], 1185.3404, -1842.3459, 13.1983,1, 0.0000, 0.0000, 0.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1185.3404, -1762.5439, 13.1983))
 	{
-		MoveObject(fstor[1], 1185.3404, -1762.5439, 13.1983,1, 0.0000, 0.0000, 0.0000);
+		MoveDynamicObject(fstor[1], 1185.3404, -1762.5439, 13.1983,1, 0.0000, 0.0000, 0.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1169.5295, -1762.5439, 13.1983))
 	{
-		MoveObject(fstor[2], 1169.5295, -1762.5439, 13.1983,1, 0.0000, 0.0000, 180.0000);
+		MoveDynamicObject(fstor[2], 1169.5295, -1762.5439, 13.1983,1, 0.0000, 0.0000, 180.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1169.5295, -1842.3459, 13.1983))
 	{
-		MoveObject(fstor[3], 1169.5295, -1842.3459, 13.1983,1, 0.0000, 0.0000, 180.0000);
+		MoveDynamicObject(fstor[3], 1169.5295, -1842.3459, 13.1983,1, 0.0000, 0.0000, 180.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1213.4050, -1842.1458, 13.0299))
 	{
-		MoveObject(fstor[4], 1213.4050, -1842.1458, 13.0299-10,4);
+		MoveDynamicObject(fstor[4], 1213.4050, -1842.1458, 13.0299-10,4);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1270.3653, -1842.2629, 13.0299))
 	{
-		MoveObject(fstor[5], 1270.3653, -1842.2629, 13.0299-10,4);
+		MoveDynamicObject(fstor[5], 1270.3653, -1842.2629, 13.0299-10,4);
 		return 1;
 	}
  	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der Nähe!");
@@ -17303,32 +17303,32 @@ CMD:fstorzu(playerid, params[])
     if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 8 || Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Fahrlehrer oder Polizist!");
 	if(IsPlayerInRangeOfPoint(playerid,10, 1185.3404, -1842.3459, 13.1983))
 	{
-		MoveObject(fstor[0], 1185.3404, -1842.3459, 13.1983,1, 0.0000, -90.0000, 0.0000);
+		MoveDynamicObject(fstor[0], 1185.3404, -1842.3459, 13.1983,1, 0.0000, -90.0000, 0.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1185.3404, -1762.5439, 13.1983))
 	{
-		MoveObject(fstor[1], 1185.3404, -1762.5439, 13.1983,1, 0.0000, -90.0000, 0.0000);
+		MoveDynamicObject(fstor[1], 1185.3404, -1762.5439, 13.1983,1, 0.0000, -90.0000, 0.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1169.5295, -1762.5439, 13.1983))
 	{
-		MoveObject(fstor[2], 1169.5295, -1762.5439, 13.1983,1, 0.0000, -90.0000, 180.0000);
+		MoveDynamicObject(fstor[2], 1169.5295, -1762.5439, 13.1983,1, 0.0000, -90.0000, 180.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1169.5295, -1842.3459, 13.1983))
 	{
-		MoveObject(fstor[3], 1169.5295, -1842.3459, 13.1983,1, 0.0000, -90.0000, 180.0000);
+		MoveDynamicObject(fstor[3], 1169.5295, -1842.3459, 13.1983,1, 0.0000, -90.0000, 180.0000);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1213.4050, -1842.1458, 13.0299))
 	{
-		MoveObject(fstor[4], 1213.4050, -1842.1458, 13.0299,4);
+		MoveDynamicObject(fstor[4], 1213.4050, -1842.1458, 13.0299,4);
 		return 1;
 	}
 	if(IsPlayerInRangeOfPoint(playerid,10, 1270.3653, -1842.2629, 13.0299))
 	{
-		MoveObject(fstor[5], 1270.3653, -1842.2629, 13.0299,4);
+		MoveDynamicObject(fstor[5], 1270.3653, -1842.2629, 13.0299,4);
 		return 1;
 	}
  	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der Nähe!");

@@ -25,7 +25,7 @@ static Float:DRAWDISTANCE   = 350.0;
 #define ALCATRAZ_FREED_FACING                       270.0
 
 // Map variables
-new object_alcatraz[409];
+new object_alcatraz[411];
 new pickup_alcatraz[2];
 new object_alcatraz_entranceGate;
 new object_alcatraz_garageGate;
@@ -78,6 +78,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			return 1;
         }
     }
+
+    return 1;
 }
 
 hook OnGameModeInit() {
@@ -605,6 +607,9 @@ hook OnGameModeInit() {
     object_alcatraz[406] = CreateDynamicObject(19912, 2882.0168, 1878.5587, 10.3259, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Alc Tor zum Aufbrechen
     object_alcatraz[407] = CreateDynamicObject(7657, 2876.6022, 1934.2126, 12.2278, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Garage gate
     object_alcatraz[408] = CreateDynamicObject(980, 2884.3974, 1979.0788, 13.2719, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Maingate
+
+    object_alcatraz[409] = CreateDynamicObject(19537, 2855.0788, 1869.7650, 10.5410, 0.0000, 0.0000, 90.00000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); // Solid ground
+    object_alcatraz[410] = CreateDynamicObject(8355, 2877.3393, 1911.1409, 10.5309, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); // Solid ground
 
     object_alcatraz_entranceGate = object_alcatraz[408];
     object_alcatraz_garageGate = object_alcatraz[407];
