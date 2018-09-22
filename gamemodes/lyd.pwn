@@ -4223,6 +4223,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\bicycleDealership>
 #include <maps\boatDealershipSf>
 #include <maps\luxuryCarDealership>
+#include <maps\cheapCarDealershipLs2>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5948,7 +5949,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Günstig\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!.", COLOR_WHITE, 1808.0851,-1889.7792,13.4073, 30.0);//Billig Autohaus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Motorradhaus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Motorrad deiner Wahl ein!", COLOR_WHITE, 1662.1256,-1884.3601,13.5469, 30.0);//Bike haus
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Count And Schutz\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2126.9578,-1124.4517,25.4636, 30.0);//Autohaus günstig 2 LS
 
 	//Verkaus 3D Infotext 2
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kleidungs Shop\n"COLOR_HEX_WHITE"Tippe /Kleidung", COLOR_WHITE, 206.3740,-8.2494,1001.2109, 11.0, .worldid = 36);//Victim LS (Strand)
