@@ -27,13 +27,13 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Pickups    
-    pickup_tuev[0] = CreateDynamicPickup(19627, 1, TUEV_AUTO_POINT, VW_MAIN, MAPS_TUEV_INTERIOR); // TÃœV fÃ¼r Auto und MotorrÃ¤der
-	pickup_tuev[1] = CreateDynamicPickup(19627, 1, TUEV_AIRCRAFT_POINT, VW_MAIN, MAPS_TUEV_INTERIOR); // TÃœV fÃ¼r Flugzeuge
+    pickup_tuev[0] = CreateDynamicPickup(19627, 1, TUEV_AUTO_POINT, VW_MAIN, MAPS_TUEV_INTERIOR); // TÜV für Auto und MotorrÃ¤der
+	pickup_tuev[1] = CreateDynamicPickup(19627, 1, TUEV_AIRCRAFT_POINT, VW_MAIN, MAPS_TUEV_INTERIOR); // TÜV für Flugzeuge
 
     // 3DTextLabels
-    text3D_tuev[0] = _:CreateDynamic3DTextLabel("TÃœV-WERKSTATT", COLOR_YELLOW, TUEV_INFO_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TUEV_INTERIOR);
-    text3D_tuev[1] = _:CreateDynamic3DTextLabel("TÃœV-WERKSTATT\n" COLOR_HEX_WHITE "Tippe /Wartungen", COLOR_GREEN, TUEV_AUTO_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TUEV_INTERIOR);
-	text3D_tuev[2] = _:CreateDynamic3DTextLabel("TÃœV-WERKSTATT\n" COLOR_HEX_WHITE "Tippe /Wartungen", COLOR_GREEN, TUEV_AIRCRAFT_POINT, 40.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TUEV_INTERIOR);    
+    text3D_tuev[0] = _:CreateDynamic3DTextLabel("TÜV-WERKSTATT", COLOR_YELLOW, TUEV_INFO_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TUEV_INTERIOR);
+    text3D_tuev[1] = _:CreateDynamic3DTextLabel("TÜV-WERKSTATT\n" COLOR_HEX_WHITE "Tippe /Wartungen", COLOR_GREEN, TUEV_AUTO_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TUEV_INTERIOR);
+	text3D_tuev[2] = _:CreateDynamic3DTextLabel("TÜV-WERKSTATT\n" COLOR_HEX_WHITE "Tippe /Wartungen", COLOR_GREEN, TUEV_AIRCRAFT_POINT, 40.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TUEV_INTERIOR);    
 
     // Objects
     // TÃœV Auto Map
