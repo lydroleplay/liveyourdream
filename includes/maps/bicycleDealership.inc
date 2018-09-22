@@ -28,8 +28,8 @@ hook OnGameModeInit() {
     text3D_bicycleDealership[0] = _:CreateDynamic3DTextLabel("Fahrradladen\n" COLOR_HEX_WHITE "Steig in ein beliebiges Fahrrad deiner Wahl ein!", COLOR_BLUE, BICYCLEDEALERSHIP_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BICYCLEDEALERSHIP_INTERIOR);
 
     // Actors
-    actor_bicycleDealership[0] = CreateDynamicActor(7, 702.7725, -1184.7910, 15.9068, .worldid = VW_MAIN, .interiorid = BICYCLEDEALERSHIP_COORDS); // Salesman
-
+    actor_bicycleDealership[0] = CreateDynamicActor(7, 702.7725, -1184.7910, 15.9068, 150.0000, .worldid = VW_MAIN, .interiorid = MAPS_BICYCLEDEALERSHIP_INTERIOR); // Salesman
+    
 	// Objects
     object_bicycleDealership[0] = CreateDynamicObject(19464, 687.7760, -1186.1932, 16.2590, 0.0000, 0.0000, 149.6000, VW_MAIN, MAPS_BICYCLEDEALERSHIP_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_bicycleDealership[0], 0, 1649, "wglass", "carshowwin2", 0xFFFFFFFF);
