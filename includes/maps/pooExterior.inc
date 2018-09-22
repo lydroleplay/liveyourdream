@@ -30,7 +30,6 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 1226, 1936.2578, -1999.3828, 16.3438, 0.25);
     RemoveBuildingForPlayer(playerid, 4857, 1942.6797, -1986.7500, 14.8984, 0.25);
     RemoveBuildingForPlayer(playerid, 1226, 1957.3359, -1982.3984, 16.3828, 0.25);
-    // TODO: peek remove old poo exterior hangars, so towed vehicles can still spawn on the old base
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {

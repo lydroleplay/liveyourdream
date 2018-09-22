@@ -24,7 +24,7 @@ static Float:DRAWDISTANCE   = 350.0;
 #define CITYHALL_INTERIOR_ELEVATOR_2_UP_R_COORDS        932.7280, -1457.6291, 2761.0164
 
 // Map variables
-new object_cityhallInterior[738];
+new object_cityhallInterior[732];
 new pickup_cityhallInterior[12];
 new text3D_cityhallInterior[3];
 new actor_cityhallInterior[10];
@@ -306,10 +306,10 @@ hook OnGameModeInit() {
     object_cityhallInterior[89] = CreateDynamicObject(19565, 906.5625, -1457.1499, 2756.4052, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[89], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
     object_cityhallInterior[90] = CreateDynamicObject(19174, 909.6889, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[90], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[90], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[90], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[91] = CreateDynamicObject(19174, 906.8087, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[91], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[91], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[91], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[92] = CreateDynamicObject(19174, 915.0288, -1463.6440, 2755.8454, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
     SetDynamicObjectMaterialText(object_cityhallInterior[92], 0, "Cityhall", 90, "Times New Roman", 40, 1, 0xFFA5A9A7, 0x0, 1);
@@ -652,10 +652,10 @@ hook OnGameModeInit() {
     object_cityhallInterior[271] = CreateDynamicObject(19565, 932.8837, -1457.1499, 2756.4155, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[271], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
     object_cityhallInterior[272] = CreateDynamicObject(19174, 929.8189, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[272], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[272], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[272], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[273] = CreateDynamicObject(19174, 932.6793, -1457.1361, 2756.5361, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[273], 0, "EG", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterialText(object_cityhallInterior[273], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[273], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_cityhallInterior[274] = CreateDynamicObject(19565, 929.4240, -1456.9095, 2756.3754, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[274], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
@@ -695,7 +695,7 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(object_cityhallInterior[293], 2, 14650, "ab_trukstpc", "sa_wood08_128", 0xFFFFFFFF);
     object_cityhallInterior[294] = CreateDynamicObject(2199, 911.9057, -1461.3148, 2753.1269, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE6_MC_1
     SetDynamicObjectMaterial(object_cityhallInterior[294], 2, 14650, "ab_trukstpc", "sa_wood08_128", 0xFFFFFFFF);
-    object_cityhallInterior[295] = CreateDynamicObject(1671, 918.5828, -1461.1533, 2753.7797, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //swivelchair_A
+    object_cityhallInterior[295] = CreateDynamicObject(1671, 918.5828, -1460.8330, 2753.7797, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //swivelchair_A
     object_cityhallInterior[296] = CreateDynamicObject(2817, 914.6895, -1473.4670, 2753.7687, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //gb_bedrug01
     SetDynamicObjectMaterial(object_cityhallInterior[296], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
     object_cityhallInterior[297] = CreateDynamicObject(2817, 914.6895, -1473.4670, 2753.8088, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //gb_bedrug01
@@ -763,809 +763,797 @@ hook OnGameModeInit() {
     object_cityhallInterior[334] = CreateDynamicObject(19174, 932.4478, -1457.0837, 2760.6384, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
     SetDynamicObjectMaterialText(object_cityhallInterior[334], 0, "y", 90, "Wingdings", 25, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_cityhallInterior[334], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[335] = CreateDynamicObject(19174, 929.8189, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[335], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    object_cityhallInterior[335] = CreateDynamicObject(19174, 932.7396, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[335], 0, "E.G.", 90, "Arial Black", 20, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[335], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[336] = CreateDynamicObject(19174, 932.7396, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[336], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    object_cityhallInterior[336] = CreateDynamicObject(19174, 906.8192, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[336], 0, "E.G.", 90, "Arial Black", 20, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[336], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[337] = CreateDynamicObject(19174, 906.8192, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[337], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    object_cityhallInterior[337] = CreateDynamicObject(19174, 909.7092, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[337], 0, "E.G.", 90, "Arial Black", 20, 0, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[337], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[338] = CreateDynamicObject(19174, 909.7092, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[338], 0, "1. Stock", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
-    SetDynamicObjectMaterial(object_cityhallInterior[338], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[339] = CreateDynamicObject(19565, 907.0526, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[338] = CreateDynamicObject(19565, 907.0526, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    SetDynamicObjectMaterial(object_cityhallInterior[338], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[339] = CreateDynamicObject(19565, 906.5822, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[339], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[340] = CreateDynamicObject(19565, 906.5822, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[340] = CreateDynamicObject(19565, 909.5128, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[340], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[341] = CreateDynamicObject(19565, 909.5128, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[341] = CreateDynamicObject(19565, 909.9533, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[341], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[342] = CreateDynamicObject(19565, 909.9533, -1457.1499, 2763.0705, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[342] = CreateDynamicObject(19565, 909.9533, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[342], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[343] = CreateDynamicObject(19565, 909.9533, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[343] = CreateDynamicObject(19565, 909.5128, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[343], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[344] = CreateDynamicObject(19565, 909.5128, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[344] = CreateDynamicObject(19565, 907.0526, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[344], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[345] = CreateDynamicObject(19565, 907.0526, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[345] = CreateDynamicObject(19565, 906.5825, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[345], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[346] = CreateDynamicObject(19565, 906.5825, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[346] = CreateDynamicObject(19565, 929.6544, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[346], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[347] = CreateDynamicObject(19565, 929.6544, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[347] = CreateDynamicObject(19565, 930.0045, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[347], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[348] = CreateDynamicObject(19565, 930.0045, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[348] = CreateDynamicObject(19565, 932.5454, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[348], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[349] = CreateDynamicObject(19565, 932.5454, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[349] = CreateDynamicObject(19565, 932.9459, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[349], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[350] = CreateDynamicObject(19565, 932.9459, -1457.1499, 2763.3208, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[350] = CreateDynamicObject(19565, 932.9459, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[350], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[351] = CreateDynamicObject(19565, 932.9459, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[351] = CreateDynamicObject(19565, 932.5454, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[351], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[352] = CreateDynamicObject(19565, 932.5454, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[352] = CreateDynamicObject(19565, 929.9940, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[352], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[353] = CreateDynamicObject(19565, 929.9940, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[353] = CreateDynamicObject(19565, 929.6536, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[353], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[354] = CreateDynamicObject(19565, 929.6536, -1457.1499, 2763.0905, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[354] = CreateDynamicObject(19565, 929.4539, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[354], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[355] = CreateDynamicObject(19565, 929.4539, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[355] = CreateDynamicObject(19565, 930.2045, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[355], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[356] = CreateDynamicObject(19565, 930.2045, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[356] = CreateDynamicObject(19565, 932.3449, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[356], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[357] = CreateDynamicObject(19565, 932.3449, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[357] = CreateDynamicObject(19565, 933.1455, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[357], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[358] = CreateDynamicObject(19565, 933.1455, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[358] = CreateDynamicObject(19565, 910.1544, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[358], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[359] = CreateDynamicObject(19565, 910.1544, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[359] = CreateDynamicObject(19565, 909.3046, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[359], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[360] = CreateDynamicObject(19565, 909.3046, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[360] = CreateDynamicObject(19565, 907.2540, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[360], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[361] = CreateDynamicObject(19565, 907.2540, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    object_cityhallInterior[361] = CreateDynamicObject(19565, 906.3842, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
     SetDynamicObjectMaterial(object_cityhallInterior[361], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[362] = CreateDynamicObject(19565, 906.3842, -1456.9095, 2763.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
-    SetDynamicObjectMaterial(object_cityhallInterior[362], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[363] = CreateDynamicObject(19387, 922.6312, -1457.0212, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
-    SetDynamicObjectMaterial(object_cityhallInterior[363], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
-    object_cityhallInterior[364] = CreateDynamicObject(19464, 917.4323, -1456.9128, 2765.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[362] = CreateDynamicObject(19387, 922.6312, -1457.0212, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
+    SetDynamicObjectMaterial(object_cityhallInterior[362], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
+    object_cityhallInterior[363] = CreateDynamicObject(19464, 917.4323, -1456.9128, 2765.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[363], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[364] = CreateDynamicObject(19464, 927.1738, -1456.9331, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[364], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[365] = CreateDynamicObject(19464, 927.1738, -1456.9331, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[365] = CreateDynamicObject(19464, 911.5225, -1456.9331, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[365], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[366] = CreateDynamicObject(19464, 911.5225, -1456.9331, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[366] = CreateDynamicObject(19464, 921.2628, -1456.9331, 2765.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[366], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[367] = CreateDynamicObject(19464, 921.2628, -1456.9331, 2765.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[367], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[368] = CreateDynamicObject(19387, 916.0405, -1457.0412, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
-    SetDynamicObjectMaterial(object_cityhallInterior[368], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
-    object_cityhallInterior[369] = CreateDynamicObject(19174, 921.0272, -1457.1136, 2761.4895, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[369], 0, "Damen ", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
-    SetDynamicObjectMaterial(object_cityhallInterior[369], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[370] = CreateDynamicObject(1753, 925.3228, -1457.5426, 2759.9807, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    object_cityhallInterior[367] = CreateDynamicObject(19387, 916.0405, -1457.0412, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
+    SetDynamicObjectMaterial(object_cityhallInterior[367], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
+    object_cityhallInterior[368] = CreateDynamicObject(19174, 921.0272, -1457.1136, 2761.4895, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[368], 0, "Damen ", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
+    SetDynamicObjectMaterial(object_cityhallInterior[368], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[369] = CreateDynamicObject(1753, 925.3228, -1457.5426, 2759.9807, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    SetDynamicObjectMaterial(object_cityhallInterior[369], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
+    object_cityhallInterior[370] = CreateDynamicObject(1753, 911.7719, -1457.5426, 2759.9807, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
     SetDynamicObjectMaterial(object_cityhallInterior[370], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[371] = CreateDynamicObject(1753, 911.7719, -1457.5426, 2759.9807, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
-    SetDynamicObjectMaterial(object_cityhallInterior[371], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[372] = CreateDynamicObject(19464, 938.5737, -1461.3734, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[371] = CreateDynamicObject(19464, 938.5737, -1461.3734, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[371], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[372] = CreateDynamicObject(19464, 901.4240, -1456.9521, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[372], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[373] = CreateDynamicObject(19464, 901.4240, -1456.9521, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[373] = CreateDynamicObject(19464, 901.0338, -1466.3739, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[373], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[374] = CreateDynamicObject(19464, 901.0338, -1466.3739, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[374] = CreateDynamicObject(19464, 901.0341, -1458.5622, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[374], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[375] = CreateDynamicObject(19464, 901.0341, -1458.5622, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[375] = CreateDynamicObject(19387, 938.5313, -1465.9105, 2761.6650, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
     SetDynamicObjectMaterial(object_cityhallInterior[375], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[376] = CreateDynamicObject(19387, 938.5313, -1465.9105, 2761.6650, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
-    SetDynamicObjectMaterial(object_cityhallInterior[376], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[377] = CreateDynamicObject(3858, 927.8206, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
+    object_cityhallInterior[376] = CreateDynamicObject(3858, 927.8206, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
+    SetDynamicObjectMaterial(object_cityhallInterior[376], 0, 1717, "cj_tv", "green_glass_64", 0xFFFFFFFF);
+    object_cityhallInterior[377] = CreateDynamicObject(3858, 922.0006, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
     SetDynamicObjectMaterial(object_cityhallInterior[377], 0, 1717, "cj_tv", "green_glass_64", 0xFFFFFFFF);
-    object_cityhallInterior[378] = CreateDynamicObject(3858, 922.0006, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
+    object_cityhallInterior[378] = CreateDynamicObject(3858, 916.1806, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
     SetDynamicObjectMaterial(object_cityhallInterior[378], 0, 1717, "cj_tv", "green_glass_64", 0xFFFFFFFF);
-    object_cityhallInterior[379] = CreateDynamicObject(3858, 916.1806, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
+    object_cityhallInterior[379] = CreateDynamicObject(3858, 910.3609, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
     SetDynamicObjectMaterial(object_cityhallInterior[379], 0, 1717, "cj_tv", "green_glass_64", 0xFFFFFFFF);
-    object_cityhallInterior[380] = CreateDynamicObject(3858, 910.3609, -1473.8166, 2764.9653, -45.5998, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
-    SetDynamicObjectMaterial(object_cityhallInterior[380], 0, 1717, "cj_tv", "green_glass_64", 0xFFFFFFFF);
-    object_cityhallInterior[381] = CreateDynamicObject(18981, 897.3908, -1463.8270, 2765.3720, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    object_cityhallInterior[380] = CreateDynamicObject(18981, 897.3908, -1463.8270, 2765.3720, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_cityhallInterior[380], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[381] = CreateDynamicObject(18981, 943.0200, -1463.8270, 2765.3720, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_cityhallInterior[381], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[382] = CreateDynamicObject(18981, 943.0200, -1463.8270, 2765.3720, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    object_cityhallInterior[382] = CreateDynamicObject(18981, 920.8698, -1454.0860, 2765.3720, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_cityhallInterior[382], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[383] = CreateDynamicObject(18981, 920.8698, -1454.0860, 2765.3720, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
-    SetDynamicObjectMaterial(object_cityhallInterior[383], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[384] = CreateDynamicObject(19430, 911.7835, -1458.6311, 2757.2348, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[383] = CreateDynamicObject(19430, 911.7835, -1458.6311, 2757.2348, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[383], 0, 1376, "cranes_dyn2_cj", "ws_oldpaintedblue", 0xFF46597A);
+    object_cityhallInterior[384] = CreateDynamicObject(19430, 927.4541, -1458.6311, 2757.2348, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[384], 0, 1376, "cranes_dyn2_cj", "ws_oldpaintedblue", 0xFF46597A);
-    object_cityhallInterior[385] = CreateDynamicObject(19430, 927.4541, -1458.6311, 2757.2348, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[385], 0, 1376, "cranes_dyn2_cj", "ws_oldpaintedblue", 0xFF46597A);
-    object_cityhallInterior[386] = CreateDynamicObject(18981, 897.3609, -1463.8270, 2759.5163, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    object_cityhallInterior[385] = CreateDynamicObject(18981, 897.3609, -1463.8270, 2759.5163, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_cityhallInterior[385], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
+    object_cityhallInterior[386] = CreateDynamicObject(18981, 943.0114, -1463.8270, 2759.5163, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_cityhallInterior[386], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
-    object_cityhallInterior[387] = CreateDynamicObject(18981, 943.0114, -1463.8270, 2759.5163, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    object_cityhallInterior[387] = CreateDynamicObject(18981, 919.9412, -1454.1279, 2759.5063, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_cityhallInterior[387], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
-    object_cityhallInterior[388] = CreateDynamicObject(18981, 919.9412, -1454.1279, 2759.5063, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
-    SetDynamicObjectMaterial(object_cityhallInterior[388], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
-    object_cityhallInterior[389] = CreateDynamicObject(19464, 901.0841, -1473.3723, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[388] = CreateDynamicObject(19464, 901.0841, -1473.3723, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[388], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[389] = CreateDynamicObject(19464, 938.5737, -1473.3653, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[389], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[390] = CreateDynamicObject(19464, 938.5737, -1473.3653, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[390] = CreateDynamicObject(19464, 938.5836, -1470.4040, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[390], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[391] = CreateDynamicObject(19464, 938.5836, -1470.4040, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[391] = CreateDynamicObject(19464, 938.6038, -1466.2845, 2765.8708, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[391], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[392] = CreateDynamicObject(19464, 938.6038, -1466.2845, 2765.8708, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[392] = CreateDynamicObject(19464, 938.1936, -1456.9521, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[392], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[393] = CreateDynamicObject(19464, 938.1936, -1456.9521, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[393] = CreateDynamicObject(19464, 938.5936, -1455.4936, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[393], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[394] = CreateDynamicObject(19464, 938.5936, -1455.4936, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[394], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[395] = CreateDynamicObject(3858, 902.4608, -1476.0250, 2762.8793, 0.0000, 0.0000, 45.2999, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
-    SetDynamicObjectMaterial(object_cityhallInterior[395], 0, 1717, "cj_tv", "green_glass_64", 0xFF000000);
-    object_cityhallInterior[396] = CreateDynamicObject(3858, 938.1912, -1476.0000, 2762.8793, 0.0000, 0.0000, 45.2999, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ottosmash1
-    SetDynamicObjectMaterial(object_cityhallInterior[396], 0, 1717, "cj_tv", "green_glass_64", 0xFF000000);
-    object_cityhallInterior[397] = CreateDynamicObject(19464, 900.7233, -1475.9814, 2762.0214, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[394] = CreateDynamicObject(19464, 934.8055, -1476.1616, 2762.3205, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[394], 0, 14801, "lee_bdupsmain", "Bdup_Blinds", 0xFFFFFFFF);
+    object_cityhallInterior[395] = CreateDynamicObject(19464, 905.7351, -1476.1616, 2762.3205, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[395], 0, 14801, "lee_bdupsmain", "Bdup_Blinds", 0xFFFFFFFF);
+    object_cityhallInterior[396] = CreateDynamicObject(19464, 900.7233, -1475.9814, 2762.0214, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[396], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[397] = CreateDynamicObject(19464, 912.9534, -1475.9814, 2762.4321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[397], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[398] = CreateDynamicObject(19464, 912.9534, -1475.9814, 2762.4321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[398] = CreateDynamicObject(19464, 918.8842, -1475.9814, 2762.4321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[398], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[399] = CreateDynamicObject(19464, 918.8842, -1475.9814, 2762.4321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[399] = CreateDynamicObject(19464, 924.8151, -1475.9814, 2762.4321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[399], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[400] = CreateDynamicObject(19464, 924.8151, -1475.9814, 2762.4321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[400] = CreateDynamicObject(19464, 929.9545, -1475.9914, 2762.0214, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[400], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[401] = CreateDynamicObject(19464, 929.9545, -1475.9914, 2762.0214, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[401] = CreateDynamicObject(19464, 929.9545, -1475.9914, 2756.0769, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[401], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[402] = CreateDynamicObject(19464, 929.9545, -1475.9914, 2756.0769, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[402] = CreateDynamicObject(19464, 907.5247, -1475.9914, 2756.1970, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[402], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[403] = CreateDynamicObject(19464, 907.5247, -1475.9914, 2756.1970, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[403], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[404] = CreateDynamicObject(1753, 937.9417, -1468.2910, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    object_cityhallInterior[403] = CreateDynamicObject(1753, 937.9417, -1468.2910, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    SetDynamicObjectMaterial(object_cityhallInterior[403], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
+    object_cityhallInterior[404] = CreateDynamicObject(1753, 937.9417, -1459.7016, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
     SetDynamicObjectMaterial(object_cityhallInterior[404], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[405] = CreateDynamicObject(1753, 937.9417, -1459.7016, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    object_cityhallInterior[405] = CreateDynamicObject(1753, 937.9417, -1472.6518, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
     SetDynamicObjectMaterial(object_cityhallInterior[405], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[406] = CreateDynamicObject(1753, 937.9417, -1472.6518, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    object_cityhallInterior[406] = CreateDynamicObject(1753, 901.6710, -1475.1933, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
     SetDynamicObjectMaterial(object_cityhallInterior[406], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[407] = CreateDynamicObject(1753, 901.6710, -1475.1933, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    object_cityhallInterior[407] = CreateDynamicObject(1753, 901.6710, -1471.3133, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
     SetDynamicObjectMaterial(object_cityhallInterior[407], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[408] = CreateDynamicObject(1753, 901.6710, -1471.3133, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
-    SetDynamicObjectMaterial(object_cityhallInterior[408], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[409] = CreateDynamicObject(19464, 901.0640, -1470.4338, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[408] = CreateDynamicObject(19464, 901.0640, -1470.4338, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[408], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[409] = CreateDynamicObject(19464, 901.0139, -1461.3629, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[409], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[410] = CreateDynamicObject(19464, 901.0139, -1461.3629, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[410], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[411] = CreateDynamicObject(19786, 901.1464, -1470.2236, 2762.4023, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    object_cityhallInterior[410] = CreateDynamicObject(19786, 901.1464, -1470.2236, 2762.4023, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    SetDynamicObjectMaterial(object_cityhallInterior[410], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[410], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
+    object_cityhallInterior[411] = CreateDynamicObject(19786, 901.1464, -1474.1933, 2762.4023, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
     SetDynamicObjectMaterial(object_cityhallInterior[411], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[411], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[412] = CreateDynamicObject(19786, 901.1464, -1474.1933, 2762.4023, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    object_cityhallInterior[412] = CreateDynamicObject(19786, 901.1464, -1460.6839, 2762.4023, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
     SetDynamicObjectMaterial(object_cityhallInterior[412], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[412], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[413] = CreateDynamicObject(19786, 901.1464, -1460.6839, 2762.4023, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[413], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[413], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[414] = CreateDynamicObject(1753, 901.6710, -1461.7126, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
-    SetDynamicObjectMaterial(object_cityhallInterior[414], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[415] = CreateDynamicObject(19786, 938.5164, -1460.6839, 2762.4023, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    object_cityhallInterior[413] = CreateDynamicObject(1753, 901.6710, -1461.7126, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    SetDynamicObjectMaterial(object_cityhallInterior[413], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
+    object_cityhallInterior[414] = CreateDynamicObject(19786, 938.5164, -1460.6839, 2762.4023, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    SetDynamicObjectMaterial(object_cityhallInterior[414], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[414], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
+    object_cityhallInterior[415] = CreateDynamicObject(19786, 938.5164, -1469.3752, 2762.4023, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
     SetDynamicObjectMaterial(object_cityhallInterior[415], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[415], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[416] = CreateDynamicObject(19786, 938.5164, -1469.3752, 2762.4023, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    object_cityhallInterior[416] = CreateDynamicObject(19786, 938.5164, -1473.5050, 2762.4023, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
     SetDynamicObjectMaterial(object_cityhallInterior[416], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[416], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[417] = CreateDynamicObject(19786, 938.5164, -1473.5050, 2762.4023, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[417], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[417], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[418] = CreateDynamicObject(2002, 937.9525, -1471.5343, 2759.9567, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //water_coolnu
-    object_cityhallInterior[419] = CreateDynamicObject(2002, 901.6923, -1472.2650, 2759.9567, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //water_coolnu
-    object_cityhallInterior[420] = CreateDynamicObject(948, 901.5866, -1462.8619, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
-    object_cityhallInterior[421] = CreateDynamicObject(948, 901.5866, -1458.4813, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
-    object_cityhallInterior[422] = CreateDynamicObject(948, 937.9970, -1458.4813, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
-    object_cityhallInterior[423] = CreateDynamicObject(948, 937.9224, -1462.8619, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
-    object_cityhallInterior[424] = CreateDynamicObject(2010, 920.5430, -1457.4154, 2759.9716, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
+    object_cityhallInterior[417] = CreateDynamicObject(2002, 937.9525, -1471.5343, 2759.9567, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //water_coolnu
+    object_cityhallInterior[418] = CreateDynamicObject(2002, 901.6923, -1472.2650, 2759.9567, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //water_coolnu
+    object_cityhallInterior[419] = CreateDynamicObject(948, 901.5866, -1462.8619, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
+    object_cityhallInterior[420] = CreateDynamicObject(948, 901.5866, -1458.4813, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
+    object_cityhallInterior[421] = CreateDynamicObject(948, 937.9970, -1458.4813, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
+    object_cityhallInterior[422] = CreateDynamicObject(948, 937.9224, -1462.8619, 2759.9685, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Plant_Pot_10
+    object_cityhallInterior[423] = CreateDynamicObject(2010, 920.5430, -1457.4154, 2759.9716, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
+    SetDynamicObjectMaterial(object_cityhallInterior[423], 1, 6490, "tvstudio_law2", "tvstud03_LAw2", 0xFFFFFFFF);
+    object_cityhallInterior[424] = CreateDynamicObject(2010, 918.2318, -1457.4154, 2759.9716, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
     SetDynamicObjectMaterial(object_cityhallInterior[424], 1, 6490, "tvstudio_law2", "tvstud03_LAw2", 0xFFFFFFFF);
-    object_cityhallInterior[425] = CreateDynamicObject(2010, 918.2318, -1457.4154, 2759.9716, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
-    SetDynamicObjectMaterial(object_cityhallInterior[425], 1, 6490, "tvstudio_law2", "tvstud03_LAw2", 0xFFFFFFFF);
-    object_cityhallInterior[426] = CreateDynamicObject(19174, 920.0172, -1457.1037, 2760.9187, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    object_cityhallInterior[425] = CreateDynamicObject(19174, 920.0172, -1457.1037, 2760.9187, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[425], 0, "y", 90, "Wingdings", 25, 1, 0xFF000000, 0x0, 0);
+    SetDynamicObjectMaterial(object_cityhallInterior[425], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[426] = CreateDynamicObject(19174, 918.8164, -1457.0937, 2763.3608, 0.0000, -90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
     SetDynamicObjectMaterialText(object_cityhallInterior[426], 0, "y", 90, "Wingdings", 25, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_cityhallInterior[426], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[427] = CreateDynamicObject(19174, 918.8164, -1457.0937, 2763.3608, 0.0000, -90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[427], 0, "y", 90, "Wingdings", 25, 1, 0xFF000000, 0x0, 0);
+    object_cityhallInterior[427] = CreateDynamicObject(19174, 921.5076, -1457.1037, 2761.8898, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[427], 0, "__", 90, "Arial Black", 50, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_cityhallInterior[427], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[428] = CreateDynamicObject(19174, 921.5076, -1457.1037, 2761.8898, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    object_cityhallInterior[428] = CreateDynamicObject(19174, 919.6466, -1457.0937, 2761.8898, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
     SetDynamicObjectMaterialText(object_cityhallInterior[428], 0, "__", 90, "Arial Black", 50, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_cityhallInterior[428], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[429] = CreateDynamicObject(19174, 919.6466, -1457.0937, 2761.8898, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[429], 0, "__", 90, "Arial Black", 50, 1, 0xFF000000, 0x0, 0);
-    SetDynamicObjectMaterial(object_cityhallInterior[429], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[430] = CreateDynamicObject(19464, 915.5947, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[430], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[431] = CreateDynamicObject(1491, 921.8579, -1457.0078, 2760.0092, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    SetDynamicObjectMaterial(object_cityhallInterior[431], 0, 18008, "intclothesa", "CJ_VICT_DOOR2", 0xFFFFFFFF);
-    object_cityhallInterior[432] = CreateDynamicObject(19174, 920.1066, -1457.1335, 2761.4895, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[432], 0, "Herren", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
+    object_cityhallInterior[429] = CreateDynamicObject(19464, 915.5947, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[429], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
+    object_cityhallInterior[430] = CreateDynamicObject(1491, 921.8579, -1457.0078, 2760.0092, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    SetDynamicObjectMaterial(object_cityhallInterior[430], 0, 18008, "intclothesa", "CJ_VICT_DOOR2", 0xFFFFFFFF);
+    object_cityhallInterior[431] = CreateDynamicObject(19174, 920.1066, -1457.1335, 2761.4895, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[431], 0, "Herren", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
+    SetDynamicObjectMaterial(object_cityhallInterior[431], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[432] = CreateDynamicObject(19174, 920.4569, -1457.1135, 2762.3503, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[432], 0, "WC", 90, "Arial Black", 50, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_cityhallInterior[432], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[433] = CreateDynamicObject(19174, 920.4569, -1457.1135, 2762.3503, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[433], 0, "WC", 90, "Arial Black", 50, 1, 0xFF000000, 0x0, 0);
-    SetDynamicObjectMaterial(object_cityhallInterior[433], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[434] = CreateDynamicObject(1491, 915.2772, -1457.0078, 2760.0092, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    SetDynamicObjectMaterial(object_cityhallInterior[434], 0, 2878, "cj_vic", "CJ_VICT_DOOR", 0xFFFFFFFF);
-    object_cityhallInterior[435] = CreateDynamicObject(19464, 909.6546, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[435], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[436] = CreateDynamicObject(19464, 919.3026, -1456.9730, 2760.4577, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[436], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
-    object_cityhallInterior[437] = CreateDynamicObject(19464, 924.8046, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[433] = CreateDynamicObject(1491, 915.2772, -1457.0078, 2760.0092, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    SetDynamicObjectMaterial(object_cityhallInterior[433], 0, 2878, "cj_vic", "CJ_VICT_DOOR", 0xFFFFFFFF);
+    object_cityhallInterior[434] = CreateDynamicObject(19464, 909.6546, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[434], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
+    object_cityhallInterior[435] = CreateDynamicObject(19464, 919.3026, -1456.9730, 2760.4577, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[435], 0, 14847, "mp_policesf", "mp_cop_carpet", 0xFFFFFFFF);
+    object_cityhallInterior[436] = CreateDynamicObject(19464, 924.8046, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[436], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
+    object_cityhallInterior[437] = CreateDynamicObject(19464, 930.7351, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[437], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[438] = CreateDynamicObject(19464, 930.7351, -1475.9527, 2750.9528, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[438] = CreateDynamicObject(19464, 931.2553, -1475.6628, 2750.9528, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[438], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[439] = CreateDynamicObject(19464, 931.2553, -1475.6628, 2750.9528, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[439] = CreateDynamicObject(19464, 909.0150, -1475.6628, 2750.9528, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[439], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[440] = CreateDynamicObject(19464, 909.0150, -1475.6628, 2750.9528, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[440] = CreateDynamicObject(19464, 906.1853, -1472.7926, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[440], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[441] = CreateDynamicObject(19464, 906.1853, -1472.7926, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[441] = CreateDynamicObject(19464, 934.0755, -1472.7926, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[441], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[442] = CreateDynamicObject(19464, 934.0755, -1472.7926, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[442] = CreateDynamicObject(19464, 902.6057, -1456.9630, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[442], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[443] = CreateDynamicObject(19464, 902.6057, -1456.9630, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[443] = CreateDynamicObject(19464, 934.8853, -1464.3923, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[443], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[444] = CreateDynamicObject(19464, 934.8853, -1464.3923, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[444] = CreateDynamicObject(19464, 934.8853, -1458.4527, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[444], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[445] = CreateDynamicObject(19464, 934.8853, -1458.4527, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[445] = CreateDynamicObject(19464, 904.7053, -1458.9631, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[445], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[446] = CreateDynamicObject(19464, 904.7053, -1458.9631, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[446] = CreateDynamicObject(19464, 904.7053, -1469.7829, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[446], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[447] = CreateDynamicObject(19464, 904.7053, -1469.7829, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[447] = CreateDynamicObject(19464, 934.8853, -1470.3321, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[447], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[448] = CreateDynamicObject(19464, 934.8853, -1470.3321, 2750.9729, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[448] = CreateDynamicObject(19464, 910.9254, -1456.9630, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[448], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[449] = CreateDynamicObject(19464, 910.9254, -1456.9630, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[449] = CreateDynamicObject(19464, 936.8955, -1456.9630, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[449], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[450] = CreateDynamicObject(19464, 936.8955, -1456.9630, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[450] = CreateDynamicObject(19464, 930.4655, -1456.9630, 2750.9729, 0.0000, 0.0000, 89.8999, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[450], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[451] = CreateDynamicObject(19464, 930.4655, -1456.9630, 2750.9729, 0.0000, 0.0000, 89.8999, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[451] = CreateDynamicObject(19464, 901.8554, -1461.8431, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[451], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[452] = CreateDynamicObject(19464, 901.8554, -1461.8431, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[452] = CreateDynamicObject(19464, 901.8554, -1466.9239, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[452], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[453] = CreateDynamicObject(19464, 901.8554, -1466.9239, 2750.9729, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[453], 0, 5042, "bombshop_las", "greymetal", 0xFFFFFFFF);
-    object_cityhallInterior[454] = CreateDynamicObject(19089, 936.7622, -1476.0279, 2765.0139, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    object_cityhallInterior[453] = CreateDynamicObject(19089, 936.7622, -1476.0279, 2765.0139, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    SetDynamicObjectMaterial(object_cityhallInterior[453], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[454] = CreateDynamicObject(19089, 905.3505, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[454], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[455] = CreateDynamicObject(19089, 905.3505, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
-    SetDynamicObjectMaterial(object_cityhallInterior[455], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[456] = CreateDynamicObject(19464, 911.6925, -1448.0040, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[456], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[457] = CreateDynamicObject(19089, 934.6113, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    object_cityhallInterior[455] = CreateDynamicObject(19464, 911.6925, -1448.0040, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[455], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[456] = CreateDynamicObject(19089, 934.6113, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    SetDynamicObjectMaterial(object_cityhallInterior[456], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[457] = CreateDynamicObject(19089, 932.5114, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[457], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[458] = CreateDynamicObject(19089, 932.5114, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    object_cityhallInterior[458] = CreateDynamicObject(19089, 935.6959, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[458], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[459] = CreateDynamicObject(19089, 935.6959, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    object_cityhallInterior[459] = CreateDynamicObject(19089, 907.6110, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[459], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[460] = CreateDynamicObject(19089, 907.6110, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    object_cityhallInterior[460] = CreateDynamicObject(19089, 903.2706, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[460], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[461] = CreateDynamicObject(19089, 903.2706, -1476.0279, 2765.1140, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    object_cityhallInterior[461] = CreateDynamicObject(19089, 933.5557, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[461], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[462] = CreateDynamicObject(19089, 933.5557, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
-    SetDynamicObjectMaterial(object_cityhallInterior[462], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[463] = CreateDynamicObject(18981, 918.2313, -1463.8270, 2765.3820, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
-    SetDynamicObjectMaterial(object_cityhallInterior[463], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[464] = CreateDynamicObject(19464, 911.6925, -1453.9134, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[464], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[465] = CreateDynamicObject(18763, 911.5178, -1450.7408, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
+    object_cityhallInterior[462] = CreateDynamicObject(18981, 918.2313, -1463.8270, 2765.3820, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_cityhallInterior[462], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[463] = CreateDynamicObject(19464, 911.6925, -1453.9134, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[463], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[464] = CreateDynamicObject(18763, 911.5178, -1450.7408, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
+    SetDynamicObjectMaterial(object_cityhallInterior[464], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
+    object_cityhallInterior[465] = CreateDynamicObject(18763, 911.5178, -1454.4918, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
     SetDynamicObjectMaterial(object_cityhallInterior[465], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[466] = CreateDynamicObject(18763, 911.5178, -1454.4918, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
-    SetDynamicObjectMaterial(object_cityhallInterior[466], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[467] = CreateDynamicObject(2515, 912.4298, -1451.4028, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    object_cityhallInterior[466] = CreateDynamicObject(2515, 912.4298, -1451.4028, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    SetDynamicObjectMaterial(object_cityhallInterior[466], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[466], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
+    object_cityhallInterior[467] = CreateDynamicObject(2515, 912.4298, -1450.0821, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
     SetDynamicObjectMaterial(object_cityhallInterior[467], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[467], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
-    object_cityhallInterior[468] = CreateDynamicObject(2515, 912.4298, -1450.0821, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    object_cityhallInterior[468] = CreateDynamicObject(2515, 912.4298, -1453.8331, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
     SetDynamicObjectMaterial(object_cityhallInterior[468], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[468], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
-    object_cityhallInterior[469] = CreateDynamicObject(2515, 912.4298, -1453.8331, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    object_cityhallInterior[469] = CreateDynamicObject(2515, 912.4298, -1455.2136, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
     SetDynamicObjectMaterial(object_cityhallInterior[469], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[469], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
-    object_cityhallInterior[470] = CreateDynamicObject(2515, 912.4298, -1455.2136, 2761.0720, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
-    SetDynamicObjectMaterial(object_cityhallInterior[470], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[470], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
+    object_cityhallInterior[470] = CreateDynamicObject(19786, 926.8073, -1450.6240, 2762.2639, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    SetDynamicObjectMaterial(object_cityhallInterior[470], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
+    SetDynamicObjectMaterial(object_cityhallInterior[470], 1, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
     object_cityhallInterior[471] = CreateDynamicObject(19786, 911.7078, -1454.4040, 2762.2639, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
     SetDynamicObjectMaterial(object_cityhallInterior[471], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[471], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[472] = CreateDynamicObject(19786, 911.7078, -1454.4040, 2762.2639, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[472], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[472], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[473] = CreateDynamicObject(19089, 906.5056, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    SetDynamicObjectMaterial(object_cityhallInterior[471], 1, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
+    object_cityhallInterior[472] = CreateDynamicObject(19089, 906.5056, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    SetDynamicObjectMaterial(object_cityhallInterior[472], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[473] = CreateDynamicObject(19089, 904.2954, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[473], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[474] = CreateDynamicObject(19089, 904.2954, -1476.0279, 2764.8884, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
-    SetDynamicObjectMaterial(object_cityhallInterior[474], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[475] = CreateDynamicObject(19786, 911.7078, -1450.7137, 2762.2639, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    object_cityhallInterior[474] = CreateDynamicObject(19786, 911.7078, -1450.7137, 2762.2639, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    SetDynamicObjectMaterial(object_cityhallInterior[474], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
+    SetDynamicObjectMaterial(object_cityhallInterior[474], 1, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
+    object_cityhallInterior[475] = CreateDynamicObject(19786, 926.8577, -1454.5439, 2762.2639, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
     SetDynamicObjectMaterial(object_cityhallInterior[475], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[475], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[476] = CreateDynamicObject(19786, 911.7078, -1450.7137, 2762.2639, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[476], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[476], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[477] = CreateDynamicObject(2741, 911.9041, -1452.5372, 2761.9111, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_SOAP_DISP
-    object_cityhallInterior[478] = CreateDynamicObject(11706, 912.6079, -1452.6064, 2759.8071, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SmallWasteBin1
-    object_cityhallInterior[479] = CreateDynamicObject(11707, 911.9008, -1448.4228, 2760.9423, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
-    object_cityhallInterior[480] = CreateDynamicObject(11707, 913.8812, -1456.6722, 2760.9423, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
-    object_cityhallInterior[481] = CreateDynamicObject(19464, 911.5319, -1456.8735, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[475], 1, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
+    object_cityhallInterior[476] = CreateDynamicObject(2741, 911.9041, -1452.5372, 2761.9111, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_SOAP_DISP
+    object_cityhallInterior[477] = CreateDynamicObject(11706, 912.6079, -1452.6064, 2759.8071, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SmallWasteBin1
+    object_cityhallInterior[478] = CreateDynamicObject(11707, 911.9008, -1448.4228, 2760.9423, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
+    object_cityhallInterior[479] = CreateDynamicObject(11707, 913.8812, -1456.6722, 2760.9423, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
+    object_cityhallInterior[480] = CreateDynamicObject(19464, 911.5319, -1456.8735, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[480], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[481] = CreateDynamicObject(19464, 917.4118, -1456.8935, 2765.9201, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[481], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[482] = CreateDynamicObject(19464, 917.4118, -1456.8935, 2765.9201, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[482] = CreateDynamicObject(19464, 923.3214, -1456.8935, 2765.9201, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[482], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[483] = CreateDynamicObject(19464, 923.3214, -1456.8935, 2765.9201, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[483] = CreateDynamicObject(19464, 919.2819, -1456.8735, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[483], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[484] = CreateDynamicObject(19464, 919.2819, -1456.8735, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[484] = CreateDynamicObject(19387, 922.6309, -1456.8415, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
     SetDynamicObjectMaterial(object_cityhallInterior[484], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[485] = CreateDynamicObject(19387, 922.6309, -1456.8415, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
+    object_cityhallInterior[485] = CreateDynamicObject(19387, 916.0405, -1456.8415, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
     SetDynamicObjectMaterial(object_cityhallInterior[485], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[486] = CreateDynamicObject(19387, 916.0405, -1456.8415, 2761.6650, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
+    object_cityhallInterior[486] = CreateDynamicObject(19464, 919.2819, -1454.2237, 2762.5297, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[486], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[487] = CreateDynamicObject(19464, 919.2819, -1454.2237, 2762.5297, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[487] = CreateDynamicObject(19464, 919.2819, -1449.1544, 2762.5297, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[487], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[488] = CreateDynamicObject(19464, 919.2819, -1449.1544, 2762.5297, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[488], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[489] = CreateDynamicObject(2602, 918.8112, -1454.3535, 2760.4091, 0.0000, 0.0000, -92.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Police_cell_Toilet
-    object_cityhallInterior[490] = CreateDynamicObject(2602, 918.7774, -1452.1710, 2760.4091, 0.0000, 0.0000, -92.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Police_cell_Toilet
-    object_cityhallInterior[491] = CreateDynamicObject(2602, 918.7683, -1450.1290, 2760.4091, 0.0000, 0.0000, -92.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Police_cell_Toilet
-    object_cityhallInterior[492] = CreateDynamicObject(2528, 917.0606, -1445.8050, 2760.0144, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
-    object_cityhallInterior[493] = CreateDynamicObject(19464, 915.8820, -1445.1855, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[488] = CreateDynamicObject(2602, 918.8112, -1454.3535, 2760.4091, 0.0000, 0.0000, -92.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Police_cell_Toilet
+    object_cityhallInterior[489] = CreateDynamicObject(2602, 918.7774, -1452.1710, 2760.4091, 0.0000, 0.0000, -92.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Police_cell_Toilet
+    object_cityhallInterior[490] = CreateDynamicObject(2602, 918.7683, -1450.1290, 2760.4091, 0.0000, 0.0000, -92.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Police_cell_Toilet
+    object_cityhallInterior[491] = CreateDynamicObject(2528, 917.0606, -1445.8050, 2760.0144, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
+    object_cityhallInterior[492] = CreateDynamicObject(19464, 915.8820, -1445.1855, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[492], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[493] = CreateDynamicObject(19464, 912.8524, -1444.4643, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[493], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[494] = CreateDynamicObject(19464, 912.8524, -1444.4643, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[494] = CreateDynamicObject(19464, 915.5230, -1444.4941, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[494], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[495] = CreateDynamicObject(19464, 915.5230, -1444.4941, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[495], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[496] = CreateDynamicObject(1491, 916.2495, -1447.5289, 2759.9321, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    object_cityhallInterior[497] = CreateDynamicObject(1491, 913.3394, -1447.5289, 2759.9321, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    object_cityhallInterior[498] = CreateDynamicObject(19464, 920.3118, -1447.4841, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[495] = CreateDynamicObject(1491, 916.2495, -1447.5289, 2759.9321, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    object_cityhallInterior[496] = CreateDynamicObject(1491, 913.3394, -1447.5289, 2759.9321, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    object_cityhallInterior[497] = CreateDynamicObject(19464, 920.3118, -1447.4841, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[497], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[498] = CreateDynamicObject(19464, 910.8120, -1447.4841, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[498], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[499] = CreateDynamicObject(19464, 910.8120, -1447.4841, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[499] = CreateDynamicObject(19464, 915.2119, -1447.4741, 2765.3906, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[499], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[500] = CreateDynamicObject(19464, 915.2119, -1447.4741, 2765.3906, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[500] = CreateDynamicObject(19464, 918.5029, -1444.4145, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[500], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[501] = CreateDynamicObject(19464, 918.5029, -1444.4145, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[501] = CreateDynamicObject(19430, 915.5341, -1447.5362, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[501], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[502] = CreateDynamicObject(19430, 915.5341, -1447.5362, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[502], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[503] = CreateDynamicObject(2528, 914.2509, -1445.7755, 2760.0144, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
-    object_cityhallInterior[504] = CreateDynamicObject(18075, 915.5850, -1450.0450, 2764.8454, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lightD
-    object_cityhallInterior[505] = CreateDynamicObject(16779, 915.4411, -1452.3680, 2764.8708, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light02
-    object_cityhallInterior[506] = CreateDynamicObject(19814, 911.8272, -1452.5699, 2761.1025, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[507] = CreateDynamicObject(19814, 911.8272, -1452.5699, 2761.2126, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[508] = CreateDynamicObject(19814, 911.8272, -1452.5699, 2760.9824, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[509] = CreateDynamicObject(19464, 926.8728, -1453.9134, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[502] = CreateDynamicObject(2528, 914.2509, -1445.7755, 2760.0144, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
+    object_cityhallInterior[503] = CreateDynamicObject(18075, 915.5850, -1450.0450, 2764.8454, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lightD
+    object_cityhallInterior[504] = CreateDynamicObject(16779, 915.4411, -1452.3680, 2764.8708, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light02
+    object_cityhallInterior[505] = CreateDynamicObject(19814, 911.8272, -1452.5699, 2761.1025, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[506] = CreateDynamicObject(19814, 911.8272, -1452.5699, 2761.2126, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[507] = CreateDynamicObject(19814, 911.8272, -1452.5699, 2760.9824, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[508] = CreateDynamicObject(19464, 926.8728, -1453.9134, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[508], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[509] = CreateDynamicObject(19464, 926.7316, -1456.8741, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[509], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[510] = CreateDynamicObject(19464, 926.7316, -1456.8741, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[510], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[511] = CreateDynamicObject(11707, 924.6409, -1456.6822, 2760.9423, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
-    object_cityhallInterior[512] = CreateDynamicObject(18763, 927.2877, -1454.4918, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
+    object_cityhallInterior[510] = CreateDynamicObject(11707, 924.6409, -1456.6822, 2760.9423, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
+    object_cityhallInterior[511] = CreateDynamicObject(18763, 927.2877, -1454.4918, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
+    SetDynamicObjectMaterial(object_cityhallInterior[511], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
+    object_cityhallInterior[512] = CreateDynamicObject(18763, 927.2877, -1450.5815, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
     SetDynamicObjectMaterial(object_cityhallInterior[512], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[513] = CreateDynamicObject(18763, 927.2877, -1450.5815, 2758.4553, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete3mx3mx5m
-    SetDynamicObjectMaterial(object_cityhallInterior[513], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[514] = CreateDynamicObject(19464, 926.8828, -1448.0235, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[514], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[515] = CreateDynamicObject(2515, 926.2197, -1455.2136, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    object_cityhallInterior[513] = CreateDynamicObject(19464, 926.8828, -1448.0235, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[513], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[514] = CreateDynamicObject(2515, 926.2197, -1455.2136, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    SetDynamicObjectMaterial(object_cityhallInterior[514], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[514], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
+    object_cityhallInterior[515] = CreateDynamicObject(2515, 926.2197, -1453.7335, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
     SetDynamicObjectMaterial(object_cityhallInterior[515], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[515], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
-    object_cityhallInterior[516] = CreateDynamicObject(2515, 926.2197, -1453.7335, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    object_cityhallInterior[516] = CreateDynamicObject(2515, 926.2197, -1451.2635, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
     SetDynamicObjectMaterial(object_cityhallInterior[516], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[516], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
-    object_cityhallInterior[517] = CreateDynamicObject(2515, 926.2197, -1451.2635, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
+    object_cityhallInterior[517] = CreateDynamicObject(2515, 926.2197, -1449.8236, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
     SetDynamicObjectMaterial(object_cityhallInterior[517], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[517], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
-    object_cityhallInterior[518] = CreateDynamicObject(2515, 926.2197, -1449.8236, 2761.0720, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_BS_SINK
-    SetDynamicObjectMaterial(object_cityhallInterior[518], 0, 11150, "ab_acc_control", "ws_shipmetal5", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[518], 1, 11301, "carshow_sfse", "ws_rollerdoor_silver", 0xFFFFFFFF);
-    object_cityhallInterior[519] = CreateDynamicObject(11706, 926.1981, -1452.5063, 2759.8071, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SmallWasteBin1
-    object_cityhallInterior[520] = CreateDynamicObject(2741, 926.6439, -1452.5472, 2761.9111, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_SOAP_DISP
-    object_cityhallInterior[521] = CreateDynamicObject(19786, 926.8577, -1454.5439, 2762.2639, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[521], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[521], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[522] = CreateDynamicObject(19786, 926.8073, -1454.5439, 2762.2639, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[522], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[522], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[523] = CreateDynamicObject(19786, 926.8073, -1450.6240, 2762.2639, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[523], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[523], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[524] = CreateDynamicObject(19786, 926.7675, -1450.6240, 2762.2639, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[524], 0, 10765, "airportgnd_sfse", "white", 0xFF5E7072);
-    SetDynamicObjectMaterial(object_cityhallInterior[524], 1, 18065, "ab_sfammumain", "shelf_glas", 0xFFFFFFFF);
-    object_cityhallInterior[525] = CreateDynamicObject(11707, 926.6912, -1448.4228, 2760.9423, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
-    object_cityhallInterior[526] = CreateDynamicObject(19814, 926.7271, -1452.5400, 2760.9824, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[527] = CreateDynamicObject(19814, 926.7271, -1452.5400, 2761.1225, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[528] = CreateDynamicObject(19814, 926.7271, -1452.5400, 2761.2626, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[529] = CreateDynamicObject(2528, 919.8004, -1449.7551, 2760.0144, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
-    object_cityhallInterior[530] = CreateDynamicObject(2528, 919.8004, -1452.9956, 2760.0144, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
-    object_cityhallInterior[531] = CreateDynamicObject(2528, 919.8004, -1455.6451, 2760.0144, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
-    object_cityhallInterior[532] = CreateDynamicObject(19464, 925.4016, -1447.4841, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[532], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[533] = CreateDynamicObject(1753, 931.0812, -1470.3409, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
-    SetDynamicObjectMaterial(object_cityhallInterior[533], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[534] = CreateDynamicObject(1491, 921.5900, -1450.5792, 2759.9321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    object_cityhallInterior[535] = CreateDynamicObject(1491, 921.5869, -1453.6593, 2759.9321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    object_cityhallInterior[536] = CreateDynamicObject(1491, 921.5869, -1456.7395, 2759.9321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    object_cityhallInterior[537] = CreateDynamicObject(19430, 921.5739, -1454.4365, 2760.6806, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[518] = CreateDynamicObject(11706, 926.1981, -1452.5063, 2759.8071, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SmallWasteBin1
+    object_cityhallInterior[519] = CreateDynamicObject(2741, 926.6439, -1452.5472, 2761.9111, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_SOAP_DISP
+    object_cityhallInterior[520] = CreateDynamicObject(19174, 929.8189, -1457.1361, 2763.1921, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[520], 0, "E.G.", 90, "Arial Black", 20, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterial(object_cityhallInterior[520], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[521] = CreateDynamicObject(11707, 926.6912, -1448.4228, 2760.9423, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //TowelRack1
+    object_cityhallInterior[522] = CreateDynamicObject(19814, 926.7271, -1452.5400, 2760.9824, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[523] = CreateDynamicObject(19814, 926.7271, -1452.5400, 2761.1225, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[524] = CreateDynamicObject(19814, 926.7271, -1452.5400, 2761.2626, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[525] = CreateDynamicObject(2528, 919.8004, -1449.7551, 2760.0144, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
+    object_cityhallInterior[526] = CreateDynamicObject(2528, 919.8004, -1452.9956, 2760.0144, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
+    object_cityhallInterior[527] = CreateDynamicObject(2528, 919.8004, -1455.6451, 2760.0144, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_TOILET3
+    object_cityhallInterior[528] = CreateDynamicObject(19464, 925.4016, -1447.4841, 2762.5297, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[528], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[529] = CreateDynamicObject(1753, 931.0811, -1470.3409, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    SetDynamicObjectMaterial(object_cityhallInterior[529], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
+    object_cityhallInterior[530] = CreateDynamicObject(1491, 921.5900, -1450.5792, 2759.9321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    object_cityhallInterior[531] = CreateDynamicObject(1491, 921.5869, -1453.6593, 2759.9321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    object_cityhallInterior[532] = CreateDynamicObject(1491, 921.5869, -1456.7395, 2759.9321, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    object_cityhallInterior[533] = CreateDynamicObject(19430, 921.5739, -1454.4365, 2760.6806, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[533], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[534] = CreateDynamicObject(19430, 920.7645, -1454.4365, 2760.6806, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[534], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[535] = CreateDynamicObject(19430, 919.9735, -1451.3664, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[535], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[536] = CreateDynamicObject(19430, 920.7636, -1451.3763, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[536], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[537] = CreateDynamicObject(19430, 921.5739, -1448.2961, 2760.6806, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[537], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[538] = CreateDynamicObject(19430, 920.7645, -1454.4365, 2760.6806, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[538] = CreateDynamicObject(19430, 920.1641, -1454.4265, 2760.6806, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[538], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[539] = CreateDynamicObject(19430, 919.9735, -1451.3664, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[539] = CreateDynamicObject(19430, 921.5739, -1451.3564, 2760.6806, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[539], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[540] = CreateDynamicObject(19430, 920.7636, -1451.3763, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[540] = CreateDynamicObject(19430, 920.7636, -1448.4566, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[540], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[541] = CreateDynamicObject(19430, 921.5739, -1448.2961, 2760.6806, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[541] = CreateDynamicObject(19430, 920.1535, -1448.4565, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[541], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[542] = CreateDynamicObject(19430, 920.1641, -1454.4265, 2760.6806, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[542] = CreateDynamicObject(19464, 921.5219, -1449.1544, 2765.3295, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[542], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[543] = CreateDynamicObject(19430, 921.5739, -1451.3564, 2760.6806, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[543] = CreateDynamicObject(19464, 921.5020, -1454.2047, 2765.3295, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[543], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[544] = CreateDynamicObject(19430, 920.7636, -1448.4567, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[544], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[545] = CreateDynamicObject(19430, 920.1535, -1448.4565, 2760.7014, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[545], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[546] = CreateDynamicObject(19464, 921.5219, -1449.1544, 2765.3295, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[546], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[547] = CreateDynamicObject(19464, 921.5020, -1454.2047, 2765.3295, 90.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[547], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[548] = CreateDynamicObject(18075, 926.6956, -1450.3454, 2764.8454, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lightD
-    object_cityhallInterior[549] = CreateDynamicObject(16779, 923.8812, -1452.3680, 2764.8708, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light02
-    object_cityhallInterior[550] = CreateDynamicObject(19175, 924.2739, -1447.6396, 2762.4118, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterial(object_cityhallInterior[550], 0, 2266, "picture_frame", "CJ_PAINTING18", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[550], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[551] = CreateDynamicObject(19089, 930.4857, -1451.8974, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
-    SetDynamicObjectMaterial(object_cityhallInterior[551], 0, 1560, "7_11_door", "cj_sheetmetal2", 0xFFFFFFFF);
-    object_cityhallInterior[552] = CreateDynamicObject(19089, 930.4857, -1459.2679, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    object_cityhallInterior[544] = CreateDynamicObject(18075, 926.6956, -1450.3454, 2764.8454, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lightD
+    object_cityhallInterior[545] = CreateDynamicObject(16779, 923.8812, -1452.3680, 2764.8708, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light02
+    object_cityhallInterior[546] = CreateDynamicObject(19175, 924.2739, -1447.6396, 2762.4118, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+    SetDynamicObjectMaterial(object_cityhallInterior[546], 0, 2266, "picture_frame", "CJ_PAINTING18", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[546], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[547] = CreateDynamicObject(19089, 930.4857, -1451.8974, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    SetDynamicObjectMaterial(object_cityhallInterior[547], 0, 1560, "7_11_door", "cj_sheetmetal2", 0xFFFFFFFF);
+    object_cityhallInterior[548] = CreateDynamicObject(19089, 930.4857, -1459.2679, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    SetDynamicObjectMaterial(object_cityhallInterior[548], 0, 1560, "7_11_door", "cj_sheetmetal2", 0xFFFFFFFF);
+    object_cityhallInterior[549] = CreateDynamicObject(1753, 931.1015, -1474.7010, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    SetDynamicObjectMaterial(object_cityhallInterior[549], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
+    object_cityhallInterior[550] = CreateDynamicObject(1753, 909.3314, -1472.6711, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    SetDynamicObjectMaterial(object_cityhallInterior[550], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
+    object_cityhallInterior[551] = CreateDynamicObject(1753, 909.3314, -1468.1905, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
+    SetDynamicObjectMaterial(object_cityhallInterior[551], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
+    object_cityhallInterior[552] = CreateDynamicObject(19089, 909.8756, -1451.8974, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_cityhallInterior[552], 0, 1560, "7_11_door", "cj_sheetmetal2", 0xFFFFFFFF);
-    object_cityhallInterior[553] = CreateDynamicObject(1753, 931.1015, -1474.7010, 2759.9807, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
-    SetDynamicObjectMaterial(object_cityhallInterior[553], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[554] = CreateDynamicObject(1753, 909.3314, -1472.6711, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
-    SetDynamicObjectMaterial(object_cityhallInterior[554], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[555] = CreateDynamicObject(1753, 909.3314, -1468.1905, 2759.9807, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SWANK_COUCH_1
-    SetDynamicObjectMaterial(object_cityhallInterior[555], 0, 1726, "mrk_couches2", "kb_sofa5_256", 0xFFFFFFFF);
-    object_cityhallInterior[556] = CreateDynamicObject(19089, 909.8756, -1451.8974, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
-    SetDynamicObjectMaterial(object_cityhallInterior[556], 0, 1560, "7_11_door", "cj_sheetmetal2", 0xFFFFFFFF);
-    object_cityhallInterior[557] = CreateDynamicObject(19089, 909.8756, -1459.2375, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
-    SetDynamicObjectMaterial(object_cityhallInterior[557], 0, 1560, "7_11_door", "cj_sheetmetal2", 0xFFFFFFFF);
-    object_cityhallInterior[558] = CreateDynamicObject(19174, 901.1901, -1465.8480, 2762.9099, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    object_cityhallInterior[553] = CreateDynamicObject(19089, 909.8756, -1459.2375, 2759.9978, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
+    SetDynamicObjectMaterial(object_cityhallInterior[553], 0, 1560, "7_11_door", "cj_sheetmetal2", 0xFFFFFFFF);
+    object_cityhallInterior[554] = CreateDynamicObject(19174, 901.1901, -1465.8480, 2762.9099, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[554], 0, "___________", 90, "Arial", 24, 1, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterial(object_cityhallInterior[554], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[555] = CreateDynamicObject(19174, 901.1901, -1465.8480, 2763.1000, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[555], 0, "___________", 90, "Arial", 24, 1, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterial(object_cityhallInterior[555], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[556] = CreateDynamicObject(19174, 938.4401, -1465.8480, 2763.1000, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[556], 0, "___________", 90, "Arial", 24, 1, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterial(object_cityhallInterior[556], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[557] = CreateDynamicObject(19174, 938.4398, -1465.8580, 2762.9018, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[557], 0, "Personalverwaltung", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterial(object_cityhallInterior[557], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[558] = CreateDynamicObject(19174, 938.4503, -1465.8480, 2762.9299, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
     SetDynamicObjectMaterialText(object_cityhallInterior[558], 0, "___________", 90, "Arial", 24, 1, 0xFF000000, 0x0, 1);
     SetDynamicObjectMaterial(object_cityhallInterior[558], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[559] = CreateDynamicObject(19174, 901.1901, -1465.8480, 2763.1000, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[559], 0, "___________", 90, "Arial", 24, 1, 0xFF000000, 0x0, 1);
-    SetDynamicObjectMaterial(object_cityhallInterior[559], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[560] = CreateDynamicObject(19174, 938.4402, -1465.8480, 2763.1000, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[560], 0, "___________", 90, "Arial", 24, 1, 0xFF000000, 0x0, 1);
-    SetDynamicObjectMaterial(object_cityhallInterior[560], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[561] = CreateDynamicObject(19174, 938.4398, -1465.8580, 2762.9018, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[561], 0, "Personalverwaltung", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
-    SetDynamicObjectMaterial(object_cityhallInterior[561], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[562] = CreateDynamicObject(19174, 938.4504, -1465.8480, 2762.9299, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[562], 0, "___________", 90, "Arial", 24, 1, 0xFF000000, 0x0, 1);
-    SetDynamicObjectMaterial(object_cityhallInterior[562], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[563] = CreateDynamicObject(1491, 938.5797, -1465.1302, 2760.0092, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
-    SetDynamicObjectMaterial(object_cityhallInterior[563], 0, 1569, "adam_v_doort", "ws_guardhousedoor", 0xFFFFFFFF);
-    object_cityhallInterior[564] = CreateDynamicObject(1536, 901.1024, -1465.1301, 2759.9863, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorEXT15
-    SetDynamicObjectMaterial(object_cityhallInterior[564], 0, 1569, "adam_v_doort", "ws_guardhousedoor", 0xFFFFFFFF);
-    object_cityhallInterior[565] = CreateDynamicObject(19814, 908.2202, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[566] = CreateDynamicObject(19814, 908.4503, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[567] = CreateDynamicObject(19814, 902.2800, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[568] = CreateDynamicObject(19814, 902.5399, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[569] = CreateDynamicObject(19814, 901.1403, -1462.3841, 2760.3098, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[570] = CreateDynamicObject(19814, 901.1604, -1458.9731, 2760.3098, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[571] = CreateDynamicObject(19814, 901.1903, -1468.3935, 2760.3098, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[572] = CreateDynamicObject(19814, 938.4500, -1459.0124, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[573] = CreateDynamicObject(19814, 938.4500, -1462.3730, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[574] = CreateDynamicObject(19814, 938.4500, -1471.0437, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[575] = CreateDynamicObject(19814, 938.4500, -1472.0240, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[576] = CreateDynamicObject(19814, 936.9995, -1475.8741, 2760.3098, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[577] = CreateDynamicObject(19814, 937.2398, -1475.8741, 2760.3098, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[578] = CreateDynamicObject(2961, 904.8776, -1457.0854, 2761.3278, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break
-    object_cityhallInterior[579] = CreateDynamicObject(2961, 934.5474, -1457.0854, 2761.3278, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break
-    object_cityhallInterior[580] = CreateDynamicObject(2962, 934.5465, -1457.0898, 2761.3232, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break_glass
-    object_cityhallInterior[581] = CreateDynamicObject(2962, 904.8767, -1457.0898, 2761.3232, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break_glass
-    object_cityhallInterior[582] = CreateDynamicObject(19826, 917.0244, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
-    SetDynamicObjectMaterial(object_cityhallInterior[582], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
-    object_cityhallInterior[583] = CreateDynamicObject(19826, 917.1646, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
-    SetDynamicObjectMaterial(object_cityhallInterior[583], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
-    object_cityhallInterior[584] = CreateDynamicObject(19826, 923.6148, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
-    SetDynamicObjectMaterial(object_cityhallInterior[584], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
-    object_cityhallInterior[585] = CreateDynamicObject(19826, 923.8048, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
-    SetDynamicObjectMaterial(object_cityhallInterior[585], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
-    object_cityhallInterior[586] = CreateDynamicObject(19814, 913.2304, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[587] = CreateDynamicObject(19814, 916.9713, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[588] = CreateDynamicObject(19814, 923.0114, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[589] = CreateDynamicObject(19814, 926.5117, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[590] = CreateDynamicObject(19814, 918.1419, -1462.6749, 2753.4748, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[591] = CreateDynamicObject(19814, 918.5722, -1462.6749, 2753.4748, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
-    object_cityhallInterior[592] = CreateDynamicObject(19786, 906.7141, -1472.8266, 2755.8620, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[592], 0, 14570, "traidaqua", "ab_tv", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[592], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[593] = CreateDynamicObject(19786, 932.9738, -1472.8266, 2755.8620, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
-    SetDynamicObjectMaterial(object_cityhallInterior[593], 0, 14570, "traidaqua", "ab_tv", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[593], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
-    object_cityhallInterior[594] = CreateDynamicObject(19387, 938.6717, -1465.9105, 2761.6650, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
-    SetDynamicObjectMaterial(object_cityhallInterior[594], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[595] = CreateDynamicObject(19464, 938.6436, -1470.4040, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[595], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[596] = CreateDynamicObject(19464, 938.6436, -1461.3641, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[596], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[597] = CreateDynamicObject(19464, 938.6338, -1466.0638, 2765.7199, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[597], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[598] = CreateDynamicObject(19430, 944.8953, -1468.0417, 2759.9421, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    object_cityhallInterior[559] = CreateDynamicObject(1491, 938.5797, -1465.1302, 2760.0092, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorINT01
+    SetDynamicObjectMaterial(object_cityhallInterior[559], 0, 1569, "adam_v_doort", "ws_guardhousedoor", 0xFFFFFFFF);
+    object_cityhallInterior[560] = CreateDynamicObject(1536, 901.1024, -1465.1301, 2759.9863, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gen_doorEXT15
+    SetDynamicObjectMaterial(object_cityhallInterior[560], 0, 1569, "adam_v_doort", "ws_guardhousedoor", 0xFFFFFFFF);
+    object_cityhallInterior[561] = CreateDynamicObject(19814, 908.2202, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[562] = CreateDynamicObject(19814, 908.4503, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[563] = CreateDynamicObject(19814, 902.2800, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[564] = CreateDynamicObject(19814, 902.5399, -1475.8642, 2760.3498, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[565] = CreateDynamicObject(19814, 901.1403, -1462.3841, 2760.3098, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[566] = CreateDynamicObject(19814, 901.1604, -1458.9731, 2760.3098, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[567] = CreateDynamicObject(19814, 901.1903, -1468.3935, 2760.3098, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[568] = CreateDynamicObject(19814, 938.4500, -1459.0124, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[569] = CreateDynamicObject(19814, 938.4500, -1462.3730, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[570] = CreateDynamicObject(19814, 938.4500, -1471.0437, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[571] = CreateDynamicObject(19814, 938.4500, -1472.0240, 2760.3098, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[572] = CreateDynamicObject(19814, 936.9995, -1475.8741, 2760.3098, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[573] = CreateDynamicObject(19814, 937.2398, -1475.8741, 2760.3098, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[574] = CreateDynamicObject(2961, 904.8776, -1457.0854, 2761.3278, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break
+    object_cityhallInterior[575] = CreateDynamicObject(2961, 934.5474, -1457.0854, 2761.3278, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break
+    object_cityhallInterior[576] = CreateDynamicObject(2962, 934.5465, -1457.0898, 2761.3232, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break_glass
+    object_cityhallInterior[577] = CreateDynamicObject(2962, 904.8767, -1457.0898, 2761.3232, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break_glass
+    object_cityhallInterior[578] = CreateDynamicObject(19826, 917.0244, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
+    SetDynamicObjectMaterial(object_cityhallInterior[578], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
+    object_cityhallInterior[579] = CreateDynamicObject(19826, 917.1646, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
+    SetDynamicObjectMaterial(object_cityhallInterior[579], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
+    object_cityhallInterior[580] = CreateDynamicObject(19826, 923.6148, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
+    SetDynamicObjectMaterial(object_cityhallInterior[580], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
+    object_cityhallInterior[581] = CreateDynamicObject(19826, 923.8048, -1456.6499, 2761.3168, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LightSwitch1
+    SetDynamicObjectMaterial(object_cityhallInterior[581], 0, 14706, "labig2int2", "lightswitch01_int", 0xFFFFFFFF);
+    object_cityhallInterior[582] = CreateDynamicObject(19814, 913.2304, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[583] = CreateDynamicObject(19814, 916.9713, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[584] = CreateDynamicObject(19814, 923.0114, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[585] = CreateDynamicObject(19814, 926.5117, -1475.8453, 2753.5849, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[586] = CreateDynamicObject(19814, 918.1419, -1462.6749, 2753.4748, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[587] = CreateDynamicObject(19814, 918.5722, -1462.6749, 2753.4748, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ElectricalOutlet2
+    object_cityhallInterior[588] = CreateDynamicObject(19786, 906.7141, -1472.8266, 2755.8620, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    SetDynamicObjectMaterial(object_cityhallInterior[588], 0, 14570, "traidaqua", "ab_tv", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[588], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
+    object_cityhallInterior[589] = CreateDynamicObject(19786, 932.9738, -1472.8266, 2755.8620, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //LCDTVBig1
+    SetDynamicObjectMaterial(object_cityhallInterior[589], 0, 14570, "traidaqua", "ab_tv", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[589], 1, 14571, "chinese_furn", "ab_tv_noise", 0xFFFFFFFF);
+    object_cityhallInterior[590] = CreateDynamicObject(19387, 938.6716, -1465.9105, 2761.6650, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall035
+    SetDynamicObjectMaterial(object_cityhallInterior[590], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[591] = CreateDynamicObject(19464, 938.6436, -1470.4040, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[591], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[592] = CreateDynamicObject(19464, 938.6436, -1461.3641, 2762.5297, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[592], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[593] = CreateDynamicObject(19464, 938.6337, -1466.0638, 2765.7199, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[593], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[594] = CreateDynamicObject(19430, 944.8953, -1468.0417, 2759.9421, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[594], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[595] = CreateDynamicObject(18762, 944.7965, -1465.6184, 2760.4494, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx1mx5m
+    SetDynamicObjectMaterial(object_cityhallInterior[595], 0, 10765, "airportgnd_sfse", "white", 0xFF3B4E78);
+    object_cityhallInterior[596] = CreateDynamicObject(19430, 944.8953, -1463.2016, 2759.9421, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[596], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[597] = CreateDynamicObject(19430, 944.8953, -1465.6627, 2759.9421, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[597], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[598] = CreateDynamicObject(19430, 944.3754, -1466.4621, 2760.1323, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
     SetDynamicObjectMaterial(object_cityhallInterior[598], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[599] = CreateDynamicObject(18762, 944.7965, -1465.6184, 2760.4494, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx1mx5m
-    SetDynamicObjectMaterial(object_cityhallInterior[599], 0, 10765, "airportgnd_sfse", "white", 0xFF3B4E78);
-    object_cityhallInterior[600] = CreateDynamicObject(19430, 944.8953, -1463.2016, 2759.9421, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[600], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[601] = CreateDynamicObject(19430, 944.8953, -1465.6627, 2759.9421, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[601], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[602] = CreateDynamicObject(19430, 944.3754, -1466.4621, 2760.1323, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[602], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[603] = CreateDynamicObject(19430, 944.3754, -1464.9720, 2760.1323, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[603], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[604] = CreateDynamicObject(1714, 946.6273, -1466.6816, 2759.9899, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //kb_swivelchair1
-    object_cityhallInterior[605] = CreateDynamicObject(19175, 944.2650, -1465.4127, 2759.8366, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_cityhallInterior[605], 0, "Schalter l", 90, "Arial", 20, 1, 0xFFFFFFFF, 0x0, 0);
-    SetDynamicObjectMaterial(object_cityhallInterior[605], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[606] = CreateDynamicObject(19175, 944.2650, -1467.7425, 2759.8366, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_cityhallInterior[606], 0, "Schalter ll", 90, "Arial", 20, 1, 0xFFFFFFFF, 0x0, 0);
-    SetDynamicObjectMaterial(object_cityhallInterior[606], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[607] = CreateDynamicObject(1714, 946.6273, -1464.5013, 2759.9899, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //kb_swivelchair1
-    object_cityhallInterior[608] = CreateDynamicObject(19808, 945.0086, -1464.4233, 2760.9680, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Keyboard1
-    object_cityhallInterior[609] = CreateDynamicObject(19808, 945.0086, -1466.7937, 2760.9680, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Keyboard1
-    object_cityhallInterior[610] = CreateDynamicObject(2601, 944.5239, -1464.4315, 2760.9790, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
+    object_cityhallInterior[599] = CreateDynamicObject(19430, 944.3754, -1464.9720, 2760.1323, 90.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[599], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[600] = CreateDynamicObject(1714, 946.6273, -1466.6816, 2759.9899, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //kb_swivelchair1
+    object_cityhallInterior[601] = CreateDynamicObject(19175, 944.2650, -1465.4127, 2759.8366, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+    SetDynamicObjectMaterialText(object_cityhallInterior[601], 0, "Schalter l", 90, "Arial", 20, 1, 0xFFFFFFFF, 0x0, 0);
+    SetDynamicObjectMaterial(object_cityhallInterior[601], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[602] = CreateDynamicObject(19175, 944.2650, -1467.7425, 2759.8366, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+    SetDynamicObjectMaterialText(object_cityhallInterior[602], 0, "Schalter ll", 90, "Arial", 20, 1, 0xFFFFFFFF, 0x0, 0);
+    SetDynamicObjectMaterial(object_cityhallInterior[602], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[603] = CreateDynamicObject(1714, 946.6273, -1464.5013, 2759.9899, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //kb_swivelchair1
+    object_cityhallInterior[604] = CreateDynamicObject(19808, 945.0086, -1464.4233, 2760.9680, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Keyboard1
+    object_cityhallInterior[605] = CreateDynamicObject(19808, 945.0086, -1466.7937, 2760.9680, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Keyboard1
+    object_cityhallInterior[606] = CreateDynamicObject(2601, 944.5239, -1464.4315, 2760.9790, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
+    SetDynamicObjectMaterial(object_cityhallInterior[606], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    object_cityhallInterior[607] = CreateDynamicObject(2601, 944.6040, -1466.7921, 2760.9790, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
+    SetDynamicObjectMaterial(object_cityhallInterior[607], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    object_cityhallInterior[608] = CreateDynamicObject(2263, 945.0792, -1464.4593, 2761.1420, -16.7000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
+    SetDynamicObjectMaterial(object_cityhallInterior[608], 0, 3881, "apsecurity_sfxrf", "WIN_DESKTOP", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[608], 1, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    object_cityhallInterior[609] = CreateDynamicObject(2601, 944.6040, -1464.4322, 2760.9189, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
+    SetDynamicObjectMaterial(object_cityhallInterior[609], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    object_cityhallInterior[610] = CreateDynamicObject(2263, 944.1259, -1466.7998, 2760.9052, 16.4999, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
     SetDynamicObjectMaterial(object_cityhallInterior[610], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[611] = CreateDynamicObject(2601, 944.6040, -1466.7921, 2760.9790, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
+    SetDynamicObjectMaterial(object_cityhallInterior[610], 1, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    object_cityhallInterior[611] = CreateDynamicObject(2263, 944.1373, -1464.4189, 2760.8666, 16.4999, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
     SetDynamicObjectMaterial(object_cityhallInterior[611], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[612] = CreateDynamicObject(2263, 945.0793, -1464.4593, 2761.1420, -16.7000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
+    SetDynamicObjectMaterial(object_cityhallInterior[611], 1, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+    object_cityhallInterior[612] = CreateDynamicObject(2263, 945.0676, -1466.8298, 2761.1801, -16.7000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
     SetDynamicObjectMaterial(object_cityhallInterior[612], 0, 3881, "apsecurity_sfxrf", "WIN_DESKTOP", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[612], 1, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[613] = CreateDynamicObject(2601, 944.6040, -1464.4322, 2760.9189, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
+    object_cityhallInterior[613] = CreateDynamicObject(2601, 944.6040, -1466.7922, 2760.9189, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
     SetDynamicObjectMaterial(object_cityhallInterior[613], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[614] = CreateDynamicObject(2263, 944.1259, -1466.7998, 2760.9052, 16.4999, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
-    SetDynamicObjectMaterial(object_cityhallInterior[614], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[614], 1, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[615] = CreateDynamicObject(2263, 944.1373, -1464.4189, 2760.8666, 16.4999, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
-    SetDynamicObjectMaterial(object_cityhallInterior[615], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[615], 1, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[616] = CreateDynamicObject(2263, 945.0676, -1466.8298, 2761.1801, -16.7000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Frame_SLIM_4
-    SetDynamicObjectMaterial(object_cityhallInterior[616], 0, 3881, "apsecurity_sfxrf", "WIN_DESKTOP", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[616], 1, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[617] = CreateDynamicObject(2601, 944.6040, -1466.7922, 2760.9189, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_JUICE_CAN
-    SetDynamicObjectMaterial(object_cityhallInterior[617], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
-    object_cityhallInterior[618] = CreateDynamicObject(19513, 944.8659, -1463.8675, 2760.9340, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //whitephone
-    object_cityhallInterior[619] = CreateDynamicObject(19513, 944.8659, -1466.2380, 2760.9340, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //whitephone
-    object_cityhallInterior[620] = CreateDynamicObject(1811, 939.2077, -1463.7757, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[621] = CreateDynamicObject(1811, 939.2077, -1462.7456, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[622] = CreateDynamicObject(1811, 939.2077, -1461.7054, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[623] = CreateDynamicObject(1811, 939.2077, -1467.8857, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[624] = CreateDynamicObject(1811, 939.2077, -1468.9260, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[625] = CreateDynamicObject(1811, 939.2077, -1469.9460, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[626] = CreateDynamicObject(19175, 938.7739, -1462.8496, 2762.4118, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterial(object_cityhallInterior[626], 0, 2266, "picture_frame", "CJ_PAINTING16", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[626], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[627] = CreateDynamicObject(19175, 938.7739, -1468.7794, 2762.4118, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterial(object_cityhallInterior[627], 0, 2266, "picture_frame", "CJ_PAINTING16", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[627], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[628] = CreateDynamicObject(19464, 941.5139, -1471.3243, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[614] = CreateDynamicObject(19513, 944.8659, -1463.8675, 2760.9340, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //whitephone
+    object_cityhallInterior[615] = CreateDynamicObject(19513, 944.8659, -1466.2380, 2760.9340, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //whitephone
+    object_cityhallInterior[616] = CreateDynamicObject(1811, 939.2077, -1463.7757, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[617] = CreateDynamicObject(1811, 939.2077, -1462.7456, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[618] = CreateDynamicObject(1811, 939.2077, -1461.7054, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[619] = CreateDynamicObject(1811, 939.2077, -1467.8857, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[620] = CreateDynamicObject(1811, 939.2077, -1468.9260, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[621] = CreateDynamicObject(1811, 939.2077, -1469.9460, 2760.5717, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[622] = CreateDynamicObject(19175, 938.7739, -1462.8496, 2762.4118, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+    SetDynamicObjectMaterial(object_cityhallInterior[622], 0, 2266, "picture_frame", "CJ_PAINTING16", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[622], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[623] = CreateDynamicObject(19175, 938.7739, -1468.7794, 2762.4118, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+    SetDynamicObjectMaterial(object_cityhallInterior[623], 0, 2266, "picture_frame", "CJ_PAINTING16", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[623], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[624] = CreateDynamicObject(19464, 941.5139, -1471.3243, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[624], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[625] = CreateDynamicObject(19464, 947.4340, -1471.3243, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[625], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[626] = CreateDynamicObject(19464, 947.4340, -1460.3436, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[626], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[627] = CreateDynamicObject(19464, 941.7039, -1460.3232, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[627], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
+    object_cityhallInterior[628] = CreateDynamicObject(19464, 949.9140, -1463.3531, 2762.5297, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[628], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[629] = CreateDynamicObject(19464, 947.4340, -1471.3243, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[629] = CreateDynamicObject(19464, 949.9140, -1469.2729, 2762.5297, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[629], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[630] = CreateDynamicObject(19464, 947.4340, -1460.3436, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[630], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[631] = CreateDynamicObject(19464, 941.7039, -1460.3232, 2762.5297, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[631], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[632] = CreateDynamicObject(19464, 949.9140, -1463.3531, 2762.5297, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[632], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[633] = CreateDynamicObject(19464, 949.9140, -1469.2729, 2762.5297, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[633], 0, 15041, "bigsfsave", "wall6", 0xFFFFFFFF);
-    object_cityhallInterior[634] = CreateDynamicObject(1811, 940.7675, -1460.8951, 2760.5717, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[635] = CreateDynamicObject(1811, 942.0974, -1460.8951, 2760.5717, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[636] = CreateDynamicObject(1811, 943.3975, -1460.8951, 2760.5717, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[637] = CreateDynamicObject(1811, 943.3975, -1470.7954, 2760.5717, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[638] = CreateDynamicObject(1811, 942.0269, -1470.7954, 2760.5717, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[639] = CreateDynamicObject(1811, 940.6666, -1470.7954, 2760.5717, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
-    object_cityhallInterior[640] = CreateDynamicObject(2010, 939.3461, -1470.7407, 2759.9838, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
-    SetDynamicObjectMaterial(object_cityhallInterior[640], 1, 18012, "genintgeneric", "planterbox128", 0xFFFFFFFF);
-    object_cityhallInterior[641] = CreateDynamicObject(2010, 939.3461, -1460.8907, 2759.9838, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
-    SetDynamicObjectMaterial(object_cityhallInterior[641], 1, 18012, "genintgeneric", "planterbox128", 0xFFFFFFFF);
-    object_cityhallInterior[642] = CreateDynamicObject(2161, 944.8826, -1460.4896, 2760.8225, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_4
-    object_cityhallInterior[643] = CreateDynamicObject(2161, 945.2528, -1471.2099, 2760.8225, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_4
-    object_cityhallInterior[644] = CreateDynamicObject(2162, 949.7091, -1469.1296, 2760.9421, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_1
-    object_cityhallInterior[645] = CreateDynamicObject(2162, 949.7091, -1461.5295, 2760.9421, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_1
-    object_cityhallInterior[646] = CreateDynamicObject(2164, 949.7589, -1464.0985, 2759.9963, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_5
-    object_cityhallInterior[647] = CreateDynamicObject(2167, 946.9199, -1460.2558, 2759.9951, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
-    object_cityhallInterior[648] = CreateDynamicObject(2167, 948.2697, -1460.2558, 2759.9951, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
-    object_cityhallInterior[649] = CreateDynamicObject(2167, 948.2697, -1471.3559, 2759.9951, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
-    object_cityhallInterior[650] = CreateDynamicObject(2167, 946.9196, -1471.3559, 2759.9951, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
-    object_cityhallInterior[651] = CreateDynamicObject(2186, 949.3242, -1466.6075, 2759.9931, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //PHOTOCOPIER_1
-    object_cityhallInterior[652] = CreateDynamicObject(19464, 941.5139, -1471.3044, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[630] = CreateDynamicObject(1811, 940.7675, -1460.8951, 2760.5717, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[631] = CreateDynamicObject(1811, 942.0974, -1460.8951, 2760.5717, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[632] = CreateDynamicObject(1811, 943.3975, -1460.8951, 2760.5717, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[633] = CreateDynamicObject(1811, 943.3975, -1470.7954, 2760.5717, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[634] = CreateDynamicObject(1811, 942.0269, -1470.7954, 2760.5717, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[635] = CreateDynamicObject(1811, 940.6666, -1470.7954, 2760.5717, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_DIN_CHAIR_5
+    object_cityhallInterior[636] = CreateDynamicObject(2010, 939.3461, -1470.7407, 2759.9838, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
+    SetDynamicObjectMaterial(object_cityhallInterior[636], 1, 18012, "genintgeneric", "planterbox128", 0xFFFFFFFF);
+    object_cityhallInterior[637] = CreateDynamicObject(2010, 939.3461, -1460.8907, 2759.9838, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //nu_plant3_ofc
+    SetDynamicObjectMaterial(object_cityhallInterior[637], 1, 18012, "genintgeneric", "planterbox128", 0xFFFFFFFF);
+    object_cityhallInterior[638] = CreateDynamicObject(2161, 944.8826, -1460.4896, 2760.8225, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_4
+    object_cityhallInterior[639] = CreateDynamicObject(2161, 945.2528, -1471.2099, 2760.8225, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_4
+    object_cityhallInterior[640] = CreateDynamicObject(2162, 949.7091, -1469.1296, 2760.9421, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_1
+    object_cityhallInterior[641] = CreateDynamicObject(2162, 949.7091, -1461.5295, 2760.9421, 0.0000, 0.0000, 270.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_1
+    object_cityhallInterior[642] = CreateDynamicObject(2164, 949.7589, -1464.0985, 2759.9963, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_5
+    object_cityhallInterior[643] = CreateDynamicObject(2167, 946.9199, -1460.2558, 2759.9951, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
+    object_cityhallInterior[644] = CreateDynamicObject(2167, 948.2697, -1460.2558, 2759.9951, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
+    object_cityhallInterior[645] = CreateDynamicObject(2167, 948.2697, -1471.3559, 2759.9951, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
+    object_cityhallInterior[646] = CreateDynamicObject(2167, 946.9196, -1471.3559, 2759.9951, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_OFFICE_UNIT_7
+    object_cityhallInterior[647] = CreateDynamicObject(2186, 949.3242, -1466.6075, 2759.9931, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //PHOTOCOPIER_1
+    object_cityhallInterior[648] = CreateDynamicObject(19464, 941.5139, -1471.3044, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[648], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
+    object_cityhallInterior[649] = CreateDynamicObject(19464, 946.9442, -1471.3044, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[649], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
+    object_cityhallInterior[650] = CreateDynamicObject(19464, 946.9442, -1460.3536, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[650], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
+    object_cityhallInterior[651] = CreateDynamicObject(19464, 941.7042, -1460.3536, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[651], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
+    object_cityhallInterior[652] = CreateDynamicObject(19464, 938.6845, -1463.3634, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[652], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[653] = CreateDynamicObject(19464, 946.9442, -1471.3044, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[653] = CreateDynamicObject(19464, 938.7045, -1468.3736, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[653], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[654] = CreateDynamicObject(19464, 946.9442, -1460.3536, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[654] = CreateDynamicObject(19464, 949.8944, -1468.3736, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[654], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[655] = CreateDynamicObject(19464, 941.7042, -1460.3536, 2767.2912, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[655] = CreateDynamicObject(19464, 949.8944, -1462.4427, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[655], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[656] = CreateDynamicObject(19464, 938.6845, -1463.3634, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[656] = CreateDynamicObject(19464, 949.8944, -1462.4427, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[656], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[657] = CreateDynamicObject(19464, 938.7045, -1468.3736, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[657] = CreateDynamicObject(19464, 949.8944, -1468.3530, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[657], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[658] = CreateDynamicObject(19464, 949.8944, -1468.3736, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[658] = CreateDynamicObject(19464, 949.8944, -1471.3038, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[658], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[659] = CreateDynamicObject(19464, 949.8944, -1462.4427, 2767.2912, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[659] = CreateDynamicObject(19464, 943.5642, -1471.3038, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[659], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[660] = CreateDynamicObject(19464, 949.8944, -1462.4427, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[660] = CreateDynamicObject(19464, 941.6843, -1471.3038, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[660], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[661] = CreateDynamicObject(19464, 949.8944, -1468.3530, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[661] = CreateDynamicObject(19464, 941.6843, -1460.3537, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[661], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[662] = CreateDynamicObject(19464, 949.8944, -1471.3038, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[662] = CreateDynamicObject(19464, 947.6240, -1460.3537, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[662], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[663] = CreateDynamicObject(19464, 943.5642, -1471.3038, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    object_cityhallInterior[663] = CreateDynamicObject(19464, 938.6441, -1462.1734, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_cityhallInterior[663], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[664] = CreateDynamicObject(19464, 941.6843, -1471.3038, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[664], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[665] = CreateDynamicObject(19464, 941.6843, -1460.3537, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[665], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[666] = CreateDynamicObject(19464, 947.6240, -1460.3537, 2757.5200, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[666], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[667] = CreateDynamicObject(19464, 938.6441, -1462.1735, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[667], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[668] = CreateDynamicObject(18075, 944.4329, -1465.8193, 2764.8713, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lightD
-    object_cityhallInterior[669] = CreateDynamicObject(16780, 943.8864, -1467.9200, 2764.9145, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light03
-    object_cityhallInterior[670] = CreateDynamicObject(16780, 943.8864, -1464.1998, 2764.9145, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light03
-    object_cityhallInterior[671] = CreateDynamicObject(3034, 946.9309, -1460.4698, 2762.8015, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
-    SetDynamicObjectMaterial(object_cityhallInterior[671], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
-    object_cityhallInterior[672] = CreateDynamicObject(3034, 941.9708, -1460.4698, 2762.8015, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
-    SetDynamicObjectMaterial(object_cityhallInterior[672], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
-    object_cityhallInterior[673] = CreateDynamicObject(3034, 946.9309, -1471.2001, 2762.8015, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
-    SetDynamicObjectMaterial(object_cityhallInterior[673], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
-    object_cityhallInterior[674] = CreateDynamicObject(3034, 941.9207, -1471.1904, 2762.8015, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
-    SetDynamicObjectMaterial(object_cityhallInterior[674], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
-    object_cityhallInterior[675] = CreateDynamicObject(19450, 909.2650, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[664] = CreateDynamicObject(18075, 944.4329, -1465.8193, 2764.8713, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lightD
+    object_cityhallInterior[665] = CreateDynamicObject(16780, 943.8864, -1467.9200, 2764.9145, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light03
+    object_cityhallInterior[666] = CreateDynamicObject(16780, 943.8864, -1464.1998, 2764.9145, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ufo_light03
+    object_cityhallInterior[667] = CreateDynamicObject(3034, 946.9309, -1460.4698, 2762.8015, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
+    SetDynamicObjectMaterial(object_cityhallInterior[667], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
+    object_cityhallInterior[668] = CreateDynamicObject(3034, 941.9708, -1460.4698, 2762.8015, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
+    SetDynamicObjectMaterial(object_cityhallInterior[668], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
+    object_cityhallInterior[669] = CreateDynamicObject(3034, 946.9309, -1471.2000, 2762.8015, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
+    SetDynamicObjectMaterial(object_cityhallInterior[669], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
+    object_cityhallInterior[670] = CreateDynamicObject(3034, 941.9207, -1471.1904, 2762.8015, 0.0000, 0.0000, 180.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //bd_window
+    SetDynamicObjectMaterial(object_cityhallInterior[670], 0, 9901, "ferry_building", "skylight_windows", 0xFFFFFFFF);
+    object_cityhallInterior[671] = CreateDynamicObject(19450, 909.2650, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[671], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[672] = CreateDynamicObject(19825, 949.6734, -1466.1933, 2762.9707, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SprunkClock1
+    SetDynamicObjectMaterial(object_cityhallInterior[672], 0, 1654, "dynamite", "clock64", 0xFFFFFFFF);
+    object_cityhallInterior[673] = CreateDynamicObject(19450, 918.8350, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[673], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[674] = CreateDynamicObject(19450, 928.3848, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[674], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[675] = CreateDynamicObject(19450, 930.5847, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[675], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[676] = CreateDynamicObject(19825, 949.6734, -1466.1933, 2762.9707, 0.0000, 0.0000, -90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SprunkClock1
-    SetDynamicObjectMaterial(object_cityhallInterior[676], 0, 1654, "dynamite", "clock64", 0xFFFFFFFF);
-    object_cityhallInterior[677] = CreateDynamicObject(19450, 918.8350, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[676] = CreateDynamicObject(19450, 934.5548, -1465.0008, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[676], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[677] = CreateDynamicObject(19450, 934.5551, -1471.1998, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[677], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[678] = CreateDynamicObject(19450, 928.3848, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[678] = CreateDynamicObject(19450, 905.3654, -1471.1998, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[678], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[679] = CreateDynamicObject(19450, 930.5847, -1461.9305, 2764.9331, 0.0000, 90.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[679] = CreateDynamicObject(19450, 905.3654, -1464.9895, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[679], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[680] = CreateDynamicObject(19450, 934.5548, -1465.0008, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[680], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[681] = CreateDynamicObject(19450, 934.5551, -1471.1998, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[681], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[682] = CreateDynamicObject(19450, 905.3654, -1471.1998, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[682], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[683] = CreateDynamicObject(19450, 905.3654, -1464.9895, 2764.9331, 0.0000, 90.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[683], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[684] = CreateDynamicObject(19450, 933.1546, -1471.1811, 2766.5825, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[680] = CreateDynamicObject(19450, 933.1546, -1471.1811, 2766.5825, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[680], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[681] = CreateDynamicObject(19450, 936.0051, -1471.1811, 2766.5825, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[681], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[682] = CreateDynamicObject(19450, 936.0150, -1465.2004, 2766.5925, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[682], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[683] = CreateDynamicObject(19450, 933.1547, -1468.3299, 2766.5925, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[683], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[684] = CreateDynamicObject(19450, 931.2150, -1460.4696, 2766.5925, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[684], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[685] = CreateDynamicObject(19450, 936.0051, -1471.1811, 2766.5825, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[685] = CreateDynamicObject(19450, 921.5955, -1460.4696, 2766.5925, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[685], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[686] = CreateDynamicObject(19450, 936.0150, -1465.2004, 2766.5925, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[686] = CreateDynamicObject(19450, 911.9658, -1460.4696, 2766.5925, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[686], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[687] = CreateDynamicObject(19450, 933.1547, -1468.3299, 2766.5925, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[687] = CreateDynamicObject(19450, 908.7152, -1460.4593, 2766.5825, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[687], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[688] = CreateDynamicObject(19450, 931.2150, -1460.4696, 2766.5925, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[688] = CreateDynamicObject(19450, 928.4057, -1463.4294, 2766.5825, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[688], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[689] = CreateDynamicObject(19450, 921.5955, -1460.4696, 2766.5925, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[689] = CreateDynamicObject(19450, 918.7656, -1463.4294, 2766.5825, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[689], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[690] = CreateDynamicObject(19450, 911.9658, -1460.4696, 2766.5925, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[690] = CreateDynamicObject(19450, 911.6956, -1463.4294, 2766.5625, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[690], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[691] = CreateDynamicObject(19450, 908.7152, -1460.4593, 2766.5825, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[691] = CreateDynamicObject(19450, 903.9754, -1465.1798, 2766.5725, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[691], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[692] = CreateDynamicObject(19450, 928.4057, -1463.4294, 2766.5825, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[692] = CreateDynamicObject(19450, 903.9754, -1471.2004, 2766.5725, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[692], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[693] = CreateDynamicObject(19450, 918.7656, -1463.4294, 2766.5825, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[693] = CreateDynamicObject(19450, 906.8054, -1468.1510, 2766.5725, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[693], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[694] = CreateDynamicObject(19450, 911.6956, -1463.4294, 2766.5625, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[694] = CreateDynamicObject(19450, 906.8054, -1471.1826, 2766.5727, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[694], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[695] = CreateDynamicObject(19450, 903.9754, -1465.1798, 2766.5725, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[695], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[696] = CreateDynamicObject(19450, 903.9754, -1471.2004, 2766.5725, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[696], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[697] = CreateDynamicObject(19450, 906.8054, -1468.1510, 2766.5725, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[697], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[698] = CreateDynamicObject(19450, 906.8054, -1471.1826, 2766.5727, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[698], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[699] = CreateDynamicObject(945, 911.4801, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[695] = CreateDynamicObject(945, 911.4801, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    SetDynamicObjectMaterial(object_cityhallInterior[695], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[695], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[695], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[695], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[696] = CreateDynamicObject(945, 907.9799, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    SetDynamicObjectMaterial(object_cityhallInterior[696], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[696], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[696], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[696], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[697] = CreateDynamicObject(945, 915.2000, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    SetDynamicObjectMaterial(object_cityhallInterior[697], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[697], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[697], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[697], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[698] = CreateDynamicObject(945, 919.0300, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    SetDynamicObjectMaterial(object_cityhallInterior[698], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[698], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[698], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(object_cityhallInterior[698], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[699] = CreateDynamicObject(945, 923.3801, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[699], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[699], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[699], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[699], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[700] = CreateDynamicObject(945, 907.9799, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[700] = CreateDynamicObject(945, 927.1604, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[700], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[700], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[700], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[700], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[701] = CreateDynamicObject(945, 915.2000, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[701] = CreateDynamicObject(945, 931.3502, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[701], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[701], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[701], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[701], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[702] = CreateDynamicObject(945, 919.0300, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[702] = CreateDynamicObject(945, 934.5601, -1464.2613, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[702], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[702], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[702], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[702], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[703] = CreateDynamicObject(945, 923.3801, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[703] = CreateDynamicObject(945, 934.5601, -1468.5815, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[703], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[703], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[703], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[703], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[704] = CreateDynamicObject(945, 927.1604, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[704] = CreateDynamicObject(945, 934.5601, -1473.1910, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[704], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[704], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[704], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[704], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[705] = CreateDynamicObject(945, 931.3502, -1462.0312, 2772.0705, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[705] = CreateDynamicObject(945, 905.3192, -1473.1910, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[705], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[705], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[705], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[705], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[706] = CreateDynamicObject(945, 934.5601, -1464.2613, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[706] = CreateDynamicObject(945, 905.3192, -1464.6014, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[706], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[706], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[706], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[706], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[707] = CreateDynamicObject(945, 934.5601, -1468.5815, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
+    object_cityhallInterior[707] = CreateDynamicObject(945, 905.3192, -1468.9615, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
     SetDynamicObjectMaterial(object_cityhallInterior[707], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[707], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[707], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
     SetDynamicObjectMaterial(object_cityhallInterior[707], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[708] = CreateDynamicObject(945, 934.5601, -1473.1910, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
-    SetDynamicObjectMaterial(object_cityhallInterior[708], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[708], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[708], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[708], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[709] = CreateDynamicObject(945, 905.3192, -1473.1910, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
-    SetDynamicObjectMaterial(object_cityhallInterior[709], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[709], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[709], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[709], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[710] = CreateDynamicObject(945, 905.3192, -1464.6014, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
-    SetDynamicObjectMaterial(object_cityhallInterior[710], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[710], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[710], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[710], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[711] = CreateDynamicObject(945, 905.3192, -1468.9615, 2772.0705, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //WS_CF_LAMPS
-    SetDynamicObjectMaterial(object_cityhallInterior[711], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[711], 1, 12850, "cunte_block1", "lightwall256", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[711], 2, 8482, "csrspalace02", "casinolightsyel_128", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(object_cityhallInterior[711], 3, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[712] = CreateDynamicObject(19450, 901.1259, -1471.0997, 2766.5539, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[708] = CreateDynamicObject(19450, 901.1259, -1471.0997, 2766.5539, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[708], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[709] = CreateDynamicObject(19450, 901.1259, -1461.4602, 2766.5539, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[709], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[710] = CreateDynamicObject(19450, 901.1259, -1461.4602, 2758.2934, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[710], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[711] = CreateDynamicObject(19450, 901.1259, -1471.1606, 2758.2934, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    SetDynamicObjectMaterial(object_cityhallInterior[711], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
+    object_cityhallInterior[712] = CreateDynamicObject(19450, 905.7857, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[712], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[713] = CreateDynamicObject(19450, 901.1259, -1461.4602, 2766.5539, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[713] = CreateDynamicObject(19450, 915.4157, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[713], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[714] = CreateDynamicObject(19450, 901.1259, -1461.4602, 2758.2934, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[714] = CreateDynamicObject(19450, 925.0053, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[714], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[715] = CreateDynamicObject(19450, 901.1259, -1471.1606, 2758.2934, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[715] = CreateDynamicObject(19450, 934.6154, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[715], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[716] = CreateDynamicObject(19450, 905.7857, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[716] = CreateDynamicObject(19450, 938.5158, -1461.8902, 2766.5637, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[716], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[717] = CreateDynamicObject(19450, 915.4157, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[717] = CreateDynamicObject(19450, 938.5158, -1471.4997, 2766.5637, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[717], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[718] = CreateDynamicObject(19450, 925.0053, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[718] = CreateDynamicObject(19450, 938.5158, -1471.4298, 2758.2827, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[718], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[719] = CreateDynamicObject(19450, 934.6154, -1457.0102, 2766.5637, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[719] = CreateDynamicObject(19450, 938.5158, -1460.3293, 2758.2827, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[719], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[720] = CreateDynamicObject(19450, 938.5158, -1461.8902, 2766.5637, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[720] = CreateDynamicObject(19450, 940.1759, -1457.0283, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[720], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[721] = CreateDynamicObject(19450, 938.5158, -1471.4997, 2766.5637, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[721] = CreateDynamicObject(19450, 899.4359, -1457.0283, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[721], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[722] = CreateDynamicObject(19450, 938.5158, -1471.4298, 2758.2827, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[722] = CreateDynamicObject(19450, 899.4655, -1475.8977, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[722], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[723] = CreateDynamicObject(19450, 938.5158, -1460.3293, 2758.2827, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
+    object_cityhallInterior[723] = CreateDynamicObject(19450, 940.1760, -1475.8878, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
     SetDynamicObjectMaterial(object_cityhallInterior[723], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[724] = CreateDynamicObject(19450, 940.1759, -1457.0283, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[724], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[725] = CreateDynamicObject(19450, 899.4359, -1457.0283, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[725], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[726] = CreateDynamicObject(19450, 899.4655, -1475.8977, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[726], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[727] = CreateDynamicObject(19450, 940.1760, -1475.8878, 2760.3825, 90.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
-    SetDynamicObjectMaterial(object_cityhallInterior[727], 0, 10765, "airportgnd_sfse", "white", 0xFF000000);
-    object_cityhallInterior[728] = CreateDynamicObject(11721, 936.6129, -1457.0749, 2760.5214, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Radiator1
-    SetDynamicObjectMaterial(object_cityhallInterior[728], 1, 14704, "lahss2_2int2", "HS_radiator2", 0xFFFFFFFF);
-    object_cityhallInterior[729] = CreateDynamicObject(11721, 902.9525, -1457.0749, 2760.5214, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Radiator1
-    SetDynamicObjectMaterial(object_cityhallInterior[729], 1, 14704, "lahss2_2int2", "HS_radiator2", 0xFFFFFFFF);
-    object_cityhallInterior[730] = CreateDynamicObject(19174, 901.1901, -1465.8580, 2762.9018, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[730], 0, "Besprechungsraum", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
-    SetDynamicObjectMaterial(object_cityhallInterior[730], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[731] = CreateDynamicObject(19174, 901.1901, -1465.8580, 2762.7216, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
-    SetDynamicObjectMaterialText(object_cityhallInterior[731], 0, "nur für Befugte!", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
-    SetDynamicObjectMaterial(object_cityhallInterior[731], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
-    object_cityhallInterior[732] = CreateDynamicObject(19464, 938.6441, -1469.6035, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[732], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
-    object_cityhallInterior[733] = CreateDynamicObject(19464, 938.5837, -1464.4645, 2765.7199, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
-    SetDynamicObjectMaterial(object_cityhallInterior[733], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
-    object_cityhallInterior[734] = CreateDynamicObject(19430, 920.7636, -1448.4467, 2763.5612, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[734], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
-    object_cityhallInterior[735] = CreateDynamicObject(19430, 920.1735, -1448.4266, 2763.5612, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
-    SetDynamicObjectMaterial(object_cityhallInterior[735], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[724] = CreateDynamicObject(11721, 936.6129, -1457.0749, 2760.5214, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Radiator1
+    SetDynamicObjectMaterial(object_cityhallInterior[724], 1, 14704, "lahss2_2int2", "HS_radiator2", 0xFFFFFFFF);
+    object_cityhallInterior[725] = CreateDynamicObject(11721, 902.9525, -1457.0749, 2760.5214, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Radiator1
+    SetDynamicObjectMaterial(object_cityhallInterior[725], 1, 14704, "lahss2_2int2", "HS_radiator2", 0xFFFFFFFF);
+    object_cityhallInterior[726] = CreateDynamicObject(19174, 901.1901, -1465.8580, 2762.9018, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[726], 0, "Besprechungsraum", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterial(object_cityhallInterior[726], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[727] = CreateDynamicObject(19174, 901.1901, -1465.8580, 2762.7216, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
+    SetDynamicObjectMaterialText(object_cityhallInterior[727], 0, "nur fÃ¼r Befugte!", 90, "Arial Black", 14, 0, 0xFF000000, 0x0, 1);
+    SetDynamicObjectMaterial(object_cityhallInterior[727], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_cityhallInterior[728] = CreateDynamicObject(19464, 938.6441, -1469.6035, 2757.5200, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[728], 0, 14650, "ab_trukstpc", "mp_CJ_WOOD5", 0xFFFFFFFF);
+    object_cityhallInterior[729] = CreateDynamicObject(19464, 938.5836, -1464.4644, 2765.7199, 0.0000, 0.0000, 0.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    SetDynamicObjectMaterial(object_cityhallInterior[729], 0, 10765, "airportgnd_sfse", "white", 0xFFFFFFFF);
+    object_cityhallInterior[730] = CreateDynamicObject(19430, 920.7636, -1448.4466, 2763.5612, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[730], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
+    object_cityhallInterior[731] = CreateDynamicObject(19430, 920.1735, -1448.4266, 2763.5612, 0.0000, 0.0000, 90.0000, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall070
+    SetDynamicObjectMaterial(object_cityhallInterior[731], 0, 17049, "cuntwf", "sw_walltile", 0xFFFFFFFF);
 
     // Windows Fix (Blinds)
-    object_cityhallInterior[736] = CreateDynamicObject(10184, 934.944946, -1476.197998, 2761.81665, 0.000000, 0.000000, -90.0, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_cityhallInterior[737] = CreateDynamicObject(10184, 909.404236, -1476.197998, 2761.81665, 0.000000, 0.000000, -90.0, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    //object_cityhallInterior[736] = CreateDynamicObject(10184, 934.944946, -1476.197998, 2761.81665, 0.000000, 0.000000, -90.0, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    //object_cityhallInterior[737] = CreateDynamicObject(10184, 909.404236, -1476.197998, 2761.81665, 0.000000, 0.000000, -90.0, VW_CITYHALLINTERIOR, MAPS_CITYHALLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
 }

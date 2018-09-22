@@ -4220,6 +4220,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\alhambraInterior>
 #include <maps\alcatraz>
 #include <maps\drivingSchoolExterior>
+#include <maps\bicycleDealership>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5945,7 +5946,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Günstig\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!.", COLOR_WHITE, 1808.0851,-1889.7792,13.4073, 30.0);//Billig Autohaus in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Luxus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 1142.3765,-1619.0011,13.9445, 30.0);//Luxus Autohaus
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Motorradhaus\n"COLOR_HEX_WHITE"Steig in ein beliebiges Motorrad deiner Wahl ein!", COLOR_WHITE, 1662.1256,-1884.3601,13.5469, 30.0);//Bike haus
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrradladen\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrrad deiner Wahl ein!", COLOR_WHITE, 690.6381,-1182.3875,15.4783, 30.0);//Fahrradladen haus
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bootshaus - San Fierro\n"COLOR_HEX_WHITE"Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_WHITE, -1489.6615,712.7635,7.1807, 30.0);//Bootsverkauf SF
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Autohaus - Count And Schutz\n"COLOR_HEX_WHITE"Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_WHITE, 2126.9578,-1124.4517,25.4636, 30.0);//Autohaus günstig 2 LS
