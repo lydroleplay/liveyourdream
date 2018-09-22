@@ -152,7 +152,8 @@ enum
 	VW_POOINTERIOR,
 	VW_LSPDINTERIOR,
 	VW_FBIINTERIOR,
-	VW_YAKUZAINTERIOR
+	VW_YAKUZAINTERIOR,
+	VW_LCNINTERIOR
 
 }
 
@@ -4039,7 +4040,6 @@ new fscars[22];
 new fsacars[2];
 new staatcars[24];
 new aztcars[18];
-new lcncars[17];
 new vagoscars[16];
 new lvpdcars[30];
 new wheelcars[14];
@@ -4225,6 +4225,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\luxuryCarDealership>
 #include <maps\cheapCarDealershipLs2>
 #include <maps\cheapCarDealershipLs>
+#include <maps\lcnExterior>
+#include <maps\lcnInterior>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5257,24 +5259,6 @@ OnGameModeInit2() {
 	aztcars[15] = AddStaticVehicleEx(411,1803.5897,-2107.4424,13.1890,269.9739,2,2,-1); // InfernusA2
 	aztcars[16] = AddStaticVehicleEx(480,1773.2216,-2092.1753,13.3215,179.8830,2,2,-1); // CometA
 
-	lcncars[0] = AddStaticVehicleEx(411,1093.5651,-1225.2573,15.5453,179.6005,75,75,-1); // LCNInfernus1
-	lcncars[1] = AddStaticVehicleEx(411,1097.7482,-1225.2493,15.5518,178.5437,75,75,-1); // LCNInfernus2
-	lcncars[2] = AddStaticVehicleEx(541,1101.8160,-1224.9753,15.4502,180.5087,75,75,-1); // LCNBullet
-	lcncars[3] = AddStaticVehicleEx(451,1105.7065,-1225.3906,15.5357,180.2435,75,75,-1); // LCNTurismo
-	lcncars[4] = AddStaticVehicleEx(415,1110.0857,-1225.2145,15.5810,177.0805,75,75,-1); // LCNCHeetah
-	lcncars[5] = AddStaticVehicleEx(560,1085.1581,-1233.8633,15.5268,270.0235,75,75,-1); // LCNSultan1
-	lcncars[6] = AddStaticVehicleEx(560,1085.1577,-1238.1287,15.5303,270.0153,75,75,-1); // LCNSultan2
-	lcncars[7] = AddStaticVehicleEx(545,1085.0730,-1242.3641,15.6388,269.5403,75,75,-1); // LCNHustler
-	lcncars[8] = AddStaticVehicleEx(409,1086.2042,-1249.8860,15.6279,312.7260,75,75,-1); // LCNStretch
-	lcncars[9] = AddStaticVehicleEx(579,1094.4312,-1250.1664,15.7551,0.0048,75,75,-1); // LCNHuntley
-	lcncars[10] = AddStaticVehicleEx(579,1098.6012,-1250.1639,15.7501,359.7653,75,75,-1); // LCNHuntle2
-	lcncars[11] = AddStaticVehicleEx(580,1103.6172,-1250.3773,15.6175,359.0536,75,75,-1); // LCNStafford1
-	lcncars[12] = AddStaticVehicleEx(580,1109.1460,-1250.3403,15.6179,358.9023,75,75,-1); // LCNStafford2
-	lcncars[13] = AddStaticVehicleEx(522,1120.5494,-1248.6732,15.6190,87.9424,75,75,-1); // LCNNRG1
-	lcncars[14] = AddStaticVehicleEx(522,1120.5509,-1247.0037,15.6137,86.6539,75,75,-1); // LCNNRG2
-	lcncars[15] = AddStaticVehicleEx(468,1120.6541,-1245.2303,15.7300,86.4783,75,75,-1); // LCNSanchez1
-	lcncars[16] = AddStaticVehicleEx(468,1120.6490,-1243.2313,15.7329,89.4255,75,75,-1); // LCNSanchez2
-
 	vagoscars[0] = AddStaticVehicleEx(522,2769.0017,-1624.9568,10.4935,267.0336,6,6,-1); // NRGV
 	vagoscars[1] = AddStaticVehicleEx(522,2769.0234,-1623.5334,10.4992,265.9211,6,6,-1); // NRGV2
 	vagoscars[2] = AddStaticVehicleEx(468,2768.8862,-1620.2795,10.5908,267.3992,6,6,-1); // SanchezV2
@@ -5396,11 +5380,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(aztcars[i]);
 		aiVehicles[ aztcars[i] ] = VEH_AZTCARS;
 	}
- 	for(new i=0;i<sizeof(lcncars);i++)
+ 	for(new i=0;i<sizeof(vehicle_lcnExterior);i++)
 	{
-		SetVehicleNumberPlate(lcncars[i], COLOR_HEX_BLACK"LCN");
-        SetVehicleToRespawn(lcncars[i]);
-		aiVehicles[ lcncars[i] ] = VEH_LCNCARS;
+		SetVehicleNumberPlate(vehicle_lcnExterior[i], COLOR_HEX_BLACK"LCN");
+        SetVehicleToRespawn(vehicle_lcnExterior[i]);
+		aiVehicles[ vehicle_lcnExterior[i] ] = VEH_LCNCARS;
 	}
 	for(new i=0;i<sizeof(vagoscars);i++)
 	{
@@ -5640,7 +5624,6 @@ OnGameModeInit2() {
 	//Fraktionssafebox
 	CreateDynamicPickup(1279, 1, 333.7054,1121.7754,1083.8903, 0);//Fsavebox Ballas
 	CreateDynamicPickup(1279, 1, 2498.2847,-1710.8126,1014.7422, 0);//Fsavebox Grove Street
-	CreateDynamicPickup(1279, 1, -788.7941,496.9221,1371.7422, 0);//Fsavebox LCN
 	CreateDynamicPickup(1279, 1, 765.3478,-39.7774,1000.6865, 0);//Fsavebox Triaden
 	CreateDynamicPickup(1279, 1, 505.9030,-79.8864,998.9609, 0);//Fsavebox Aztecas
 	CreateDynamicPickup(1279, 1, -2170.3828,635.3927,1052.3750, 0);//Fsavebox Outlawz
@@ -5650,7 +5633,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 331.0788,1128.5469,1083.8828, 0);//Ballas Herz
 	CreateDynamicPickup(1240, 1, 938.7240,1733.3646,8.8516, 0);//Wheelman
 	CreateDynamicPickup(1240, 1, 2496.0542,-1709.4050,1014.7422, 0);//Grove Herz
-	CreateDynamicPickup(1240, 1, -789.5930,510.1159,1367.3745, 0);//LCN Herz
 	CreateDynamicPickup(1240, 1, 2807.4153,-1165.1274,1025.5703, 0);//Vagos
 	CreateDynamicPickup(1240, 1, 508.3369,-84.9195,998.9609, 0);//Aztecas
 	CreateDynamicPickup(1240, 1, 902.5193,-1277.1499,14.5935, 0);//O-Amt /dienst
@@ -5664,8 +5646,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 326.7928,307.7375,999.1484,-1);//Zollamt Duty
 
 	//Gang Interior Eingang
-	CreateDynamicPickup(19197, 1, 1083.0183,-1226.5609,15.8203, 0);//LCN Eingang
-
 	CreateDynamicPickup(19197, 1, 1999.9869,-1114.0542,27.1250, 0);//Ballas Eingang
 	CreateDynamicPickup(19197, 1, 2495.3547,-1690.6273,14.7656, 0);//Grove Eingang
 	CreateDynamicPickup(19197, 1, 1804.1870,-2124.9021,13.9424, 0);//Aztecas Eingang
@@ -5686,7 +5666,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1254, 1, 331.9387,1119.7072,1083.8903, 0);//Ballas Waffenlager
 	CreateDynamicPickup(1254, 1, 2491.1003,-1699.9390,1014.7416, 0);//Grove Waffenlager
 	CreateDynamicPickup(1254, 1, 506.0543,-81.1208,998.9609, 0);//Aztecas Waffenlager
-	CreateDynamicPickup(1254, 1, -778.2419,496.2420,1368.5304, 0);//LCN Waffenlager
 	CreateDynamicPickup(1254, 1, 2809.7944,-1171.9598,1025.5703, 0);//Vagos Waffenlager
 	CreateDynamicPickup(1254, 1, 771.2057,-39.4471,1000.6865, 0);//Triaden Waffenlager
 	CreateDynamicPickup(1254, 1, -2165.1348,644.2082,1052.3750, 0);//Outlawz Waffenlager
@@ -5702,7 +5681,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 359.5758,-2107.5520,74.8357, 0);//Springbrett oben
 
 	//Gangitem Points
-	CreateDynamicPickup(1275, 1, -791.3092,508.1032,1367.3672, 0);//LCN Skin
 	CreateDynamicPickup(1275, 1, 2491.7261,-1701.2618,1018.3438, 0);//GS Skin
 	CreateDynamicPickup(1275, 1, 308.2954,1120.7721,1083.8828, 0);//BALLAS Skin
 	CreateDynamicPickup(1275, 1, 1798.4584,-2124.5525,13.5469, 0);//AZTECAS Skin
@@ -5825,7 +5803,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Mechaniker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -93.9144,-1196.9713,2.4775, 25.0);//MECHANIKER
 
     //Gang Interior Eingang
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_BLACK"LCN", COLOR_WHITE, 1083.0183,-1226.5609,15.8203, 25.0);//LCN
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_PINK"BALLAS", COLOR_WHITE, 1999.9869,-1114.0542,27.1250, 25.0);//Ballas
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_GREEN"GROVE STREET", COLOR_WHITE, 2495.3547,-1690.6273,14.7656, 25.0);//Grove
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_LIGHTBLUE"AZTECAS", COLOR_WHITE, 1804.1870,-2124.9021,13.9424, 25.0);//Aztecas
@@ -5834,7 +5811,7 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Territorium der\n"COLOR_HEX_YELLOW"VAGOS", COLOR_WHITE, 2770.6990,-1628.7225,12.1775, 25.0);//VAGOS
 
    	//Gangshop 3D Text
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LCN - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE, -791.3092,508.1032,1367.3672, 15.0);//LCN
+	
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"GroveStreet - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE, 2491.7261,-1701.2618,1018.3438, 15.0);//GS
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Ballas - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE,308.2954,1120.7721,1083.8828, 15.0);//BALLAS
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE, 2805.5723,-1170.7960,1025.5703, 15.0, .worldid = 6);//VAGOS
@@ -5846,7 +5823,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Ballas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 331.9387,1119.7072,1083.8903, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"GroveStreet - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2491.1003,-1699.9390,1014.7416, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Aztecas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 506.0543,-81.1208,998.9609, 15.0);//Waffenlager
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"LCN - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -778.2419,496.2420,1368.5304, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2809.7944,-1171.9598,1025.5703, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Triaden - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 771.2057,-39.4471,1000.6865, 15.0);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -2165.1348,644.2082,1052.3750, 15.0);//Waffenlager
@@ -5869,7 +5845,7 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wheelman Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 938.7240,1733.3646,8.8516, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Vagos Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2807.4153,-1165.1274,1025.5703, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Aztecas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 508.3369,-84.9195,998.9609, 15.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"LCN Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, -789.5930,510.1159,1367.3745, 15.0);
+	
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Staat Dienst\n"COLOR_HEX_WHITE"Tippe /Dienst um in den Dienst zu gehen", COLOR_WHITE, 350.0831,160.1326,1025.7891, 15.0 , .worldid = 1);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Terroristenlager\n"COLOR_HEX_WHITE"Tippe /Terrorwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, -795.0400,1557.1365,27.1244, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Triaden Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, 768.1578,-36.6934,1000.6865, 15.0);
@@ -5884,7 +5860,7 @@ OnGameModeInit2() {
 	//Fraktionssafebox 3d Text
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Ballas\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 333.7054,1121.7754,1083.8903, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Grove Street\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 2498.2847,-1710.8126,1014.7422, 8.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der LCN\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, -788.7941,496.9221,1371.7422, 8.0);
+
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Triaden\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 765.3478,-39.7774,1000.6865, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Aztecas\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 505.9030,-79.8864,998.9609, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Vagos\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 2811.7188,-1165.9420,1025.5703, 8.0);
@@ -10562,10 +10538,9 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 12)
 			{
-				SetPlayerPos(playerid, -789.5930,510.1159,1367.3745);
-				SetPlayerInterior(playerid, 1);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, -789.5930,510.1159,1367.3745);
+				SetPlayerPosEx(playerid, LCN_INTERIOR_SPAWN_POINT, MAPS_LCNINTERIOR_INTERIOR, VW_LCNINTERIOR);
+				SetPlayerFacingAngle(playerid, LCN_INTERIOR_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 13)
 			{
@@ -18171,7 +18146,7 @@ CMD:gangwaffen(playerid)
 	    GivePlayerCash(playerid, -800);
 	    GivePlayerWeapon(playerid, 5, 1);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0, -789.5930,510.1159,1367.3745))//LCN
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, LCN_INTERIOR_SPAWN_POINT))//LCN
 	{
 	    //if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
 	    if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
@@ -18355,7 +18330,7 @@ CMD:gheilen(playerid)
 	    SetPlayerHealth(playerid, 100);
 	    SetTimerEx("HeilReady", 60000, 0, "i", playerid);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0, -789.5930,510.1159,1367.3745))//LCN
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, LCN_INTERIOR_SPAWN_POINT))//LCN
 	{
 	    if(!(Spieler[playerid][pFraktion] == 12))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LCN Mitglied.");
 	    Spieler[playerid][pHeilReady] = 0;
@@ -20168,11 +20143,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 12)
 	{
-		for(new i=0;i<sizeof(lcncars);i++)
+		for(new i=0;i<sizeof(vehicle_lcnExterior);i++)
 		{
-			if(!IsVehicleOccupied(lcncars[i]))
+			if(!IsVehicleOccupied(vehicle_lcnExterior[i]))
 			{
-				SetVehicleToRespawn(lcncars[i]);
+				SetVehicleToRespawn(vehicle_lcnExterior[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die LCN Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -29261,19 +29236,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, -49.8745,-269.3627,6.6332);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 899.5109,-901.7924,45.7656))//LCN außen
-		{
-		    if(!(Spieler[playerid][pFraktion] == 12))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Mitglied der LCN");
-		    SetPlayerInterior(playerid, 1);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, -794.9042,490.1946,1376.1953);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, -794.9042,490.1946,1376.1953))//LCN innen
-		{
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 899.5109,-901.7924,45.7656);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1462.6464,-1011.3412,26.8438))// Bank LS außen
 		{
 		    if( g_iBankraubStatus == Bankraub_Aktiv ) {
@@ -34177,7 +34139,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	                return SendClientMessage(playerid,COLOR_YELLOW,"Du besitzt nicht genug Geld für dieses Item!");
 	            }
 				if( !IsPlayerInRangeOfPoint(playerid,5.0,1798.4584,-2124.5525,13.5469) && !IsPlayerInRangeOfPoint(playerid,5.0,2805.5723,-1170.7960,1025.5703) && !IsPlayerInRangeOfPoint(playerid,5.0, YAKUZA_INTERIOR_GANGSHOP_POINT)
-					&& !IsPlayerInRangeOfPoint(playerid,5.0,2491.7261,-1701.2618,1018.3438) && !IsPlayerInRangeOfPoint(playerid,5.0,-791.3092,508.1032,1367.3672) && !IsPlayerInRangeOfPoint(playerid,5.0,308.2954,1120.7721,1083.8828)
+					&& !IsPlayerInRangeOfPoint(playerid,5.0,2491.7261,-1701.2618,1018.3438) && !IsPlayerInRangeOfPoint(playerid,5.0, LCN_INTERIOR_GANGSHOP_POINT) && !IsPlayerInRangeOfPoint(playerid,5.0,308.2954,1120.7721,1083.8828)
 					&& !IsPlayerInRangeOfPoint(playerid,5.0,772.5916,-50.4404,1000.5859)  && !IsPlayerInRangeOfPoint(playerid,5.0,-2159.0173,640.3590,1052.3817)) {
 					return SendClientMessage(playerid,COLOR_RED,"Hier kannst du diesen Befehl nicht ausführen!");
 				}
@@ -48771,8 +48733,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_LCNCARS ) {
-		for( i  = 0; i < sizeof(lcncars) ; i++) {
-			if( lcncars[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_lcnExterior) ; i++) {
+			if( vehicle_lcnExterior[i] == vehicleid ) {
 			    return 12;
 			}
 		}
@@ -51559,7 +51521,7 @@ COMMAND:clubshop(playerid,params[]) {
 
 COMMAND:gangitem(playerid,params[]) {
 	if( !IsPlayerInRangeOfPoint(playerid,5.0,1798.4584,-2124.5525,13.5469) && !IsPlayerInRangeOfPoint(playerid,5.0,2805.5723,-1170.7960,1025.5703) && !IsPlayerInRangeOfPoint(playerid,5.0, YAKUZA_INTERIOR_GANGSHOP_POINT)
-	&& !IsPlayerInRangeOfPoint(playerid,5.0,2491.7261,-1701.2618,1018.3438) && !IsPlayerInRangeOfPoint(playerid,5.0,-791.3092,508.1032,1367.3672) && !IsPlayerInRangeOfPoint(playerid,5.0,308.2954,1120.7721,1083.8828)
+	&& !IsPlayerInRangeOfPoint(playerid,5.0,2491.7261,-1701.2618,1018.3438) && !IsPlayerInRangeOfPoint(playerid,5.0, LCN_INTERIOR_GANGSHOP_POINT) && !IsPlayerInRangeOfPoint(playerid,5.0,308.2954,1120.7721,1083.8828)
 	&& !IsPlayerInRangeOfPoint(playerid,5.0,772.5916,-50.4404,1000.5859) && !IsPlayerInRangeOfPoint(playerid,5.0,-2159.0173,640.3590,1052.3817)) {
 		return SendClientMessage(playerid,COLOR_RED,"Hier kannst du diesen Befehl nicht ausführen!");
 	}
@@ -51849,7 +51811,7 @@ new g_FraktionsSafeBoxLocation[][e_FraktionsSafeBoxLocation] = {
 	{7,333.7054,1121.7754,1083.8903},
 	{10, YAKUZA_INTERIOR_SAFEBOX_POINT},
 	{11,505.9030,-79.8864,998.9609},
-	{12,-788.7941,496.9221,1371.7422},
+	{12, LCN_INTERIOR_SAFEBOX_POINT},
 	{21,765.3478,-39.7774,1000.6865},
 	{20,-2170.3828,635.3927,1052.3750},
 	{13,2811.7188,-1165.9420,1025.5703}
