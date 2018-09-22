@@ -7,7 +7,7 @@
 static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
-// Boat dealership in LS points
+// Boat dealership in SF points
 #define BOATDEALERSHIPSF_COORDS    -1489.6615, 712.7635, 7.1807
 
 // Map variables
