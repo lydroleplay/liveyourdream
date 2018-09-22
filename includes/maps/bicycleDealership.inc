@@ -25,7 +25,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Map Icons
-    CreateDynamicMapIcon(MAPS_BICYCLEDEALERSHIP_INTERIOR, 55, 0, VW_MAIN, MAPS_BICYCLEDEALERSHIP_INTERIOR);
+    CreateDynamicMapIcon(BICYCLEDEALERSHIP_COORDS, 55, 0, VW_MAIN, MAPS_BICYCLEDEALERSHIP_INTERIOR);
 
     // 3DTextLabels
     text3D_bicycleDealership[0] = _:CreateDynamic3DTextLabel("Fahrradladen\n" COLOR_HEX_WHITE "Steig in ein beliebiges Fahrrad deiner Wahl ein!", COLOR_BLUE, BICYCLEDEALERSHIP_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BICYCLEDEALERSHIP_INTERIOR);
