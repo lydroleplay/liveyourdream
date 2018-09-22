@@ -25,7 +25,7 @@ static Float:DRAWDISTANCE   = 350.0;
 new object_lspdInterior[538];
 new pickup_lspdInterior[8];
 new text3D_lspdInterior[3];
-new actor_lspdInterior[4];
+new actor_lspdInterior[7];
 new object_duty_door_lspdInterior;
 new lspdInterior_pIDControllingDoor = INVALID_PLAYER_ID;
 
@@ -141,6 +141,11 @@ hook OnGameModeInit() {
     ApplyDynamicActorAnimation(actor_lspdInterior[2], "PED", "SEAT_idle", 4.0, 1, 0, 0, 0, 0);
     actor_lspdInterior[3] = CreateDynamicActor(280, 1645.4669, -1374.7523, 1962.5068, 45.0000, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // 
     ApplyDynamicActorAnimation(actor_lspdInterior[3], "COP_AMBIENT", "Coplook_loop", 4.0, 1, 0, 0, 0, 0);
+    actor_lspdInterior[4] = CreateDynamicActor(280, 1653.4335, -1374.9639, 1962.4168, 180.0000, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // Cop taking mug shot
+    ApplyDynamicActorAnimation(actor_lspdInterior[4], "CAMERA", "picstnd_take", 4.0, 1, 0, 0, 0, 0);
+    actor_lspdInterior[5] = CreateDynamicActor(0, 1653.5098, -1377.3226, 1962.5168, 0.0000, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // CJ getting mug shot taken
+    actor_lspdInterior[6] = CreateDynamicActor(31, 1625.1361, -1384.8080, 1962.4068, 0.0000, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // Old woman waiting
+    ApplyDynamicActorAnimation(actor_lspdInterior[6], "MISC", "SEAT_LR", 4.0, 1, 0, 0, 0, 0);
 
 	// Objects
 	object_lspdInterior[0] = CreateDynamicObject(18981, 1631.1151, -1348.8780, 1961.0068, 0.0000, 90.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
