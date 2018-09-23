@@ -41,11 +41,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Objects
-
-    object_phoneBooths[0] = CreateDynamicObject(1216, 1484.00000, -1022.20001, 23.50000,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_phoneBooths[1] = CreateDynamicObject(1216, 1480.09998, -1022.20001, 23.50000,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_phoneBooths[2] = CreateDynamicObject(1216, 1423.17529, -980.62933, 1639.50659,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Telefonzelle 1
-    object_phoneBooths[3] = CreateDynamicObject(1216, 1418.03040, -980.65070, 1639.50659,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Telefonzelle 2
+    object_phoneBooths[0] = CreateDynamicObject(1216, 1493.8215, -1022.1099, 23.5000,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    object_phoneBooths[1] = CreateDynamicObject(1216, 1430.7398, -1022.1299, 23.5000,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    // object_phoneBooths[2] = CreateDynamicObject(1216, 1423.17529, -980.62933, 1639.50659,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Telefonzelle 1
+    // object_phoneBooths[3] = CreateDynamicObject(1216, 1418.03040, -980.65070, 1639.50659,   0.00000, 0.00000, 0.00000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Telefonzelle 2
     object_phoneBooths[4] = CreateDynamicObject(1216, 826.1378, -1356.4941, 13.1284, 0.0000,    0.0000, -179.5998, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //phonebooth1
 
     //Telefonzellen SF und LV
@@ -99,5 +98,5 @@ hook OnGameModeInit() {
     object_phoneBooths[51] = CreateDynamicObject(1216, 1038.80969, -1932.43811, 12.63050,   0.00000, 0.00000, 90.96000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_phoneBooths[52] = CreateDynamicObject(1216, 103.92840, -1522.48511, 6.59400,   0.00000, 0.00000, -63.24000, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_phoneBooths[53] = CreateDynamicObject(1216, 44.19660, -219.07460, 1.18550,   0.00000, 0.00000, -182.46001, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_phoneBooths[54] = CreateDynamicObject(1216,1443.28137200,-989.31127900,1639.38781700,0.00000000,0.00000000,-89.99998128, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //object(67)
+    // object_phoneBooths[54] = CreateDynamicObject(1216,1443.28137200,-989.31127900,1639.38781700,0.00000000,0.00000000,-89.99998128, VW_MAIN, MAPS_PHONEBOOTHS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //object(67)
 }

@@ -4,8 +4,8 @@
 #define MAPS_SHISHABAR_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 100.0;
+static Float:DRAWDISTANCE   = 90.0;
 
 // Shisha bar points
 #define SHISHABAR_ENTER_COORDS      1786.6959, -1299.6388, 13.4341
