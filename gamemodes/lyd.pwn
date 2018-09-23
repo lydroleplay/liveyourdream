@@ -1191,8 +1191,8 @@ new const g_FahrzeugVerleihFahrzeuge[][e_FahrzeugVerleihFahrzeuge] = {
 	{752.2538,-1333.4092,13.2859,228.0755,426,2600, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,1}, //Stations am: Neulingsspawn
 
 	{1461.9940,-2418.8147,14.0028,270.8374,593,17800, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
-	{1483.3928,-2403.3188,13.5522,181.1372,469,24800, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
-	{1474.4540,-2403.1062,13.7592,180.8858,487,26100, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
+	{1490.1938,-2400.0662,13.5416,181.1372,469,24800, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
+	{1481.1306,-2399.7166,13.7120,180.8858,487,26100, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
 	{1495.7388,-2434.8101,14.4736,92.7344,519,41000, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
 	{1462.8730,-2435.1128,14.1073,274.7881,513,41000, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
 	{1494.4330,-2414.5166,14.9590,91.5051,511,41000, Text3D:INVALID_3DTEXT_ID ,INVALID_VEHICLE_ID,2}, //Flugverleih
@@ -4015,8 +4015,6 @@ new combines[6];
 new zugb[3];
 new pizzacar[8];
 new Text3D:t3dBus[4];
-new flug[4];
-new truck[18];
 new kfzcars[6];
 new bauarb[8];
 new schiff[5];
@@ -4226,7 +4224,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\misc>
 #include <maps\phoneBooths>
 #include <maps\wheelmanBase>
-//#include <maps\lsAirport>
+#include <maps\airportLs>
+#include <maps\truckerBase>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -4409,11 +4408,11 @@ public MinuteTimer()
 	for( i=0;i<sizeof(bus);i++){
 		gGas[bus[i]] = GetMaxTank(bus[i]);
 	}
-	for( i=0;i<sizeof(flug);i++){
-		gGas[flug[i]] = GetMaxTank(flug[i]);
+	for( i=0;i<sizeof(vehicle_airportLs);i++){
+		gGas[vehicle_airportLs[i]] = GetMaxTank(vehicle_airportLs[i]);
 	}
-	for( i=0;i<sizeof(truck);i++){
-		gGas[truck[i]] = GetMaxTank(truck[i]);
+	for( i=0;i<sizeof(vehicle_truckerBase);i++){
+		gGas[vehicle_truckerBase[i]] = GetMaxTank(vehicle_truckerBase[i]);
 	}
 	for( i=0;i<sizeof(schiff);i++){
 		gGas[schiff[i]] = GetMaxTank(schiff[i]);
@@ -4882,32 +4881,6 @@ OnGameModeInit2() {
 	t3dBus[2] = Text3D:INVALID_3DTEXT_ID;
 	t3dBus[3] = Text3D:INVALID_3DTEXT_ID;
 
-	//Pilot
-	flug[0] =AddStaticVehicleEx(553,1989.80004883,-2382.10009766,15.80000019,90.00000000,0,1,60*10); //Nevada
-	flug[1] =AddStaticVehicleEx(553,1874.40002441,-2288.69995117,15.80000019,270.00000000,0,1,60*10); //Nevada
-	flug[2] =AddStaticVehicleEx(553,1989.50000000,-2315.29980469,15.80000019,90.00000000,0,1,60*10); //Nevada
-	flug[3] =AddStaticVehicleEx(553,1922.39941406,-2245.09960938,15.80000019,180.00000000,0,1,60*10); //Nevada
-
-	//Trucker
-	truck[0] = AddStaticVehicleEx(515,111.9806,-271.2436,2.1045,90.0622,206,1,60*10); // neue trucker base
-	truck[1] = AddStaticVehicleEx(515,111.9751,-263.3154,2.1953,90.0618,206,1,60*10); // neue trucker base
-	truck[2] = AddStaticVehicleEx(515,111.9673,-256.0652,2.2001,90.0614,206,1,60*10); // neue trucker base
-	truck[3] = AddStaticVehicleEx(515,111.9596,-248.9178,2.2002,90.0614,206,1,60*10); // neue trucker base
-	truck[4] = AddStaticVehicleEx(515,111.9519,-241.7516,2.2002,90.0614,206,1,60*10); // neue trucker base
-	truck[5] = AddStaticVehicleEx(435,124.0474,-271.2945,2.2203,90.1387,252,1,60*10); // neue trucker base
-	truck[6] = AddStaticVehicleEx(435,123.9199,-263.5539,2.1730,90.0605,252,1,60*10); // neue trucker base
-	truck[7] = AddStaticVehicleEx(435,123.8529,-256.0350,2.1798,90.1762,252,1,60*10); // neue trucker base
-	truck[8] = AddStaticVehicleEx(435,123.9129,-248.8182,2.2209,90.1592,252,1,60*10); // neue trucker base
-	truck[9] = AddStaticVehicleEx(435,123.8932,-241.5547,2.2267,90.1596,252,1,60*10); // neue trucker base
-	truck[10] = AddStaticVehicleEx(584,91.2023,-286.9339,2.7498,359.6140,252,1,60*10); // neue trucker base
-	truck[11] = AddStaticVehicleEx(584,78.0325,-286.9543,2.7593,0.0933,252,1,60*10); // neue trucker base
-	truck[12] = AddStaticVehicleEx(584,52.0501,-286.0643,2.8832,0.1037,252,1,60*10); // neue trucker base
-	truck[13] = AddStaticVehicleEx(584,65.0615,-286.4729,2.7277,0.1350,252,1,60*10); // neue trucker base
-	truck[14] = AddStaticVehicleEx(514,65.0370,-274.7122,2.1284,0.0764,252,1,60*10); // neue trucker base
-	truck[15] = AddStaticVehicleEx(514,52.4016,-274.7278,2.2399,0.0784,252,1,60*10); // neue trucker base
-	truck[16] = AddStaticVehicleEx(514,77.4810,-274.7199,2.0988,0.0407,252,1,60*10); // neue trucker base
-	truck[17] = AddStaticVehicleEx(514,90.6049,-274.7139,2.1904,0.0407,252,1,60*10); // neue trucker base
-
 	//Schiffe
 	schiff[0] = AddStaticVehicleEx(453,2541.6123,-2257.8533,-0.3546,179.7160,1,1,60*10); // schiff
 	schiff[1] = AddStaticVehicleEx(453,2489.6853,-2268.3591,-0.3919,267.9600,1,1,60*10); // schiff
@@ -4971,14 +4944,14 @@ OnGameModeInit2() {
 		SetVehicleToRespawn( zugb[i] );
 	    aiVehicles[ zugb[i] ] = VEH_ZUGB;
 	}
-	for(new i=0;i<sizeof( flug );i++) {
-	    aiVehicles[ flug[i] ] = VEH_FLUG;
+	for(new i=0;i<sizeof(vehicle_airportLs);i++) {
+	    aiVehicles[ vehicle_airportLs[i] ] = VEH_FLUG;
 	}
-	for(new i=0;i<sizeof(truck);i++)
+	for(new i=0;i<sizeof(vehicle_truckerBase);i++)
 	{
-		SetVehicleNumberPlate(truck[i], COLOR_HEX_BLACK"TRUCKER");
-		SetVehicleToRespawn(truck[i]);
-		aiVehicles[ truck[i] ] = VEH_TRUCK;
+		SetVehicleNumberPlate(vehicle_truckerBase[i], COLOR_HEX_BLACK "TRUCKER");
+		SetVehicleToRespawn(vehicle_truckerBase[i]);
+		aiVehicles[ vehicle_truckerBase[i] ] = VEH_TRUCK;
 	}
 	for(new i=0;i<sizeof(vehicle_busStation);i++)
 	{
@@ -5542,7 +5515,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 2008.1722,1169.3364,10.8203, 0);//Werbeagentur LV
 	CreateDynamicPickup(1239, 1, 2160.4111,-98.0815,2.8239, 0);//Gangjail Point
 	CreateDynamicPickup(1239, 1, 1234.3380,-1823.9462,13.5909, 0);//Auto. Fahrschule
-	CreateDynamicPickup(1239, 1, 1819.9427,-2400.1108,13.5547, 0);//Repair am Flughafen Los Santos
 	// CreateDynamicPickup(1239, 1, 2288.5466,2444.9841,3.2734, 0);//Staatsrepair von LVPD
 	// CreateDynamicPickup(1239, 1, 621.3207,-584.6555,17.2330, 0);//Staatsrepair von Zollamt
 	CreateDynamicPickup(1239, 1, 1248.3843,-1833.8750,13.3930, 0);//Staatsrepair von Army
@@ -5630,8 +5602,6 @@ OnGameModeInit2() {
 
 	//Job Skinpoints
 	CreateDynamicPickup(1275, 1,-90.4999,-10.3628,3.1094, 0);//Bauer
-	CreateDynamicPickup(1275, 1,43.5684,-261.4508,1.8305, 0);//Trucker
-	CreateDynamicPickup(1275, 1,1893.2450,-2328.8833,13.5469, 0);//Pilot
 	CreateDynamicPickup(1275, 1,2046.2723,-1913.2064,13.5469, 0);//Stra�enreiniger
 	CreateDynamicPickup(1275, 1,2118.6157,-2085.0828,13.5544, 0);//M�llmann
 
@@ -5685,7 +5655,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 207.7187,-100.5032,1005.2578, 37);//Binco (GS)
 	CreateDynamicPickup(1239, 1, 1702.9427,-1470.3704,13.5469, 0);//MotorradfÃƒÂ¤rbe point
 	CreateDynamicPickup(1239, 1, 1763.4915,2080.2959,10.8203, 0);//AutofÃƒÂ¤rbe point
-	CreateDynamicPickup(1239, 1, 1798.4768,-2423.4924,13.5547, 0);//FlugzeugfÃƒÂ¤rbe point
 	CreateDynamicPickup(1275, 1, 2316.5325,-1010.7850,1054.7188, 0);//Club Shop
 	CreateDynamicPickup(1239, 1, 2313.3645,-1013.3300,1050.2109, 0);//GetrÃƒÂ¤nke Clubvilla in Los Santos
 	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//GetrÃƒÂ¤nke Clubvilla in Las Venturas
@@ -5708,7 +5677,6 @@ OnGameModeInit2() {
 	// CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 621.3207,-584.6555,17.2330, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1248.3843,-1833.8750,13.3930, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 1138.9730,-1820.9103,33.6354, 10.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Flugzeug-Reparatur\n"COLOR_HEX_WHITE"Tippe /Flugzeugrepair", COLOR_WHITE, 1819.9427,-2400.1108,13.5547, 20.0);
 
 	//Fahrtticket 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"FahrgeschÃƒÂ¤ft: Fallturm\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 374.6658,-2121.6416,7.8820, 10.0);//Fallturm
@@ -5721,8 +5689,6 @@ OnGameModeInit2() {
 
 	//Job Skin 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Bauern\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, -90.4999,-10.3628,3.1094, 25.0);//BAUER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Trucker\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 43.5684,-261.4508,1.8305, 25.0);//TRUCKER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Piloten\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1893.2450,-2328.8833,13.5469, 25.0);//PILOT
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r StraÃƒÅ¸enreiniger\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2046.2723,-1913.2064,13.5469, 25.0);//STRAÃƒÅ¸ENREINIGER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r MÃƒÂ¼llmann\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2118.6157,-2085.0828,13.5544, 25.0);//MÃƒÅ“LLMANN
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung fÃƒÂ¼r Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 831.2045,865.6005,12.5911, 25.0);//BAUARBEITER
@@ -5811,7 +5777,7 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Motorradlackiererei\n"COLOR_HEX_ORANGE"Preis: 2.000$\n"COLOR_HEX_WHITE"Tippe /Motorradfarbe", COLOR_WHITE, 1702.9427,-1470.3704,13.5469, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Autolackiererei\n"COLOR_HEX_ORANGE"Preis: 1.500$\n"COLOR_HEX_WHITE"Tippe /Autofarbe", COLOR_WHITE, 1763.4915,2080.2959,10.8203, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Abbauwerkstatt\nfÃƒÂ¼r Auto- u. Motorradtuning\n"COLOR_HEX_ORANGE"Preis: 3.000$\n"COLOR_HEX_WHITE"Tippe /Tuningabbauen", COLOR_WHITE, 1782.8275,-1702.7240,13.5096, 20.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Flugzeuglackiererei\n"COLOR_HEX_ORANGE"Preis: 5.000$\n"COLOR_HEX_WHITE"Tippe /Flugzeugfarbe", COLOR_WHITE, 1798.4768,-2423.4924,13.5547, 20.0);
+
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Entladungspunkt\n"COLOR_HEX_WHITE"Tippe /Paketentladen", COLOR_WHITE, -1857.4130,-1618.9630,21.9022, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Entladungspunkt\n"COLOR_HEX_WHITE"Tippe /Paketentladen", COLOR_WHITE, -258.9534,-2181.9905,29.0150, 10.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Kein Fahrlehrer da?\n"COLOR_HEX_WHITE"Tippe /Ruflehrer\n"COLOR_HEX_GRAU"----------\n"COLOR_HEX_YELLOW"Automatische Fahrschule\n"COLOR_HEX_WHITE"Tippe /Fahrpruefung", COLOR_WHITE, 1234.3380,-1823.9462,13.5909, 40.0);
@@ -6169,7 +6135,6 @@ public OnPlayerConnect(playerid)
 	SetPlayerMapIcon(playerid, 2, 1461.5116,-1019.0845,24.5987, 52, 0, 0);//Bank
 	SetPlayerMapIcon(playerid, 6, 550.6537,-1264.4824,16.9693, 55, 0, 0);//Grottis
 	SetPlayerMapIcon(playerid, 7, 1238.0809,-1814.2310,13.4292, 19, 0, 0);//Fahrschule
-    SetPlayerMapIcon(playerid, 11, 1841.7158,-2568.3242,13.5469, 55, 0, 0);//Flugzeughaus
     SetPlayerMapIcon(playerid, 13, 1038.5304,-1339.6097,13.7266, 17, 0, 0);//Donatladen
     SetPlayerMapIcon(playerid, 14, 1833.2742,-1681.8307,13.4802, 49, 0, 0);//Bar
     SetPlayerMapIcon(playerid, 15, 1006.6136,-942.5633,42.0423, 42, 0, 0);//Tankstelle
@@ -7643,7 +7608,7 @@ CMD:suchatm(playerid)
 
 CMD:flugzeugrepair(playerid)
 {
-	if(IsPlayerInRangeOfPoint(playerid,10.0,1819.9427,-2400.1108,13.5547))
+	if(IsPlayerInRangeOfPoint(playerid,10.0, AIRPORTLS_REPAIR_POINT))
 	{
 		if(IsAPlane(GetVehicleModel(GetPlayerVehicleID(playerid))))
 		{
@@ -19877,8 +19842,8 @@ stock RespawnJobCars(jobID) {
 	switch (jobID) {
 		case 1:		{ for (new i = 0; i < sizeof(combines); i++) if (!IsVehicleOccupied(combines[i])) SetVehicleToRespawn(combines[i]); }
 		case 2:		{ for (new i = 0; i < sizeof(vehicle_busStation); i++) if (!IsVehicleOccupied(vehicle_busStation[i])) SetVehicleToRespawn(vehicle_busStation[i]); }
-		case 3:		{ for (new i = 0; i < sizeof(truck); i++) if (!IsVehicleOccupied(truck[i])) SetVehicleToRespawn(truck[i]); }
-		case 4:		{ for (new i = 0; i < sizeof(flug); i++) if (!IsVehicleOccupied(flug[i])) SetVehicleToRespawn(flug[i]); }
+		case 3:		{ for (new i = 0; i < sizeof(vehicle_truckerBase); i++) if (!IsVehicleOccupied(vehicle_truckerBase[i])) SetVehicleToRespawn(vehicle_truckerBase[i]); }
+		case 4:		{ for (new i = 0; i < sizeof(vehicle_airportLs); i++) if (!IsVehicleOccupied(vehicle_airportLs[i])) SetVehicleToRespawn(vehicle_airportLs[i]); }
 		case 5:		{ for (new i = 0; i < sizeof(kfzcars); i++) if (!IsVehicleOccupied(kfzcars[i])) SetVehicleToRespawn(kfzcars[i]); }
 		case 7:		{ for (new i = 0; i < sizeof(reinigung); i++) if (!IsVehicleOccupied(reinigung[i])) SetVehicleToRespawn(reinigung[i]); }
 		case 8:		{ for (new i = 0; i < sizeof(muell); i++) if (!IsVehicleOccupied(muell[i])) SetVehicleToRespawn(muell[i]); }
@@ -22263,11 +22228,11 @@ CMD:startflug(playerid)
 	    return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
 	    //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
 	}
-	for(new i=0;i<sizeof(flug);i++)
+	for(new i=0;i<sizeof(vehicle_airportLs);i++)
 	{
 	    new vID = GetPlayerVehicleID(playerid);
 		if(!(GetPlayerState(playerid) == PLAYER_STATE_DRIVER))return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Flugzeug.");
-		if(vID == flug[i])
+		if(vID == vehicle_airportLs[i])
 		{
 			KillTimer(pilotwait[playerid]);
 			pilotwait[playerid] = INVALID_TIMER_ID;
@@ -22799,16 +22764,16 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			    pjvar=1;
 			}
 		}
-		for(new jl;jl<sizeof(truck);jl++)
+		for(new jl;jl<sizeof(vehicle_truckerBase);jl++)
 		{
-			if(vehicleid==truck[jl])
+			if(vehicleid==vehicle_truckerBase[jl])
 			{
 			    pjvar=1;
 			}
 		}
-		for(new jk;jk<sizeof(flug);jk++)
+		for(new jk;jk<sizeof(vehicle_airportLs);jk++)
 		{
-			if(vehicleid==flug[jk])
+			if(vehicleid==vehicle_airportLs[jk])
 			{
 			    pjvar=1;
 			}
@@ -22956,16 +22921,16 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 			    UnLockCar(vehicleid);
 			}
 		}
-	    for(new k;k<sizeof(flug);k++)
+	    for(new k;k<sizeof(vehicle_airportLs);k++)
 	    {
-			if(vehicleid==flug[k])
+			if(vehicleid==vehicle_airportLs[k])
 			{
 			    UnLockCar(vehicleid);
 			}
 		}
-	    for(new j;j<sizeof(truck);j++)
+	    for(new j;j<sizeof(vehicle_truckerBase);j++)
 	    {
-			if(vehicleid==truck[j])
+			if(vehicleid==vehicle_truckerBase[j])
 			{
 			    UnLockCar(vehicleid);
 			}
@@ -23528,9 +23493,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 		else if( aiVehicles[vehicleid] == VEH_FLUG ) {
-			for(new i=0;i<sizeof(flug);i++)
+			for(new i=0;i<sizeof(vehicle_airportLs);i++)
 			{
-			    if(vehicleid == flug[i])
+			    if(vehicleid == vehicle_airportLs[i])
 			    {
 					for(new pID=0;pID<MAX_PLAYERS;pID++)
 					{
@@ -23560,9 +23525,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 		else if( aiVehicles[vehicleid] == VEH_TRUCK ) {
-			for(new i=0;i<sizeof(truck);i++)
+			for(new i=0;i<sizeof(vehicle_truckerBase);i++)
 			{
-				if(vehicleid == truck[i])
+				if(vehicleid == vehicle_truckerBase[i])
 				{
 					for(new pID=0;pID<MAX_PLAYERS;pID++)
 					{
@@ -24195,11 +24160,11 @@ public OnPlayerWaitPilot(playerid)
 		KillTimer(pilotwait[playerid]);
 		pilotwait[playerid] = INVALID_TIMER_ID;
 
-		for(new i=0;i<sizeof(flug);i++)
+		for(new i=0;i<sizeof(vehicle_airportLs);i++)
 		{
 		    new vID = GetPlayerVehicleID(playerid);
      		if(!(GetPlayerState(playerid) == PLAYER_STATE_DRIVER))return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Flugzeug!");
-			if(vID == flug[i])
+			if(vID == vehicle_airportLs[i])
 			{
 				new pilotlog[128];
 				new ort[24];
@@ -25608,10 +25573,10 @@ public OnPlayerEnterCheckpoint(playerid)
 	//Pilot
 	else if(CP_PILOT1 <= pCheckpoint[playerid] <= CP_PILOT4)
 	{
-	    for(new i=0;i<sizeof(flug);i++)
+	    for(new i=0;i<sizeof(vehicle_airportLs);i++)
 	    {
 	        new vID = GetPlayerVehicleID(playerid);
-			if(vID == flug[i])
+			if(vID == vehicle_airportLs[i])
 			{
 			    PilotTime[playerid] = 0;
 			    FreezePlayer(playerid);
@@ -26511,10 +26476,10 @@ public OnPlayerEnterCheckpoint(playerid)
 	//Trucker
 	else if(pCheckpoint[playerid] == CP_TRUCK1 || pCheckpoint[playerid] == CP_TRUCK2)
 	{
-		for(new i=0;i<sizeof(truck);i++)
+		for(new i=0;i<sizeof(vehicle_truckerBase);i++)
 		{
 			new vID = GetPlayerVehicleID(playerid);
-			if(vID == truck[i])
+			if(vID == vehicle_truckerBase[i])
 			{
 				if(pCheckpoint[playerid] == CP_TRUCK1)
 				{
@@ -51585,7 +51550,7 @@ COMMAND:autofarbe(playerid,params[]) {
 	return 1;
 }
 COMMAND:flugzeugfarbe(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,5.0,1798.4768,-2423.4924,13.5547)) {
+	if( !IsPlayerInRangeOfPoint(playerid,5.0, AIRPORTLS_PAINTJOB_POINT)) {
 		return SendClientMessage(playerid,COLOR_GREEN,"Du bist nicht an einer Flugzeuglackiererei!");
 	}
 	new
@@ -60627,8 +60592,8 @@ new const g_JobSkins[][e_JobSkins] = {
 	// X    Y       Z     Job , SkinID
 	{-90.4999,  -10.3628,  3.1094,  1, 161 }, //Bauer
 	{BUSSTATION_JOBSKIN_POINT,	2, 255 }, //Busfahrer
-	{43.5684,  -261.4508,  1.8305,	3, 32 }, //Trucker
-	{1893.2450,  -2328.8833,  13.5469,	4, 61 }, //Pilot
+	{TRUCKERBASE_JOBSKIN_POINT,	3, 32 }, //Trucker
+	{AIRPORTLS_JOBSKIN_POINT,	4, 61 }, //Pilot
 	{-77.6301,  -1135.9799,  1.0781,  5, 50 }, //Mechaniker
 	{ LSPD_INTERIOR_LAWYER_SKIN_POINT,  6, 57 }, // Lawyer (Anwalt)
 	{2046.2723,  -1913.2064,  13.5469,  7, 260 }, //Stra�enreiniger
