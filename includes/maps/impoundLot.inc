@@ -27,9 +27,11 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 1440, 957.9688, -1336.4531, 13.0313, 0.25);
     RemoveBuildingForPlayer(playerid, 1283, 951.4453, -1327.9531, 15.4922, 0.25);
     RemoveBuildingForPlayer(playerid, 5818, 954.6875, -1305.7734, 30.1406, 0.25);
-
+    
     // Hangars on the old base
-    RemoveBuildingForPlayer(playerid, 3776, 873.6336, -1202.7254, 16.9765, 100.0);
+    RemoveBuildingForPlayer(playerid, 3776, 831.960, -1191.140, 25.039, 0.250);
+    RemoveBuildingForPlayer(playerid, 3776, 868.132, -1191.140, 25.039, 0.250);
+    RemoveBuildingForPlayer(playerid, 3776, 902.335, -1191.140, 25.039, 0.250);
 }
 
 hook OnGameModeInit() {

@@ -153,8 +153,8 @@ enum
 	VW_LSPDINTERIOR,
 	VW_FBIINTERIOR,
 	VW_YAKUZAINTERIOR,
-	VW_LCNINTERIOR
-
+	VW_LCNINTERIOR,
+	VW_GOVERNMENTINTERIOR
 }
 
 new gSQL;
@@ -1620,7 +1620,7 @@ stock bool:IsTUVNeeded(distance) {
 #define 	ColorDialog4    1215
 #define 	ColorDialog5    1216
 #define     DIALOG_SECURECODE_REGISTER 1217
-#define     DIALOG_VISUM    1218
+//#define     DIALOG_VISUM    1218
 #define     DIALOG_WANTEDTICKET 1219
 #define     DIALOG_FSLISTE  1220
 #define     DIALOG_TABMENU_ADM 1221
@@ -2409,17 +2409,6 @@ enum e_FahrzeugBlitzer {
 }
 
 new aiVehicleBlitzer[MAX_VEHICLES][e_FahrzeugBlitzer];
-
-enum e_Visum {
-	V_iPrice,
-	V_sStadt[18]
-};
-
-new const g_Visum[][e_Visum] = {
-	{1000,"Los Santos"},
-	{1000,"San Fierro"},
-	{1000,"Las Venturas"}
-};
 
 enum e_WantedTicket {
 	WT_iPoints,
@@ -3747,7 +3736,6 @@ enum SpielerDaten
 	PlayerText:ptPayDay,
 	pAutoknackerExtraLohn,
 	pSSteuer,
-	pVisum,
 	pHelm,
 	pExperte,
 	unixAFKNotice,
@@ -3919,7 +3907,6 @@ new ZettelPreis[MAX_PLAYERS];
 new TazerTime[MAX_PLAYERS];
 new Tazered[MAX_PLAYERS];
 new Cuffed[MAX_PLAYERS];
-new regtor[1];
 new tresortuer[1];
 new Refueling[MAX_PLAYERS];
 new RefuelType[MAX_PLAYERS];
@@ -4041,20 +4028,18 @@ new ballascars[17];
 new grovecars[16];
 new fscars[22];
 new fsacars[2];
-new staatcars[24];
 new aztcars[18];
 new vagoscars[16];
 new lvpdcars[30];
 new wheelcars[14];
 new armycars[1];
-new terrorcars[16];
 new triadencars[17];
 new outlawzscars[17];
 new zollcars[9];
 
 new gSteuern;
 
-new g_aiNoDM[4];
+new g_aiNoDM[5];
 new g_waiNoDM[2];
 new g_iWantedHackerZone;
 new g_iAlhambra;
@@ -4207,6 +4192,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\busStops>
 #include <maps\hitmanBase>
 #include <maps\governmentExterior>
+#include <maps\governmentInterior>
 #include <maps\bikeRental>
 #include <maps\noobSpawn>
 #include <maps\taxiStations>
@@ -4232,6 +4218,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\lcnInterior>
 #include <maps\tuev>
 #include <maps\bikeDealership>
+#include <maps\terrorBase>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -4788,6 +4775,7 @@ OnGameModeInit2() {
 	g_aiNoDM[1] = CreateDynamicRectangle(1284.0, -1776.0, 1157.0, -1846.0, .interiorid = -1); // Fahrschule
 	g_aiNoDM[2] = CreateDynamicRectangle(1614.3436, -1331.6265, 1671.4816, -1403.0798, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // LSPD Interior
 	g_aiNoDM[3] = CreateDynamicRectangle(882.1005, -1438.1812, 965.1881, -1483.2373, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Cityhall Interior
+	g_aiNoDM[4] = CreateDynamicRectangle(1400.2966, -1742.9885, 1558.1973, -1804.2220, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall Exterior
 
 	g_waiNoDM[0] = CreateDynamicRectangle( 1602.0 , -1864.0 , 1419.0 , -1581.0, .interiorid = -1 );
 	g_waiNoDM[1] = CreateDynamicRectangle( 788.0 , -1388.0 , 849.0 , -1331.0, .interiorid = -1 );
@@ -5079,31 +5067,6 @@ OnGameModeInit2() {
 		SetVehicleHealth(vehicle_lspdExterior[i], 2000.0);
 	}
 
-	staatcars[0] = AddStaticVehicleEx(487,1114.5248,-2053.9150,74.6203,270.0741,1,1,-1); // Maverick2R
-	staatcars[1] = AddStaticVehicleEx(487,1115.0560,-2019.9536,74.5852,270.1370,1,1,-1); // Maverick1R
-	staatcars[2] = AddStaticVehicleEx(447,1143.4955,-2028.3813,69.0234,231.9276,1,1,-1); // SeaSparrowR1
-	staatcars[3] = AddStaticVehicleEx(447,1142.5803,-2051.8494,69.0123,325.6711,1,1,-1); // SeaSparrowR2
-	staatcars[4] = AddStaticVehicleEx(409,1245.9902,-2038.6270,59.6193,269.3471,1,1,-1); // StretchR1
-	staatcars[5] = AddStaticVehicleEx(409,1245.9641,-2032.9684,59.6148,270.0976,1,1,-1); // StretchR2
-	staatcars[6] = AddStaticVehicleEx(575,1245.0320,-2027.0718,59.4587,270.3821,1,1,-1); // BroadwayR1
-	staatcars[7] = AddStaticVehicleEx(575,1244.8904,-2021.8790,59.4947,270.0905,1,1,-1); // BroadwayR2
-	staatcars[8] = AddStaticVehicleEx(545,1244.5935,-2017.5416,59.6599,269.9887,1,1,-1); // HustlerR1
-	staatcars[9] = AddStaticVehicleEx(545,1244.6661,-2013.3552,59.6750,270.3156,1,1,-1); // HustlerR2
-	staatcars[10] = AddStaticVehicleEx(445,1249.3820,-2009.3279,59.6004,180.5011,1,1,-1); // AdmiralR1
-	staatcars[11] = AddStaticVehicleEx(421,1253.9259,-2009.3246,59.4728,179.7888,1,1,-1); // WashingtonR1
-	staatcars[12] = AddStaticVehicleEx(421,1258.5281,-2009.4188,59.3482,181.6844,1,1,-1); // WashingtonR2
-	staatcars[13] = AddStaticVehicleEx(580,1263.5603,-2009.4227,59.1374,180.1492,1,1,-1); // StaffordR2
-	staatcars[14] = AddStaticVehicleEx(580,1268.4791,-2009.4064,59.0037,180.5591,1,1,-1); // StaffordR1
-	staatcars[15] = AddStaticVehicleEx(523,1278.5439,-2009.7267,58.4581,88.3075,1,1,-1); // HPVR1
-	staatcars[16] = AddStaticVehicleEx(523,1278.5181,-2013.3505,58.4571,89.3358,1,1,-1); // HPVR3
-	staatcars[17] = AddStaticVehicleEx(523,1278.6244,-2011.5990,58.4619,87.7739,1,1,-1); // HPVR2
-	staatcars[18] = AddStaticVehicleEx(490,1277.6956,-2017.0865,59.0840,88.1104,0,0,-1); // FBIRancherR1
-	staatcars[19] = AddStaticVehicleEx(490,1277.6106,-2023.4589,59.0788,90.0643,0,0,-1); // FBIRancherR2
-	staatcars[20] = AddStaticVehicleEx(599,1278.0114,-2029.0730,59.2017,89.4257,0,0,-1); // PDRangerR1
-	staatcars[21] = AddStaticVehicleEx(599,1278.0083,-2034.7952,59.2205,91.0731,0,0,-1); // PDRangerR2
-	staatcars[22] = AddStaticVehicleEx(596,1277.4084,-2040.2709,58.7408,88.5071,1,0,-1); // PDCarR2
-	staatcars[23] = AddStaticVehicleEx(596,1277.0834,-2045.0055,58.7637,88.9386,1,0,-1); // PDCarR1
-
 	for (new i; i < sizeof(vehicle_fbiExterior); i++) {
 		SetVehicleHealth(vehicle_fbiExterior[i],2000.0);
 	}
@@ -5286,23 +5249,6 @@ OnGameModeInit2() {
 		SetVehicleHealth(armycars[i],2000.0);
 	}
 
-	terrorcars[0] = AddStaticVehicleEx(468,-793.5461,1606.8418,26.6697,232.6591,45,132,-1); // nrg1
-	terrorcars[1] = AddStaticVehicleEx(468,-793.6014,1605.1918,26.6710,230.6999,6,6,-1); // nrg2
-	terrorcars[2] = AddStaticVehicleEx(468,-789.8359,1606.4724,26.7862,238.1966,12,12,-1); // sanchez1
-	terrorcars[3] = AddStaticVehicleEx(468,-790.1686,1604.6023,26.7861,236.2739,0,0,-1); // sanchez2neu
-	terrorcars[4] = AddStaticVehicleEx(560,-786.4879,1605.6173,26.5718,179.8917,163,163,-1); // sultan1
-	terrorcars[5] = AddStaticVehicleEx(560,-783.1884,1605.7771,26.5744,180.0599,131,131,-1); // sultan2
-	terrorcars[6] = AddStaticVehicleEx(579,-779.9321,1605.4313,27.0454,181.6307,0,0,-1); // huntley1
-	terrorcars[7] = AddStaticVehicleEx(579,-776.4337,1605.4574,27.0494,181.1379,1,1,-1); // huntley2
-	terrorcars[8] = AddStaticVehicleEx(554,-773.0320,1605.4667,26.9489,180.0479,4,4,-1); // buffalo1
-	terrorcars[9] = AddStaticVehicleEx(402,-769.5782,1605.4597,26.9207,179.8260,87,87,-1); // sabre1
-	terrorcars[10] = AddStaticVehicleEx(475,-764.3019,1599.6383,26.6535,86.9992,81,81,-1); // cheetah1
-	terrorcars[11] = AddStaticVehicleEx(526,-764.6872,1596.2074,26.8311,87.7339,77,77,-1); // bullet1
-	terrorcars[12] = AddStaticVehicleEx(526,-764.9205,1592.8184,26.8759,86.6844,123,123,-1); // infi1
-	terrorcars[13] = AddStaticVehicleEx(542,-765.1465,1589.6088,26.8759,86.8303,17,17,-1); // infi2
-	terrorcars[14] = AddStaticVehicleEx(476,-780.1793,1635.1915,27.7771,268.5923,145,0,-1); // rustler1
-	terrorcars[15] = AddStaticVehicleEx(487,-781.8011,1618.2927,27.3038,270.0000,97,23,-1); // heli
-
 	outlawzscars[0] = AddStaticVehicleEx(411,-33.1031,-273.4972,5.1499,271.3550,219,219,-1); // InfernusO1
 	outlawzscars[1] = AddStaticVehicleEx(411,-33.0603,-276.7014,5.1499,269.5479,219,219,-1); // InfernusO2
 	outlawzscars[2] = AddStaticVehicleEx(541,-33.0257,-280.0908,5.0478,268.1004,219,219,-1); // BulletO
@@ -5355,11 +5301,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(vehicle_lspdExterior[i]);
 		aiVehicles[vehicle_lspdExterior[i]] = VEH_LSPDCARS;
 	}
-	for(new i=0;i<sizeof(staatcars);i++)
+	for(new i=0;i<sizeof(vehicle_governmentExterior);i++)
 	{
-		SetVehicleNumberPlate(staatcars[i], COLOR_HEX_BLACK"STAAT");
-        SetVehicleToRespawn(staatcars[i]);
-		aiVehicles[ staatcars[i] ] = VEH_STAATCARS;
+		SetVehicleNumberPlate(vehicle_governmentExterior[i], COLOR_HEX_BLACK"STAAT");
+        SetVehicleToRespawn(vehicle_governmentExterior[i]);
+		aiVehicles[ vehicle_governmentExterior[i] ] = VEH_STAATCARS;
 	}
 	for(new i=0;i<sizeof(vehicle_samdExterior);i++)
 	{
@@ -5445,11 +5391,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(zollcars[i]);
 		aiVehicles[ zollcars[i] ] = VEH_ZOLLCARS;
 	}
-	for(new i=0;i<sizeof(terrorcars);i++)
+	for(new i=0;i<sizeof(vehicle_terrorBase);i++)
 	{
-		SetVehicleNumberPlate(terrorcars[i], COLOR_HEX_BLACK"SF-8473");
-        SetVehicleToRespawn(terrorcars[i]);
-		aiVehicles[ terrorcars[i] ] = VEH_TERRORCARS;
+		SetVehicleNumberPlate(vehicle_terrorBase[i], COLOR_HEX_BLACK"SF-8473");
+        SetVehicleToRespawn(vehicle_terrorBase[i]);
+		aiVehicles[ vehicle_terrorBase[i] ] = VEH_TERRORCARS;
 	}
 
 	ASKDraw = TextDrawCreate(514.000000, 125.000000, "Anti-Spawn-Kill");
@@ -5556,8 +5502,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 1571.2114,-1336.6027,16.4844, 0);//Startower oben
 	// CreateDynamicPickup(19197, 1, 2870.8152,1906.2897,11.5510, 0);//Hochsicherheitstrakt au�en
 	// CreateDynamicPickup(19197, 1, 2870.9697,1902.6180,11.5510, 0);//Hochsicherheitstrakt innen
-	CreateDynamicPickup(19197, 1, 1123.0570,-2036.8217,69.8937, 0);//Pr�si eingang
-	CreateDynamicPickup(19197, 1, 378.2743,161.9802,1025.7891, 0);//Pr�si drinne
 	CreateDynamicPickup(19197, 1, 1726.6801,-1638.5601,20.2233, 0);//In Hotel ausgang
 	CreateDynamicPickup(19197, 1, 315.8161,-143.5091,999.6016,0);//Army Innen
 	CreateDynamicPickup(19197, 1, -1366.4780,500.7095,11.1953,0 );//Army Au�en
@@ -5643,9 +5587,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1240, 1, 902.5193,-1277.1499,14.5935, 0);//O-Amt /dienst
 	CreateDynamicPickup(1240, 1, -2033.1216,-117.4597,1035.1719, 0);//Dienst Fahrschule
 	CreateDynamicPickup(1240, 1, 2280.1423,2423.6230,3.4766,0);//LVPD Duty
-	CreateDynamicPickup(1240, 1, 350.1314,160.0231,1025.7891, 0);//Pr�si Herz
 	CreateDynamicPickup(1240, 1, 309.2354,-135.8690,999.6016,0);//Army Duty
-	CreateDynamicPickup(1240, 1, -795.0400,1557.1365,27.1244,0);//Terror Herz
 	CreateDynamicPickup(1240, 1, 768.1578,-36.6934,1000.6865, 0);//Triaden
 	CreateDynamicPickup(1240, 1, -2170.3818,641.4621,1052.3817, 0);//OUTLAWZS
 	CreateDynamicPickup(1240, 1, 326.7928,307.7375,999.1484,-1);//Zollamt Duty
@@ -5756,7 +5698,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//GetrÃƒÂ¤nke Clubvilla in Las Venturas
 	CreateDynamicPickup(1239, 1, 2309.3276,-8.2968,26.7422, 0);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
-	CreateDynamicPickup(1581, 1, 359.0354,180.4977,1008.3828, 0);//Visum
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
 
 	//Jobpoints
@@ -5849,7 +5790,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Aztecas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 508.3369,-84.9195,998.9609, 15.0);
 	
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Staat Dienst\n"COLOR_HEX_WHITE"Tippe /Dienst um in den Dienst zu gehen", COLOR_WHITE, 350.0831,160.1326,1025.7891, 15.0 , .worldid = 1);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Terroristenlager\n"COLOR_HEX_WHITE"Tippe /Terrorwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, -795.0400,1557.1365,27.1244, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Triaden Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 768.1578,-36.6934,1000.6865, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"OutlawZ Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, -2170.3818,641.4621,1052.3817, 15.0);
 
@@ -5896,7 +5836,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen BankÃƒÂ¼berfall mit\n"COLOR_HEX_RED"/Tresoraufbrechen", COLOR_WHITE, 296.8997,188.5367,1007.1719, 10.0, .worldid = 200);
     //CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Informationen zum Stadtamt\n"COLOR_HEX_WHITE"Tippe /Stadtamtinfo", COLOR_WHITE, 1481.7039,-1740.6183,13.5469, 30.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Los Santos 4 Sterne Hotel\n"COLOR_HEX_WHITE"Miete Dir gÃƒÂ¼nstig ein schÃƒÂ¶nes Hotelzimmer", COLOR_WHITE, 1722.5425,-1650.1168,20.2289, 20.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"VISUM-AMT\n"COLOR_HEX_WHITE"Tippe /Visumbeantragen", COLOR_WHITE, 359.0354,180.4977,1008.3828, 15.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 1\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.4529,-12.6540,26.7422, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 2\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.3318,-9.9532,26.7422, 15.0);
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Einwohnermeldeamt\n"COLOR_HEX_WHITE"Schalter 1", COLOR_WHITE, 359.0863,210.2258,1008.3828, 15.0);
@@ -10515,10 +10454,9 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 9)
 			{
-				SetPlayerPos(playerid, 355.5500,151.3302,1025.7891);
-				SetPlayerInterior(playerid, 3);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 355.5500,151.3302,1025.7891);
+				SetPlayerPosEx(playerid, GOVERNMENT_INTERIOR_SPAWN_POINT, MAPS_GOVERNMENTINTERIOR_INTERIOR, VW_GOVERNMENTINTERIOR);
+				SetPlayerFacingAngle(playerid, GOVERNMENT_INTERIOR_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 10)
 			{
@@ -10551,7 +10489,7 @@ public SetPlayerSpawn(playerid)
 				SetPlayerPos(playerid, HITMANBASE_SPAWN_POINT);
 				SetPlayerFacingAngle(playerid, HITMANBASE_SPAWN_POINT_FACING);
 				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
+				SetPlayerVirtualWorld(playerid, VW_MAIN);
 				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 15)
@@ -10559,7 +10497,7 @@ public SetPlayerSpawn(playerid)
 				SetPlayerPos(playerid, NINEDEMONSBASE_SPAWN_POINT);
 				SetPlayerFacingAngle(playerid, NINEDEMONSBASE_SPAWN_POINT_FACING);
 				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
+				SetPlayerVirtualWorld(playerid, VW_MAIN);
 				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 16)
@@ -10585,10 +10523,11 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 19)
 			{
-				SetPlayerPos(playerid, -795.0400,1557.1365,27.1244);
+				SetPlayerPos(playerid, TERRORBASE_SPAWN_POINT);
+				SetPlayerFacingAngle(playerid, TERRORBASE_SPAWN_POINT_FACING);
 				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, -795.0400,1557.1365,27.1244);
+				SetPlayerVirtualWorld(playerid, VW_MAIN);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 20)
 			{
@@ -17210,28 +17149,6 @@ CMD:ipberkanbanlydadmin(playerid, params[])
 	return 1;
 }
 
-//Pr�sidenten Tore
-CMD:ptorauf(playerid, params[])
-{
-    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Fahrlehrer oder Polizist!");
-	if(IsPlayerInRangeOfPoint(playerid,10, 1283.7829, -2056.2246, 59.8079))
-	{
-		MoveObject(regtor[0], 1283.7829, -2056.2246, 59.8079-10,2);
-		return 1;
-	}
- 	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der N�he!");
-}
-CMD:ptorzu(playerid, params[])
-{
-    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Fahrlehrer oder Polizist!");
-	if(IsPlayerInRangeOfPoint(playerid,10, 1283.7829, -2056.2246, 59.8079))
-	{
-		MoveObject(regtor[0], 1283.7829, -2056.2246, 59.8079,2);
-		return 1;
-	}
- 	return SendClientMessage(playerid, COLOR_RED,"Du bist nicht in der N�he!");
-}
-
 //FS TORE============
 CMD:fstorauf(playerid, params[])
 {
@@ -18205,7 +18122,7 @@ CMD:terrorwaffen(playerid)
 	    SendClientMessage(playerid,COLOR_RED,"Du kannst diesen Befehl nicht ausf�hren");
 		return SendWeaponBlockInfo(playerid);
 	}
-	if(IsPlayerInRangeOfPoint(playerid, 2.0, -795.0400,1557.1365,27.1244))//Terroristen
+	if(IsPlayerInRangeOfPoint(playerid, 2.0, TERRORBASE_SPAWN_POINT))//Terroristen
 	{
 	    if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
 	    if(GetPlayerMoney(playerid) < 2000)return SendClientMessage(playerid, COLOR_RED, "Du ben�tigst $2000.");
@@ -18355,7 +18272,7 @@ CMD:gheilen(playerid)
 	    SetPlayerHealth(playerid, 100);
 	    SetTimerEx("HeilReady", 60000, 0, "i", playerid);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0, -795.0400,1557.1365,27.1244))//Terror
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, TERRORBASE_SPAWN_POINT))//Terror
 	{
 	    if(!(Spieler[playerid][pFraktion] == 19))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Terrorist.");
 	    Spieler[playerid][pHeilReady] = 0;
@@ -18783,7 +18700,7 @@ CMD:dienst(playerid)
 			SendFraktionMessage(22, COLOR_YELLOW, string);
 			GiveCopWeapons(playerid);
 		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 350.1314,160.0231,1025.7891))//Staat Duty
+		else if(IsPlayerInRangeOfPoint(playerid, 2.0, GOVERNMENT_INTERIOR_DUTY_POINT)) //Staat Duty
 		{
 			if(!(Spieler[playerid][pFraktion] == 9))return SendClientMessage(playerid, COLOR_RED, "Du geh�rst nicht dem Staat an!");
 			if(Spieler[playerid][pRank] == 0)//Praktikant
@@ -20101,11 +20018,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 9)
 	{
-		for(new i=0;i<sizeof(staatcars);i++)
+		for(new i=0;i<sizeof(vehicle_governmentExterior);i++)
 		{
-			if(!IsVehicleOccupied(staatcars[i]))
+			if(!IsVehicleOccupied(vehicle_governmentExterior[i]))
 			{
-				SetVehicleToRespawn(staatcars[i]);
+				SetVehicleToRespawn(vehicle_governmentExterior[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die Staats Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -20231,11 +20148,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 19)
 	{
-		for(new i=0;i<sizeof(terrorcars);i++)
+		for(new i=0;i<sizeof(vehicle_terrorBase);i++)
 		{
-			if(!IsVehicleOccupied(terrorcars[i]))
+			if(!IsVehicleOccupied(vehicle_terrorBase[i]))
 			{
-				SetVehicleToRespawn(terrorcars[i]);
+				SetVehicleToRespawn(vehicle_terrorBase[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die Terroristen Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -29073,18 +28990,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, 2042.3730,-1311.6049,23.9810);
 		}
-  		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1123.0570,-2036.8217,69.8937))//Pr�si au�en
-		{
-		    SetPlayerInterior(playerid, 3);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 378.4390,161.8866,1025.7891);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 378.4390,161.8866,1025.7891))//Pr�si innen
-		{
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 1123.0570,-2036.8217,69.8937);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 993.4795,-1459.6665,13.5469))//newsbase unten
 		{
       		if(!(Spieler[playerid][pFraktion] == 4))return SendClientMessage(playerid, COLOR_RED, "Du bist kein News Reporter!");
@@ -32160,21 +32065,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            //SendClientMessage(playerid,COLOR_ORANGE,"Der Fragesteller fand deine Auskunft nicht ausreichend und hat dich negativ bewertet!");
 	        }
 	        SendClientMessage(playerid,COLOR_WHITE,String);
-	    }
-	    case DIALOG_VISUM: {
-	        if(response) {
-	            if( GetPlayerMoney(playerid) < g_Visum[listitem][V_iPrice] ) {
-	                ShowVisumList(playerid);
-	                SendClientMessage(playerid,COLOR_RED,"Du hast nicht genug Geld f�r ein Visum");
-	                return 1;
-	            }
-	            new
-	                String[128];
-				format(String,sizeof(String),"Du hast ein Visum f�r die Stadt %s ( -%d$ ). Nach einem Relog ist dein Visum ausgelaufen!!!",g_Visum[listitem][V_sStadt],g_Visum[listitem][V_iPrice]);
-				SendClientMessage(playerid,COLOR_YELLOW,String);
-				GivePlayerCash(playerid,-g_Visum[listitem][V_iPrice]);
-	            Spieler[playerid][pVisum] = listitem + 1;
-	        }
 	    }
 	    case DIALOG_NOTRUF: {
 	        if(response) {
@@ -48751,8 +48641,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_STAATCARS ) {
-		for( i  = 0; i < sizeof(staatcars) ; i++) {
-			if( staatcars[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_governmentExterior) ; i++) {
+			if( vehicle_governmentExterior[i] == vehicleid ) {
 			    return 9;
 			}
 		}
@@ -48848,8 +48738,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_TERRORCARS ) {
-		for( i  = 0; i < sizeof(terrorcars) ; i++) {
-			if( terrorcars[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_terrorBase) ; i++) {
+			if( vehicle_terrorBase[i] == vehicleid ) {
 			    return 19;
 			}
 		}
@@ -60157,64 +60047,6 @@ COMMAND:allesspeichern(playerid,params[]) {
     SendClientMessage(playerid,COLOR_YELLOW,"Daten werden zum speichern gesendet ...");
     SaveAll();
 	mysql_pquery("SELECT NOW()",THREAD_SAVEALL,playerid,gSQL,MySQLThreadOwner);
-	return 1;
-}
-
-COMMAND:visumbeantragen(playerid,params[]) {
-	#pragma unused params
-	if (!IsPlayerInRangeOfPoint(playerid,5.0,359.0354,180.4977,1008.3828)) {
-	    return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der LS-Stadthalle!");
-	}
-
-	if (Spieler[playerid][pVisum] != 0) {
-	    return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits ein Visum.");
-	}
-
-	ShowVisumList(playerid);
-	return 1;
-}
-
-ShowVisumList(playerid) {
-	new
-	    String[128];
-	for(new i ; i < sizeof(g_Visum) ; i++) {
-		format(String,sizeof(String),"%s%s ( %d$ )\n",String,g_Visum[i][V_sStadt],g_Visum[i][V_iPrice]);
-	}
-	ShowPlayerDialog(playerid,DIALOG_VISUM,DIALOG_STYLE_LIST,"Visum Beantragen",String,"Beantragen","Abbruch");
-	return 1;
-}
-
-COMMAND:visum(playerid,params[]) {
-	new
-	    str[64],
-	    giveid;
-	format(str,sizeof(str),"U(%d)",playerid);
-	if(sscanf(params,str,giveid)) {
-		return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Visum ([Spieler])");
-	}
-	if( !IsPlayerConnected(giveid)) {
-		return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht Online.");
-	}
-	new
-	    String[128];
-	if(playerid != giveid) {
-		format(String,sizeof(String),"Du hast dein Visum %s gezeigt",GetName(giveid));
-		SendClientMessage(playerid,COLOR_WHITE,String);
-		format(String,sizeof(String),"Spieler %s zeigt dir sein Visum",GetName(playerid));
-		SendClientMessage(giveid,COLOR_LIGHTRED2,String);
-	}
-	SendClientMessage(giveid,COLOR_GREEN,"===========AUFENTHALTSVISUM===========");
-	format(String,sizeof(String),"Besitzer: %s", GetName(playerid) );
-	SendClientMessage(giveid,COLOR_WHITE,String);
-	format(String,sizeof(String),"Reisegenehmigung: %s", Spieler[playerid][pVisum] ? ("Vorhanden") : ("Nicht Vorhanden") );
-	SendClientMessage(giveid,COLOR_WHITE,String);
-	if( Spieler[playerid][pVisum] == 0 ) {
-	    str = "Nicht Vorhanden";
-	}
-	else {
-	    format( str , sizeof(str) , "%s" , g_Visum[ Spieler[playerid][pVisum] - 1][V_sStadt] );
-	}
-	SendClientMessage(giveid,COLOR_GREEN,"======================================");
 	return 1;
 }
 
