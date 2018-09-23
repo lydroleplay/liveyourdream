@@ -2072,9 +2072,9 @@ enum {
 //Testserver
 #if defined Testserveran
 #define 	SQL_HOST			"localhost"
-#define 	SQL_USER			"samp6100" // Server: gtaserver3173 - Test Server: ni89284_1_DB
-#define 	SQL_PASS			"Hallo500" // Server: Vy4Cwwif - Test Server: Vy4Cwwif
-#define 	SQL_DATA			"samp6100_test" // Server: gtaserver3173 - Test Server: ni89284_1_DB
+#define 	SQL_USER			"1231" // Server: gtaserver3173 - Test Server: ni89284_1_DB
+#define 	SQL_PASS			"samp6511" // Server: Vy4Cwwif - Test Server: Vy4Cwwif
+#define 	SQL_DATA			"samp6511_benny" // Server: gtaserver3173 - Test Server: ni89284_1_DB
 #else
 #define 	SQL_HOST			"31.172.86.143"
 #define 	SQL_USER			"samp" // Server: gtaserver3173 - Test Server: ni89284_1_DB
@@ -3268,7 +3268,7 @@ new Kaufliste[84][aHaus] = {
 };
 
 #define MAX_ATM 106
-new Float:ATM[][MAX_ATM] = {
+new Float:ATM[][] = {
 {2130.10009766,-1151.19995117,23.68000031},
 {551.20001221,-1260.50000000,16.87999916},
 {755.09997559,-1360.80004883,13.19999981},
@@ -3372,7 +3372,9 @@ new Float:ATM[][MAX_ATM] = {
 {1225.32947,-1811.68408,16.24608},
 {1420.52087, -980.45911, 1639.41125},
 {881.15, -1198.46, 16.61},
-{1790.9886, -1303.7802, 119.8556}
+{1790.9886, -1303.7802, 119.8556},
+{1484.833862, -1805.827637, 14.740836},
+{59.964539, -1562.702515, 13.211584}
 };
 
 
@@ -4031,7 +4033,6 @@ new fsacars[2];
 new aztcars[18];
 new vagoscars[16];
 new lvpdcars[30];
-new wheelcars[14];
 new armycars[1];
 new triadencars[17];
 new outlawzscars[17];
@@ -4219,6 +4220,13 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\tuev>
 #include <maps\bikeDealership>
 #include <maps\terrorBase>
+#include <maps\atm>
+#include <maps\trafficLights>
+#include <maps\tollStations>
+#include <maps\misc>
+#include <maps\phoneBooths>
+#include <maps\wheelmanBase>
+//#include <maps\lsAirport>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5099,20 +5107,6 @@ OnGameModeInit2() {
 	ballascars[15]=AddStaticVehicleEx(566,2022.5289,-1141.0352,24.5565,89.6170,233,233,-1); // TahomaBallas
 	ballascars[16]=AddStaticVehicleEx(415,2026.1147,-1130.4745,24.4481,89.5987,233,233,-1); // CheetahBallas
 
-	wheelcars[0] = AddStaticVehicleEx(468,952.5954,1758.7262,8.3156,180.5374,19,19,-1); // wheelmen car
-	wheelcars[1] = AddStaticVehicleEx(468,955.0316,1758.8654,8.3157,180.7352,19,19,-1); // wheelmen car
-	wheelcars[2] = AddStaticVehicleEx(522,958.3127,1758.9200,8.2156,179.1201,19,19,-1); // wheelmen car
-	wheelcars[3] = AddStaticVehicleEx(522,960.8812,1759.0088,8.2190,180.3178,19,19,-1); // wheelmen car
-	wheelcars[4] = AddStaticVehicleEx(411,983.6983,1745.4128,8.3823,90.1818,19,19,-1); // wheelmen car
-	wheelcars[5] = AddStaticVehicleEx(411,983.8836,1741.1553,8.3880,90.9491,19,19,-1); // wheelmen car
-	wheelcars[6] = AddStaticVehicleEx(560,983.9272,1737.0353,8.3485,91.7573,19,19,-1); // wheelmen car
-	wheelcars[7] = AddStaticVehicleEx(560,984.1312,1733.3309,8.3707,93.2435,19,19,-1); // wheelmen car
-	wheelcars[8] = AddStaticVehicleEx(560,983.9086,1729.8083,8.4432,90.8776,19,19,-1); // wheelmen car
-	wheelcars[9] = AddStaticVehicleEx(560,984.0126,1726.1807,8.4343,91.3444,19,19,-1); // wheelmen car
-	wheelcars[10] = AddStaticVehicleEx(415,984.0925,1722.7196,8.3845,92.1436,19,19,-1); // wheelmen car
-	wheelcars[11] = AddStaticVehicleEx(541,984.3115,1719.5607,8.2907,89.2417,19,19,-1); // wheelmen car
-	wheelcars[12] = AddStaticVehicleEx(487,952.3722,1692.2795,15.9515,270.6660,19,19,-1); // wheelmen car
-	wheelcars[13] = AddStaticVehicleEx(487,951.6595,1680.0258,15.9471,268.2809,19,19,-1); // wheelmen car
 
 	grovecars[0]=AddStaticVehicleEx(451,2473.2583,-1694.4656,13.2400,0.1565,86,86,-1); // NEUE GROVE CARS
 	grovecars[1]=AddStaticVehicleEx(541,2473.2947,-1703.3059,13.0748,0.0540,86,86,-1); // NEUE GROVE CARS
@@ -5361,11 +5355,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(lvpdcars[i]);
 		aiVehicles[ lvpdcars[i] ] = VEH_LVPDCARS;
 	}
-	for(new i=0;i<sizeof(wheelcars);i++)
+	for(new i=0;i<sizeof(vehicle_wheelmanBase);i++)
 	{
-		SetVehicleNumberPlate(wheelcars[i], COLOR_HEX_BLACK"WHEELMAN");
-        SetVehicleToRespawn(wheelcars[i]);
-		aiVehicles[ wheelcars[i] ] = VEH_WHEELCARS;
+		SetVehicleNumberPlate(vehicle_wheelmanBase[i], COLOR_HEX_BLACK"WHEELMAN");
+        SetVehicleToRespawn(vehicle_wheelmanBase[i]);
+		aiVehicles[ vehicle_wheelmanBase[i] ] = VEH_WHEELCARS;
 	}
 	for(new i=0;i<sizeof(armycars);i++)
 	{
@@ -5580,7 +5574,6 @@ OnGameModeInit2() {
 
 	//Duty und Spawn Points
 	CreateDynamicPickup(1240, 1, 331.0788,1128.5469,1083.8828, 0);//Ballas Herz
-	CreateDynamicPickup(1240, 1, 938.7240,1733.3646,8.8516, 0);//Wheelman
 	CreateDynamicPickup(1240, 1, 2496.0542,-1709.4050,1014.7422, 0);//Grove Herz
 	CreateDynamicPickup(1240, 1, 2807.4153,-1165.1274,1025.5703, 0);//Vagos
 	CreateDynamicPickup(1240, 1, 508.3369,-84.9195,998.9609, 0);//Aztecas
@@ -5785,7 +5778,6 @@ OnGameModeInit2() {
     //Spawn 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Grove Street Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2496.0542,-1709.4050,1014.7422, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Ballas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 331.0788,1128.5469,1083.8828, 15.0, .worldid = 0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Wheelman Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 938.7240,1733.3646,8.8516, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Vagos Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 2807.4153,-1165.1274,1025.5703, 15.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Aztecas Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum AusrÃƒÂ¼sten\nTippe /Gheilen zum heilen", COLOR_WHITE, 508.3369,-84.9195,998.9609, 15.0);
 	
@@ -10509,10 +10501,9 @@ public SetPlayerSpawn(playerid)
 			}
 			else if(Spieler[playerid][pFraktion] == 17)
 			{
-				SetPlayerPos(playerid, 938.7240,1733.3646,8.8516);
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
-				Streamer_UpdateEx(playerid, 938.7240,1733.3646,8.8516);
+				SetPlayerPosEx(playerid, WHEELMANBASE_SPAWN_POINT, MAPS_WHEELMANBASE_INTERIOR, VW_MAIN);
+				SetPlayerFacingAngle(playerid, WHEELMANBASE_SPAWN_POINT_FACING);
+				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 18)
 			{
@@ -18071,7 +18062,7 @@ CMD:gangwaffen(playerid)
 	    GivePlayerCash(playerid, -800);
 	    GivePlayerWeapon(playerid, 2, 1);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0,938.7240,1733.3646,8.8516))//Wheelman
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, WHEELMANBASE_SPAWN_POINT))//Wheelman
 	{
 	    //if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
 	    if(GetPlayerMoney(playerid) < 1300)return SendClientMessage(playerid, COLOR_RED, "Du ben�tigst $1.300.");
@@ -18265,7 +18256,7 @@ CMD:gheilen(playerid)
 	    SetPlayerHealth(playerid, 100);
 	    SetTimerEx("HeilReady", 60000, 0, "i", playerid);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 2.0, 938.7240,1733.3646,8.8516))//Wheelman
+	else if(IsPlayerInRangeOfPoint(playerid, 2.0, WHEELMANBASE_SPAWN_POINT))//Wheelman
 	{
 	    if(!(Spieler[playerid][pFraktion] == 17))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Wheelman Mitglied.");
 	    Spieler[playerid][pHeilReady] = 0;
@@ -20122,11 +20113,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 17)
 	{
-		for(new i=0;i<sizeof(wheelcars);i++)
+		for(new i=0;i<sizeof(vehicle_wheelmanBase);i++)
 		{
-			if(!IsVehicleOccupied(wheelcars[i]))
+			if(!IsVehicleOccupied(vehicle_wheelmanBase[i]))
 			{
-				SetVehicleToRespawn(wheelcars[i]);
+				SetVehicleToRespawn(vehicle_wheelmanBase[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die Wheelman Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -48724,8 +48715,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_WHEELCARS ) {
-		for( i  = 0; i < sizeof(wheelcars) ; i++) {
-			if( wheelcars[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_wheelmanBase) ; i++) {
+			if( vehicle_wheelmanBase[i] == vehicleid ) {
 			    return 17;
 			}
 		}
@@ -58858,7 +58849,7 @@ stock InitTelefonzelle() {
 	            Streamer_GetFloatData(STREAMER_TYPE_OBJECT,i,E_STREAMER_Y,Y);
 	            Streamer_GetFloatData(STREAMER_TYPE_OBJECT,i,E_STREAMER_Z,Z);
 	            g_Telefonzelle[g_iTelefonzelle][T_iObjectID] = i;
-	            g_Telefonzelle[g_iTelefonzelle][T_t3dLabel] = CreateDynamic3DTextLabel("{FFFF00}- Telefonzelle -\n{00FF00}Befehl: /Telefonzelle",0xFFFFFFFF,X,Y,Z + 1.25 ,20.0);
+	            g_Telefonzelle[g_iTelefonzelle][T_t3dLabel] = CreateDynamic3DTextLabel("{FFFF00}- Telefonzelle -\n{00FF00}Befehl: /Telefonzelle",0xFFFFFFFF,X,Y,Z + 1.25 ,20.0, .testlos = 1);
 	            g_iTelefonzelle++;
 	        }
 	    }
@@ -69473,26 +69464,26 @@ stock InitSchilder() {
     CreateDynamicObject(8548, 1543.63818, -1597.68958, 13.75410,   0.00000, 0.00000, 272.20981);
     CreateDynamicObject(8548, 1543.63818, -1586.82422, 13.75410,   0.00000, 0.00000, 85.25610);
     CreateDynamicObject(8548, 1418.56360, -1726.93066, 13.68501,   0.00000, 0.00000, 86.50762);
-	CreateDynamicObject(8548, 1418.56360, -1737.53503, 13.68500,   0.00000, 0.00000, 264.23343);
+	// CreateDynamicObject(8548, 1418.56360, -1737.53503, 13.68500,   0.00000, 0.00000, 264.23343);
 
 	for(new i , j = Streamer_GetUpperBound(STREAMER_TYPE_OBJECT) ; i < j ; i++) {
 	    if( IsValidDynamicObject(i) ) {
 	        modelid = Streamer_GetIntData(STREAMER_TYPE_OBJECT,i,E_STREAMER_MODEL_ID);
 	        if( modelid == 1324 ) {
 	            GetDynamicObjectPos(i,X,Y,Z);
-	            CreateDynamic3DTextLabel("{FF0000}Geschwindigkeit:{FFA500}\n80 km/h",0xFFFFFFFF,X,Y,Z + 1.5,42.0);
+	            CreateDynamic3DTextLabel("{FF0000}Geschwindigkeit:{FFA500}\n80 km/h",0xFFFFFFFF,X,Y,Z + 1.5,42.0, .testlos = 1);
 	        }
 	        else if( modelid == 1323 ) {
 	            GetDynamicObjectPos(i,X,Y,Z);
-	            CreateDynamic3DTextLabel("{FF0000}Geschwindigkeit:{FFA500}\n130 km/h",0xFFFFFFFF,X,Y,Z + 1.5,45.0);
+	            CreateDynamic3DTextLabel("{FF0000}Geschwindigkeit:{FFA500}\n130 km/h",0xFFFFFFFF,X,Y,Z + 1.5,45.0, .testlos = 1);
 	        }
 	        else if( modelid == 8548 ) {
 	            GetDynamicObjectPos(i,X,Y,Z);
-	            CreateDynamic3DTextLabel("{0077FF}VERKEHRSBERUHIGTE ZONE\n{FF0000}Geschwindigkeit:{FFA500}\n40 km/h",0xFFFFFFFF,X,Y,Z + 1.5,42.0);
+	            CreateDynamic3DTextLabel("{0077FF}VERKEHRSBERUHIGTE ZONE\n{FF0000}Geschwindigkeit:{FFA500}\n40 km/h",0xFFFFFFFF,X,Y,Z + 1.5,42.0, .testlos = 1);
 	        }
 	        else if( modelid == 1350 ) {
 	            GetDynamicObjectPos(i,X,Y,Z);
-	            CreateDynamic3DTextLabel("{FFFFFE}An dieser Ampel\n{FFFFFE}bei {FF0000}ROT{FFFFFE} halten!\nGilt von 15.00 bis 22.00 Uhr",0xFFFFFFFF,X,Y,Z + 1.5,20.0);
+	            CreateDynamic3DTextLabel("{FFFFFE}An dieser Ampel\n{FFFFFE}bei {FF0000}ROT{FFFFFE} halten!\nGilt von 15.00 bis 22.00 Uhr",0xFFFFFFFF,X,Y,Z + 1.5,20.0, .testlos = 1);
 	        }
 	    }
 	}

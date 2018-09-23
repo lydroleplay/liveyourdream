@@ -195,7 +195,7 @@ stock AddWerbebanner( index ) {
 	else {
 		format(String,sizeof(String),"Werbetafel gehört: %s",g_Werbebanner[index][W_sOwner]);
 	}
-	g_Werbebanner[index][W_t3dLabel] = CreateDynamic3DTextLabel(String,0xFFFFFFFF,g_Werbebanner[index][W_fX],g_Werbebanner[index][W_fY],g_Werbebanner[index][W_fZ],30.0);
+	g_Werbebanner[index][W_t3dLabel] = CreateDynamic3DTextLabel(String,0xFFFFFFFF,g_Werbebanner[index][W_fX],g_Werbebanner[index][W_fY],g_Werbebanner[index][W_fZ],30.0, .testlos = 1);
 
 	g_Werbebanner[index][W_iObjectID] = CreateDynamicObject( g_Werbebanner[index][W_iModelID],g_Werbebanner[index][W_fObjX],g_Werbebanner[index][W_fObjY],g_Werbebanner[index][W_fObjZ],g_Werbebanner[index][W_fObjRotX],g_Werbebanner[index][W_fObjRotY],g_Werbebanner[index][W_fObjRotZ]);
 	UpdateObject(index);

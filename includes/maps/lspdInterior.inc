@@ -799,13 +799,13 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterialText(object_lspdInterior[318], 0, "_______________", 90, "Arial", 20, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_lspdInterior[318], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_lspdInterior[319] = CreateDynamicObject(19175, 1652.2939, -1377.8658, 1963.1684, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_lspdInterior[319], 0, "1.80 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
+    SetDynamicObjectMaterialText(object_lspdInterior[319], 0, "2.00 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_lspdInterior[319], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_lspdInterior[320] = CreateDynamicObject(19175, 1652.2939, -1377.8459, 1961.9770, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_lspdInterior[320], 0, "1.20 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
+    SetDynamicObjectMaterialText(object_lspdInterior[320], 0, "1.40 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_lspdInterior[320], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_lspdInterior[321] = CreateDynamicObject(19175, 1652.2939, -1377.8658, 1962.3977, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_lspdInterior[321], 0, "1.40 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
+    SetDynamicObjectMaterialText(object_lspdInterior[321], 0, "1.60 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_lspdInterior[321], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_lspdInterior[322] = CreateDynamicObject(19089, 1654.3076, -1377.8657, 1963.7668, 0.0000, 0.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Rope3
     SetDynamicObjectMaterial(object_lspdInterior[322], 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
@@ -1161,7 +1161,7 @@ hook OnGameModeInit() {
     object_lspdInterior[532] = CreateDynamicObject(19358, 1617.1573, -1377.3592, 1964.3702, 0.0000, 90.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall006
     SetDynamicObjectMaterial(object_lspdInterior[532], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
     object_lspdInterior[533] = CreateDynamicObject(19175, 1652.2939, -1377.8459, 1962.7779, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_lspdInterior[533], 0, "1.60 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
+    SetDynamicObjectMaterialText(object_lspdInterior[533], 0, "1.80 m", 90, "Arial", 15, 1, 0xFF000000, 0x0, 0);
     SetDynamicObjectMaterial(object_lspdInterior[533], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_lspdInterior[534] = CreateDynamicObject(19464, 1660.2447, -1377.9731, 1959.0524, 0.0000, 0.0000, 90.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_lspdInterior[534], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
