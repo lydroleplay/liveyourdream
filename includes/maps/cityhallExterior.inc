@@ -24,7 +24,7 @@ static Float:DRAWDISTANCE   = 350.0;
 
 
 // Map variables
-new object_cityhallExterior[361];
+new object_cityhallExterior[363];
 new pickup_cityhallExterior[2];
 new text3D_cityhallExterior[3];
 new actor_cityhallExterior[1];
@@ -81,7 +81,6 @@ hook OnPlayerConnect(playerid) {
 	RemoveBuildingForPlayer(playerid, 620, 1429.5313, -1748.4219, 12.9063, 0.25);
 	RemoveBuildingForPlayer(playerid, 700, 1438.0313, -1747.9375, 13.4453, 0.25);
 	RemoveBuildingForPlayer(playerid, 620, 1447.9063, -1748.2266, 12.9063, 0.25);
-	RemoveBuildingForPlayer(playerid, 1283, 1441.8594, -1733.0078, 15.6250, 0.25);
 	RemoveBuildingForPlayer(playerid, 4002, 1479.8672, -1790.3984, 56.0234, 0.25);
 	RemoveBuildingForPlayer(playerid, 3980, 1481.1875, -1785.0703, 22.3828, 0.25);
 	RemoveBuildingForPlayer(playerid, 4003, 1481.0781, -1747.0313, 33.5234, 0.25);
@@ -572,7 +571,7 @@ hook OnGameModeInit() {
 	object_cityhallExterior[196] = CreateDynamicObject(19450, 1514.1705, -1783.8060, 10.7910, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall090
 	SetDynamicObjectMaterial(object_cityhallExterior[196], 0, 3119, "cs_ry_props", "lightgrey", 0xFFFFFFFF);
 	object_cityhallExterior[197] = CreateDynamicObject(10631, 1549.4691, -1783.5821, 16.7998, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //ammunation_SFS
-	object_cityhallExterior[198] = CreateDynamicObject(11497, 1501.8575, -1758.9852, 12.6007, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //des_baitshop
+	object_cityhallExterior[198] = CreateDynamicObject(18239, 1499.1213, -1758.1406, 12.5060, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Custom
 	object_cityhallExterior[199] = CreateDynamicObject(789, 1416.1993, -1842.8155, 25.6730, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //hashburytree4sfs
 	object_cityhallExterior[200] = CreateDynamicObject(789, 1546.9604, -1847.3363, 25.6730, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //hashburytree4sfs
 	object_cityhallExterior[201] = CreateDynamicObject(16061, 1469.1811, -1855.8265, 12.1716, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //des_treeline2
@@ -876,4 +875,8 @@ hook OnGameModeInit() {
 	object_cityhallExterior[360] = CreateDynamicObject(19175, 1416.1396, -1742.2607, 17.9181, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
 	SetDynamicObjectMaterialText(object_cityhallExterior[360], 0, "5 m", 90, "Arial", 30, 1, 0xFFFFFFFF, 0x0, 1);
 	SetDynamicObjectMaterial(object_cityhallExterior[360], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+
+	// Custom Door Objects:
+	object_cityhallExterior[361] = CreateDynamicObject(1532, 1522.1401, -1754.8687, 12.5363, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+	object_cityhallExterior[362] = CreateDynamicObject(1556, 1549.2960, -1774.6709, 12.8107, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
 }
