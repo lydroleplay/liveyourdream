@@ -4,8 +4,8 @@
 #define MAPS_ATM_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 70.0;
-static Float:DRAWDISTANCE   = 50.0;
+static Float:STREAMDISTANCE = 100.0;
+static Float:DRAWDISTANCE   = 80.0;
 
 // Map variables
 new object_atm[109];

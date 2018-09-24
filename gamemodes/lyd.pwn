@@ -55143,6 +55143,7 @@ new const Float:g_StaatRepair[][] = {
 	{ SAMD_STATEREPAIR_COORDS }, 	// Medic
 	{ POO_STATEREPAIR_COORDS }, 	// Oamt
 	{ FBI_STATEREPAIR_COORDS }, 	// FBI
+	{ GOVERNMENT_STATEREPAIR_COORDS }, // Regierung
 	{2288.5466, 2444.9841, 	3.2734}, 	// LVPD
 	{1248.3843, -1833.8750, 13.3930}, 	// Fahrschule
 	{1138.9730, -1820.9103, 33.6354} 	// Fahrschule Dach

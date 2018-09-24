@@ -58,7 +58,7 @@ hook OnGameModeInit() {
     pickup_samdInterior[3] = CreateDynamicPickup(19197, 1, SAMD_INTERIOR_EXIT_COORDS, VW_SAMDINTERIOR, MAPS_SAMDINTERIOR_INTERIOR); // Exit point
 
 	// 3DTextLabels
-	text3D_samdInterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Krankenversicherung\n" COLOR_HEX_WHITE "Keine Behandlungskosten für 7 Tage! Preis: $7000\nTippe /Krankenversicherung", COLOR_WHITE, SAMD_INTERIOR_HEALTH_INSURANCE_COORDS, 25.0, .testlos = 1, .worldid = VW_SAMDINTERIOR, .interiorid = MAPS_SAMDINTERIOR_INTERIOR); // Health insurance
+	text3D_samdInterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Krankenversicherung\n" COLOR_HEX_WHITE "Keine Behandlungskosten für 7 Tage! Preis: $7.000\nTippe /Krankenversicherung", COLOR_WHITE, SAMD_INTERIOR_HEALTH_INSURANCE_COORDS, 25.0, .testlos = 1, .worldid = VW_SAMDINTERIOR, .interiorid = MAPS_SAMDINTERIOR_INTERIOR); // Health insurance
     text3D_samdInterior[1] = _:CreateDynamic3DTextLabel("AUßER BETRIEB", COLOR_RED, SAMD_INTERIOR_ELEVATOR_1_DOWN_COORDS, 25.0, .testlos = 1, .worldid = VW_SAMDINTERIOR, .interiorid = MAPS_SAMDINTERIOR_INTERIOR); // Elevator 1 Out of Order
 
     // Actors

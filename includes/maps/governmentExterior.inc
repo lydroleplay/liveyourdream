@@ -26,12 +26,14 @@ static Float:DRAWDISTANCE   = 350.0;
 #define GOVERNMENT_BARRIER_FOR_RANGE_COORDS     1544.6835, -1627.1996, 13.3828
 #define GOVERNMENT_BARRIER_OPEN_RY              0.0000
 #define GOVERNMENT_BARRIER_CLOSED_RY            90.0000
+#define GOVERNMENT_STATEREPAIR_COORDS           1585.0372, -1677.7273, 5.8977
 
 // Map variables
 new object_governmentExterior[162];
 new object_government_barrier;
 new object_government_gate;
-new pickup_governmentExterior[3];
+new text3D_governmentExterior[1];
+new pickup_governmentExterior[4];
 new vehicle_governmentExterior[17];
 
 CMD:rgate(playerid, params[]) {
@@ -104,6 +106,10 @@ hook OnGameModeInit() {
     pickup_governmentExterior[0] = CreateDynamicPickup(19197, 1, GOVERNMENT_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR);
     pickup_governmentExterior[1] = CreateDynamicPickup(19197, 1, GOVERNMENT_ROOF_EXIT_COORDS, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR);
     pickup_governmentExterior[2] = CreateDynamicPickup(19197, 1, GOVERNMENT_GARAGE_EXIT_COORDS, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR);
+    pickup_governmentExterior[3] = CreateDynamicPickup(1239, 1, GOVERNMENT_STATEREPAIR_COORDS, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR); // Staterepair
+
+    // 3DTextLabels
+    text3D_governmentExterior[0] = _:CreateDynamic3DTextLabel("Staats-Reparatur\n" COLOR_HEX_WHITE "Tippe /Staatrepair", COLOR_YELLOW, GOVERNMENT_STATEREPAIR_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_GOVERNMENTEXTERIOR_INTERIOR); // Staterepair
 
     // Vehicles
     vehicle_governmentExterior[0] = AddStaticVehicle(409, 1528.7433, -1683.8628, 5.6721, 269.4835, 1, 1); // gov
