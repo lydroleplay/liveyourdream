@@ -35,11 +35,11 @@ Riesenrad_OnPlayerConnect(playerid)
 //______________________________________________________________________________
 Riesenrad_Init()
 {
-	FerrisWheelObjects[10]=CreateObject(18877,389.7734,-2028.4688,22,0,0,90,300);
-	FerrisWheelObjects[11]=CreateObject(18878,389.7734,-2028.4688,22,0,0,90,300);
+	FerrisWheelObjects[10]=CreateDynamicObject(18877,389.7734,-2028.4688,22,0,0,90, .drawdistance = 300);
+	FerrisWheelObjects[11]=CreateDynamicObject(18878,389.7734,-2028.4688,22,0,0,90, .drawdistance = 300);
 	for(new x=0;x<sizeof(FerrisWheelObjects) - 2 ;x++) {
-		FerrisWheelObjects[x]=CreateObject(18879,389.7734,-2028.4688,22,0,0,90,300);
-		AttachObjectToObject(FerrisWheelObjects[x], FerrisWheelObjects[10],gFerrisCageOffsets[x][0],gFerrisCageOffsets[x][1],gFerrisCageOffsets[x][2],0.0, 0.0, 90, 0 );}
+		FerrisWheelObjects[x]=CreateDynamicObject(18879,389.7734,-2028.4688,22,0,0,90, .drawdistance = 300);
+		AttachDynamicObjectToObject(FerrisWheelObjects[x], FerrisWheelObjects[10],gFerrisCageOffsets[x][0],gFerrisCageOffsets[x][1],gFerrisCageOffsets[x][2],0.0, 0.0, 90, 0 );}
 	SetTimer("RotateFerrisWheel",FERRIS_WHEEL_WAIT_TIME,false);
 	forEx(MAX_PLAYERS,playerid){
 		RemoveBuildingForPlayer(playerid, 6463, 389.7734, -2028.4688, 19.8047, 0.5);
@@ -55,7 +55,7 @@ Riesenrad_Init()
 Riesenrad_Exit()
 {
 	for(new x ; x < sizeof(FerrisWheelObjects) ; x++) {
-		DestroyObject(FerrisWheelObjects[x]);
+		DestroyDynamicObject(FerrisWheelObjects[x]);
 	}
 	return 1;
 }
@@ -79,5 +79,5 @@ public RotateFerrisWheel()
 	else FerrisWheelAlternate=1;
 	new Float:FerrisWheelModZPos=0.0;
 	if(FerrisWheelAlternate)FerrisWheelModZPos=0.05;
-	MoveObject(FerrisWheelObjects[10],389.7734,-2028.4688,22.0+FerrisWheelModZPos,FERRIS_WHEEL_SPEED,0,FerrisWheelAngle,90);
+	MoveDynamicObject(FerrisWheelObjects[10],389.7734,-2028.4688,22.0+FerrisWheelModZPos,FERRIS_WHEEL_SPEED,0,FerrisWheelAngle,90);
 }

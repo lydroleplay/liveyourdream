@@ -1,5 +1,4 @@
 #include <a_samp>
-#pragma tabsize 0
 
 #define VERSION "0.4"
 
@@ -418,7 +417,7 @@ public BurningTimer(playerid)
 	        PlayerOnFireHP[playerid] = hp;
 		}
 		hp = Float:(PlayerOnFireHP[playerid] - 1.0);
-		if( hp < 1.0 ) { // Nicht sterben lassen bei Brennen...Zerstört GM
+		if( hp < 1.0 ) { // Nicht sterben lassen bei Brennen...Zerstï¿½rt GM
 		    hp = 1.0;
 		}
 		SetPlayerHealth(playerid,hp);
