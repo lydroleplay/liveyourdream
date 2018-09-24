@@ -131,6 +131,7 @@ Yakuza:
 //#define Testserveran
 #define PREIS_SCHEIDUNG 32000
 #define SOUND_ALHAMBRA "http://lyd-roleplay.de/musik/disco.mp3"
+#define URL_LOGINMUSIC "http://42oo.de/loginmusiklyd.mp3"
 
 #define HAUSTIER_OFFSET 1.5
 
@@ -5934,7 +5935,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1,  1702.9427,-1470.3704,13.5469, 0);//Motorradfärbe point
 	CreateDynamicPickup(1239, 1, 1763.4915,2080.2959,10.8203, 0);//Autofärbe point
 	CreateDynamicPickup(1239, 1,  -2653.6023,1407.0844,906.2734, 0);//Getränke Clubvilla in Las Venturas
-	CreateDynamicPickup(1239, 1,  2309.3276,-8.2968,26.7422, 0);//kfzversicherung
+	CreateDynamicPickup(1239, 1,  2309.3276,-8.2968,26.7422, VW_REGISTRATIONOFFICE);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
 
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
@@ -6084,7 +6085,7 @@ OnGameModeInit2() {
     //CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Getränkestand\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1455.8802,-1741.8704,13.5469, 10.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, -2656.1047,1416.0248,906.2734, 8.0); // in Las Venturas
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Kueche\n"COLOR_HEX_WHITE"Tippe /Clubheal", COLOR_WHITE, -2653.5183,1413.5085,906.2734, 8.0); //in Las Venturas
-   	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten für 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = 0);
+   	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten für 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = VW_REGISTRATIONOFFICE);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 
 	//Verkaus 3D Infotext 2
@@ -6391,7 +6392,7 @@ public OnPlayerConnect(playerid)
 	    }
 	}
 
-    PlayAudioStreamForPlayer(playerid, "http://lyd-roleplay.de/musik/loginmusik.mp3");
+    PlayAudioStreamForPlayer(playerid, URL_LOGINMUSIC);
     //PlayAudioStreamForPlayer(playerid, "http://www.uploadmusic.org/MUSIC/5384711376757549.mp3");
     PlayerKey[playerid] = 0;
 
@@ -24157,7 +24158,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
             }
             else if(RadioSender[vehicleid] == 14)
             {
-                PlayAudioStreamForPlayer(playerid, "http://lyd-roleplay.de/musik/loginmusik.mp3");
+                PlayAudioStreamForPlayer(playerid, URL_LOGINMUSIC);
             }
             else if(RadioSender[vehicleid] == 15)
             {
@@ -39168,32 +39169,32 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1480.7660,-1805.3538,15.3578,5.0, CP_NAVI4);
+                    SetPlayerCheckpointEx(playerid, CITYHALL_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI4);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Los Santos Stadthalle wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 914.3174,-1004.0942,37.9902,5.0, CP_NAVI1);
+                    SetPlayerCheckpointEx(playerid, 914.3174,-1004.0942,37.9902, 2.0, CP_NAVI1);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Posthaus in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, 5.0, CP_NAVI77);
+                    SetPlayerCheckpointEx(playerid, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI77);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die San Andreas Zulassungsstelle wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 1310.3245,-1383.1377,13.7432,5.0, CP_NAVI38);
+                    SetPlayerCheckpointEx(playerid, WEDDING_COORDS, 2.0, CP_NAVI38);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das San Andreas Standesamt wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 547.7603,-1285.7424,17.5821,5.0, CP_NAVI3);
+                    SetPlayerCheckpointEx(playerid, TUEV_INFO_POINT, 2.0, CP_NAVI3);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Los Santos TÜV-Amt für Autos und Motorräder wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 2113.1296,-2423.3569,13.6150,5.0, CP_NAVI3);
+                    SetPlayerCheckpointEx(playerid, TUEV_AIRCRAFT_POINT, 2.0, CP_NAVI3);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Los Santos TÜV-Amt für Helikopter und Flugzeuge wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39205,22 +39206,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1546.5355,-1675.2742,13.5625,5.0, CP_NAVI1);
+                    SetPlayerCheckpointEx(playerid, LSPD_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI1);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Los Santos Police Department wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1873.619873, 703.549377, 11.426342,5.0, CP_NAVI2);
+                    SetPlayerCheckpointEx(playerid, FBI_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI2);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das San Andreas FBI wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 1712.495483, -1149.090942, 24.495884,5.0, CP_NAVI2);
+                    SetPlayerCheckpointEx(playerid, SAMD_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI2);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Los Santos Medical Department wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 927.0587,-1221.2727,16.9531,5.0, CP_NAVI3);
+                    SetPlayerCheckpointEx(playerid, POO_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI3);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Los Santos Ordnungsamt wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39234,7 +39235,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1234.2719,-1823.8157,13.5911,5.0, CP_NAVI5);
+                    SetPlayerCheckpointEx(playerid, 1234.2719,-1823.8157,13.5911, 2.0, CP_NAVI5);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Los Santos Fahrschule wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39246,17 +39247,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1706.2548,-1136.1959,24.0859,5.0, CP_NAVI8);
+                    SetPlayerCheckpointEx(playerid, SAMD_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI8);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Versicherungspolice für Krankenversicherung wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1473.9695,-1805.2731,15.3500,5.0, CP_NAVI9);
+                    SetPlayerCheckpointEx(playerid, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI9);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Versicherungspolice für KFZ-Versicherung wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 1480.7660,-1805.3538,15.3578,5.0, CP_NAVI9);
+                    SetPlayerCheckpointEx(playerid, CITYHALL_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI9);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Versicherungspolice für Rechtsschutz wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39268,12 +39269,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1461.6046,-1019.6259,24.6364,5.0, CP_NAVI8);
+                    SetPlayerCheckpointEx(playerid, BANKINTERIORLS_ENTER_COORDS, 2.0, CP_NAVI8);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Zentralbank in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1952.5675,1342.9261,15.3672,5.0, CP_NAVI9);
+                    SetPlayerCheckpointEx(playerid, BANKINTERIORLV_ENTER_COORDS, 2.0, CP_NAVI9);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Zentralbank in Las Venturas wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39285,37 +39286,37 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1142.893311, -1618.987061, 14.546228,5.0, CP_NAVI8);
+                    SetPlayerCheckpointEx(playerid, LUXURYCARDEALERSHIP_COORDS, 2.0, CP_NAVI8);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das luxuriöse Autohaus in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1804.6133,-1890.9283,13.4073,5.0, CP_NAVI9);
+                    SetPlayerCheckpointEx(playerid, CHEAPCARDEALERSHIPLS_COORDS, 2.0, CP_NAVI9);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das günstige Autohaus in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 1662.1256,-1884.3601,13.5469,5.0, CP_NAVI10);
+                    SetPlayerCheckpointEx(playerid, BIKEDEALERSHIP_COORDS, 2.0, CP_NAVI10);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Motorradhandel in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 1843.3145,-2570.7102,13.5469,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, AIRPORTLS_PLANE_DEALERSHIP_POINT, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Flugzeughandel in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 994.1482,-1975.4965,8.1708,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, BOATDEALERSHIPLS_COORDS, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Bootshandel in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 690.249390, -1182.216919, 16.064381,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, BICYCLEDEALERSHIP_COORDS, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrradladen in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 902.073730, -938.696716, 43.275948,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, OLDTIMERDEALERSHIP_COORDS, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Oldtimer Autohaus in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39327,47 +39328,47 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 2125.3564,-1122.2646,25.3851,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_IDLEWOOD, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih am Coutt & Schutz in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 766.9273,-1338.6477,13.5313,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_NOOBSPAWN, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih am Neulingsspawn in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 894.2911,-1408.3984,13.0723,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_NOOBSPAWN2, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih in Los Santos, Nähe dem Neulingsspawn, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 1339.7483,-1250.4331,13.3963,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_AMMU, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih am Hauptammunation in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 1187.6713,-1041.9974,31.7851,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_BSN, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih in Los Santos, Nähe dem Burger Shot North, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 948.8850,-1774.8470,13.9330,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_LSBEACH, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih am Los Santos Strand wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 1585.0505,2610.7458,10.6719,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_LV, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih in Las Venturas wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
-                    SetPlayerCheckpointEx(playerid, 1470.7415,-2410.9363,13.5547,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, 1470.7415,-2410.9363,13.5547, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Flugzeugverleih in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==8)
                 {
-                    SetPlayerCheckpointEx(playerid, -70.2909,-552.6151,3.7223,5.0, CP_NAVI11);
+                    SetPlayerCheckpointEx(playerid, BOATRENTAL_COORDS, 2.0, CP_NAVI11);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Bootsverleih in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39379,37 +39380,37 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1218.6708,-914.2564,42.9161,5.0, CP_NAVI12);
+                    SetPlayerCheckpointEx(playerid, SUBWAY_DRIVEIN_COORDS, 2.0, CP_NAVI12);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Burger Shot North in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 817.6655,-1618.9307,13.7034,5.0, CP_NAVI13);
+                    SetPlayerCheckpointEx(playerid, 817.6655,-1618.9307,13.7034,2.0, CP_NAVI13);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Burger Shot South in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 2098.0144,-1806.8236,13.5541,5.0, CP_NAVI14);
+                    SetPlayerCheckpointEx(playerid, 2098.0144,-1806.8236,13.5541,2.0, CP_NAVI14);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Pizzaria in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 925.6447,-1352.1470,13.3761,5.0, CP_NAVI15);
+                    SetPlayerCheckpointEx(playerid, 925.6447,-1352.1470,13.3761,2.0, CP_NAVI15);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Cluckin' Bell North in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 2422.1592,-1508.4604,23.9922,5.0, CP_NAVI16);
+                    SetPlayerCheckpointEx(playerid, 2422.1592,-1508.4604,23.9922,2.0, CP_NAVI16);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Cluckin' Bell South in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 2082.9170,2224.1670,11.0234,5.0, CP_NAVI75);
+                    SetPlayerCheckpointEx(playerid, 2082.9170,2224.1670,11.0234,2.0, CP_NAVI75);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Pizzaria in Las Venturas, Nähe des LVPD, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 2102.3757,2229.0376,11.0234,5.0, CP_NAVI75);
+                    SetPlayerCheckpointEx(playerid, 2102.3757,2229.0376,11.0234,2.0, CP_NAVI75);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Cluckin' Bell in Las Venturas, Nähe des LVPD, wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39421,52 +39422,52 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1005.5800,-941.1790,42.1320,5.0, CP_NAVI17);
+                    SetPlayerCheckpointEx(playerid, 1005.5800,-941.1790,42.1320,2.0, CP_NAVI17);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in Los Santos, Nähe dem BSN, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1944.0356,-1771.8125,13.3906,5.0, CP_NAVI18);
+                    SetPlayerCheckpointEx(playerid, 1944.0356,-1771.8125,13.3906,2.0, CP_NAVI18);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in Los Santos, Nähe dem Club Alhambra, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 653.1495,-570.1783,16.3359,5.0, CP_NAVI19);
+                    SetPlayerCheckpointEx(playerid, 653.1495,-570.1783,16.3359,2.0, CP_NAVI19);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in Los Santos, Nähe des FBI, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, -99.1346,-1166.1656,2.5805,5.0, CP_NAVI20);
+                    SetPlayerCheckpointEx(playerid, -99.1346,-1166.1656,2.5805,2.0, CP_NAVI20);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle - Landstraße Los Santos, Richtung San Fierro, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, -2023.9924,156.4616,28.8359,5.0, CP_NAVI21);
+                    SetPlayerCheckpointEx(playerid, -2023.9924,156.4616,28.8359,2.0, CP_NAVI21);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in San Fierro, Nähe dem Hauptbahnhof San Fierro, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, -1676.5607,412.4557,7.1797,5.0, CP_NAVI22);
+                    SetPlayerCheckpointEx(playerid, -1676.5607,412.4557,7.1797,2.0, CP_NAVI22);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in San Fierro, Nähe des SFPD, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 612.2504,1694.3873,6.9922,5.0, CP_NAVI23);
+                    SetPlayerCheckpointEx(playerid, 612.2504,1694.3873,6.9922,2.0, CP_NAVI23);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle im Wüstengebiet Las Venturas wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
-                    SetPlayerCheckpointEx(playerid, 1596.0598,2198.7400,10.8203,5.0, CP_NAVI24);
+                    SetPlayerCheckpointEx(playerid, 1596.0598,2198.7400,10.8203,2.0, CP_NAVI24);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in Las Venturas, Nähe des LVPD, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==8)
                 {
-                    SetPlayerCheckpointEx(playerid, 1380.9908,457.3878,19.9316,5.0, CP_NAVI74);
+                    SetPlayerCheckpointEx(playerid, 1380.9908,457.3878,19.9316,2.0, CP_NAVI74);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in Los Santos, Nähe der Bauernfarm, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==9)
                 {
-                    SetPlayerCheckpointEx(playerid, 2201.8096,2475.6104,10.8203,5.0, CP_NAVI82);
+                    SetPlayerCheckpointEx(playerid, 2201.8096,2475.6104,10.8203,2.0, CP_NAVI82);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tankstelle in Las Venturas, Nähe des LVPD, wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39478,27 +39479,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1457.8679,-1140.2852,24.0735,5.0, CP_NAVI25);
+                    SetPlayerCheckpointEx(playerid, 1457.8679,-1140.2852,24.0735,2.0, CP_NAVI25);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das ZIP Kleidergeschäft in Los Santos, Nähe der Bank, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 2244.6521,-1664.0035,15.4766,5.0, CP_NAVI26);
+                    SetPlayerCheckpointEx(playerid, 2244.6521,-1664.0035,15.4766,2.0, CP_NAVI26);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Binco Kleidergeschäft in Los Santos, Nähe der Grove Street, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 461.0692,-1501.0800,31.0574,5.0, CP_NAVI26);
+                    SetPlayerCheckpointEx(playerid, 461.0692,-1501.0800,31.0574,2.0, CP_NAVI26);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Victim Kleidergeschäft in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 1022.5134,-1123.2565,23.8703,5.0, CP_NAVI73);
+                    SetPlayerCheckpointEx(playerid, 1022.5134,-1123.2565,23.8703,2.0, CP_NAVI73);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Club-Skinshop in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 2127.5486,2378.9626,10.8203,5.0, CP_NAVI73);
+                    SetPlayerCheckpointEx(playerid, 2127.5486,2378.9626,10.8203,2.0, CP_NAVI73);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Club-Skinshop in Las Venturas wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39510,22 +39511,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1350.0214,-1754.2931,13.3554,5.0, CP_NAVI27);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop in Los Santos, Nähe des LSPD, wurde auf der Karte Rot markiert.");
+                    SetPlayerCheckpointEx(playerid, 1350.0214,-1754.2931,13.3554,2.0, CP_NAVI27);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop in Los Santos, Nähe der Stadthalle, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1316.0682,-906.5001,38.3864,5.0, CP_NAVI28);
+                    SetPlayerCheckpointEx(playerid, 1316.0682,-906.5001,38.3864,2.0, CP_NAVI28);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop in Los Santos, Nähe des Burger Shot North, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 2423.7568,-1742.3107,13.5469,5.0, CP_NAVI28);
+                    SetPlayerCheckpointEx(playerid, 2423.7568,-1742.3107,13.5469,2.0, CP_NAVI28);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop in Los Santos, Nähe der Grove Street, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 1154.7301,-1457.9226,15.7969,5.0, CP_NAVI28);
+                    SetPlayerCheckpointEx(playerid, 1154.7301,-1457.9226,15.7969,2.0, CP_NAVI28);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop im Shopping Market in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39537,7 +39538,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1498.3309,-1585.8683,13.5469,5.0, CP_NAVI44);
+                    SetPlayerCheckpointEx(playerid, 1498.3309,-1585.8683,13.5469, 2.0, CP_NAVI44);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Casino in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39549,17 +39550,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1228.1368,-1423.4741,13.5548,5.0, CP_NAVI39);
+                    SetPlayerCheckpointEx(playerid, ELECTRONICSSHOP_COORDS, 2.0, CP_NAVI39);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Elektromarkt in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 825.6833,-2038.6458,12.8684,5.0, CP_NAVI39);
+                    SetPlayerCheckpointEx(playerid, FISHINGSHOP_COORDS, 2.0, CP_NAVI39);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Angelshop in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 1804.098389, -1723.522583, 14.138840,5.0, CP_NAVI76);
+                    SetPlayerCheckpointEx(playerid, PETSHOP_COORDS, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Tierhandel in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39571,42 +39572,42 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 2000.7357,-1136.0017,25.3077,5.0, CP_NAVI44);
+                    SetPlayerCheckpointEx(playerid, 2000.7357,-1136.0017,25.3077,2.0, CP_NAVI44);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Ballas Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1816.0269,-2112.6909,13.3828,5.0, CP_NAVI45);
+                    SetPlayerCheckpointEx(playerid, 1816.0269,-2112.6909,13.3828,2.0, CP_NAVI45);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Aztecas Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 2810.6587,-1581.4873,10.9309,5.0, CP_NAVI46);
+                    SetPlayerCheckpointEx(playerid, 2810.6587,-1581.4873,10.9309,2.0, CP_NAVI46);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Vagos Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 2773.5256,-2456.0720,13.6371,5.0, CP_NAVI47);
+                    SetPlayerCheckpointEx(playerid, YAKUZA_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI47);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Yakuza Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 1101.908936, -1236.140869, 16.420313,5.0, CP_NAVI48);
+                    SetPlayerCheckpointEx(playerid, LSPD_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI48);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die La Cosa Nostra Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 2489.8831,-1668.2643,13.3438,5.0, CP_NAVI48);
+                    SetPlayerCheckpointEx(playerid, 2489.8831,-1668.2643,13.3438,2.0, CP_NAVI48);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Grove Street Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 900.4517,-1664.7787,13.5469,5.0, CP_NAVI49);
+                    SetPlayerCheckpointEx(playerid, 900.4517,-1664.7787,13.5469,2.0, CP_NAVI49);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Triaden Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
-                    SetPlayerCheckpointEx(playerid, -49.7421,-301.2473,5.4297,5.0, CP_NAVI49);
+                    SetPlayerCheckpointEx(playerid, -49.7421,-301.2473,5.4297,2.0, CP_NAVI49);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Outlawz Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39618,77 +39619,77 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1930.3031,-2344.5083,13.5469,5.0, CP_NAVI50);
+                    SetPlayerCheckpointEx(playerid, 1930.3031,-2344.5083,13.5469,2.0, CP_NAVI50);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Flughafen wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 2112.8987,-2098.1521,13.5469,5.0, CP_NAVI51);
+                    SetPlayerCheckpointEx(playerid, 2112.8987,-2098.1521,13.5469,2.0, CP_NAVI51);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Mülldepo wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 2059.0566,-1910.7906,13.5469,5.0, CP_NAVI52);
+                    SetPlayerCheckpointEx(playerid, 2059.0566,-1910.7906,13.5469,2.0, CP_NAVI52);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Stadtreinigung wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 2118.1602,-1775.5365,13.3916,5.0, CP_NAVI53);
+                    SetPlayerCheckpointEx(playerid, 2118.1602,-1775.5365,13.3916,2.0, CP_NAVI53);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Pizzaria wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 1565.7582,23.2893,24.1641,5.0, CP_NAVI54);
+                    SetPlayerCheckpointEx(playerid, 1565.7582,23.2893,24.1641,2.0, CP_NAVI54);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Gärtnerei wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 2516.5254,-2253.6462,13.3321,5.0, CP_NAVI55);
+                    SetPlayerCheckpointEx(playerid, 2516.5254,-2253.6462,13.3321,2.0, CP_NAVI55);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Schiffshafen wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 1257.3948,-1379.4574,13.2933,5.0, CP_NAVI56);
+                    SetPlayerCheckpointEx(playerid, 1257.3948,-1379.4574,13.2933,2.0, CP_NAVI56);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Buszentrale wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
-                    SetPlayerCheckpointEx(playerid, 1552.2079,-1675.6183,16.1894,5.0, CP_NAVI57);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Gefängniszellen im Los Santos Police Department wurde auf der Karte Rot markiert.");
+                    SetPlayerCheckpointEx(playerid, LSPD_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI57);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Los Santos Police Department wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==8)
                 {
-                    SetPlayerCheckpointEx(playerid, 1564.5618,-1020.5309,23.9063,5.0, CP_NAVI58);
+                    SetPlayerCheckpointEx(playerid, 1564.5618,-1020.5309,23.9063, 2.0, CP_NAVI58);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Geldtransport Firma wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==9)
                 {
-                    SetPlayerCheckpointEx(playerid, 1003.8848,-1350.9558,13.3388,5.0, CP_NAVI59);
+                    SetPlayerCheckpointEx(playerid, 1003.8848,-1350.9558,13.3388, 2.0, CP_NAVI59);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Eisverkauf wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==10)
                 {
-                    SetPlayerCheckpointEx(playerid, -12.3201,28.1475,3.1172,5.0, CP_NAVI60);
+                    SetPlayerCheckpointEx(playerid, -12.3201,28.1475,3.1172, 2.0, CP_NAVI60);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Bauern Farm wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==11)
                 {
-                    SetPlayerCheckpointEx(playerid, 62.1230,-247.9869,1.5781,5.0, CP_NAVI61);
+                    SetPlayerCheckpointEx(playerid, 62.1230,-247.9869,1.5781, 2.0, CP_NAVI61);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fernfahrer Hof wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==12)
                 {
-                    SetPlayerCheckpointEx(playerid, 846.9400,885.9145,13.3516,5.0, CP_NAVI62);
+                    SetPlayerCheckpointEx(playerid, 846.9400,885.9145,13.3516, 2.0, CP_NAVI62);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Baustelle wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==13)
                 {
-                    SetPlayerCheckpointEx(playerid, 1274.4128,-1340.0114,13.3530,5.0, CP_NAVI80);
+                    SetPlayerCheckpointEx(playerid, TAXISTATIONS_JOBSKIN_POINT_BUSSTATION, 2.0, CP_NAVI80);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Taxizentrale wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==14)
                 {
-                    SetPlayerCheckpointEx(playerid, 2390.9146,-1920.6163,13.3828,5.0, CP_NAVI80);
+                    SetPlayerCheckpointEx(playerid, 2390.9146,-1920.6163,13.3828, 2.0, CP_NAVI80);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Hotdogverkauf wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39700,47 +39701,47 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, JEFF_COORDS, 5.0, CP_NAVI64);
+                    SetPlayerCheckpointEx(playerid, JEFF_COORDS, 2.0, CP_NAVI64);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der illegale Berufsmarkt wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 2349.7061,-1246.4760,22.5000,5.0, CP_NAVI64);
+                    SetPlayerCheckpointEx(playerid, SAFEBOX_COORDS_LS, 2.0, CP_NAVI64);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Safebox in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 1685.7469,1746.1523,10.8251,5.0, CP_NAVI64);
+                    SetPlayerCheckpointEx(playerid, SAFEBOX_COORDS_LV, 2.0, CP_NAVI64);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Safebox in Las Venturas wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 2160.315186, -97.976898, 3.429407,5.0, CP_NAVI65);
+                    SetPlayerCheckpointEx(playerid, 2160.315186, -97.976898, 3.429407, 2.0, CP_NAVI65);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Gangjail wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 2298.2554,-2350.6294,13.5469,5.0, CP_NAVI66);
+                    SetPlayerCheckpointEx(playerid, 2298.2554,-2350.6294,13.5469, 2.0, CP_NAVI66);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Waffendealer Platz wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 318.9959,-60.6508,1.5781,5.0, CP_NAVI67);
+                    SetPlayerCheckpointEx(playerid, 318.9959,-60.6508,1.5781, 2.0, CP_NAVI67);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Drogendealer Platz wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, -1510.6661,1975.3440,48.4219,5.0, CP_NAVI78);
+                    SetPlayerCheckpointEx(playerid, WANTEDHACKERBASE_POINT, 2.0, CP_NAVI78);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der WantedCode - Hacker Computer wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
-                    SetPlayerCheckpointEx(playerid, -1548.0554,125.1203,3.5547,5.0, CP_NAVI79);
+                    SetPlayerCheckpointEx(playerid, -1548.0554,125.1203,3.5547, 2.0, CP_NAVI79);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Autodieb Kran wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==8)
                 {
-                    SetPlayerCheckpointEx(playerid, -382.0342,-1426.4521,26.0822,5.0, CP_NAVI72);
+                    SetPlayerCheckpointEx(playerid, -382.0342,-1426.4521,26.0822, 2.0, CP_NAVI72);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Schmied, der von Handschellen befreit, wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39752,42 +39753,42 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1702.9427,-1470.3704,13.5469,5.0, CP_NAVI68);
+                    SetPlayerCheckpointEx(playerid, 1702.9427,-1470.3704,13.5469, 2.0, CP_NAVI68);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Motorrad Tuninggarage wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 1041.0613,-1028.3164,32.1016,5.0, CP_NAVI69);
+                    SetPlayerCheckpointEx(playerid, 1041.0613,-1028.3164,32.1016, 2.0, CP_NAVI69);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die normale Tuninggarage in Las Venturas wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, -1935.8890,236.2874,34.3125,5.0, CP_NAVI70);
+                    SetPlayerCheckpointEx(playerid, -1935.8890,236.2874,34.3125, 2.0, CP_NAVI70);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die normale Tuninggarage in San Fierro wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 2645.2095,-2035.3197,13.5540,5.0, CP_NAVI71);
+                    SetPlayerCheckpointEx(playerid, 2645.2095,-2035.3197,13.5540, 2.0, CP_NAVI71);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tuninggarage in Los Santos für Oldtimer wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, -2713.5679,217.3422,4.2651,5.0, CP_NAVI72);
+                    SetPlayerCheckpointEx(playerid, -2713.5679,217.3422,4.2651, 2.0, CP_NAVI72);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Tuninggarage in Los Santos für Spezialefahrzeuge wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 1763.4915,2080.2959,10.8203,5.0, CP_NAVI72);
+                    SetPlayerCheckpointEx(playerid, 1763.4915,2080.2959,10.8203, 2.0, CP_NAVI72);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Lackierstation für Spezialfahrzeuge in Las Venturas wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 1798.4768,-2423.4924,13.5547,5.0, CP_NAVI72);
+                    SetPlayerCheckpointEx(playerid, AIRPORTLS_PAINTJOB_POINT, 2.0, CP_NAVI72);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Lackierstation für Flugzeuge in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
-                    SetPlayerCheckpointEx(playerid, 1782.8275,-1702.7240,13.5096,5.0, CP_NAVI72);
+                    SetPlayerCheckpointEx(playerid, 1782.8275,-1702.7240,13.5096, 2.0, CP_NAVI72);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Abbauwerkstatt für Auto- und Motorradtuning in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39799,7 +39800,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1329.4666,-1559.4634,13.5469,5.0, CP_NAVI76);
+                    SetPlayerCheckpointEx(playerid, 1329.4666,-1559.4634,13.5469, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Hotel in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39811,17 +39812,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1365.9547,-1279.0731,13.5469,5.0, CP_NAVI33);
+                    SetPlayerCheckpointEx(playerid, 1365.9547,-1279.0731,13.5469, 2.0, CP_NAVI33);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Haupt-Ammunation in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, 2400.5369,-1981.5837,13.5469,5.0, CP_NAVI81);
+                    SetPlayerCheckpointEx(playerid, 2400.5369,-1981.5837,13.5469, 2.0, CP_NAVI81);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Ammunation in Downtown, Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 2159.1836,943.2106,10.8203,5.0, CP_NAVI83);
+                    SetPlayerCheckpointEx(playerid, 2159.1836,943.2106,10.8203, 2.0, CP_NAVI83);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Ammunation in Las Venturas wurde auf der Karte Rot markiert.");
                 }
             }
@@ -39833,77 +39834,77 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if(listitem==0)
                 {
-                    SetPlayerCheckpointEx(playerid, 1959.5519,-2180.7378,13.5469,5.0, CP_NAVI29);
+                    SetPlayerCheckpointEx(playerid, 1959.5519,-2180.7378,13.5469, 2.0, CP_NAVI29);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Los Santos Flughafen wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
-                    SetPlayerCheckpointEx(playerid, -1547.0936,-431.9405,6.0073,5.0, CP_NAVI30);
+                    SetPlayerCheckpointEx(playerid, -1547.0936,-431.9405,6.0073, 2.0, CP_NAVI30);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der San Fierro Flughafen wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
-                    SetPlayerCheckpointEx(playerid, 1711.9429,1604.6927,10.0079,5.0, CP_NAVI31);
+                    SetPlayerCheckpointEx(playerid, 1711.9429,1604.6927,10.0079, 2.0, CP_NAVI31);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Las Venturas Flughafen wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
-                    SetPlayerCheckpointEx(playerid, 1022.2402,-1133.5944,23.8281,5.0, CP_NAVI32);
+                    SetPlayerCheckpointEx(playerid, CLUBINTERIORLS_ENTER_COORDS, 2.0, CP_NAVI32);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die ClubVilla in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, 2127.5486,2378.9626,10.8203,5.0, CP_NAVI32);
+                    SetPlayerCheckpointEx(playerid, 2127.5486,2378.9626,10.8203, 2.0, CP_NAVI32);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die ClubVilla in Las Venturas wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
-                    SetPlayerCheckpointEx(playerid, 815.1536,-1341.5598,13.5308,5.0, CP_NAVI34);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Neulingsspawn in Los Santoswurde auf der Karte Rot markiert.");
+                    SetPlayerCheckpointEx(playerid, NOOBSPAWN_STARTBONUS_POINT, 2.0, CP_NAVI34);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Neulingsspawn in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 268.9609,1384.2981,10.1610,5.0, CP_NAVI35);
+                    SetPlayerCheckpointEx(playerid, 268.9609,1384.2981,10.1610, 2.0, CP_NAVI35);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Las Venturas Öl-Raffinerie wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
-                    SetPlayerCheckpointEx(playerid, 577.4390,1221.7273,11.2689,5.0, CP_NAVI36);
+                    SetPlayerCheckpointEx(playerid, 577.4390,1221.7273,11.2689, 2.0, CP_NAVI36);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Las Venturas Waren Vergabe wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==8)
                 {
-                    SetPlayerCheckpointEx(playerid, -1707.6189,10.5305,3.6368,5.0, CP_NAVI37);
+                    SetPlayerCheckpointEx(playerid, -1707.6189,10.5305,3.6368, 2.0, CP_NAVI37);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der San Fierro Hafen wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==9)
                 {
-                    SetPlayerCheckpointEx(playerid, 836.144714, -2060.179199, 13.467188,5.0, CP_NAVI40);
+                    SetPlayerCheckpointEx(playerid, FISHINGSHOP_COORDS, 2.0, CP_NAVI40);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Angelplatz wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==10)
                 {
-                    SetPlayerCheckpointEx(playerid, 1413.4673,-1698.6144,13.5395,5.0, CP_NAVI41);
+                    SetPlayerCheckpointEx(playerid, 1413.4673,-1698.6144,13.5395, 2.0, CP_NAVI41);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Werbeagentur in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==11)
                 {
-                    SetPlayerCheckpointEx(playerid, 2008.1722,1169.3364,10.8203,5.0, CP_NAVI41);
+                    SetPlayerCheckpointEx(playerid, 2008.1722,1169.3364,10.8203, 2.0, CP_NAVI41);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Werbeagentur in Las Venturas wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==12)
                 {
-                    SetPlayerCheckpointEx(playerid, 1738.5869,-1586.3961,13.5555,5.0, CP_NAVI76);
+                    SetPlayerCheckpointEx(playerid, 1738.5869,-1586.3961,13.5555, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Paintball Anlage wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==13)
                 {
-                    SetPlayerCheckpointEx(playerid, 660.3523,-1869.5139,5.5537,5.0, CP_NAVI76);
+                    SetPlayerCheckpointEx(playerid, 660.3523,-1869.5139,5.5537, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Sportstudio in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==14)
                 {
-                    SetPlayerCheckpointEx(playerid, 660.3523,-1869.5139,5.5537,5.0, CP_NAVI76);
+                    SetPlayerCheckpointEx(playerid, SHISHABAR_ENTER_COORDS, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Shisha-Bar in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
@@ -41163,7 +41164,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 else if(listitem == 14 ) {
                     SetPlayerAttachedObject( playerid, ATTACHED_INDEX_MUSIK, 19421, 2, 0.035, 0.000000, 0.000000, 90.000000, 0.000000, 270.000000, 1.000000, 1.000000, 1.000000 ); // headphones01 - kopfhörer
-                    PlayAudioStreamForPlayer(playerid, "http://lyd-roleplay.de/musik/loginmusik.mp3");
+                    PlayAudioStreamForPlayer(playerid, URL_LOGINMUSIC);
                 }
                 else if(listitem == 15 ) {
                     SetPlayerAttachedObject( playerid, ATTACHED_INDEX_MUSIK, 19421, 2, 0.035, 0.000000, 0.000000, 90.000000, 0.000000, 270.000000, 1.000000, 1.000000, 1.000000 ); // headphones01 - kopfhörer
@@ -41352,7 +41353,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         {
                             if(GetPlayerVehicleID(i) == vID)
                             {
-                                PlayAudioStreamForPlayer(i, "http://lyd-roleplay.de/musik/loginmusik.mp3");
+                                PlayAudioStreamForPlayer(i, URL_LOGINMUSIC);
                             }
                         }
                         RadioSender[vID] = 15;
@@ -52895,8 +52896,8 @@ public SetPlayerView(playerid,step) {
     else if(step == 8 ) {
         TogglePlayerSpectating(playerid,false);
     }*/
-    InterpolateCameraPos(playerid, 1139.7091,-1540.5814,143.8189, 1276.9259,-1440.7892,143.8189, 20000);
-    InterpolateCameraLookAt(playerid, 1170.0543,-1516.1144,143.8189, 1305.9446,-1420.8511,143.8189, 20000);
+    InterpolateCameraPos(playerid, 1564.733398, -1738.897827, 62.053535, 1395.101562, -1748.152099, 66.176651, 25000);
+    InterpolateCameraLookAt(playerid, 1561.099609, -1741.746337, 60.134815, 1398.683105, -1750.965820, 64.113708, 25000);
 
     return 1;
 }

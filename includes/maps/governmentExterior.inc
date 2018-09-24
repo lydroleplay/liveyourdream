@@ -233,7 +233,7 @@ hook OnGameModeInit() {
     object_governmentExterior[62] = CreateDynamicObject(19441, 1543.2823, -1615.3369, 12.3821, -0.2998, -89.9999, 88.7995, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall081
     SetDynamicObjectMaterial(object_governmentExterior[62], 0, 12871, "ce_ground01", "dirttracksgrass256", 0x00000000);
     object_governmentExterior[63] = CreateDynamicObject(19172, 1547.0307, -1687.9188, 15.0913, 0.0000, 0.0000, -109.0998, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
-    SetDynamicObjectMaterialText(object_governmentExterior[63], 0, "leeres Feld", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
+    SetDynamicObjectMaterialText(object_governmentExterior[63], 0, "", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
     SetDynamicObjectMaterial(object_governmentExterior[63], 1, 19297, "matlights", "invisible", 0x00000000);
     object_governmentExterior[64] = CreateDynamicObject(3515, 1563.0958, -1611.1197, 12.2129, 0.0000, 18.6000, 0.0000, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //vgsfountain
     object_governmentExterior[65] = CreateDynamicObject(19175, 1564.9919, -1683.8332, 30.2464, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
@@ -349,7 +349,7 @@ hook OnGameModeInit() {
     object_governmentExterior[133] = CreateDynamicObject(18762, 1545.2370, -1658.1623, 14.3999, 0.0000, 0.0000, 18.5998, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx1mx5m
     SetDynamicObjectMaterial(object_governmentExterior[133], 0, 2176, "casino_props", "marblebox", 0x00000000);
     object_governmentExterior[134] = CreateDynamicObject(19172, 1546.0155, -1690.8358, 15.1014, 0.0000, 0.0000, -109.0998, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
-    SetDynamicObjectMaterialText(object_governmentExterior[134], 0, "leeres Feld", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
+    SetDynamicObjectMaterialText(object_governmentExterior[134], 0, "", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
     SetDynamicObjectMaterial(object_governmentExterior[134], 1, 19297, "matlights", "invisible", 0x00000000);
     object_governmentExterior[135] = CreateDynamicObject(19174, 1543.4514, -1633.8006, 13.8225, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture3
     SetDynamicObjectMaterialText(object_governmentExterior[135], 0, "Kameraüberwacht!", OBJECT_MATERIAL_SIZE_512x128, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
@@ -368,10 +368,10 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterialText(object_governmentExterior[141], 0, "Regierung", OBJECT_MATERIAL_SIZE_256x128, "Arial", 50, 1, 0xFF000000, 0x00000000, 1);
     SetDynamicObjectMaterial(object_governmentExterior[141], 1, 19297, "matlights", "invisible", 0x00000000);
     object_governmentExterior[142] = CreateDynamicObject(19172, 1547.0329, -1687.9188, 14.1814, 0.0000, 0.0000, -109.0998, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
-    SetDynamicObjectMaterialText(object_governmentExterior[142], 0, "leeres Feld", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
+    SetDynamicObjectMaterialText(object_governmentExterior[142], 0, "", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
     SetDynamicObjectMaterial(object_governmentExterior[142], 1, 19297, "matlights", "invisible", 0x00000000);
     object_governmentExterior[143] = CreateDynamicObject(19172, 1546.0124, -1690.8675, 14.1814, 0.0000, 0.0000, -109.0998, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
-    SetDynamicObjectMaterialText(object_governmentExterior[143], 0, "leeres Feld", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
+    SetDynamicObjectMaterialText(object_governmentExterior[143], 0, "", OBJECT_MATERIAL_SIZE_256x128, "Arial", 25, 1, 0xFF000000, 0x00000000, 1);
     SetDynamicObjectMaterial(object_governmentExterior[143], 1, 19297, "matlights", "invisible", 0x00000000);
     object_governmentExterior[144] = CreateDynamicObject(18981, 1547.2928, -1724.0572, 11.4982, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_governmentExterior[144], 0, 16640, "a51", "Metal3_128", 0x00000000);
