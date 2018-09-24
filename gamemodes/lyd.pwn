@@ -156,7 +156,8 @@ enum
 	VW_LCNINTERIOR,
 	VW_GOVERNMENTINTERIOR,
 	VW_BANKINTERIORLS,
-	VW_BANKINTERIORLS2
+	VW_BANKINTERIORLS2,
+	VW_CLUBINTERIORLS
 }
 
 new gSQL;
@@ -3369,7 +3370,7 @@ new Float:ATM[][] = {
 // {826.4333,-1351.3235,13.5342},
 //{822.5450,-1355.8326,13.5422},
 {827.1663, -1355.6239, 13.1646},
-{2320.4854,-1008.1277,1054.7188},
+{1004.599915, -1131.191284, 23.465918}, //Clubvilla LS
 {1225.32947,-1811.68408,16.24608},
 {1420.52087, -980.45911, 1639.41125},
 {881.15, -1198.46, 16.61},
@@ -4230,6 +4231,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\bankExteriorLs>
 #include <maps\bankInteriorLs>
 #include <maps\bankInteriorLs2>
+#include <maps\clubExteriorLs>
+#include <maps\clubInteriorLs>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5458,9 +5461,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 389.6256,173.6593,1008.3828, 0);//Stadthalle Innen
 	CreateDynamicPickup(19197, 1, 2305.8259,-16.1325,26.7496, 0);//KFZ-AMT Außen
 	CreateDynamicPickup(19197, 1, 264.3734,191.1904,1008.1719,0);//FBI Innen
-	CreateDynamicPickup(1318, 1, 1022.5145,-1121.7628,23.8719, 0);//Clubmitglied enter in Los Santos
 	CreateDynamicPickup(1318, 1, 2127.5486,2378.9626,10.8203, 0);//Clubmitglied enter in Las Venturas
-	CreateDynamicPickup(1318, 1, 2317.6533,-1026.3450,1050.2178, 0);//Ausgangclub in Los Santos
 	CreateDynamicPickup(1318, 1, -2636.6230,1403.3202,906.4609, 0);//Ausgangclub in Las Venturas
 	CreateDynamicPickup(19197, 1, 1952.5675,1342.9261,15.3672, 0);//Bank in LV Außen
 	CreateDynamicPickup(19197, 1, 288.7102,167.3666,1007.1719, 200);//Bank in LV innen
@@ -5487,7 +5488,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 286.14,-40.63,1001.52, 53);//Ausgang Ammu LV
 	CreateDynamicPickup(19197, 1, 238.6129,139.4004,1003.0234, 0);//Ausgang Krankenhaus
 
-
 	//Info Position
 	//CreateDynamicPickup(1247, 1, 814.4642,-1345.7327,13.5320, 0);//Server-Experte
 	CreateDynamicPickup(1239, 1, 822.3183,1.8747,1004.1797, -1);//Posthaus /Post
@@ -5499,12 +5499,8 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, -2158.7920,642.9232,1052.3750, 0);//Clubzeichen
 	CreateDynamicPickup(1247, 1, 2268.1128,2448.0073,3.5313, 0);//Arrest Point LV
 	// CreateDynamicPickup(1247, 1, 321.0334,315.3957,999.1484, 0);//Arrest Point Zoll
-	CreateDynamicPickup(1239, 1, 2324.6904,-1014.0570,1050.2109, 0);//Waffenshop Club in Los Santos
 	CreateDynamicPickup(1239, 1, -2656.1047,1416.0248,906.2734, 0);//Waffenshop Club in Las Venturas
-	CreateDynamicPickup(1239, 1, 2321.2417,-1005.3172,1054.7188, 0);//Pee Club
-	CreateDynamicPickup(1276, 1, 2320.6201,-1008.0496,1054.7188, 0);//ATM Club in Los Santos
-	CreateDynamicPickup(1314, 1, 2325.3647,-1021.1942,1050.2109, 0);//Dance Club in Los Santos
-    CreateDynamicPickup(1240, 1, 2313.5750,-1008.9286,1050.2109, 0);//Heal Club in Los Santos
+
     CreateDynamicPickup(1240, 1, -2653.5183,1413.5085,906.2734, 0);//Heal Club in Las Venturas
    	CreateDynamicPickup(1239, 1, -1857.4130,-1618.9630,21.9022, 0);//Unloadpunkt Waffendealer
 	CreateDynamicPickup(1239, 1, -258.9534,-2181.9905,29.0150, 0);//Unloadpunkt Drogendealer
@@ -5650,8 +5646,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 207.7187,-100.5032,1005.2578, 37);//Binco (GS)
 	CreateDynamicPickup(1239, 1, 1702.9427,-1470.3704,13.5469, 0);//Motorradfärbe point
 	CreateDynamicPickup(1239, 1, 1763.4915,2080.2959,10.8203, 0);//Autofärbe point
-	CreateDynamicPickup(1275, 1, 2316.5325,-1010.7850,1054.7188, 0);//Club Shop
-	CreateDynamicPickup(1239, 1, 2313.3645,-1013.3300,1050.2109, 0);//Getränke Clubvilla in Los Santos
 	CreateDynamicPickup(1239, 1, -2653.6023,1407.0844,906.2734, 0);//Getränke Clubvilla in Las Venturas
 	CreateDynamicPickup(1239, 1, 2309.3276,-8.2968,26.7422, 0);//kfzversicherung
 	//CreateDynamicPickup(1239, 1, 1455.8802,-1741.8704,13.5469, 0);//Getraenk
@@ -5778,7 +5772,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\nGebäude verlassen mit 'Enter'", COLOR_BLUE, 2169.8208,1618.7504,999.9766, 15.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Gangjail\n"COLOR_HEX_WHITE"Tippe /Gangjail um einzusperren\nTippe /Aufbrechen um zu befreien", COLOR_WHITE, 2160.4111,-98.0815,2.8239, 13.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur für Clubmitglieder", COLOR_WHITE, 2127.5486,2378.9626,10.8203, 20.0, .worldid = 0); // Clubvilla in Las Venturas
-	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur für Clubmitglieder", COLOR_WHITE, 1022.4622,-1121.5886,23.8720, 20.0, .worldid = 0); // Clubvilla in Los Santos
  	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kredit aufnehmen\n"COLOR_HEX_WHITE"Tippe /Kredit", COLOR_WHITE, 298.9642,179.2220,1007.1719, 10.0, .worldid = 200);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bankservice\n"COLOR_HEX_WHITE"Tippe /Bank", COLOR_WHITE, 292.4491,180.1878,1007.1794, 15.0, .worldid = 200);
 	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen Banküberfall mit\n"COLOR_HEX_RED"/Bankausrauben", COLOR_WHITE, 2144.1055,1641.6750,993.5761, 13.0, .worldid = 500);
@@ -5797,18 +5790,11 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Los Santos - Hauptbahnhof\n"COLOR_HEX_WHITE"Bitte halten Sie Abstand von der Bahnsteigkante und\n"COLOR_HEX_WHITE"betreten Sie erst den Bahnsteig nach Halt des Zuges!", COLOR_WHITE, 1738.0658,-1949.8571,14.1172, 18.0);*/
 
 	//Verkaufs 3D Infotext
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 2313.3645,-1013.3300,1050.2109, 10.0); //in Los Santos
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Clubvilla Bar\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, -2653.6023,1407.0844,906.2734, 10.0); //in Las Venturas
 
     //CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Getränkestand\n"COLOR_HEX_WHITE"Tippe /Getraenk", COLOR_WHITE, 1455.8802,-1741.8704,13.5469, 10.0);
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, 2324.6904,-1014.0570,1050.2109, 8.0); // in Los Santos
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, -2656.1047,1416.0248,906.2734, 8.0); // in Las Venturas
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Kueche\n"COLOR_HEX_WHITE"Tippe /Clubheal", COLOR_WHITE, 2313.5750,-1008.9286,1050.2109, 8.0); // in Los Santos
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Kueche\n"COLOR_HEX_WHITE"Tippe /Clubheal", COLOR_WHITE, -2653.5183,1413.5085,906.2734, 8.0); //in Las Venturas
- 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Tanzflaeche\n"COLOR_HEX_WHITE"Tippe /Clubdance 1-7", COLOR_WHITE, 2325.3647,-1021.1942,1050.2109, 8.0);
-  	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Toilette\n"COLOR_HEX_WHITE"Tippe /Pee", COLOR_WHITE, 2321.2417,-1005.3172,1054.7188, 8.0);
-  	//CreateDynamic3DTextLabel(COLOR_HEX_RED"** BIS ZUM 24.02.2015 FÜR ALLE **\n"COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
-  	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club-Garderobe\n"COLOR_HEX_WHITE"Tippe /Clubshop", COLOR_WHITE, 2316.5325,-1010.7850,1054.7188, 15.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten für 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 
@@ -6135,7 +6121,7 @@ public OnPlayerConnect(playerid)
     SetPlayerMapIcon(playerid, 20, -1676.5607,412.4557,7.1797, 42, 0, 0);//Tankstelle
     SetPlayerMapIcon(playerid, 21, -99.1346,-1166.1656,2.5805, 42, 0, 0);//Tankstelle
     SetPlayerMapIcon(playerid, 22, -1676.5607,412.4557,7.1797, 42, 0, 0);//Tankstelle
-    SetPlayerMapIcon(playerid, 23, 1022.2402,-1133.5944,23.8281, 48, 0, 0);//Clubvilla
+    SetPlayerMapIcon(playerid, 23, 2127.5486,2378.9626,10.8203, 48, 0, 0);//Clubvilla in LV
     SetPlayerMapIcon(playerid, 24, 925.6447,-1352.1470,13.3761, 14, 0, 0);//Chuckin Nord
     SetPlayerMapIcon(playerid, 25, 2422.1592,-1508.4604,23.9922, 14, 0, 0);//Chuckin Süd
     SetPlayerMapIcon(playerid, 26, 1350.0214,-1754.2931,13.3554, 25, 0, 0);//247 lspd
@@ -6152,7 +6138,6 @@ public OnPlayerConnect(playerid)
  	SetPlayerMapIcon(playerid, 41, 1257.1144,-1339.0963,12.9213, 8, 0, 0);//Busbahnhof
  	SetPlayerMapIcon(playerid, 42, 1952.5675,1342.9261,15.3672, 52, 0, 0);//Bank in LV
  	SetPlayerMapIcon(playerid, 43, 2008.1722,1169.3364,10.8203, 46, 0, 0);//Werbung in LV
- 	SetPlayerMapIcon(playerid, 44, 2127.5486,2378.9626,10.8203, 48, 0, 0);//Clubvilla in Las Venturas
 
     // 36 für /DFINDE reserviert
 	//	SetPlayerCameraPos(playerid, 1511.7239,-1715.6687,30.0469);//Brücke Verona Beach
@@ -7542,6 +7527,14 @@ CMD:createobject(playerid, params[]) {
 	SendClientMessage(playerid, COLOR_WHITE, message);
 	EditObject(playerid, customObject[index]);
 	return 1;
+}
+
+CMD:vw(playerid) {
+	if (Spieler[playerid][pAdmin] < 2) return 1;
+
+	new message[30];
+	format(message, sizeof(message), "Virtual World: %i", GetPlayerVirtualWorld(playerid));
+	return SendClientMessage(playerid, COLOR_WHITE, message);
 }
 
 CMD:debug(playerid, params[]) {
@@ -11985,7 +11978,7 @@ CMD:clubwaffen(playerid)
 	    SendClientMessage(playerid,COLOR_RED,"Du kannst keine Waffen erwerben.");
 		return SendWeaponBlockInfo(playerid);
 	}
-	if(IsPlayerInRangeOfPoint(playerid, 2.0, 2324.6904,-1014.0570,1050.2109) && GetPlayerInterior(playerid) == 9 || IsPlayerInRangeOfPoint(playerid, 2.0, -2656.1047,1416.0248,906.2734) && GetPlayerInterior(playerid) == 3)
+	if(IsPlayerInRangeOfPoint(playerid, 2.0, CLUBINTERIORLS_WEAPONS_POINT) && GetPlayerInterior(playerid) == 9 || IsPlayerInRangeOfPoint(playerid, 2.0, -2656.1047,1416.0248,906.2734) && GetPlayerInterior(playerid) == 3)
 	{
 		//if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
 		ShowPlayerDialog(playerid, CDIALOG_WMENU, DIALOG_STYLE_LIST, "Club Waffenmenu", "\
@@ -18284,7 +18277,7 @@ CMD:steineentladen(playerid)
 
 CMD:clubheal(playerid)
 {
-	if(IsPlayerInRangeOfPoint(playerid, 2.0, 2313.5750,-1008.9286,1050.2109) || IsPlayerInRangeOfPoint(playerid, 2.0, -2653.5183,1413.5085,906.2734))//Clubheilen
+	if(IsPlayerInRangeOfPoint(playerid, 2.0, CLUBINTERIORLS_HEAL_POINT) || IsPlayerInRangeOfPoint(playerid, 2.0, -2653.5183,1413.5085,906.2734))//Clubheilen
 	{
 	    if(Spieler[playerid][pHeilReady] == 0)return SendClientMessage(playerid, COLOR_YELLOW, "In der Clubküche wird gerade für dich gekocht, warte ein Moment.");
 	    Spieler[playerid][pHeilReady] = 0;
@@ -28854,21 +28847,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerInterior(playerid, 0);
 		    SetPlayerVirtualWorld(playerid, 0);
 		    SetPlayerPos(playerid, 1901.9264,742.8745,10.8198);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0,2317.6533,-1026.3450,1050.2178))//Clubvilla in Los Santos
-		{
-		    if(Spieler[playerid][pDonateRank] == 0)return SendClientMessage(playerid, COLOR_RED, "Der Zutritt ist dir untersagt, weil du kein CLUBMITGLIED bist.");
-		    SetPlayerInterior(playerid, 0);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 1022.5145,-1121.7628,23.8719);
-		    StopAudioStreamForPlayer(playerid);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1022.5145,-1121.7628,23.8719))//Clubvilla in Los Santos
-		{
-		    if(Spieler[playerid][pDonateRank] == 0)return SendClientMessage(playerid, COLOR_RED, "Der Zutritt ist dir untersagt, weil du kein CLUBMITGLIED bist.");
-		    SetPlayerInterior(playerid,9);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 2317.6533,-1026.3450,1050.2178);
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0,2127.5486,2378.9626,10.8203))//Clubvilla in Las Venturas
 		{
@@ -52603,7 +52581,7 @@ COMMAND:starttaxi(playerid,params[]) {
 
 COMMAND:getraenk(playerid,params[]) {
 	//if( !IsPlayerInRangeOfPoint(playerid,15.0,499.4468,-20.7656,1000.6797) ) {
-	if (!IsPlayerInRangeOfPoint(playerid, 4.0, SHISHABAR_DRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0, ALHAMBRAINTERIOR_BUYDRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,2313.3645,-1013.3300,1050.2109) && !IsPlayerInRangeOfPoint(playerid,4.0,1455.8802,-1741.8704,13.5469)
+	if (!IsPlayerInRangeOfPoint(playerid, 4.0, SHISHABAR_DRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0, ALHAMBRAINTERIOR_BUYDRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0, CLUBINTERIORLOS_DRINKS_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,1455.8802,-1741.8704,13.5469)
  		&& !IsPlayerInRangeOfPoint(playerid,4.0,1215.3011,-13.0128,1000.9219) && !IsPlayerInRangeOfPoint(playerid,4.0, CASINO_INTERIOR_BUYDRINK_POINT) && !IsPlayerInRangeOfPoint(playerid,4.0,-2653.6023,1407.0844,906.2734) ) {
 		return SendClientMessage(playerid,COLOR_ORANGE,"Du befindest dich nicht in der Bar");
 	}
