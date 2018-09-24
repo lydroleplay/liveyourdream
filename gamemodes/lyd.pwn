@@ -4233,6 +4233,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\clubExteriorLs>
 #include <maps\clubInteriorLs>
 #include <maps\boatCargoJob>
+#include <maps\kartParcour>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5571,7 +5572,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1274, 1, 373.8057,-2056.3586,7.9260, 0);//Autossooter
 	CreateDynamicPickup(1274, 1, 356.7114,-2149.5613,7.8779, 0);//Breakdancer
 	CreateDynamicPickup(1274, 1, 382.0282,-2165.8818,7.8511, 0);//Schiff
-	CreateDynamicPickup(1274, 1, -2036.0660,-98.3114,35.1641, 0);//Kartbahn
 	CreateDynamicPickup(1274, 1, 396.3516,-2152.5928,7.8399, 0);//Wasserbahn
 	CreateDynamicPickup(19197, 1, 361.7136,-2107.5913,7.8340, 0);//Springbrett unten
 	CreateDynamicPickup(19197, 1, 359.5758,-2107.5520,74.8357, 0);//Springbrett oben
@@ -5660,7 +5660,6 @@ OnGameModeInit2() {
 	//Fahrtticket 3D Text
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgeschäft: Fallturm\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 374.6658,-2121.6416,7.8820, 10.0);//Fallturm
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgeschäft: Autosscooter\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 373.8057,-2056.3586,7.9260, 10.0);//Autosscooter
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgeschäft: Kartbahn\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, -2036.0660,-98.3114,35.1641, 10.0);//Kartbahn
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgeschäft: Breakdancer\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 356.7114,-2149.5613,7.8779, 10.0);//Breakdancer
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgeschäft: Schaukelschiff\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 382.0282,-2165.8818,7.8511, 10.0);//Schaukelschiff
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrgeschäft: Wasserbahn\n"COLOR_HEX_WHITE"Tippe /Ticketkaufen\n"COLOR_HEX_BLUE"Ticketpreis: 300$", COLOR_WHITE, 396.3516,-2152.5928,7.8399, 10.0);//Wasserbahn
@@ -67399,7 +67398,7 @@ COMMAND:ticketkaufen(playerid,params[]) {
 	else  if( IsPlayerInRangeOfPoint(playerid,3.0,382.0282,-2165.8818,7.8511) ) {// schiff
 	    fahrgeschaeft = 3;
 	}
-	else  if( IsPlayerInRangeOfPoint(playerid,3.0,-2036.0660,-98.3114,35.1641) ) {// Kartbahn
+	else  if( IsPlayerInRangeOfPoint(playerid,3.0, KARTPARCOUR_TICKETPOINT) ) {// Kartbahn
 	    fahrgeschaeft = 4;
 	}
 	else  if( IsPlayerInRangeOfPoint(playerid,3.0,396.3516,-2152.5928,7.8399) ) {// Wasserbahn

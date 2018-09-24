@@ -11,6 +11,7 @@ static Float:DRAWDISTANCE   = 130.0;
 #define BOATCARGOJOB_JOBSKIN_POINT       2487.6289, -2250.2695, 3.0000
 #define BOATCARGOJOB_LOADGARGO_POINT     2615.2017, -2322.4878, 1.8984
 #define BOATCARGOJOB_UNLOADCARGO_POINT   2293.6399, 522.7067, 1.7944
+
 // Map variables
 new object_boatCargoJob[7];
 new pickup_boatCargoJob[3];
