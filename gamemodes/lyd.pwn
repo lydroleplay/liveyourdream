@@ -4236,6 +4236,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\kartParcour>
 #include <maps\bankExteriorLv>
 #include <maps\bankInteriorLv>
+#include <maps\amusementPark>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5825,9 +5826,9 @@ OnGameModeInit2() {
 	// TODO: Peek delete?
 	#if defined WEIHNACHTS_EVENT
 	for(new i ; i < sizeof(g_Geschenk) ; i++) {
-	    g_Geschenk[i][G_iObjectID] = CreateObject( g_Geschenk[i][G_iModel],g_Geschenk[i][G_fX],g_Geschenk[i][G_fY],g_Geschenk[i][G_fZ],0.0,0.0,0.0,50.0);
+	    g_Geschenk[i][G_iObjectID] = CreateDynamicObject( g_Geschenk[i][G_iModel],g_Geschenk[i][G_fX],g_Geschenk[i][G_fY],g_Geschenk[i][G_fZ],0.0,0.0,0.0,50.0);
 	    g_Geschenk[i][G_t3dLabel] = CreateDynamic3DTextLabel("/OSTEREI",0xFFFFFFFF,g_Geschenk[i][G_fX],g_Geschenk[i][G_fY],g_Geschenk[i][G_fZ] + 0.65,20.0);
-		MoveObject( g_Geschenk[i][G_iObjectID] , g_Geschenk[i][G_fX],g_Geschenk[i][G_fY],g_Geschenk[i][G_fZ] , 1.0 , 180.0 , 0.0 , 0.0 );
+		MoveDynamicObject( g_Geschenk[i][G_iObjectID] , g_Geschenk[i][G_fX],g_Geschenk[i][G_fY],g_Geschenk[i][G_fZ] , 1.0 , 180.0 , 0.0 , 0.0 );
 	}
 	#endif
 
@@ -17135,7 +17136,7 @@ CMD:fstorzu(playerid, params[])
 	        {
 				return SendClientMessage(playerid, COLOR_GREY, "Du bist kein Stadtamt/Regierungs Mitglied.");
 			}
-			MoveObject(stadttor[0], 356, 171.5, 1007.4000244141, 3);
+			MoveDynamicObject(stadttor[0], 356, 171.5, 1007.4000244141, 3);
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 10, 354.39999389648, 175.80000305176, 1007.4000244141))//stadtamt 2
 		{
@@ -17143,7 +17144,7 @@ CMD:fstorzu(playerid, params[])
 	        {
 				return SendClientMessage(playerid, COLOR_GREY, "Du bist kein Stadtamt/Regierungs Mitglied.");
 			}
-		    MoveObject(stadttor[1], 354.39999389648, 175.80000305176, 1007.4000244141-10, 3);
+		    MoveDynamicObject(stadttor[1], 354.39999389648, 175.80000305176, 1007.4000244141-10, 3);
 		}
     }
  	else if(strcmp(entry, "zu", true) == 0)
@@ -17154,7 +17155,7 @@ CMD:fstorzu(playerid, params[])
 	        {
 				return SendClientMessage(playerid, COLOR_GREY, "Du bist kein Stadtamt/Regierungs Mitglied.");
 			}
-			MoveObject(stadttor[0], 356, 171.5, 1007.4000244141, 0, 0, 272, 3);
+			MoveDynamicObject(stadttor[0], 356, 171.5, 1007.4000244141, 0, 0, 272, 3);
 	    }
 	 	else if(IsPlayerInRangeOfPoint(playerid, 10, 354.39999389648, 175.80000305176, 1007.4000244141))//stadtamt 2
 		{
@@ -17162,7 +17163,7 @@ CMD:fstorzu(playerid, params[])
 	        {
 				return SendClientMessage(playerid, COLOR_GREY, "Du bist kein Stadtamt/Regierungs Mitglied.");
 			}
-		    MoveObject(stadttor[1], 354.39999389648, 175.80000305176, 1007.4000244141, 3);
+		    MoveDynamicObject(stadttor[1], 354.39999389648, 175.80000305176, 1007.4000244141, 3);
 		}
     }
 	return 1;
@@ -26638,7 +26639,7 @@ public OnPlayerRequestSpawn(playerid)
 	return 0;
 }
 
-public OnObjectMoved(objectid)
+public OnDynamicObjectMoved(objectid)
 {
 	if( Riesenrad_OnObjectMoved(objectid)) return 1;
 	#if defined SILVESTER_EVENT
@@ -26648,7 +26649,7 @@ public OnObjectMoved(objectid)
 		//printf("OnDynamicObjectMoved() OBJECT_SCHIFF differenz %d",GetTickCount() - t );
 	    if( g_Schiff[S_ibStatus] == 1 ) {
 	        g_Schiff[S_ibStatus] = 2;
-	        SetTimer("Pulse_Schiff",200 + random(150),false);
+	        SetTimer("Pulse_Schiff", 10,false);
 	    }
 	    else if(g_Schiff[S_ibStatus] == 3 ) {
 	        new
@@ -26677,7 +26678,7 @@ public OnObjectMoved(objectid)
 					}
 				}
 	        }
-			MoveObject( g_Schiff[S_iObject] , g_Schiff[S_fX] + g_Schiff[S_fOffsetX], g_Schiff[S_fY] - g_Schiff[S_fOffsetY], g_Schiff[S_fZ] + g_Schiff[S_fOffsetZ], g_Schiff[S_fSpeed], frandom(-33.0,-37.0,3) , 0.0 , 86.0 );
+			MoveDynamicObject( g_Schiff[S_iObject] , g_Schiff[S_fX] + g_Schiff[S_fOffsetX], g_Schiff[S_fY] - g_Schiff[S_fOffsetY], g_Schiff[S_fZ] + g_Schiff[S_fOffsetZ], g_Schiff[S_fSpeed], frandom(-33.0,-37.0,3) , 0.0 , 86.0 );
 	        g_Schiff[S_ibStatus] = 4;
 	    }
 	    else if( g_Schiff[S_ibStatus] == 4 ) {
@@ -26685,7 +26686,7 @@ public OnObjectMoved(objectid)
 	        g_Schiff[S_ibStatus] = 5;
 	    }
 	    else if( g_Schiff[S_ibStatus] == 6 ) {
-			MoveObject( g_Schiff[S_iObject] , g_Schiff[S_fX] - g_Schiff[S_fOffsetX], g_Schiff[S_fY] - g_Schiff[S_fOffsetY], g_Schiff[S_fZ] + g_Schiff[S_fOffsetZ], g_Schiff[S_fSpeed], frandom(37.0,33.0,3) , 0.0 , 86.0 );
+			MoveDynamicObject( g_Schiff[S_iObject] , g_Schiff[S_fX] - g_Schiff[S_fOffsetX], g_Schiff[S_fY] - g_Schiff[S_fOffsetY], g_Schiff[S_fZ] + g_Schiff[S_fOffsetZ], g_Schiff[S_fSpeed], frandom(37.0,33.0,3) , 0.0 , 86.0 );
 	        g_Schiff[S_ibStatus] = 1;
 	    }
 	    return 1;
@@ -26708,17 +26709,88 @@ public OnObjectMoved(objectid)
 	            Float:rx,
 	            Float:ry,
 	            Float:rz;
-			GetObjectRot( objectid,rx,ry,rz);
-			GetObjectPos( objectid,x,y,z);
+			GetDynamicObjectRot( objectid,rx,ry,rz);
+			GetDynamicObjectPos( objectid,x,y,z);
 			if( z > g_Geschenk[i][G_fZ] ) z = g_Geschenk[i][G_fZ];
 			else z += 0.5;
 			ry = float(random(361));
 			rx = float(random(361));
 			rz = float(random(361));
-			MoveObject( objectid , g_Geschenk[i][G_fX],g_Geschenk[i][G_fY], z  , 0.25 , 0.0 , 0.0 , rz );
+			MoveDynamicObject( objectid , g_Geschenk[i][G_fX],g_Geschenk[i][G_fY], z  , 0.25 , 0.0 , 0.0 , rz );
 	    }
 	}
 	#endif
+
+	//if( Gate_OnDynamicObjectMoved(objectid)) return 1;
+	if( objectid == g_BallonConfig[BC_iObject] ) {
+	    MoveBallon();
+	}
+	new e_streamer_extra_id = Streamer_GetIntData(STREAMER_TYPE_OBJECT,objectid,E_STREAMER_EXTRA_ID);
+	if( e_streamer_extra_id == OBJECT_ZOLL ) {
+	    //printf("OnDynamicObjectMoved %d OBJECT_ZOLL",objectid);
+		for(new i ; i < sizeof(g_Zoll); i++) {
+		    if( objectid == g_Zoll[i][Z_iObject] ) {
+		        if( g_Zoll[i][Z_iStatus] == 1 ) {
+		            g_Zoll[i][Z_iStatus] = 2;
+		        }
+		        else {
+		            g_Zoll[i][Z_iStatus] = 0;
+		        }
+		        break;
+		    }
+		}
+	}
+	else if( e_streamer_extra_id == OBJECT_FALLTURM_PLATTE ) {
+	    //printf("OnDynamicObjectMoved %d",g_FallTurm[FT_ibStatus]);
+        KillTimer(g_FallTurm[FT_tTimer]);
+	    if( g_FallTurm[FT_ibStatus] == 2 ) {
+			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",5000,false);
+			//SendFahrgeschaeftMessage(0,COLOR_YELLOW,"Gleich geht es abwärts");
+			g_FallTurm[FT_ibStatus] = 3;
+	    }
+		else if( g_FallTurm[FT_ibStatus] == 4 ) {
+		    new
+		        Float:x,
+		        Float:y,
+		        Float:z;
+		    g_FallTurm[FT_ibStatus] = 5;
+			//SendFahrgeschaeftMessage(0,COLOR_YELLOW,"Der Turm fährt gleich wieder hoch");
+			for(new i ; i < MAX_PLAYERS ; i++) {
+			    if( Spieler[i][pFahrgeschaeft] == 0 ) {
+			        if( GetPlayerPos(i,x,y,z)) {
+				        SetPlayerPos(i,x,y,7.85);
+				        //TogglePlayerControllable(i,true);
+			        }
+			    }
+			}
+			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",5000,false);
+		}
+		else if( g_FallTurm[FT_ibStatus] == 6 ) {
+		    g_FallTurm[FT_ibStatus] = 7;
+			//SendFahrgeschaeftMessage(0,COLOR_YELLOW,"Oben angekommen. Nochmal runter!");
+			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",5000,false);
+		}
+		else if( g_FallTurm[FT_ibStatus] == 8 ) {
+		    new
+		        Float:x,
+		        Float:y,
+		        Float:z;
+		    g_FallTurm[FT_ibStatus] = 9;
+			for(new i ; i < MAX_PLAYERS ; i++) {
+			    if( Spieler[i][pFahrgeschaeft] == 0 ) {
+			        if( GetPlayerPos(i,x,y,z)) {
+				        SetPlayerPos(i,x,y,7.85);
+				        TogglePlayerControllable(i,true);
+			        }
+			    }
+			}
+			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",2500,false);
+		}
+	}
+	else if(e_streamer_extra_id == OBJECT_BREAKDANCER) {
+	    MoveBreakdancer();
+	}
+
 	return 1;
 }
 
@@ -26927,12 +26999,12 @@ CMD:sultancop(playerid)
 			{
 				vSirene[vID] = CreateDynamicObject(19420, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0);
 				AttachDynamicObjectToVehicle(vSirene[vID],vID,-0.000000, 0.000000, 0.800000, 0.000000, 0.000000, 0.000000);
-				vSirene[vID] = CreateObject(19327, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0);
-				AttachObjectToVehicle(vSirene[vID],vID, -0.000000, 2.200000, 0.299999, 284.000000, 0.000000, 179.000000 ); // <vorne>
-				SetObjectMaterialText(vSirene[vID], "POLIZEI", 0, OBJECT_MATERIAL_SIZE_256x128,"Arial", 28, 1, 0xFFFFFFFF, 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
-				vSirene[vID] = CreateObject(19327, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0);
-				AttachObjectToVehicle(vSirene[vID],vID, -0.000000, -2.399999, 0.200000, 0.000000, 0.000000, 0.000000 ); // <vorne>
-				SetObjectMaterialText(vSirene[vID], "POLIZEI", 0, OBJECT_MATERIAL_SIZE_256x128,"Arial", 28, 1, 0xFFFFFFFF, 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
+				vSirene[vID] = CreateDynamicObject(19327, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0);
+				AttachDynamicObjectToVehicle(vSirene[vID],vID, -0.000000, 2.200000, 0.299999, 284.000000, 0.000000, 179.000000 ); // <vorne>
+				SetDynamicObjectMaterialText(vSirene[vID], "POLIZEI", 0, OBJECT_MATERIAL_SIZE_256x128,"Arial", 28, 1, 0xFFFFFFFF, 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
+				vSirene[vID] = CreateDynamicObject(19327, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0);
+				AttachDynamicObjectToVehicle(vSirene[vID],vID, -0.000000, -2.399999, 0.200000, 0.000000, 0.000000, 0.000000 ); // <vorne>
+				SetDynamicObjectMaterialText(vSirene[vID], "POLIZEI", 0, OBJECT_MATERIAL_SIZE_256x128,"Arial", 28, 1, 0xFFFFFFFF, 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 			}
 			else
 			{
@@ -26958,9 +27030,9 @@ CMD:textp(playerid)
 		{
 			if(vSirene[vID] == INVALID_OBJECT_ID)
 			{
-				vSirene[vID] = CreateObject( 19327,0,0,0,0,0,0,80 ); // <vorne>
-				AttachObjectToVehicle(vSirene[vID],vID, 0.000000, 2.000000, 0.400000, 260.000000, 180.000000, 0.000000 ); // <vorne>
-				SetObjectMaterialText(vSirene[vID], "PUMA <3", 0, OBJECT_MATERIAL_SIZE_256x128,"Arial", 28, 1, 0xFFFFFFFF, 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
+				vSirene[vID] = CreateDynamicObject( 19327,0,0,0,0,0,0,80 ); // <vorne>
+				AttachDynamicObjectToVehicle(vSirene[vID],vID, 0.000000, 2.000000, 0.400000, 260.000000, 180.000000, 0.000000 ); // <vorne>
+				SetDynamicObjectMaterialText(vSirene[vID], "PUMA <3", 0, OBJECT_MATERIAL_SIZE_256x128,"Arial", 28, 1, 0xFFFFFFFF, 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 			}
 			else
 			{
@@ -53287,78 +53359,6 @@ COMMAND:stopinterview(playerid,params[]) {
 	return 1;
 }
 
-public OnDynamicObjectMoved(objectid) {
-	//if( Gate_OnDynamicObjectMoved(objectid)) return 1;
-	if( objectid == g_BallonConfig[BC_iObject] ) {
-	    MoveBallon();
-	}
-	new e_streamer_extra_id = Streamer_GetIntData(STREAMER_TYPE_OBJECT,objectid,E_STREAMER_EXTRA_ID);
-	if( e_streamer_extra_id == OBJECT_ZOLL ) {
-	    //printf("OnDynamicObjectMoved %d OBJECT_ZOLL",objectid);
-		for(new i ; i < sizeof(g_Zoll); i++) {
-		    if( objectid == g_Zoll[i][Z_iObject] ) {
-		        if( g_Zoll[i][Z_iStatus] == 1 ) {
-		            g_Zoll[i][Z_iStatus] = 2;
-		        }
-		        else {
-		            g_Zoll[i][Z_iStatus] = 0;
-		        }
-		        break;
-		    }
-		}
-	}
-	else if( e_streamer_extra_id == OBJECT_FALLTURM_PLATTE ) {
-	    //printf("OnDynamicObjectMoved %d",g_FallTurm[FT_ibStatus]);
-        KillTimer(g_FallTurm[FT_tTimer]);
-	    if( g_FallTurm[FT_ibStatus] == 2 ) {
-			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",5000,false);
-			//SendFahrgeschaeftMessage(0,COLOR_YELLOW,"Gleich geht es abwärts");
-			g_FallTurm[FT_ibStatus] = 3;
-	    }
-		else if( g_FallTurm[FT_ibStatus] == 4 ) {
-		    new
-		        Float:x,
-		        Float:y,
-		        Float:z;
-		    g_FallTurm[FT_ibStatus] = 5;
-			//SendFahrgeschaeftMessage(0,COLOR_YELLOW,"Der Turm fährt gleich wieder hoch");
-			for(new i ; i < MAX_PLAYERS ; i++) {
-			    if( Spieler[i][pFahrgeschaeft] == 0 ) {
-			        if( GetPlayerPos(i,x,y,z)) {
-				        SetPlayerPos(i,x,y,7.85);
-				        //TogglePlayerControllable(i,true);
-			        }
-			    }
-			}
-			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",5000,false);
-		}
-		else if( g_FallTurm[FT_ibStatus] == 6 ) {
-		    g_FallTurm[FT_ibStatus] = 7;
-			//SendFahrgeschaeftMessage(0,COLOR_YELLOW,"Oben angekommen. Nochmal runter!");
-			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",5000,false);
-		}
-		else if( g_FallTurm[FT_ibStatus] == 8 ) {
-		    new
-		        Float:x,
-		        Float:y,
-		        Float:z;
-		    g_FallTurm[FT_ibStatus] = 9;
-			for(new i ; i < MAX_PLAYERS ; i++) {
-			    if( Spieler[i][pFahrgeschaeft] == 0 ) {
-			        if( GetPlayerPos(i,x,y,z)) {
-				        SetPlayerPos(i,x,y,7.85);
-				        TogglePlayerControllable(i,true);
-			        }
-			    }
-			}
-			g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",2500,false);
-		}
-	}
-	else if(e_streamer_extra_id == OBJECT_BREAKDANCER) {
-	    MoveBreakdancer();
-	}
-	return 1;
-}
 stock SendFahrgeschaeftMessage(fahrgeschaeft,color,msg[]) {
 	for(new i ; i < MAX_PLAYERS ; i++) {
 	    if( Spieler[i][pFahrgeschaeft] == fahrgeschaeft ) {
@@ -54849,7 +54849,7 @@ COMMAND:halloween(playerid,params[]) {
 	            format(String,sizeof(String),"[HALLOWEEN] %s hat ein Kürbis gefunden! Kürbisse: %d/%d",GetName(playerid),g_iGeschenk,sizeof(g_Geschenk));
 	            SendClientMessageToAll(COLOR_YELLOW,String);
 	            DestroyDynamic3DTextLabel( g_Geschenk[i][G_t3dLabel] );
-	            DestroyObject( g_Geschenk[i][G_iObjectID] );
+	            DestroyDynamicObject( g_Geschenk[i][G_iObjectID] );
 	            g_Geschenk[i][G_bFound] = true;
 				GivePlayerCash(playerid,50000);
 				Spieler[playerid][pLevel] += 1;
@@ -54903,9 +54903,9 @@ COMMAND:werfboellersilv2013(playerid,params[]) {
     Spieler[playerid][pBoeller]--;
     SendClientMessage(playerid,COLOR_YELLOW,"Du hast einen Böller geworfen!");
 	ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.0, 0, 0, 0, 0, 0, 1 );
-	obj1 = CreateObject(18717, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
-	obj = CreateObject(1672, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
-	obj2 = CreateObject(18686, x , y, z - 1.2 , 0.0 , 0.0 , 0.0 );
+	obj1 = CreateDynamicObject(18717, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
+	obj = CreateDynamicObject(1672, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
+	obj2 = CreateDynamicObject(18686, x , y, z - 1.2 , 0.0 , 0.0 , 0.0 );
 	SetTimerEx("Boeller", 1009 , false , "ddfffdd" , obj , 8 , x , y , z , obj1 , x , y , z , obj2, INVALID_OBJECT_ID);
     Spieler[playerid][unixFeuerwerk] = gettime() + 20;
 	return 1;
@@ -54919,8 +54919,8 @@ public Boeller(objectid,count,Float:x,Float:y,Float:z,objectid2) {
 		SetTimerEx("Boeller", 150 + random(450) , false , "ddfffd" , objectid , count , x , y , z , objectid2 );
     }
     else {
-		DestroyObject(objectid2);
-		DestroyObject(objectid);
+		DestroyDynamicObject(objectid2);
+		DestroyDynamicObject(objectid);
     }
 	return 1;
 }
@@ -54951,8 +54951,8 @@ COMMAND:rauchknallersilv2013(playerid,params[]) {
     Spieler[playerid][pBoeller]--;
     SendClientMessage(playerid,COLOR_YELLOW,"Du hast einen Böller geworfen!");
 	ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.0, 0, 0, 0, 0, 0, 1 );
-	obj2 = CreateObject(18715, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
-	obj = CreateObject(1672, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
+	obj2 = CreateDynamicObject(18715, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
+	obj = CreateDynamicObject(1672, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
 	SetTimerEx("RauchBoeller", 1009 , false , "ddfffdd" , obj , 8 , x , y , z , obj2, INVALID_OBJECT_ID);
     Spieler[playerid][unixFeuerwerk] = gettime() + 20;
 	return 1;
@@ -54966,8 +54966,8 @@ public RauchBoeller(objectid,count,Float:x,Float:y,Float:z,objectid2) {
 		SetTimerEx("RauchBoeller", 150 + random(450) , false , "ddfffd" , objectid , count , x , y , z , objectid2 );
     }
     else {
-		DestroyObject(objectid2);
-		DestroyObject(objectid);
+		DestroyDynamicObject(objectid2);
+		DestroyDynamicObject(objectid);
     }
 	return 1;
 }
@@ -54998,8 +54998,8 @@ COMMAND:blendknallersilv2013(playerid,params[]) {
     Spieler[playerid][pBoeller]--;
     SendClientMessage(playerid,COLOR_YELLOW,"Du hast einen Böller geworfen!");
 	ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.0, 0, 0, 0, 0, 0, 1 );
-	obj2 = CreateObject(18717, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
-	obj = CreateObject(345, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
+	obj2 = CreateDynamicObject(18717, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
+	obj = CreateDynamicObject(345, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
 	SetTimerEx("blendknaller", 1009 , false , "ddfffdd" , obj , 8 , x , y , z , obj2 , INVALID_OBJECT_ID);
     Spieler[playerid][unixFeuerwerk] = gettime() + 20;
 	return 1;
@@ -55013,8 +55013,8 @@ public blendknaller(objectid,count,Float:x,Float:y,Float:z,objectid2) {
 		SetTimerEx("blendknaller", 1009 , false , "ddfffdd" , objectid , count , x , y , z , objectid2 );
     }
     else {
-		DestroyObject(objectid2);
-		DestroyObject(objectid);
+		DestroyDynamicObject(objectid2);
+		DestroyDynamicObject(objectid);
     }
 	return 1;
 }
@@ -55045,8 +55045,8 @@ COMMAND:leuchtknallersilv2013(playerid,params[]) {
     Spieler[playerid][pBoeller]--;
     SendClientMessage(playerid,COLOR_YELLOW,"Du hast einen Leuchtknaller geworfen!");
 	ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.0, 0, 0, 0, 0, 0, 1 );
-	obj2 = CreateObject(18717, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
-	obj = CreateObject(1672, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
+	obj2 = CreateDynamicObject(18717, x , y, z - 1.7 , 0.0 , 0.0 , 0.0 );
+	obj = CreateDynamicObject(1672, x , y, z - 0.1 , 0.0 , 90.0 , random(360) );
 	SetTimerEx("Leuchtknaller", 1009 , false , "ddfffdd" , obj , 8 , x , y , z , obj2 , INVALID_OBJECT_ID);
     Spieler[playerid][unixFeuerwerkleucht] = gettime() + 10;
 	return 1;
@@ -55057,14 +55057,14 @@ forward Leuchtknaller(objectid,count,Float:x,Float:y,Float:z,objectid2,objectid3
 public Leuchtknaller(objectid,count,Float:x,Float:y,Float:z,objectid2,objectid3) {
     count--;
     //CreateExplosion(x + frandom(2.5,-2.5) ,y + frandom(2.5,-2.5) , z - 0.5 , 11, 0.001 );
-	DestroyObject(objectid3);
+	DestroyDynamicObject(objectid3);
     if( count ) {
-		objectid3 = CreateObject( lighteffects[random(sizeof(lighteffects))] , x , y, z + 0.6 , 0.0 , 0.0 , 0.0 );
+		objectid3 = CreateDynamicObject( lighteffects[random(sizeof(lighteffects))] , x , y, z + 0.6 , 0.0 , 0.0 , 0.0 );
 		SetTimerEx("Leuchtknaller", 1009 , false , "ddfffdd" , objectid , count , x , y , z , objectid2,objectid3 );
     }
     else {
-		DestroyObject(objectid2);
-		DestroyObject(objectid);
+		DestroyDynamicObject(objectid2);
+		DestroyDynamicObject(objectid);
     }
 	return 1;
 }
@@ -55087,7 +55087,7 @@ public Leuchtknaller(objectid,count,Float:x,Float:y,Float:z,objectid2,objectid3)
 	GetPlayerPos(playerid,x,y,z);
 	GetXYInFrontOfPosition(x, y, face, 9.0);
     Spieler[playerid][pRaketen]--;
-	obj = CreateObject(18718, x , y, z - 2.25 , 0.0 , 0.0 , 0.0 );
+	obj = CreateDynamicObject(18718, x , y, z - 2.25 , 0.0 , 0.0 , 0.0 );
     SetTimerEx("CreateFireworkEx",650 + random(350) ,false,"ffffd",x,y,z,face,obj);
     SendClientMessage(playerid,COLOR_YELLOW,"Du hast eine Rakete gezündet!");
     Spieler[playerid][unixFeuerwerk] = gettime() + 30;
@@ -55105,7 +55105,7 @@ public CreateFireworkEx(Float:x,Float:y,Float:z,Float:face,obj) {
 		1,
 		frandom(15.0,7.0,2)
 	);
-	DestroyObject(obj);
+	DestroyDynamicObject(obj);
 	return 1;
 }*/
 
@@ -67696,7 +67696,7 @@ public Pulse_Fallturm() {
 	        Float:ox,
 	        Float:oy,
 	        Float:oz;
-        GetObjectPos(g_FallTurm[FT_aiWagonObject][0],ox,oy,oz);
+        GetDynamicObjectPos(g_FallTurm[FT_aiWagonObject][0],ox,oy,oz);
         for(new i ; i < MAX_PLAYERS ; i++) {
             if( Spieler[i][pFahrgeschaeft] == 0 ) {
                 if( !IsObjectFallturmWagon( GetPlayerSurfingObjectID(i) )) {
@@ -67741,8 +67741,8 @@ stock MoveUpFallturm() {
 	    Float:y,
 	    Float:z;
 	for(new i ; i < 4 ; i++) {
-		GetObjectPos( g_FallTurm[FT_aiWagonObject][i] , x,y,z);
-		MoveObject( g_FallTurm[FT_aiWagonObject][i] , x , y, z + 80.0 , 4.5);
+		GetDynamicObjectPos( g_FallTurm[FT_aiWagonObject][i] , x,y,z);
+		MoveDynamicObject( g_FallTurm[FT_aiWagonObject][i] , x , y, z + 80.0 , 4.5);
 		//MoveDynamicObject( g_FallTurm[FT_aiCamera][i] , x , y, z + 80.0 , 2.85);
 	}
 	GetDynamicObjectPos( g_FallTurm[FT_iScheibeObjekt] , x,y,z);
@@ -67767,8 +67767,8 @@ stock FallDownFallturm() {
 	g_FallTurm[FT_tTimer] = SetTimer("Pulse_Fallturm",197,true);
 	speed = frandom(25.0,23.0,3);
 	for(new i ; i < 4 ; i++) {
-		GetObjectPos( g_FallTurm[FT_aiWagonObject][i] , x, y , z);
-		MoveObject( g_FallTurm[FT_aiWagonObject][i] , x , y, z - 80.0 , speed);
+		GetDynamicObjectPos( g_FallTurm[FT_aiWagonObject][i] , x, y , z);
+		MoveDynamicObject( g_FallTurm[FT_aiWagonObject][i] , x , y, z - 80.0 , speed);
 		//MoveDynamicObject( g_FallTurm[FT_aiCamera][i] , x , y, z - 80.0, speed);
 	}
 	GetDynamicObjectPos( g_FallTurm[FT_iScheibeObjekt] , x,y,z);
@@ -67793,7 +67793,7 @@ stock SetPlayerToFahrgeschaeft(playerid,fahrgeschaeft) {
 			    Float:x,
 			    Float:y,
 			    Float:z;
-			GetObjectPos( g_FallTurm[FT_aiWagonObject][slot] , x,y,z);
+			GetDynamicObjectPos( g_FallTurm[FT_aiWagonObject][slot] , x,y,z);
 	    	SetPlayerPos( playerid, x,y,z );
 	    	g_FallTurm[FT_abUsed][slot] = true;
 	    	Spieler[playerid][pFahrgeschaeft] = fahrgeschaeft;
@@ -67915,15 +67915,14 @@ stock SetPlayerToFahrgeschaeft(playerid,fahrgeschaeft) {
 	return 1;
 }
 
-// TODO: Peek CreateObject -> CreateDynamicObject
 stock InitFallturm() {
 	g_FallTurm[FT_ibStatus] = 0;
 	g_FallTurm[FT_iScheibeObjekt] = CreateDynamicObject(19278, 385.37869, -2127.62549, 59.5,   0.00000, 180.00000, 0.00000);
 
-	g_FallTurm[FT_aiWagonObject][0] = CreateObject(19277, 385.24939, -2133.14404, 8.55,   0.00000, 0.00000, 0.00000);
-	g_FallTurm[FT_aiWagonObject][1] = CreateObject(19277, 380.04660, -2127.43018, 8.55,   0.00000, 0.00000, 272.58011);
-	g_FallTurm[FT_aiWagonObject][2] = CreateObject(19277, 385.24939, -2122.27832, 8.55,   0.00000, 0.00000, 180.00000);
-	g_FallTurm[FT_aiWagonObject][3] = CreateObject(19277, 390.41589, -2127.43018, 8.55,   0.00000, 0.00000, 90.00000);
+	g_FallTurm[FT_aiWagonObject][0] = CreateDynamicObject(19277, 385.24939, -2133.14404, 8.55,   0.00000, 0.00000, 0.00000);
+	g_FallTurm[FT_aiWagonObject][1] = CreateDynamicObject(19277, 380.04660, -2127.43018, 8.55,   0.00000, 0.00000, 272.58011);
+	g_FallTurm[FT_aiWagonObject][2] = CreateDynamicObject(19277, 385.24939, -2122.27832, 8.55,   0.00000, 0.00000, 180.00000);
+	g_FallTurm[FT_aiWagonObject][3] = CreateDynamicObject(19277, 390.41589, -2127.43018, 8.55,   0.00000, 0.00000, 90.00000);
 
 	/*
 	g_FallTurm[FT_aiCamera][0] = CreateDynamicObject(19300, 385.24939, -2133.14404, 8.29360 ,   0.00000, 0.00000, 0.00000);
@@ -67948,7 +67947,6 @@ stock IsObjectFallturmWagon(objectid) {
 	return 0;
 }
 // /schiff 372.10446 -2175.82153 20.05120
-// TODO: Peek CreateObject -> CreateDynamicObject
 stock SchaukelschiffInit() {
     g_Schiff[S_ibStatus] = 0;
     g_Schiff[S_fSpeed] = frandom(9.0,7.5,3);
@@ -67960,10 +67958,10 @@ stock SchaukelschiffInit() {
     g_Schiff[S_fOffsetY] = 0.0;
     g_Schiff[S_fOffsetZ] = 15.000 - 5.740;
 
-    g_Schiff[S_iObject] = CreateObject(8493, 372.10446, -2175.82153, 20.05120,   0.00000, 0.00000, 86.0);
+    g_Schiff[S_iObject] = CreateDynamicObject(8493, 372.10446, -2175.82153, 20.05120,   0.00000, 0.00000, 86.0);
     //Streamer_SetIntData(STREAMER_TYPE_OBJECT, g_Schiff[S_iObject] ,E_STREAMER_EXTRA_ID, OBJECT_SCHIFF );
     g_Schiff[S_ibStatus] = 1;
-	MoveObject( g_Schiff[S_iObject] , g_Schiff[S_fX] , g_Schiff[S_fY], g_Schiff[S_fZ] + 0.5 , g_Schiff[S_fSpeed], frandom(35.0,28.0,3) , 0.0 , 86.0 );
+	MoveDynamicObject( g_Schiff[S_iObject] , g_Schiff[S_fX] , g_Schiff[S_fY], g_Schiff[S_fZ] + 0.5 , g_Schiff[S_fSpeed], frandom(35.0,28.0,3) , 0.0 , 86.0 );
 	return 1;
 }
 forward Pulse_Schiff();
@@ -67972,11 +67970,11 @@ public Pulse_Schiff() {
     g_Schiff[S_fSpeed] = frandom(8.5,7.5,3);
 	if( g_Schiff[S_ibStatus] == 2) {
 	    g_Schiff[S_ibStatus] = 3;
-		MoveObject( g_Schiff[S_iObject] , g_Schiff[S_fX] , g_Schiff[S_fY], g_Schiff[S_fZ] , g_Schiff[S_fSpeed], 0.0 , 0.0 , 86.0 );
+		MoveDynamicObject( g_Schiff[S_iObject] , g_Schiff[S_fX] , g_Schiff[S_fY], g_Schiff[S_fZ] , g_Schiff[S_fSpeed], 0.0 , 0.0 , 86.0 );
 	}
 	else if( g_Schiff[S_ibStatus] == 5) {
 	    g_Schiff[S_ibStatus] = 6;
-		MoveObject( g_Schiff[S_iObject] , g_Schiff[S_fX] , g_Schiff[S_fY], g_Schiff[S_fZ] , g_Schiff[S_fSpeed], 0.0 , 0.0 , 86.0 );
+		MoveDynamicObject( g_Schiff[S_iObject] , g_Schiff[S_fX] , g_Schiff[S_fY], g_Schiff[S_fZ] , g_Schiff[S_fSpeed], 0.0 , 0.0 , 86.0 );
 	}
 	return 1;
 }
@@ -68005,22 +68003,21 @@ stock GetFreeBreakdancerSlot() {
 	return -1;
 }
 
-// TODO: Peek CreateObject -> CreateDynamicObject
 stock InitBreakdancer() {
 	new
 	    i;
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 355.99719, -2153.05029, 10.65203,   0.00000, 0.00000, 39.35999);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 358.37784, -2152.10815, 10.65203,   0.00000, 0.00000, -3.96001);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 360.97186, -2151.81274, 10.65203,   0.00000, 0.00000, -29.04001);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 363.17868, -2153.27148, 10.65203,   0.00000, 0.00000, -49.92001);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 364.26526, -2155.45947, 10.65203,   0.00000, 0.00000, -96.48002);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 364.21054, -2158.06372, 10.65203,   0.00000, 0.00000, -121.14003);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 362.63095, -2160.13013, 10.65203,   0.00000, 0.00000, -149.87991);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 360.36526, -2161.11035, 10.65203,   0.00000, 0.00000, -191.03987);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 357.87384, -2160.74023, 10.65203,   0.00000, 0.00000, -214.49988);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 356.06296, -2159.25684, 10.65203,   0.00000, 0.00000, -258.89969);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 355.16202, -2157.21045, 10.65203,   0.00000, 0.00000, -258.05984);
-	g_BreakDancerSlot[i++][BDS_iObject] = CreateObject(18879, 355.09671, -2155.01904, 10.65203,   0.00000, 0.00000, -286.43948);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 355.99719, -2153.05029, 10.65203,   0.00000, 0.00000, 39.35999);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 358.37784, -2152.10815, 10.65203,   0.00000, 0.00000, -3.96001);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 360.97186, -2151.81274, 10.65203,   0.00000, 0.00000, -29.04001);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 363.17868, -2153.27148, 10.65203,   0.00000, 0.00000, -49.92001);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 364.26526, -2155.45947, 10.65203,   0.00000, 0.00000, -96.48002);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 364.21054, -2158.06372, 10.65203,   0.00000, 0.00000, -121.14003);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 362.63095, -2160.13013, 10.65203,   0.00000, 0.00000, -149.87991);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 360.36526, -2161.11035, 10.65203,   0.00000, 0.00000, -191.03987);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 357.87384, -2160.74023, 10.65203,   0.00000, 0.00000, -214.49988);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 356.06296, -2159.25684, 10.65203,   0.00000, 0.00000, -258.89969);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 355.16202, -2157.21045, 10.65203,   0.00000, 0.00000, -258.05984);
+	g_BreakDancerSlot[i++][BDS_iObject] = CreateDynamicObject(18879, 355.09671, -2155.01904, 10.65203,   0.00000, 0.00000, -286.43948);
 	return 1;
 }
 
@@ -68062,8 +68059,8 @@ public Pulse_Breakdancer() {
     else if( g_BreakDancer[BD_ibStatus] == 4 ) {
 		for(new i = 0 ; i < sizeof(g_BreakDancerSlot) ; i++) {
 		    StopObject(g_BreakDancerSlot[i][BDS_iObject]);
-	    	SetObjectPos(g_BreakDancerSlot[i][BDS_iObject] ,g_BreakDancerSlot[i][BDS_fX],g_BreakDancerSlot[i][BDS_fY],g_BreakDancerSlot[i][BDS_fZ]);
-	    	SetObjectRot(g_BreakDancerSlot[i][BDS_iObject] ,0.0,0.0,0.0);
+	    	SetDynamicObjectPos(g_BreakDancerSlot[i][BDS_iObject] ,g_BreakDancerSlot[i][BDS_fX],g_BreakDancerSlot[i][BDS_fY],g_BreakDancerSlot[i][BDS_fZ]);
+	    	SetDynamicObjectRot(g_BreakDancerSlot[i][BDS_iObject] ,0.0,0.0,0.0);
 	    	g_BreakDancerSlot[i][BDS_iStep] = 0;
 	    	g_BreakDancerSlot[i][BDS_bUsed] = false;
 		}
@@ -68090,7 +68087,7 @@ stock MoveBreakdancer() {
 		rx = frandom(10.0,-10.0,2);
 		ry = frandom(10.0,-10.0,2);
 		rz = frandom(360.0,0.0,2);
-	    MoveObject( g_BreakDancerSlot[i][BDS_iObject],g_BreakDancerSlot[slot][BDS_fX],g_BreakDancerSlot[slot][BDS_fY],g_BreakDancerSlot[slot][BDS_fZ],speed,rx,ry,rz);
+	    MoveDynamicObject( g_BreakDancerSlot[i][BDS_iObject],g_BreakDancerSlot[slot][BDS_fX],g_BreakDancerSlot[slot][BDS_fY],g_BreakDancerSlot[slot][BDS_fZ],speed,rx,ry,rz);
 	}
 	return 1;
 }
@@ -68107,7 +68104,7 @@ stock SetPlayerToShip(playerid) {
 	    Float:x,
 	    Float:y,
 	    Float:z;
-	GetObjectPos(g_Schiff[S_iObject],x,y,z);
+	GetDynamicObjectPos(g_Schiff[S_iObject],x,y,z);
 	SetPlayerPos(playerid,x,y,z - 0.5);
 	return 1;
 }
