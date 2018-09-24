@@ -4019,7 +4019,6 @@ new pizzacar[8];
 new Text3D:t3dBus[4];
 new kfzcars[6];
 new bauarb[8];
-new schiff[5];
 new reinigung[8];
 new geldt[8];
 new muell[6];
@@ -4233,6 +4232,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\bankInteriorLs2>
 #include <maps\clubExteriorLs>
 #include <maps\clubInteriorLs>
+#include <maps\boatCargoJob>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -4888,13 +4888,6 @@ OnGameModeInit2() {
 	t3dBus[2] = Text3D:INVALID_3DTEXT_ID;
 	t3dBus[3] = Text3D:INVALID_3DTEXT_ID;
 
-	//Schiffe
-	schiff[0] = AddStaticVehicleEx(453,2541.6123,-2257.8533,-0.3546,179.7160,1,1,60*10); // schiff
-	schiff[1] = AddStaticVehicleEx(453,2489.6853,-2268.3591,-0.3919,267.9600,1,1,60*10); // schiff
-	schiff[2] = AddStaticVehicleEx(453,2509.3716,-2268.9241,-0.1255,270.0640,1,1,60*10); // schiff
-	schiff[3] = AddStaticVehicleEx(453,2532.5693,-2268.9958,-0.2065,271.9193,1,1,60*10); // schiff
-	schiff[4] = AddStaticVehicleEx(453,2481.3464,-2256.9226,-0.1752,179.9813,1,1,60*10); // schiff
-
 	//Reinigung
 	reinigung[0] = AddStaticVehicleEx(574,2065.6135,-1903.0514,13.2720,180.3510,1,3,60*10); // reni
 	reinigung[1] = AddStaticVehicleEx(574,2062.4521,-1903.0706,13.2972,180.3509,1,3,60*10); // reni
@@ -5014,11 +5007,11 @@ OnGameModeInit2() {
 		SetVehicleToRespawn(geldt[i]);
 		aiVehicles[ geldt[i] ] = VEH_GELDT;
 	}
-	for(new i=0;i<sizeof(schiff);i++)
+	for(new i=0;i<sizeof(vehicle_boatCargoJob);i++)
 	{
-		SetVehicleNumberPlate(schiff[i], COLOR_HEX_BLACK"SCHIFF");
-		SetVehicleToRespawn(schiff[i]);
-		aiVehicles[ schiff[i] ] = VEH_SCHIFF;
+		SetVehicleNumberPlate(vehicle_boatCargoJob[i], COLOR_HEX_BLACK"SCHIFF");
+		SetVehicleToRespawn(vehicle_boatCargoJob[i]);
+		aiVehicles[ vehicle_boatCargoJob[i] ] = VEH_SCHIFF;
 	}
 	for(new i=0;i<sizeof(reinigung);i++)
 	{
@@ -5597,7 +5590,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1,2118.6157,-2085.0828,13.5544, 0);//Müllmann
 
 	CreateDynamicPickup(1275, 1,831.2045,865.6005,12.5911, 0);//Bauarbeiter
-	CreateDynamicPickup(1275, 1,2487.6289,-2250.2695,3.0000, 0);//Schiffsfahrer
 	CreateDynamicPickup(1275, 1,1551.5492,-1005.0830,24.0781, 0);//Geldtransportfahrer
 	CreateDynamicPickup(1275, 1,1021.9334,-1371.0099,13.5585, 0);//Eisverkäufer
 	CreateDynamicPickup(1275, 1,2117.3662,-1790.0100,13.5547, 0);//Pizzalieferrant
@@ -5653,8 +5645,6 @@ OnGameModeInit2() {
 
 	//Jobpoints
 	CreateDynamicPickup(1276, 1, 645.3646,-521.5663,16.3359, 0);//Geld entladen
-	CreateDynamicPickup(1279, 1, 2615.2017,-2322.4878,1.8984, 0);//Fracht laden
-	CreateDynamicPickup(1279, 1, 2293.6399,522.7067,1.7944, 0);//Fracht entladen
 	CreateDynamicPickup(1279, 1, 635.8752,862.5970,-42.6892, 0);//Steine laden
 	CreateDynamicPickup(1279, 1, 607.7939,863.4465,-42.0452, 0);//Steine laden
 	CreateDynamicPickup(1279, 1, 382.3929,871.6203,21.9523, 0);//steine entladen
@@ -5681,7 +5671,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Straßenreiniger\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2046.2723,-1913.2064,13.5469, 25.0);//STRAßENREINIGER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Müllmann\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2118.6157,-2085.0828,13.5544, 25.0);//MÜLLMANN
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 831.2045,865.6005,12.5911, 25.0);//BAUARBEITER
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Schiffsfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2487.6289,-2250.2695,3.0000, 25.0);//SCHIFFSFAHRER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Geldtransportfahrer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1551.5492,-1005.0830,24.0781, 25.0);//GELDTRANSPORTFAHRER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Eisverkäufer\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 1021.9334,-1371.0099,13.5585, 25.0);//EISVERKÄUFER
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Arbeitskleidung für Pizzalieferrant\n"COLOR_HEX_WHITE"Tippe /Jobkleidung", COLOR_WHITE, 2117.3662,-1790.0100,13.5547, 25.0);//PIZZALIEGERRANT
@@ -5719,8 +5708,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -2165.1348,644.2082,1052.3750, 15.0);//Waffenlager
 
 	//Job 3D Text
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Schiffsfahrer\n"COLOR_HEX_WHITE"Tippe /Frachtladen", COLOR_WHITE, 2615.2017,-2322.4878,1.8984, 10.0, .worldid = 0);
-    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Schiffsfahrer\n"COLOR_HEX_WHITE"Tippe /Frachtentladen", COLOR_WHITE, 2293.6399,522.7067,1.7944, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Steineladen", COLOR_WHITE, 635.8752,862.5970,-42.6892, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Steineladen", COLOR_WHITE, 607.7939,863.4465,-42.0452, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Steineentladen", COLOR_WHITE, 382.3929,871.6203,21.9523, 10.0, .worldid = 0);
@@ -18238,7 +18225,7 @@ CMD:gheilen(playerid)
 CMD:frachtladen(playerid)
 {
     if(Spieler[playerid][pJob] == 11)
-	if(IsPlayerInRangeOfPoint(playerid, 5.0, 2615.0654,-2321.5684,-0.4229))
+	if(IsPlayerInRangeOfPoint(playerid, 5.0, BOATCARGOJOB_LOADGARGO_POINT))
 	{
 	   SendClientMessage(playerid, COLOR_YELLOW, "Du hast die Fracht aufs Schiff geholt! Fahre LV-Hafen");
 	}
@@ -18248,7 +18235,7 @@ CMD:frachtladen(playerid)
 CMD:frachtentladen(playerid)
 {
     if(Spieler[playerid][pJob] == 11)
-	if(IsPlayerInRangeOfPoint(playerid, 5.0, 2294.1472,520.3597,-0.5748))
+	if(IsPlayerInRangeOfPoint(playerid, 5.0, BOATCARGOJOB_UNLOADCARGO_POINT))
 	{
 	   SendClientMessage(playerid, COLOR_YELLOW, "Du hast die Fracht vom Schiff abgeladen! Fahre wieder zurück!");
 	}
@@ -19832,7 +19819,7 @@ stock RespawnJobCars(jobID) {
 		case 8:		{ for (new i = 0; i < sizeof(muell); i++) if (!IsVehicleOccupied(muell[i])) SetVehicleToRespawn(muell[i]); }
 		case 9:		{ for (new i = 0; i < sizeof(vehicle_gardenerBase); i++) if (!IsVehicleOccupied(vehicle_gardenerBase[i])) SetVehicleToRespawn(vehicle_gardenerBase[i]); }
 		case 10:	{ for (new i = 0; i < sizeof(bauarb); i++) if (!IsVehicleOccupied(bauarb[i])) SetVehicleToRespawn(bauarb[i]); }
-		case 11:	{ for (new i = 0; i < sizeof(schiff); i++) if (!IsVehicleOccupied(schiff[i])) SetVehicleToRespawn(schiff[i]); }
+		case 11:	{ for (new i = 0; i < sizeof(vehicle_boatCargoJob); i++) if (!IsVehicleOccupied(vehicle_boatCargoJob[i])) SetVehicleToRespawn(vehicle_boatCargoJob[i]); }
 		case 12:	{ for (new i = 0; i < sizeof(geldt); i++) if (!IsVehicleOccupied(geldt[i])) SetVehicleToRespawn(geldt[i]); }
 		case 13:	{ for (new i = 0; i < sizeof(eismann); i++) if (!IsVehicleOccupied(eismann[i])) SetVehicleToRespawn(eismann[i]); }
 		case 15:	{ for (new i = 0; i < sizeof(pizzacar); i++) if (!IsVehicleOccupied(pizzacar[i])) SetVehicleToRespawn(pizzacar[i]); }
@@ -22421,10 +22408,10 @@ CMD:startschiff(playerid)
 		return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
 	    //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
 	}
-    for(new i=0;i<sizeof(schiff);i++)
+    for(new i=0;i<sizeof(vehicle_boatCargoJob);i++)
     {
 		new vID = GetPlayerVehicleID(playerid);
-		if(vID == schiff[i])
+		if(vID == vehicle_boatCargoJob[i])
 		{
 			SetPlayerCheckpointEx(playerid, 2615.0654,-2321.5684,-0.4229, 5.0, CP_SCHIFF1);
 			SendClientMessage(playerid, COLOR_GREEN, "Du bist nun im Dienst. Fahre die Marker ab und tue was vorgeschrieben wird!");
@@ -22726,9 +22713,9 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 			    pjvar=1;
 			}
 		}
-		for(new jo;jo<sizeof(schiff);jo++)
+		for(new jo;jo<sizeof(vehicle_boatCargoJob);jo++)
 		{
-			if(vehicleid==schiff[jo])
+			if(vehicleid==vehicle_boatCargoJob[jo])
 			{
 			    pjvar=1;
 			}
@@ -22918,9 +22905,9 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 			    UnLockCar(vehicleid);
 			}
 		}
-	    for(new h;h<sizeof(schiff);h++)
+	    for(new h;h<sizeof(vehicle_boatCargoJob);h++)
 	    {
-			if(vehicleid==schiff[h])
+			if(vehicleid==vehicle_boatCargoJob[h])
 			{
 			    UnLockCar(vehicleid);
 			}
@@ -23720,9 +23707,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 		else if( aiVehicles[vehicleid] == VEH_SCHIFF ) {
-			for(new i=0;i<sizeof(schiff);i++)
+			for(new i=0;i<sizeof(vehicle_boatCargoJob);i++)
 			{
-			    if(vehicleid == schiff[i])
+			    if(vehicleid == vehicle_boatCargoJob[i])
 			    {
 					for(new pID=0;pID<MAX_PLAYERS;pID++)
 					{
@@ -25774,10 +25761,10 @@ public OnPlayerEnterCheckpoint(playerid)
 	//Schiff
 	else if(CP_SCHIFF1 <= pCheckpoint[playerid] <= CP_SCHIFF7)
     {
-		for(new i=0;i<sizeof(schiff);i++)
+		for(new i=0;i<sizeof(vehicle_boatCargoJob);i++)
 		{
 			new vID = GetPlayerVehicleID(playerid);
-			if(vID == schiff[i])
+			if(vID == vehicle_boatCargoJob[i])
 			{
 			    if(pCheckpoint[playerid] == CP_SCHIFF1)
 			    {
@@ -60535,7 +60522,7 @@ new const g_JobSkins[][e_JobSkins] = {
 	{2118.6157,  -2085.0828,  13.5544,	8, 260 }, //Müllmann
 	{GARDENERBASE_JOBSKIN_POINT,	9, 35 }, //Gärtner
 	{831.2045,  865.6005,  12.5911,	 10, 27 }, //Bauarbeiter
-	{2487.6289,  -2250.2695,  3.0000,  11, 37 }, //Schiffsfahrer
+	{BOATCARGOJOB_JOBSKIN_POINT,  11, 37 }, //Schiffsfahrer
 	{1551.5492,  -1005.0830,  24.0781,	12, 202 }, //Geldtransport
 	{1021.9334,  -1371.0099,  13.5585,	13, 264 }, //Eisfahrer
 	{2117.3662,  -1790.0100,  13.5547,	15, 155 }, //Pizzalieferant
