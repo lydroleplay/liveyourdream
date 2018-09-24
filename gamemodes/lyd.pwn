@@ -4027,7 +4027,7 @@ new hotdogcar[3];
 new pdeaccadmin[MAX_PLAYERS][MAX_PLAYER_NAME];
 new ballascars[17];
 new grovecars[16];
-new fscars[22];
+new fscars[18];
 new fsacars[2];
 new aztcars[18];
 new vagoscars[16];
@@ -5117,10 +5117,6 @@ OnGameModeInit2() {
 	fscars[15] = AddStaticVehicleEx(593,1225.2351,-1797.4314,34.1174,90.1936,3,1,-1); // fs fahr
 	fscars[16] = AddStaticVehicleEx(431,1200.3561,-1831.2299,13.5042,270.4382,3,3,-1); // bus fahrschule
 	fscars[17] = AddStaticVehicleEx(431,1200.3883,-1835.4598,13.5199,270.4391,3,3,-1); // bus fahrschule
-	fscars[18] = AddStaticVehicleEx(522,1703.9857,-1753.4187,13.3142,271.1102,3,3,-1); // Autos am Übungsplatz
-	fscars[19] = AddStaticVehicleEx(522,1703.9437,-1751.7252,13.2950,269.9869,3,3,-1); // Autos am Übungsplatz
-	fscars[20] = AddStaticVehicleEx(445,1705.8457,-1748.5142,13.5433,270.9769,3,3,-1); // Autos am Übungsplatz
-	fscars[21] = AddStaticVehicleEx(445,1705.7233,-1745.0416,13.3379,271.2215,3,3,-1); // Autos am Übungsplatz
 
 	fsacars[0] = AddStaticVehicleEx(435,1172.6271,-1789.8167,14.0381,179.9523,1,1,-1); // fslkwhange
 	fsacars[1] = AddStaticVehicleEx(435,1181.6830,-1791.7823,14.0243,179.5749,1,1,-1); // fslkwhanger
@@ -5452,7 +5448,6 @@ OnGameModeInit2() {
 
 	CreateDynamicPickup(19197, 1, 1384.1174,-1661.3926,13.4622, 0);//Donatladen enter
 	CreateDynamicPickup(19197, 1, 1038.3171,-1339.7793,13.7266, -1);//Donatladen exit
-	CreateDynamicPickup(19197, 1, 389.6256,173.6593,1008.3828, 0);//Stadthalle Innen
 	CreateDynamicPickup(19197, 1, 2305.8259,-16.1325,26.7496, 0);//KFZ-AMT Außen
 	CreateDynamicPickup(19197, 1, 264.3734,191.1904,1008.1719,0);//FBI Innen
 	CreateDynamicPickup(1318, 1, 2127.5486,2378.9626,10.8203, 0);//Clubmitglied enter in Las Venturas
@@ -5480,38 +5475,29 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 285.79,-85.8,1001.52, 1);//Ausgang Ammu LS
 	CreateDynamicPickup(19197, 1, 316.42,-169.41,999.59, 40);//Ausgang Ammu LS Ballas
 	CreateDynamicPickup(19197, 1, 286.14,-40.63,1001.52, 53);//Ausgang Ammu LV
-	CreateDynamicPickup(19197, 1, 238.6129,139.4004,1003.0234, 0);//Ausgang Krankenhaus
 
 	//Info Position
-	//CreateDynamicPickup(1247, 1, 814.4642,-1345.7327,13.5320, 0);//Server-Experte
 	CreateDynamicPickup(1239, 1, 822.3183,1.8747,1004.1797, -1);//Posthaus /Post
 	CreateDynamicPickup(1239, 1, 2316.4529,-12.6540,26.7422, VW_REGISTRATIONOFFICE);//KFZ Schalter 1
 	CreateDynamicPickup(1239, 1, 2316.3318,-9.9532,26.7422, VW_REGISTRATIONOFFICE);//KFZ Schalter 2
-	//CreateDynamicPickup(1239, 1, 358.2364,180.3480,1008.3828, 0);//Staatsamt Point
-	//CreateDynamicPickup(1239, 1, 358.2361,184.5094,1008.3828, 0);//Staatsamt Point 2
 	CreateDynamicPickup(1239, 1, 292.4491,180.1878,1007.1794, 200);//Bankschalter in LV Bank
 	CreateDynamicPickup(1239, 1, -2158.7920,642.9232,1052.3750, 0);//Clubzeichen
 	CreateDynamicPickup(1247, 1, 2268.1128,2448.0073,3.5313, 0);//Arrest Point LV
-	// CreateDynamicPickup(1247, 1, 321.0334,315.3957,999.1484, 0);//Arrest Point Zoll
 	CreateDynamicPickup(1239, 1, -2656.1047,1416.0248,906.2734, 0);//Waffenshop Club in Las Venturas
 
     CreateDynamicPickup(1240, 1, -2653.5183,1413.5085,906.2734, 0);//Heal Club in Las Venturas
    	CreateDynamicPickup(1239, 1, -1857.4130,-1618.9630,21.9022, 0);//Unloadpunkt Waffendealer
 	CreateDynamicPickup(1239, 1, -258.9534,-2181.9905,29.0150, 0);//Unloadpunkt Drogendealer
-	//CreateDynamicPickup(1239, 1, 1481.7039,-1740.6183,13.5469, 0);//Stadtamt-Information
 	CreateDynamicPickup(1318, 1, -1548.0554,125.1203,3.5547, 0);//Autodieb kran
 	CreateDynamicPickup(1239, 1, 1412.1915,-1700.3817,13.5395, 0);//Werbeagentur LS
 	CreateDynamicPickup(1239, 1, 2008.1722,1169.3364,10.8203, 0);//Werbeagentur LV
 	CreateDynamicPickup(1239, 1, 2160.4111,-98.0815,2.8239, 0);//Gangjail Point
 	CreateDynamicPickup(1239, 1, 1234.3380,-1823.9462,13.5909, 0);//Auto. Fahrschule
-	// CreateDynamicPickup(1239, 1, 2288.5466,2444.9841,3.2734, 0);//Staatsrepair von LVPD
-	// CreateDynamicPickup(1239, 1, 621.3207,-584.6555,17.2330, 0);//Staatsrepair von Zollamt
 	CreateDynamicPickup(1239, 1, 1248.3843,-1833.8750,13.3930, 0);//Staatsrepair von Army
 	CreateDynamicPickup(1239, 1, 1138.9730,-1820.9103,33.6354, 0);//Staatsrepairfür Fahrschule Helikopterplatz
 	CreateDynamicPickup(1239, 1, 298.9642,179.2220,1007.1719, 200);//Kredit in LV Bank
 	CreateDynamicPickup(1242, 1, 326.8095,308.8015,999.1484, 0);//Zollamt Waffenspint
 
-    //CreateDynamicPickup(1239, 1, 2004.6497,1018.1676,994.4688, 50);//Casino Info
    	CreateDynamicPickup(1239, 1, 2041.3099,-1408.8322,17.1641, 0);//Zollamt oben
 	CreateDynamicPickup(1239, 1, 610.4565,-583.6769,18.1342, 0);//Zollamt unten
 	CreateDynamicPickup(3798, 1, 2571.6233,-2226.6980,13.3550, 0);//Warenkauf LS
@@ -5554,7 +5540,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1275, 1, 2284.2014,2423.4590,3.4766, 0);//LVPD Skin
 	//CreateDynamicPickup(1275, 1, 1213.5494,-1812.7568,16.5938, 0);//Fahrschulskin
 	CreateDynamicPickup(1275, 1, 814.9228,-1234.5846,14.9359, 0);//Oamtskin
-	CreateDynamicPickup(1275, 1, 221.7282,183.1214,1003.0313, 0);//Medic Skin
 	CreateDynamicPickup(1275, 1, 307.6244,-131.3671,999.6083, 0);//Army Skin'
 	CreateDynamicPickup(1275, 1, 326.9853,306.7588,999.1484, -1);//Zollamt Skin
 
@@ -5644,7 +5629,7 @@ OnGameModeInit2() {
 	//CreateDynamicPickup(1239, 1, 1151.7448,-1203.0283,19.5159, 0);//Peilsender Verkauf
 
 	//Jobpoints
-	CreateDynamicPickup(1276, 1, 645.3646,-521.5663,16.3359, 0);//Geld entladen
+	// CreateDynamicPickup(1279, 1, 645.3646,-521.5663,16.3359, 0);//Geld entladen
 	CreateDynamicPickup(1279, 1, 635.8752,862.5970,-42.6892, 0);//Steine laden
 	CreateDynamicPickup(1279, 1, 607.7939,863.4465,-42.0452, 0);//Steine laden
 	CreateDynamicPickup(1279, 1, 382.3929,871.6203,21.9523, 0);//steine entladen
@@ -28873,21 +28858,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, 361.7136,-2107.5913,7.8340);
 		}
-		//FRAKTIONINTERIOR
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 2042.3730,-1311.6049,23.9810))//Krankenhaus port LS
-		{
-		    if(!(Spieler[playerid][pFraktion] == 3))return SendClientMessage(playerid, COLOR_RED, "Du bist nicht vom Rettungsdienst!");
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 1607.3962,1816.5919,10.8203);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1607.3962,1816.5919,10.8203))//Krankenhaus port LV
-		{
-		    if(!(Spieler[playerid][pFraktion] == 3))return SendClientMessage(playerid, COLOR_RED, "Du bist nicht vom Rettungsdienst!");
-		    SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 2042.3730,-1311.6049,23.9810);
-		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 993.4795,-1459.6665,13.5469))//newsbase unten
 		{
       		if(!(Spieler[playerid][pFraktion] == 4))return SendClientMessage(playerid, COLOR_RED, "Du bist kein News Reporter!");
@@ -28951,12 +28921,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerInterior(playerid, 0);
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, 1216.5732,-1812.2876,16.5938);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 238.6129,139.4004,1003.0234))//Krankenhaus Int  - Ausgang
-		{
-		  	SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-			SetPlayerPos(playerid, 1712.4034, -1130.0344, 24.1077);
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 893.6498,-1636.3358,14.9297))//Triaden außen
 		{
