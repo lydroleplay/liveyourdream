@@ -29,13 +29,19 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if (newkeys & KEY_SECONDARY_ATTACK) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLS2_ENTER_POINT)) {
-            SetPlayerPosEx(playerid, BANKINTERIORLS2_EXIT_POINT + 0.5, MAPS_BANKINTERIORLS2_INTERIOR, VW_BANKINTERIORLS2);
+            Streamer_UpdateEx(playerid, BANKINTERIORLS2_EXIT_POINT, VW_BANKINTERIORLS2, MAPS_BANKINTERIORLS2_INTERIOR, STREAMER_TYPE_OBJECT);
+            SetPlayerVirtualWorld(playerid, VW_BANKINTERIORLS2);
+            SetPlayerInterior(playerid, MAPS_BANKINTERIORLS2_INTERIOR);
+            SetPlayerPos(playerid, BANKINTERIORLS2_EXIT_POINT);
             SetPlayerFacingAngle(playerid, BANKINTERIORLS2_EXIT_FACING);
             SetCameraBehindPlayer(playerid);
 
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLS_EXIT_COORDS)) {
-            SetPlayerPosEx(playerid, BANKINTERIORLS_ENTER_COORDS + 0.5, MAPS_BANKEXTERIORLS_INTERIOR, VW_MAIN);
+            Streamer_UpdateEx(playerid, BANKINTERIORLS_ENTER_COORDS, VW_MAIN, MAPS_BANKEXTERIORLS_INTERIOR, STREAMER_TYPE_OBJECT);            
+            SetPlayerVirtualWorld(playerid, VW_MAIN);
+            SetPlayerInterior(playerid, MAPS_BANKEXTERIORLS_INTERIOR);
+            SetPlayerPos(playerid, BANKINTERIORLS_ENTER_COORDS);
             SetPlayerFacingAngle(playerid, BANKINTERIORLS_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
 
@@ -132,5 +138,5 @@ hook OnGameModeInit() {
     object_bankInteriorLs[69] = CreateDynamicObject(19808, 1444.21716, -990.22632, 1639.66772, 0.00000, 0.00000, 89.74200, VW_BANKINTERIORLS, MAPS_BANKINTERIORLS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bankInteriorLs[70] = CreateDynamicObject(19808, 1444.21716, -993.59088, 1639.66772, 0.00000, 0.00000, 89.74200, VW_BANKINTERIORLS, MAPS_BANKINTERIORLS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bankInteriorLs[71] = CreateDynamicObject(1886, 1439.18274, -980.87518, 1646.71460, 19.00000, -4.00000, 302.51730, VW_BANKINTERIORLS, MAPS_BANKINTERIORLS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_bankInteriorLs[72] = CreateDynamicObject(14789, 1424.69031, -1004.06616, 1643.01868, 0.00000, 0.00000, 89.99998, VW_BANKINTERIORLS, MAPS_BANKINTERIORLS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    object_bankInteriorLs[72] = CreateDynamicObject(14789, 1424.69031, -1004.06616, 1643.01868, 0.00000, 0.00000, 89.99998, VW_BANKINTERIORLS, MAPS_BANKINTERIORLS_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE);
 }

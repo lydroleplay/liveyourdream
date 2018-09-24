@@ -44,6 +44,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING && !IsPlayerExecutive(playerid))
                 return SendClientMessage(playerid,COLOR_RED,"Du kannst die Asservatenkammer nicht betreten, weil die Polizei aufgrund eines Überfalles die Kammer gesperrt hat!");
             
+            Streamer_UpdateEx(playerid, EVIDENCEROOM_INTERIOR_EXIT_COORDS, VW_EVIDENCEROOMINTERIOR, MAPS_EVIDENCEROOMINTERIOR_INTERIOR, STREAMER_TYPE_OBJECT);
             SetPlayerPos(playerid, EVIDENCEROOM_INTERIOR_EXIT_COORDS);
             SetPlayerInterior(playerid, MAPS_EVIDENCEROOMINTERIOR_INTERIOR);
             SetPlayerVirtualWorld(playerid, VW_EVIDENCEROOMINTERIOR);

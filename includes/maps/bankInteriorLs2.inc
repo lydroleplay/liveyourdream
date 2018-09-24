@@ -22,8 +22,11 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if (newkeys & KEY_SECONDARY_ATTACK) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLS2_EXIT_POINT)) {
-            SetPlayerPosEx(playerid, BANKINTERIORLS2_ENTER_POINT + 0.5, MAPS_BANKINTERIORLS_INTERIOR, VW_BANKINTERIORLS);
-            SetPlayerFacingAngle(playerid, BANKINTERIORLS_ENTER_FACING);
+            Streamer_UpdateEx(playerid, BANKINTERIORLS2_ENTER_POINT, VW_BANKINTERIORLS, MAPS_BANKINTERIORLS_INTERIOR, STREAMER_TYPE_OBJECT);
+            SetPlayerVirtualWorld(playerid, VW_BANKINTERIORLS);
+            SetPlayerInterior(playerid, MAPS_BANKINTERIORLS_INTERIOR);
+            SetPlayerPos(playerid, BANKINTERIORLS2_ENTER_POINT);
+            SetPlayerFacingAngle(playerid, BANKINTERIORLS2_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
 
             return 1;

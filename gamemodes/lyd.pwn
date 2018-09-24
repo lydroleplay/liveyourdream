@@ -157,7 +157,8 @@ enum
 	VW_GOVERNMENTINTERIOR,
 	VW_BANKINTERIORLS,
 	VW_BANKINTERIORLS2,
-	VW_CLUBINTERIORLS
+	VW_CLUBINTERIORLS,
+	VW_BANKINTERIORLV
 }
 
 new gSQL;
@@ -2709,7 +2710,7 @@ new
 	g_tPulseBank,
 	g_unixBankraub,
 	g_tPulseBankPosition,
-	g_iBankraubStatus,
+	g_iBankraubStatus = Bankraub_Bereit,
 	g_aiVehicleSirene[MAX_VEHICLES][4];
 
 new FischNamen[8][64] = {
@@ -3911,7 +3912,6 @@ new ZettelPreis[MAX_PLAYERS];
 new TazerTime[MAX_PLAYERS];
 new Tazered[MAX_PLAYERS];
 new Cuffed[MAX_PLAYERS];
-new tresortuer[1];
 new Refueling[MAX_PLAYERS];
 new RefuelType[MAX_PLAYERS];
 new MakeAnimation[MAX_PLAYERS];
@@ -4234,6 +4234,8 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 #include <maps\clubInteriorLs>
 #include <maps\boatCargoJob>
 #include <maps\kartParcour>
+#include <maps\bankExteriorLv>
+#include <maps\bankInteriorLv>
 
 enum e_KampfShop {
 	Float:KS_fX,
@@ -5452,8 +5454,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1, 264.3734,191.1904,1008.1719,0);//FBI Innen
 	CreateDynamicPickup(1318, 1, 2127.5486,2378.9626,10.8203, 0);//Clubmitglied enter in Las Venturas
 	CreateDynamicPickup(1318, 1, -2636.6230,1403.3202,906.4609, 0);//Ausgangclub in Las Venturas
-	CreateDynamicPickup(19197, 1, 1952.5675,1342.9261,15.3672, 0);//Bank in LV Außen
-	CreateDynamicPickup(19197, 1, 288.7102,167.3666,1007.1719, 200);//Bank in LV innen
 	CreateDynamicPickup(1318, 1, 2169.8208,1618.7504,999.9766, 39);//Paintball Ausgang in INT 1
 	CreateDynamicPickup(19197, 1, 1571.2114,-1336.6027,16.4844, 0);//Startower unten
 	CreateDynamicPickup(19197, 1, 1571.2114,-1336.6027,16.4844, 0);//Startower oben
@@ -5480,7 +5480,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 822.3183,1.8747,1004.1797, -1);//Posthaus /Post
 	CreateDynamicPickup(1239, 1, 2316.4529,-12.6540,26.7422, VW_REGISTRATIONOFFICE);//KFZ Schalter 1
 	CreateDynamicPickup(1239, 1, 2316.3318,-9.9532,26.7422, VW_REGISTRATIONOFFICE);//KFZ Schalter 2
-	CreateDynamicPickup(1239, 1, 292.4491,180.1878,1007.1794, 200);//Bankschalter in LV Bank
 	CreateDynamicPickup(1239, 1, -2158.7920,642.9232,1052.3750, 0);//Clubzeichen
 	CreateDynamicPickup(1247, 1, 2268.1128,2448.0073,3.5313, 0);//Arrest Point LV
 	CreateDynamicPickup(1239, 1, -2656.1047,1416.0248,906.2734, 0);//Waffenshop Club in Las Venturas
@@ -5495,7 +5494,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 1234.3380,-1823.9462,13.5909, 0);//Auto. Fahrschule
 	CreateDynamicPickup(1239, 1, 1248.3843,-1833.8750,13.3930, 0);//Staatsrepair von Army
 	CreateDynamicPickup(1239, 1, 1138.9730,-1820.9103,33.6354, 0);//Staatsrepairfür Fahrschule Helikopterplatz
-	CreateDynamicPickup(1239, 1, 298.9642,179.2220,1007.1719, 200);//Kredit in LV Bank
 	CreateDynamicPickup(1242, 1, 326.8095,308.8015,999.1484, 0);//Zollamt Waffenspint
 
    	CreateDynamicPickup(1239, 1, 2041.3099,-1408.8322,17.1641, 0);//Zollamt oben
@@ -5712,7 +5710,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"OutlawZ Spawn\n"COLOR_HEX_WHITE"Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum heilen", COLOR_WHITE, -2170.3818,641.4621,1052.3817, 15.0);
 
 	//3D Gebäude mit Enter betreten
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Zentralbank Las Venturas\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1952.5675,1342.9261,15.3672, 20.0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Fahrschule\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1216.5732,-1812.2876,16.5938, 20.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\n"COLOR_HEX_WHITE"Gebäude betreten mit 'Enter'", COLOR_WHITE, 1738.5869,-1586.3961,13.5555, 8.0);
 
@@ -5743,10 +5740,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Paintball - Anlage\nGebäude verlassen mit 'Enter'", COLOR_BLUE, 2169.8208,1618.7504,999.9766, 15.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Gangjail\n"COLOR_HEX_WHITE"Tippe /Gangjail um einzusperren\nTippe /Aufbrechen um zu befreien", COLOR_WHITE, 2160.4111,-98.0815,2.8239, 13.0, .worldid = 0);
 	CreateDynamic3DTextLabel(COLOR_HEX_GREENA"Die Clubvilla\n"COLOR_HEX_WHITE"Zutritt nur für Clubmitglieder", COLOR_WHITE, 2127.5486,2378.9626,10.8203, 20.0, .worldid = 0); // Clubvilla in Las Venturas
- 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kredit aufnehmen\n"COLOR_HEX_WHITE"Tippe /Kredit", COLOR_WHITE, 298.9642,179.2220,1007.1719, 10.0, .worldid = 200);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bankservice\n"COLOR_HEX_WHITE"Tippe /Bank", COLOR_WHITE, 292.4491,180.1878,1007.1794, 15.0, .worldid = 200);
-	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen Banküberfall mit\n"COLOR_HEX_RED"/Bankausrauben", COLOR_WHITE, 2144.1055,1641.6750,993.5761, 13.0, .worldid = 500);
-	CreateDynamic3DTextLabel(COLOR_HEX_WHITE"Starte einen Banküberfall mit\n"COLOR_HEX_RED"/Tresoraufbrechen", COLOR_WHITE, 296.8997,188.5367,1007.1719, 10.0, .worldid = 200);
     //CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Informationen zum Stadtamt\n"COLOR_HEX_WHITE"Tippe /Stadtamtinfo", COLOR_WHITE, 1481.7039,-1740.6183,13.5469, 30.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Los Santos 4 Sterne Hotel\n"COLOR_HEX_WHITE"Miete Dir günstig ein schönes Hotelzimmer", COLOR_WHITE, 1722.5425,-1650.1168,20.2289, 20.0);
    	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Fahrzeug Zulassungsstelle\n"COLOR_HEX_WHITE"Schalter 1\nTippe /Zulassungsstelle", COLOR_WHITE, 2316.4529,-12.6540,26.7422, 15.0);
@@ -6107,7 +6100,6 @@ public OnPlayerConnect(playerid)
     SetPlayerMapIcon(playerid, 39, 1380.9908,457.3878,19.9316, 42, 0, 0);//Tankstelle
 	SetPlayerMapIcon(playerid, 40, 2423.8147,-1742.4226,13.1120, 25, 0, 0);//247 grove street
  	SetPlayerMapIcon(playerid, 41, 1257.1144,-1339.0963,12.9213, 8, 0, 0);//Busbahnhof
- 	SetPlayerMapIcon(playerid, 42, 1952.5675,1342.9261,15.3672, 52, 0, 0);//Bank in LV
  	SetPlayerMapIcon(playerid, 43, 2008.1722,1169.3364,10.8203, 46, 0, 0);//Werbung in LV
 
     // 36 für /DFINDE reserviert
@@ -15025,7 +15017,7 @@ CMD:m(playerid, params[])
 
 CMD:ueberweisen(playerid)
 {
-	if(!IsPlayerInRangeOfPoint(playerid, 3.0, BANKINTERIORLS_TRANSFER_POINT))return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Bank am Überweisungsschalter.");
+	if (!(IsPlayerInRangeOfPoint(playerid, 3.0, BANKINTERIORLS_TRANSFER_POINT) || IsPlayerInRangeOfPoint(playerid, 3.0, BANKINTERIORLV_TRANSFER_POINT))) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Bank am Überweisungsschalter.");
 	if( Spieler[playerid][pLevel] < 4 ) {
 	    return SendClientMessage(playerid, COLOR_RED, "Du bist unter Level 4 und kannst diese deshalb Funktion nicht nutzen!");
 	}
@@ -28999,25 +28991,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    SetPlayerInterior(playerid, 0);
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerPos(playerid, -49.8745,-269.3627,6.6332);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 1952.5675,1342.9261,15.3672))// Bank LV außen
-		{
-		    if( g_iBankraubStatus == Bankraub_Aktiv ) {
-		        if( !IsPlayerExecutive(playerid) && Spieler[playerid][pFraktion] != 3 && Spieler[playerid][pFraktion] != 5 ) {
-					SendClientMessage(playerid,COLOR_RED,"Du kannst die Zentralbank nicht betreten, weil die Polizei aufgrund eines Überfalles die Bank gesperrt hat!");
-			        return 1;
-		        }
-		    }
-		    SetPlayerInterior(playerid, 3);
-		    SetPlayerVirtualWorld(playerid, 200);
-		    SetPlayerPos(playerid, 288.7102,167.3666,1007.1719);
-			SetPlayerFacingAngle(playerid, 0.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 288.7102,167.3666,1007.1719))// Bank LV innen
-		{
-		    SetPlayerInterior(playerid, 0);
-		    SetPlayerVirtualWorld(playerid, 0);
-		    SetPlayerPos(playerid, 1952.5675,1342.9261,15.3672);
 		}
 		//SetCameraBehindPlayer(playerid); bugfix test eingeklammert Auftrag 2706
 	}
@@ -48875,6 +48848,7 @@ forward Pulse_Bankraub();
 public Pulse_Bankraub() {
 	KillTimer(g_tPulseBank);
 	if( g_iBankraubStatus == Bankraub_Wartezeit ) {
+		MoveDynamicObject(object_bankInteriorLv_vault, BANKINTERIORLV_VAULT_CLOSED, 4);
 	    g_iBankraubStatus = Bankraub_Bereit;
 		SendClientMessageToAll(COLOR_ORANGE,"Die Bank kann jetzt wieder ausgeraubt werden.");
 		g_tPulseBank = SetTimer("Pulse_Bankraub",( (BANKRAUB_ZEIT)*1000)+197,false);
@@ -48891,8 +48865,8 @@ public Pulse_Bankraub() {
 forward LVBank_Position(diebid);
 public LVBank_Position(diebid) {
 	if( GetPlayerInterior(diebid) == 3 )
-	if( GetPlayerVirtualWorld(diebid) == 200 ) {
-		if( IsPlayerInRangeOfPoint(diebid,100.0,296.8997,188.5367,1007.1719) ) {
+	if( GetPlayerVirtualWorld(diebid) == VW_BANKINTERIORLV ) {
+		if( IsPlayerInRangeOfPoint(diebid,100.0, BANKINTERIORLV_ROB_POINT) ) {
 		    new
 		        zeit;
 			zeit = ( gettime() - g_unixBankraub );
@@ -48924,7 +48898,6 @@ public LVBank_Position(diebid) {
 	KillTimer(g_tPulseBankPosition);
 	g_tPulseBankPosition = INVALID_TIMER_ID;
 	RemovePlayerAttachedObject(diebid,0);
-	MoveObject(tresortuer[0], 296.91638, 189.45781, 1008.11816,4);
 	Pulse_Bankraub();
 	return 1;
 }
@@ -48983,7 +48956,7 @@ stock HasPlayerWeapon(playerid) {
 }
 
 COMMAND:tresoraufbrechen(playerid,params[]) {
-	if( (!IsPlayerInRangeOfPoint(playerid,2.0,296.8997,188.5367,1007.1719) ) || (GetPlayerInterior(playerid) != 3) || (GetPlayerVirtualWorld(playerid) != 200) ) {
+	if( (!IsPlayerInRangeOfPoint(playerid,2.0, BANKINTERIORLV_ROB_POINT) ) || (GetPlayerInterior(playerid) != 3) || (GetPlayerVirtualWorld(playerid) != VW_BANKINTERIORLV) ) {
         SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Las Venturas Zentralbank.");
 	    return 1;
 	}
@@ -49008,7 +48981,7 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
 	format(String,sizeof(String),"[ZENTRALBANK] Bankräuber %s raubt die Las Venturas Zentralbank aus!",GetName(playerid));
 	SendClientMessageToAll(COLOR_RED,String);
 	PlayerPlaySound(playerid,1058,0.0,0.0,0.0);
-	MoveObject(tresortuer[0], 296.91638-3, 189.45781, 1008.11816,4);
+	MoveDynamicObject(object_bankInteriorLv_vault, BANKINTERIORLV_VAULT_OPEN, 4);
 
 	SendClientMessage(playerid,COLOR_RED,"[ACHTUNG] Die Alarmanlage ist angegangen, die Polizei ist unterwegs! Halte 10 Minuten in der Bank aus!");
 
@@ -49026,9 +48999,9 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
 
 forward ResetEvidenceRoomHeist();
 public ResetEvidenceRoomHeist() {
-		g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] = EVIDENCEROOM_STATUS_IDLE;
-		MoveDynamicObject(object_door_evroomInterior, 1254.1525, -14.1255, 999.9403, 999.0, 0.0000, 0.0000, -90.8999);
-		return SendClientMessageToAll(COLOR_RED, "Die Asservatenkammer kann nun wieder ausgeraubt werden.");
+	g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] = EVIDENCEROOM_STATUS_IDLE;
+	MoveDynamicObject(object_door_evroomInterior, 1254.1525, -14.1255, 999.9403, 999.0, 0.0000, 0.0000, -90.8999);
+	return SendClientMessageToAll(COLOR_RED, "Die Asservatenkammer kann nun wieder ausgeraubt werden.");
 }
 
 forward EvidenceRoomHeistFinished();
@@ -61025,7 +60998,7 @@ COMMAND:kredit(playerid,params[]) {
  	if(Spieler[playerid][pKreditwert] != 0 ) {
  		return SendClientMessage(playerid, COLOR_RED, "Du beziehst bereits einen Kredit");
  	}
-	if( !IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLS_CREDIT_POINT) && !IsPlayerInRangeOfPoint(playerid, 2.0, 298.9642,179.2220,1007.1719) ) {
+	if( !IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLS_CREDIT_POINT) && !IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLV_CREDIT_POINT) ) {
  		return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keinen Kredit beantragen");
 	}
 	new string1[256];
@@ -61430,7 +61403,7 @@ COMMAND:telefonzelle(playerid,params[]) {
 }
 
 COMMAND:bank(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLS_SERVICE_POINT) && !IsPlayerInRangeOfPoint(playerid, 2.0, 292.4491,180.1878,1007.1794) ) {
+	if( !IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLS_SERVICE_POINT) && !IsPlayerInRangeOfPoint(playerid, 2.0, BANKINTERIORLV_SERVICE_POINT) ) {
  		return SendClientMessage(playerid, COLOR_RED, "Du kannst diesen Befehl hier nicht ausführen");
 	}
 	Spieler[playerid][pPinVergessen] = 0;

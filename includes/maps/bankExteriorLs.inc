@@ -9,7 +9,7 @@
 //static Float:DRAWDISTANCE   = 350.0;
 
 // Bank Exterior LS Points
-#define BANKINTERIORLS_EXIT_COORDS      1415.9511, -988.9711, 1639.9802
+#define BANKINTERIORLS_EXIT_COORDS      1415.8184, -988.8695, 1639.7843
 #define BANKINTERIORLS_EXIT_FACING      270.0
 #define BANKINTERIORLS_ENTER_COORDS     1462.6464, -1011.3412, 26.8438
 #define BANKINTERIORLS_ENTER_FACING     180.0
@@ -30,7 +30,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		        if (!IsPlayerExecutive(playerid))
 					return SendClientMessage(playerid, COLOR_RED, "Du kannst die Zentralbank nicht betreten, weil die Polizei aufgrund eines Überfalles die Bank gesperrt hat!");
             
-            SetPlayerPosEx(playerid, BANKINTERIORLS_EXIT_COORDS, MAPS_BANKINTERIORLS_INTERIOR, VW_BANKINTERIORLS);
+            Streamer_UpdateEx(playerid, BANKINTERIORLS_EXIT_COORDS, VW_BANKINTERIORLS, MAPS_BANKINTERIORLS_INTERIOR, STREAMER_TYPE_OBJECT);
+            SetPlayerVirtualWorld(playerid, VW_BANKINTERIORLS);
+            SetPlayerInterior(playerid, MAPS_BANKINTERIORLS_INTERIOR);
+            SetPlayerPos(playerid, BANKINTERIORLS_EXIT_COORDS);
             SetPlayerFacingAngle(playerid, BANKINTERIORLS_EXIT_FACING);
             SetCameraBehindPlayer(playerid);
 
@@ -41,7 +44,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     return 1;
 }
 
-hook OnGameModeInit() {    
+hook OnGameModeInit() {
+    // Map Icons
+    CreateDynamicMapIcon(BANKINTERIORLS_ENTER_COORDS, 52, 0, VW_MAIN, MAPS_BANKEXTERIORLS_INTERIOR);
+
     // Pickups
     pickup_bankExteriorLs[0] = CreateDynamicPickup(19197, 1, BANKINTERIORLS_ENTER_COORDS, VW_MAIN, MAPS_BANKEXTERIORLS_INTERIOR); // Bank interior enter 
 
