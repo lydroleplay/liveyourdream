@@ -4431,6 +4431,9 @@ new iGangZones;
 new Text:tdGangZoneHeader;
 new g_GangZone[MAX_GANGZONES][e_GangZone];
 
+new alcatrazGateHackTimeout   = 0;
+new alcatrazGateHackTimestamp = 0;
+
 
 #include <drogen>
 #include <werbebanner>
@@ -4937,7 +4940,8 @@ public HauptTimer()
 public OnGameModeInit()
 {
 	Connect_To_Database();
-	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 800, -1); // Object fixOnGameModeInit2();
+	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 800, -1); // Object fix
+    OnGameModeInit2();
 }
 
 OnGameModeInit2() {
@@ -6122,10 +6126,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE,  377.1597,-67.7632,1001.5151, 10.0, .worldid = 31);//BS 8
 
 	//CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Peilsender-Verkauf\n"COLOR_HEX_WHITE"Tippe /Peilsender", COLOR_WHITE,  1151.7448,-1203.0283,19.5159, 25.0);//
-
-
-
-	 CreateDynamicPickup(1550, 1, 299.4320,191.2753,1007.1794,0); //BANK LV
 	gSteuern = 1;
 
     //Gate::Gate();
@@ -6146,7 +6146,8 @@ OnGameModeInit2() {
     SchaukelschiffInit();
     InitBreakdancer();
 
-	// TODO: Peek delete?#if defined WEIHNACHTS_EVENT
+	// TODO: Peek delete?
+    #if defined WEIHNACHTS_EVENT
 	for(new i ; i < sizeof(g_Geschenk) ; i++) {
 	    g_Geschenk[i][G_iObjectID] = CreateDynamicObject( g_Geschenk[i][G_iModel],g_Geschenk[i][G_fX],g_Geschenk[i][G_fY],g_Geschenk[i][G_fZ],0.0,0.0,0.0,50.0);
 	    g_Geschenk[i][G_t3dLabel] = CreateDynamic3DTextLabel("/OSTEREI",0xFFFFFFFF,g_Geschenk[i][G_fX],g_Geschenk[i][G_fY],g_Geschenk[i][G_fZ] + 0.65,20.0);
@@ -17275,9 +17276,6 @@ CMD:kick(playerid, params[])
     return 1;
 }
 
-new alcatrazGateHackTimeout   = 0;
-new alcatrazGateHackTimestamp = 0;
-
 //FS TORE============
 CMD:fstorauf(playerid, params[])
 {
@@ -20031,8 +20029,8 @@ stock RespawnJobCars(jobID) {
         case 2:     { for (new i = 0; i < sizeof(vehicle_busStation); i++) if (!IsVehicleOccupied(vehicle_busStation[i])) SetVehicleToRespawn(vehicle_busStation[i]); }
         case 3:     {
             new trailerid, bool:excludeVehicles[MAX_VEHICLES];
-            for (new i = 0; i < 9; i++) if (IsVehicleOccupied(truck[i]) && (trailerid = GetVehicleTrailer(truck[i]))) excludeVehicles[trailerid] = true;
-            for (new i = 0; i < sizeof(vehicle_truckerBase); i++) if (!IsVehicleOccupied(vehicle_truckerBase[i]) && !excludeVehicles[truck[i]]) SetVehicleToRespawn(vehicle_truckerBase[i]);
+            for (new i = 0; i < 9; i++) if (IsVehicleOccupied(vehicle_truckerBase[i]) && (trailerid = GetVehicleTrailer(vehicle_truckerBase[i]))) excludeVehicles[trailerid] = true;
+            for (new i = 0; i < sizeof(vehicle_truckerBase); i++) if (!IsVehicleOccupied(vehicle_truckerBase[i]) && !excludeVehicles[vehicle_truckerBase[i]]) SetVehicleToRespawn(vehicle_truckerBase[i]);
         }
         case 4:     { for (new i = 0; i < sizeof(vehicle_airportLs); i++) if (!IsVehicleOccupied(vehicle_airportLs[i])) SetVehicleToRespawn(vehicle_airportLs[i]); }
         case 5:     { for (new i = 0; i < sizeof(kfzcars); i++) if (!IsVehicleOccupied(kfzcars[i])) SetVehicleToRespawn(kfzcars[i]); }
@@ -20059,12 +20057,15 @@ stock RespawnJobCars(jobID) {
 stock RespawnFactionCars(playerid, factionID) {
 	new string[128];
 	new trailerid, bool:excludeVehicles[MAX_VEHICLES];
-    for (new i = 0; i < 7; i++) if (IsVehicleOccupied(oamtcars[i]) && (trailerid = GetVehicleTrailer(oamtcars[i]))) excludeVehicles[trailerid] = true;if (factionID == 1)
+
+    for (new i = 0; i < sizeof(vehicle_pooExterior); i++)
+        if (IsVehicleOccupied(vehicle_pooExterior[i]) && (trailerid = GetVehicleTrailer(vehicle_pooExterior[i])))
+            excludeVehicles[trailerid] = true;
+    
+    if (factionID == 1)
 	{
-		for(new i=0;i<sizeof(vehicle_lspdExterior);i++)
-
-			if(!IsVehicleOccupied(vehicle_lspdExterior[i]))
-
+		for (new i=0;i<sizeof(vehicle_lspdExterior);i++)
+			if (!IsVehicleOccupied(vehicle_lspdExterior[i]))
 				SetVehicleToRespawn(vehicle_lspdExterior[i]);
 
 
@@ -20074,10 +20075,8 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 2)
 	{
-		for(new i=0;i<sizeof(vehicle_fbiExterior);i++)
-
-			if(!IsVehicleOccupied(vehicle_fbiExterior[i]))
-
+		for (new i=0;i<sizeof(vehicle_fbiExterior);i++)
+			if (!IsVehicleOccupied(vehicle_fbiExterior[i]))
 				SetVehicleToRespawn(vehicle_fbiExterior[i]);
 
 
@@ -20087,10 +20086,8 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 3)
 	{
-		for(new i=0;i<sizeof(vehicle_samdExterior);i++)
-
-			if(!IsVehicleOccupied(vehicle_samdExterior[i]))
-
+		for (new i=0;i<sizeof(vehicle_samdExterior);i++)
+			if (!IsVehicleOccupied(vehicle_samdExterior[i]))
 				SetVehicleToRespawn(vehicle_samdExterior[i]);
 
 
@@ -20100,25 +20097,19 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 4)
 	{
-		for(new i=0;i<sizeof(vehicle_sanaBase);i++)
-		{
-			if(!IsVehicleOccupied(vehicle_sanaBase[i])&& !excludeVehicles[newscars[i]])
-			{
+		for (new i=0;i<sizeof(vehicle_sanaBase);i++)
+			if (!IsVehicleOccupied(vehicle_sanaBase[i]) && !excludeVehicles[vehicle_sanaBase[i]])
 				SetVehicleToRespawn(vehicle_sanaBase[i]);
-			}
-		}
+        
 		format(string, sizeof(string), "* Die SA-NA Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(4, COLOR_DARKRED, string);
 		return 1;
 	}
 	else if(factionID == 5)
 	{
-		for(new i=0;i<sizeof(vehicle_pooExterior);i++)
-
-			if(!IsVehicleOccupied(vehicle_pooExterior[i]))
-
+		for (new i=0;i<sizeof(vehicle_pooExterior);i++)
+			if (!IsVehicleOccupied(vehicle_pooExterior[i]))
 				SetVehicleToRespawn(vehicle_pooExterior[i]);
-
 
 		format(string, sizeof(string), "* Die Ordnungsamt Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(5, COLOR_DARKRED, string);
@@ -20126,26 +20117,20 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 6)
 	{
-		for(new i=0;i<sizeof(grovecars);i++)
-		{
-			if(!IsVehicleOccupied(grovecars[i])&& !excludeVehicles[grovecars[i]])
-			{
+		for (new i=0;i<sizeof(grovecars);i++)
+			if (!IsVehicleOccupied(grovecars[i])&& !excludeVehicles[grovecars[i]])
 				SetVehicleToRespawn(grovecars[i]);
-			}
-		}
+        
 		format(string, sizeof(string), "* Die Grove Street Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(6, COLOR_DARKRED, string);
 		return 1;
 	}
 	else if(factionID == 7)
 	{
-		for(new i=0;i<sizeof(ballascars);i++)
-		{
-			if(!IsVehicleOccupied(ballascars[i])&& !excludeVehicles[ballascars[i]])
-			{
+		for (new i=0;i<sizeof(ballascars);i++)
+			if (!IsVehicleOccupied(ballascars[i])&& !excludeVehicles[ballascars[i]])
 				SetVehicleToRespawn(ballascars[i]);
-			}
-		}
+        
 		format(string, sizeof(string), "* Die Ballas Fahrzeuge wurden von %s respawnt.", GetName(playerid));
 		SendFraktionMessage(7, COLOR_DARKRED, string);
 		return 1;
@@ -20188,7 +20173,7 @@ stock RespawnFactionCars(playerid, factionID) {
 	{
 		for(new i=0;i<sizeof(vehicle_yakuzaExterior);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_yakuzaExterior[i])&& !excludeVehicles[yakucars[i]])
+			if(!IsVehicleOccupied(vehicle_yakuzaExterior[i])&& !excludeVehicles[vehicle_yakuzaExterior[i]])
 			{
 				SetVehicleToRespawn(vehicle_yakuzaExterior[i]);
 			}
@@ -20214,7 +20199,7 @@ stock RespawnFactionCars(playerid, factionID) {
 	{
 		for(new i=0;i<sizeof(vehicle_lcnExterior);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_lcnExterior[i])&& !excludeVehicles[lcncars[i]])
+			if(!IsVehicleOccupied(vehicle_lcnExterior[i])&& !excludeVehicles[vehicle_lcnExterior[i]])
 			{
 				SetVehicleToRespawn(vehicle_lcnExterior[i]);
 			}
@@ -20240,7 +20225,7 @@ stock RespawnFactionCars(playerid, factionID) {
 	{
 		for(new i=0;i<sizeof(vehicle_hitmanBase);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_hitmanBase[i])&& !excludeVehicles[hitmanc[i]])
+			if(!IsVehicleOccupied(vehicle_hitmanBase[i])&& !excludeVehicles[vehicle_hitmanBase[i]])
 			{
 				SetVehicleToRespawn(vehicle_hitmanBase[i]);
 			}
@@ -20253,7 +20238,7 @@ stock RespawnFactionCars(playerid, factionID) {
 	{
 		for(new i=0;i<sizeof(vehicle_nineDemonsBase);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_nineDemonsBase[i])&& !excludeVehicles[bikercars[i]])
+			if(!IsVehicleOccupied(vehicle_nineDemonsBase[i])&& !excludeVehicles[vehicle_nineDemonsBase[i]])
 			{
 				SetVehicleToRespawn(vehicle_nineDemonsBase[i]);
 			}
@@ -20279,7 +20264,7 @@ stock RespawnFactionCars(playerid, factionID) {
 	{
 		for(new i=0;i<sizeof(vehicle_wheelmanBase);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_wheelmanBase[i])&& !excludeVehicles[wheelcars[i]])
+			if(!IsVehicleOccupied(vehicle_wheelmanBase[i])&& !excludeVehicles[vehicle_wheelmanBase[i]])
 			{
 				SetVehicleToRespawn(vehicle_wheelmanBase[i]);
 			}
@@ -20305,7 +20290,7 @@ stock RespawnFactionCars(playerid, factionID) {
 	{
 		for(new i=0;i<sizeof(vehicle_terrorBase);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_terrorBase[i])&& !excludeVehicles[terrorcars[i]])
+			if(!IsVehicleOccupied(vehicle_terrorBase[i])&& !excludeVehicles[vehicle_terrorBase[i]])
 			{
 				SetVehicleToRespawn(vehicle_terrorBase[i]);
 			}
@@ -48988,7 +48973,8 @@ forward Pulse_Bankraub();
 public Pulse_Bankraub() {
 	KillTimer(g_tPulseBank);
 	if( g_iBankraubStatus == Bankraub_Wartezeit ) {
-	MoveDynamicObject(object_bankInteriorLv_vault, BANKINTERIORLV_VAULT_CLOSED, 4);    g_iBankraubStatus = Bankraub_Bereit;
+	    MoveDynamicObject(object_bankInteriorLv_vault, BANKINTERIORLV_VAULT_CLOSED, 4);
+        g_iBankraubStatus = Bankraub_Bereit;
 		SendClientMessageToAll(COLOR_ORANGE,"Die Bank kann jetzt wieder ausgeraubt werden.");
 		g_tPulseBank = SetTimer("Pulse_Bankraub",( (BANKRAUB_ZEIT)*1000)+197,false);
 	}
@@ -49824,33 +49810,28 @@ COMMAND:knastzeit(playerid,params[]) {
 
 CMD:rallcars(playerid, params[]) return cmd_respawnallcars(playerid, params);
 
-COMMAND:respawnallcars(playerid,params[]) {
-    new hour,minu,sec;
-    gettime(hour,minu,sec);
-    if(Spieler[playerid][pAdmin] < 3&&hour<23&&hour>9)
-    {
+COMMAND:respawnallcars(playerid, params[]) {
+    new hour, minu, sec;
+    gettime(hour, minu, sec);
+    if (Spieler[playerid][pAdmin] < 3 && hour < 23 && hour > 9)
         return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    }
-    else if(Spieler[playerid][pAdmin]<1)
-    {
+    else if (Spieler[playerid][pAdmin] < 1)
         return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    }
 
     new trailerid, bool:excludeVehicles[MAX_VEHICLES];
-    for (new i = 0; i < 9; i++) {
-        if (IsVehicleOccupied(truck[i]) && (trailerid = GetVehicleTrailer(truck[i]))) excludeVehicles[trailerid] = true;
-        if (IsVehicleOccupied(oamtcars[i]) && (trailerid = GetVehicleTrailer(oamtcars[i]))) excludeVehicles[trailerid] = true;
-    }
+    for (new i = 0; i < sizeof(vehicle_truckerBase); i++)
+        if (IsVehicleOccupied(vehicle_truckerBase[i]) && (trailerid = GetVehicleTrailer(vehicle_truckerBase[i]))) excludeVehicles[trailerid] = true;
 
-    for (new i = 1; i < MAX_VEHICLES; i++) {
-        if (!IsVehicleOccupied(i) && !excludeVehicles[i]) {
+    for (new i = 0; i < sizeof(vehicle_pooExterior); i++)
+        if (IsVehicleOccupied(vehicle_pooExterior[i]) && (trailerid = GetVehicleTrailer(vehicle_pooExterior[i]))) excludeVehicles[trailerid] = true;
+
+    for (new i = 1; i < MAX_VEHICLES; i++)
+        if (!IsVehicleOccupied(i) && !excludeVehicles[i])
             SetVehicleToRespawn(i);
-        }
-    }
-    new
-        String[128];
-    format(String,sizeof(String),"%s %s hat alle unbesetzten Fahrzeuge zurückgespawnt.", GetPlayerAdminRang(playerid), GetName(playerid));
-    SendClientMessageToAll(COLOR_YELLOW,String);
+    
+    new String[128];
+    format(String, sizeof(String), "%s %s hat alle unbesetzten Fahrzeuge zurückgespawnt.", GetPlayerAdminRang(playerid), GetName(playerid));
+    SendClientMessageToAll(COLOR_YELLOW, String);
     return 1;
 }
 
@@ -59285,7 +59266,7 @@ COMMAND:savehouseobject(playerid,params[]) {
 
 COMMAND:zulassungsstelle(playerid,params[]) {
 	if( !IsPlayerInRangeOfPoint(playerid,5.0,2316.4529,-12.6540,26.7422) || !IsPlayerInRangeOfPoint(playerid,5.0,2316.3318,-9.9532,26.7422) )
-        returnSendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe der Zulassungsstelle.");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe der Zulassungsstelle.");
 
 	return
 	ShowPlayerDialog(playerid,DIALOG_ZULASSUNGSSTELLE,DIALOG_STYLE_LIST,"Zulassungsstelle","Fahrzeug zulassen\nFahrzeug abmelden","Weiter","Abbruch");
@@ -66467,7 +66448,8 @@ COMMAND:entleeren(playerid,params[]) {
 }
 
 stock MuellInit() {
-	// TODO: Peek Müll map file?CreateDynamicObject(1344, 1575.32, -1860.68, 13.33, 0.00, 0.00, -90.00,0,0,-1,150.0);
+	// TODO: Peek Müll map file?
+    CreateDynamicObject(1344, 1575.32, -1860.68, 13.33, 0.00, 0.00, -90.00,0,0,-1,150.0);
 	CreateDynamicObject(1344, 1575.31, -1794.34, 13.24, 0.00, 0.00, -90.00,0,0,-1,150.0);
 	CreateDynamicObject(1344, 1575.25, -1743.08, 13.33, 0.00, 0.00, -90.00,0,0,-1,150.0);
 	CreateDynamicObject(1344, 1372.86, -1726.57, 13.32, 0.00, 0.00, 0.00,0,0,-1,150.0);
@@ -69234,7 +69216,8 @@ stock InitSchilder() {
 	    Float:Z,
 	    Float:X,
 	    Float:Y;
-	// TODO: Peek schilder map file?/*LV und SF Schilder
+	// TODO: Peek schilder map file?
+    /*LV und SF Schilder
 	CreateDynamicObject(1324, -1753.73096, -619.88928, 17.60860, 0.00000, 0.00000, -90.00000);
 	CreateDynamicObject(1324, -1768.81104, -619.88928, 17.60860, 0.00000, 0.00000, 90.00000);
 	CreateDynamicObject(1324, -2001.11462, 145.46530, 28.14950, 0.00000, 0.00000, -90.00000);
@@ -69383,7 +69366,8 @@ stock InitParkscheibe() {
 	    Float:Z,
 	    Float:X,
 	    Float:Y;
-	// TODO: Peek parkscheiben map file?CreateDynamicObject(963, 1351.64575, -1270.84008, 13.41868, 90.00000, 0.00000, 0.00000); //Hauptammu Parkscheinautomat
+	// TODO: Peek parkscheiben map file?
+    CreateDynamicObject(963, 1351.64575, -1270.84008, 13.41868, 90.00000, 0.00000, 0.00000); //Hauptammu Parkscheinautomat
 	CreateDynamicObject(963, 1445.02282, -1772.52527, 13.57012, 90.00000, 90.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
 	CreateDynamicObject(963, 1429.53638, -1755.35925, 13.56855, 90.00000,   0.00000, 0.00000); // Cityhall (Stadthalle) Parkscheinautomat
 	CreateDynamicObject(963, 929.452576, -1589.62305, 13.64268, 90.00000, 0.00000, 0.00000); // LSPD Parkscheinautomat

@@ -39,8 +39,12 @@ CMD:alcatrazgate(playerid, params[]) {
         new Float:fX, Float:fY, Float:fZ;
         GetDynamicObjectPos(object_alcatraz_entranceGate, fX, fY, fZ);
         
-        if (fZ == ALCATRAZ_ENTRANCEGATE_OPEN_Z)
+        if (fZ == ALCATRAZ_ENTRANCEGATE_OPEN_Z) {
+            if (alcatrazGateHackTimeout > gettime())
+                return SendClientMessage(playerid, COLOR_RED, "Das Tor wurde gehackt und kann noch nicht wieder geschlossen werden.");
+
             MoveDynamicObject(object_alcatraz_entranceGate, fX, fY, ALCATRAZ_ENTRANCEGATE_CLOSED_Z, 2.0);
+        }
         else
             MoveDynamicObject(object_alcatraz_entranceGate, fX, fY, ALCATRAZ_ENTRANCEGATE_OPEN_Z, 2.0);
 
