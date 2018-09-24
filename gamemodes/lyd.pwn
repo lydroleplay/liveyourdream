@@ -52896,6 +52896,8 @@ public SetPlayerView(playerid,step) {
     else if(step == 8 ) {
         TogglePlayerSpectating(playerid,false);
     }*/
+    SetPlayerVirtualWorld(playerid, VW_MAIN);
+    Streamer_UpdateEx(playerid, 1564.733398, -1738.897827, 62.053535, 0);
     InterpolateCameraPos(playerid, 1564.733398, -1738.897827, 62.053535, 1395.101562, -1748.152099, 66.176651, 25000);
     InterpolateCameraLookAt(playerid, 1561.099609, -1741.746337, 60.134815, 1398.683105, -1750.965820, 64.113708, 25000);
 
