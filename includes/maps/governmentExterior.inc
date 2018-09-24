@@ -102,6 +102,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Map Icon
+    CreateDynamicMapIcon(GOVERNMENT_INTERIOR_ENTER_COORDS, 34, 0, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR); // R icon
+
     // Pickups
     pickup_governmentExterior[0] = CreateDynamicPickup(19197, 1, GOVERNMENT_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR);
     pickup_governmentExterior[1] = CreateDynamicPickup(19197, 1, GOVERNMENT_ROOF_EXIT_COORDS, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR);
