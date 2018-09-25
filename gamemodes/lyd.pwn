@@ -10067,9 +10067,9 @@ CMD:rufdetektiv(playerid)
 {
     if(Spieler[playerid][pDuty] == 0)return SendClientMessage(playerid, COLOR_RED, "Du bist nicht im Dienst.");
     if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Polizist.");
-    SendClientMessage(playerid, COLOR_BLUE, "Du hast ein Detektiv angefordert! Der Detektiv wurde zum Eingangsbereich der Los Santos Polizei gerufen.");
+    SendClientMessage(playerid, COLOR_BLUE, "Du hast einen Detektiv angefordert! Der Detektiv wurde zum Eingangsbereich der Los Santos Polizei gerufen.");
     new string[128];
-    format(string, sizeof(string), "Polizeibeamter %s benötigt ein Detektiv. Bitte beim Eingangsbereich der Los Santos Polizei melden! Vergütung: 2.000$", GetName(playerid));
+    format(string, sizeof(string), "Polizeibeamter %s benötigt ein Detektiv. Bitte beim Eingangsbereich der Los Santos Polizei melden! Vergütung: $2.000", GetName(playerid));
     SendJobMessage(14, COLOR_YELLOW, string);
     return 1;
 }
@@ -10974,7 +10974,7 @@ public OnPlayerDeath(playerid, killerid, reason)
     Robbing_OnPlayerDeath(playerid);
     GetPlayerPos(playerid, x, y, z);
     Spieler[playerid][pTot] = 1;
-    Spieler[playerid][pTotTime] = 120;
+    Spieler[playerid][pTotTime] = IsMedicOnDuty() ? 120 : 60;
     Spieler[playerid][pTotX] = x;
     Spieler[playerid][pTotY] = y;
     Spieler[playerid][pTotZ] = z;
@@ -21086,13 +21086,14 @@ CMD:wiederbeleben(playerid, params[])
 {
     new pID, string[128];
     if(!(Spieler[playerid][pFraktion] == 3))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Sanitäter.");
+    if (!Spieler[playerid][pDuty]) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht im Dienst.");
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Wiederbeleben [SpielerID/Name]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if(Spieler[pID][pTot] == 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht tot.");
     if(pID == playerid)return SendClientMessage(playerid, COLOR_RED, "Du kannst dich nicht selbst wiederbeleben!");
     //if(pID == playerid)return SendClientMessage(playerid, COLOR_RED, "Du kannst dich selber nicht wiederbeleben.");
     if( GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst zu Fuß Unterwegs sein.");
+        return SendClientMessage(playerid, COLOR_RED, "Du musst zu Fuß unterwegs sein.");
     }
     if( Spieler[playerid][pWiederbelebung] == 1 ) {
         return SendClientMessage(playerid, COLOR_RED, "Du belebst bereits einen Spieler wieder.");
@@ -21159,6 +21160,7 @@ new Float:DOC_BAG_POS[][][] = {
 CMD:dtasche(playerid, params[]) {
     new doctorBag = GetPVarInt(playerid, "DOCTOR_BAG"), bone = 6;
     if (Spieler[playerid][pFraktion] != 3 && !doctorBag) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Sanitäter.");
+    if (!Spieler[playerid][pDuty] && !doctorBag) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht im Dienst.");
 
     if (!strcmp(params, "links", true)) bone = 5;
     if (!doctorBag || doctorBag != bone && Spieler[playerid][pFraktion] == 3) {
@@ -21201,6 +21203,7 @@ CMD:sfinden(playerid, params[])
 {
     new pID, string[128];
     if(!(Spieler[playerid][pFraktion] == 3))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Sanitäter.");
+    if (!Spieler[playerid][pDuty]) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht im Dienst.");
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Sfinden [SpielerID/Name]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if(Spieler[pID][pTot] == 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht tot.");
@@ -21214,6 +21217,7 @@ CMD:sheilen(playerid, params[])
 {
     new pID, string[128];
     if(!(Spieler[playerid][pFraktion] == 3))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Sanitäter.");
+    if (!Spieler[playerid][pDuty]) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht im Dienst.");
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Sheilen [SpielerID/Name]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if(pID == playerid)return SendClientMessage(playerid, COLOR_RED, "Du kannst dich selber nicht heilen.");
@@ -42552,7 +42556,7 @@ public PayDay()
             Spieler[playerid][pHours]++;
             //House Rent etc.
             if( Spieler[playerid][pHours] == 2 ) {
-                SendClientMessage(playerid,COLOR_YELLOW,"Besucherzeit abgelaufen! Du trägst nun keinen Koffer mehr mit dir");
+                SendClientMessage(playerid,COLOR_YELLOW,"Besucherzeit abgelaufen! Du trägst nun keinen Koffer mehr mit dir.");
                 RemovePlayerAttachedObject(playerid,2);
             }
             new check;
@@ -49282,7 +49286,7 @@ COMMAND:werbung(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Du musst Level 5 sein um eine Werbung zu schreiben!");
     }
     if( g_unixWerbung > tick ) {
-        return SendClientMessage(playerid, COLOR_RED, "Die Letzte Werbung ist noch keine 3 Minuten alt.");
+        return SendClientMessage(playerid, COLOR_RED, "Die letzte Werbung ist noch keine 3 Minuten alt.");
     }
     ShowPlayerDialog(playerid,DIALOG_WERBUNG,DIALOG_STYLE_INPUT,"Werbung Kaufen","Du kannst eine Werbung kaufen.\nPro Zeichen fallen 200$ Kosten an","Absenden","Abbrechen");
     return 1;
@@ -49301,7 +49305,7 @@ COMMAND:hwerbung(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Du musst Level 3 sein um eine Werbung zu schreiben!");
     }
     if( g_unixWerbungHitman > tick ) {
-        return SendClientMessage(playerid, COLOR_RED, "Die Letzte Werbung ist noch keine 8 Minuten alt.");
+        return SendClientMessage(playerid, COLOR_RED, "Die letzte H-Werbung ist noch keine 8 Minuten alt.");
     }
     ShowPlayerDialog(playerid,DIALOG_HWERBUNG,DIALOG_STYLE_INPUT,"Werbung Kaufen","Du kannst eine Werbung kaufen.\nPro Zeichen fallen 100$ Kosten an","Absenden","Abbrechen");
     return 1;
@@ -49322,6 +49326,11 @@ stock GetOnlineExekutive(playerid) {
         }
     }
     return c;
+}
+
+stock IsMedicOnDuty() {
+    for (new i; i <= GetPlayerPoolSize(); i++) if (Spieler[i][pFraktion] == 3 && Spieler[i][pDuty]) return true;
+    return false;
 }
 
 stock GetOnlineMedic(playerid) {
