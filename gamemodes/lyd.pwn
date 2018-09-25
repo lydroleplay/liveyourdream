@@ -2366,7 +2366,7 @@ enum {
 
 #define     MAX_HOUSES          703
 #define     MAX_HOTELS          30
-#define     MAX_BIZES           60
+#define     MAX_BIZES           62
 #define     MAX_TANKEN          30
 #define     MAX_FISCHE_PRO_PLATZ    20
 #define     MAX_APLATZ          10
@@ -43929,6 +43929,7 @@ CMD:event(playerid, params[])
             if(IsPlayerConnected(i) && gPlayerLogged[i] == 1)
             {
                 Spieler[i][pLevel] += entry;
+                SetPlayerScore(playerid, Spieler[i][pLevel]);
             }
         }
         format(string, sizeof(string), COLOR_HEX_WHITE"Alle Spieler haben von "COLOR_HEX_ORANGE"%s "COLOR_HEX_GREEN"+%d "COLOR_HEX_WHITE"Level-Up erhalten.", GetName(playerid), entry);
