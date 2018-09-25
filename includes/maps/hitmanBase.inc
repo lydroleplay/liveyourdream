@@ -54,21 +54,21 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Vehicles
-    vehicle_hitmanBase[0] = AddStaticVehicle(473, -661.7864, 876.6932, -0.1803, 225.1089, -1, -1); // hitman
-    vehicle_hitmanBase[1] = AddStaticVehicle(411, -706.7307, 968.9254, 12.1815, 221.3496, -1, -1); // hitman
-    vehicle_hitmanBase[2] = AddStaticVehicle(451, -697.4601, 969.0258, 12.0166, 222.7610, -1, -1); // hitman
-    vehicle_hitmanBase[3] = AddStaticVehicle(411, -702.3138, 969.1326, 12.1175, 225.6084, -1, -1); // hitman
-    vehicle_hitmanBase[4] = AddStaticVehicle(475, -692.5334, 968.9919, 12.0395, 221.4761, -1, -1); // hitman
-    vehicle_hitmanBase[5] = AddStaticVehicle(560, -671.3557, 968.9650, 11.8342, 134.5210, -1, -1); // hitman
-    vehicle_hitmanBase[6] = AddStaticVehicle(429, -675.9988, 969.0268, 11.8136, 131.0158, -1, -1); // hitman
-    vehicle_hitmanBase[7] = AddStaticVehicle(480, -681.2371, 969.0425, 11.9076, 126.3826, -1, -1); // hitman
-    vehicle_hitmanBase[8] = AddStaticVehicle(560, -666.7589, 968.7836, 11.8359, 138.1186, -1, -1); // hitman
-    vehicle_hitmanBase[9] = AddStaticVehicle(487, -678.1942, 982.1398, 12.5393, 142.0905, -1, -1); // hitman
-    vehicle_hitmanBase[10] = AddStaticVehicle(487, -692.9394, 981.9201, 12.5917, 128.8131, -1, -1); // hitman
-    vehicle_hitmanBase[11] = AddStaticVehicle(522, -673.2268, 944.0676, 11.7050, 33.1575, -1, -1); // hitman
-    vehicle_hitmanBase[12] = AddStaticVehicle(522, -671.4668, 944.9990, 11.6994, 31.5224, -1, -1); // hitman
-    vehicle_hitmanBase[13] = AddStaticVehicle(522, -669.8409, 945.7893, 11.7045, 31.1202, -1, -1); // hitman
-    vehicle_hitmanBase[14] = AddStaticVehicle(482, -700.3405, 945.9280, 12.4658, 359.9060, -1, -1); // hitman
+    vehicle_hitmanBase[0] = AddStaticVehicleEx(473, -661.7864, 876.6932, -0.1803, 225.1089, -1, -1, -1); // hitman
+    vehicle_hitmanBase[1] = AddStaticVehicleEx(411, -706.7307, 968.9254, 12.1815, 221.3496, -1, -1, -1); // hitman
+    vehicle_hitmanBase[2] = AddStaticVehicleEx(451, -697.4601, 969.0258, 12.0166, 222.7610, -1, -1, -1); // hitman
+    vehicle_hitmanBase[3] = AddStaticVehicleEx(411, -702.3138, 969.1326, 12.1175, 225.6084, -1, -1, -1); // hitman
+    vehicle_hitmanBase[4] = AddStaticVehicleEx(475, -692.5334, 968.9919, 12.0395, 221.4761, -1, -1, -1); // hitman
+    vehicle_hitmanBase[5] = AddStaticVehicleEx(560, -671.3557, 968.9650, 11.8342, 134.5210, -1, -1, -1); // hitman
+    vehicle_hitmanBase[6] = AddStaticVehicleEx(429, -675.9988, 969.0268, 11.8136, 131.0158, -1, -1, -1); // hitman
+    vehicle_hitmanBase[7] = AddStaticVehicleEx(480, -681.2371, 969.0425, 11.9076, 126.3826, -1, -1, -1); // hitman
+    vehicle_hitmanBase[8] = AddStaticVehicleEx(560, -666.7589, 968.7836, 11.8359, 138.1186, -1, -1, -1); // hitman
+    vehicle_hitmanBase[9] = AddStaticVehicleEx(487, -678.1942, 982.1398, 12.5393, 142.0905, -1, -1, -1); // hitman
+    vehicle_hitmanBase[10] = AddStaticVehicleEx(487, -692.9394, 981.9201, 12.5917, 128.8131, -1, -1, -1); // hitman
+    vehicle_hitmanBase[11] = AddStaticVehicleEx(522, -673.2268, 944.0676, 11.7050, 33.1575, -1, -1, -1); // hitman
+    vehicle_hitmanBase[12] = AddStaticVehicleEx(522, -671.4668, 944.9990, 11.6994, 31.5224, -1, -1, -1); // hitman
+    vehicle_hitmanBase[13] = AddStaticVehicleEx(522, -669.8409, 945.7893, 11.7045, 31.1202, -1, -1, -1); // hitman
+    vehicle_hitmanBase[14] = AddStaticVehicleEx(482, -700.3405, 945.9280, 12.4658, 359.9060, -1, -1, -1); // hitman
 
     // Pickups
     pickup_hitmanBase[0] = CreateDynamicPickup(1239,  1, HITMANBASE_AD_POINT, VW_MAIN, MAPS_HITMANBASE_INTERIOR); // Hitman ad point
