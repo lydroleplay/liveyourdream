@@ -24,6 +24,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+	// Map Icon
+    CreateDynamicMapIcon(CHEAPCARDEALERSHIPLV_COORDS, 55, 0, VW_MAIN, MAPS_CHEAPCARDEALERSHIPLV_INTERIOR);
+    
     // 3DTextLabels
     text3D_cheapCarDealership_lv[0] = _:CreateDynamic3DTextLabel("Autohaus Günstig - Las Venturas\n" COLOR_HEX_WHITE "Steige in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_BLUE, CHEAPCARDEALERSHIPLV_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLV_INTERIOR);
 

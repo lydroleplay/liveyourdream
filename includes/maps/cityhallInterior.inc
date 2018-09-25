@@ -38,7 +38,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_EXIT_COORDS)) { // Exit
             if(pCheckpoint[playerid] == CP_TUTORIAL3) {
 				SetPlayerCheckpointEx(playerid, CITYHALL_INTERIOR_STADTHALLE, 5.0, CP_TUTORIAL4);
-				SendClientMessage(playerid, COLOR_GREEN, "Gehe nun zum Informations-Punkt und beantrage einen Personalausweis und suche dir ein Job aus.");
+				SendClientMessage(playerid, COLOR_GREEN, "Gehe nun zum Informationspunkt, beantrage einen Personalausweis und suche dir einen Job aus.");
 			}
             SetPlayerFacingAngle(playerid, CITYHALL_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
@@ -108,7 +108,7 @@ hook OnGameModeInit() {
 	// 3DTextLabels
     text3D_cityhallInterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Stadthalle\n" COLOR_HEX_WHITE "Tippe /Stadthalle", COLOR_WHITE, CITYHALL_INTERIOR_STADTHALLE, 25.0, .testlos = 1, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // /stadthalle point
     text3D_cityhallInterior[1] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Zollamt Schalter\n" COLOR_HEX_WHITE "Tippe /Zollpass", COLOR_WHITE, CITYHALL_INTERIOR_DESK1, 15.0, .testlos = 1, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Desk 1 (Zollamt Schalter)
-    text3D_cityhallInterior[2] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Rechtsschutzversicherung\n" COLOR_HEX_WHITE "62 Tage - Preis: 87.000$\n" COLOR_HEX_ORANGE "Tippe /Rechtsschutz", COLOR_WHITE, CITYHALL_INTERIOR_DESK2, 15.0, .testlos = 1, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Desk 2 (Rechtsschutzversicherung)
+    text3D_cityhallInterior[2] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Rechtsschutzversicherung\n" COLOR_HEX_WHITE "62 Tage - Preis: $87.000\n" COLOR_HEX_ORANGE "Tippe /Rechtsschutz", COLOR_WHITE, CITYHALL_INTERIOR_DESK2, 15.0, .testlos = 1, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Desk 2 (Rechtsschutzversicherung)
 
     // Actors
     actor_cityhallInterior[0] = CreateDynamicActor(141, 918.6574, -1461.5676, 2754.3459, 180.0000, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Maindesk

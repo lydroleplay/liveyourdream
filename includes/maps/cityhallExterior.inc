@@ -136,7 +136,7 @@ hook OnGameModeInit() {
     pickup_cityhallExterior[1] = CreateDynamicPickup(19197, 1, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_CITYHALLEXTERIOR_INTERIOR); // Registration office
 
 	// 3DTextLabels
-    text3D_cityhallExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "-> San Andreas Stadtamt <-\n" COLOR_HEX_WHITE "Arbeitsamt, Meldeamt,\nVisum-/Passbehörde\nGebäude betreten mit 'Enter'", COLOR_WHITE, CITYHALL_INTERIOR_ENTER_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall
+    text3D_cityhallExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "-> San Andreas Stadtamt <-\n" COLOR_HEX_WHITE "Arbeitsamt, Meldeamt, Passbehörde\nGebäude betreten mit 'Enter'", COLOR_WHITE, CITYHALL_INTERIOR_ENTER_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall
     text3D_cityhallExterior[1] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "-> Kraftfahrtbundesamt - Zulassungsstelle <-\n" COLOR_HEX_WHITE "Gebäude betreten mit 'Enter'", COLOR_WHITE, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Registration office
     text3D_cityhallExterior[2] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Illegaler Jobvermittler - Jeff\n" COLOR_HEX_WHITE "Tippe /Illegalejobs", COLOR_WHITE, JEFF_COORDS, 20.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Jeff
 

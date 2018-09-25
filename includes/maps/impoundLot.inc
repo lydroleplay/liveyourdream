@@ -29,9 +29,10 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 5818, 954.6875, -1305.7734, 30.1406, 0.25);
     
     // Hangars on the old base
-    RemoveBuildingForPlayer(playerid, 3776, 831.960, -1191.140, 25.039, 0.250);
-    RemoveBuildingForPlayer(playerid, 3776, 868.132, -1191.140, 25.039, 0.250);
-    RemoveBuildingForPlayer(playerid, 3776, 902.335, -1191.140, 25.039, 0.250);
+    RemoveBuildingForPlayer(playerid, 3776, 831.960, -1191.140, 25.039, 300.0);
+    RemoveBuildingForPlayer(playerid, 3777, 831.960, -1191.140, 25.039, 300.0);
+    // RemoveBuildingForPlayer(playerid, 3776, 868.132, -1191.140, 25.039, 0.250);
+    // RemoveBuildingForPlayer(playerid, 3776, 902.335, -1191.140, 25.039, 0.250);
 }
 
 hook OnGameModeInit() {
@@ -84,4 +85,8 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(object_impoundLot[20], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_impoundLot[21] = CreateDynamicObject(8661, 954.7427, -1367.0491, 12.5496, 0.0000, 0.0000, -0.0798, VW_MAIN, MAPS_IMPOUNDLOT_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //gnhtelgrnd_lvs
     SetDynamicObjectMaterial(object_impoundLot[21], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+
+    // Old Poo Base
+    // object_impoundLot[22] = CreateDynamicObject(8841, 875.880187, -1180.036376, 18.981000, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_IMPOUNDLOT_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE);
+    // object_impoundLot[23] = CreateDynamicObject(8841, 832.003112, -1180.036376, 18.981000, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_IMPOUNDLOT_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE);
 }

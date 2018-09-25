@@ -32,6 +32,9 @@ hook OnPlayerConnect(playerid) {
 }
 
 hook OnGameModeInit() {
+    // Map Icons
+    CreateDynamicMapIcon(SUBWAY_DRIVEIN_COORDS, 36, 0, VW_MAIN, MAPS_SUBWAYEXTERIOR_INTERIOR);
+
 	// Pickups
 	pickup_subway[0] = CreateDynamicPickup(2769, 1, SUBWAY_DRIVEIN_COORDS, VW_MAIN, MAPS_SUBWAYEXTERIOR_INTERIOR); // Drivein
 

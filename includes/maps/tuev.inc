@@ -26,6 +26,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Map Icons
+    CreateDynamicMapIcon(TUEV_INFO_POINT, 27, 0, VW_MAIN, MAPS_TUEV_INTERIOR);
+    CreateDynamicMapIcon(TUEV_AIRCRAFT_POINT, 27, 0, VW_MAIN, MAPS_TUEV_INTERIOR);
+    
     // Pickups    
     pickup_tuev[0] = CreateDynamicPickup(19627, 1, TUEV_AUTO_POINT, VW_MAIN, MAPS_TUEV_INTERIOR); // TÜV für Auto und MotorrÃ¤der
 	pickup_tuev[1] = CreateDynamicPickup(19627, 1, TUEV_AIRCRAFT_POINT, VW_MAIN, MAPS_TUEV_INTERIOR); // TÜV für Flugzeuge

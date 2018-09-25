@@ -24,6 +24,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Map Icon
+    CreateDynamicMapIcon(LUXURYCARDEALERSHIP_COORDS, 55, 0, VW_MAIN, MAPS_LUXURYCARDEALERSHIP_INTERIOR);
+
     // 3DTextLabels
     text3D_luxuryCarDealership[0] = _:CreateDynamic3DTextLabel("Autohaus - Luxus\n" COLOR_HEX_WHITE "Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_BLUE, LUXURYCARDEALERSHIP_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_LUXURYCARDEALERSHIP_INTERIOR);
 

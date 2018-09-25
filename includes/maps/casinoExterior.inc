@@ -9,10 +9,8 @@ static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
 // Casino points
-// #define CASINO_INTERIOR_ENTER_COORDS     1901.9264, 742.8745, 10.8198
-// #define CASINO_INTERIOR_EXIT_COORDS          264.3734, 191.1904, 1008.1719
-// #define CASINO_INTERIOR_ENTER_FACING     180.0
-// #define CASINO_INTERIOR_EXIT_FACING          90.0
+#define CASINOEXTERIOR_INFO_POINT     1498.3309, -1585.8683, 13.5469
+
 
 // Map variables
 new object_casinoExterior[36];
@@ -28,9 +26,12 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     return 1;
 }
 
-hook OnGameModeInit() {    
+hook OnGameModeInit() {
+    // Map Icons
+    CreateDynamicMapIcon(CASINOEXTERIOR_INFO_POINT, 12, 0, VW_MAIN, MAPS_CASINOEXTERIOR_INTERIOR);
+
     // 3DTextLabels
-    text3D_casinoExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "-> LS - GROßES CASINO <-", COLOR_WHITE, 1498.3309, -1585.8683, 13.5469, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CASINOEXTERIOR_INTERIOR); // Casino Info
+    text3D_casinoExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "-> LS - GROßES CASINO <-", COLOR_WHITE, CASINOEXTERIOR_INFO_POINT, 20.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CASINOEXTERIOR_INTERIOR); // Casino Info
 
     // Objects
     object_casinoExterior[0] = CreateDynamicObject(7231, 1498.83, -1577.36, 35.61, 0.00, 0.00, 0.00, VW_MAIN, MAPS_CASINOEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);

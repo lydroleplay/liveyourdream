@@ -8,7 +8,7 @@ static Float:STREAMDISTANCE = 100.0;
 static Float:DRAWDISTANCE   = 80.0;
 
 // Map variables
-new object_atm[109];
+new object_atm[101];
 
 hook OnPlayerConnect(playerid) {
     // ---
@@ -120,4 +120,5 @@ hook OnGameModeInit() {
     object_atm[97] = CreateDynamicObject(2942, 1484.833862, -1805.827637, 14.740836, 0.000000, 0.000000, -178.600006, VW_MAIN, MAPS_ATM_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //object(kmb_atm1) LS,SF,LV
     object_atm[98] = CreateDynamicObject(2942, 959.964539, -1562.702515, 13.211584, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_ATM_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //object(kmb_atm1) LS,SF,LV
     object_atm[99] = CreateDynamicObject(2942, 1004.599915, -1131.191284, 23.465918, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_ATM_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //object(kmb_atm1) LS,SF,LV
+    object_atm[100] = CreateDynamicObject(2942, 921.592407, -1207.274780, 16.619688, 0.000000, 0.000000, -90.000000, VW_MAIN, MAPS_ATM_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //object(kmb_atm1) LS,SF,LV
 }

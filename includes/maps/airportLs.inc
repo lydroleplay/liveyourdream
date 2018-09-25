@@ -29,7 +29,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Map Icons
-    CreateDynamicMapIcon(AIRPORTLS_PLANE_DEALERSHIP_POINT, 55, 0, VW_MAIN, MAPS_AIRPORTLS_INTERIOR);
+    CreateDynamicMapIcon(AIRPORTLS_PLANE_DEALERSHIP_POINT, 5, 0, VW_MAIN, MAPS_AIRPORTLS_INTERIOR);
 
 	// Pickups
 	pickup_airportLs[0] = CreateDynamicPickup(1275, 1, AIRPORTLS_JOBSKIN_POINT, VW_MAIN, MAPS_AIRPORTLS_INTERIOR); // Job skin

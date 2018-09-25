@@ -23,8 +23,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Map Icon
+    CreateDynamicMapIcon(BOATDEALERSHIPSF_COORDS, 9, 0, VW_MAIN, MAPS_BOATDEALERSHIPSF_INTERIOR);
+
     // 3DTextLabels
-    text3D_boatDealershipSf[0] = _:CreateDynamic3DTextLabel("Bootshaus - San Fierro\n" COLOR_HEX_WHITE "Steig in ein beliebiges Boot deiner Wahl ein!", COLOR_BLUE, BOATDEALERSHIPSF_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BOATDEALERSHIPSF_INTERIOR);
+    text3D_boatDealershipSf[0] = _:CreateDynamic3DTextLabel("Bootshaus - San Fierro\n" COLOR_HEX_WHITE "Steige in ein beliebiges Boot deiner Wahl ein!", COLOR_BLUE, BOATDEALERSHIPSF_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BOATDEALERSHIPSF_INTERIOR);
 
 	// Objects
 	object_boatDealershipSf[0] = CreateDynamicObject(3406, -1474.4681, 685.2744, -1.7446, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_BOATDEALERSHIPSF_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //cxref_woodjetty

@@ -3043,16 +3043,16 @@ new
                 LS - Stadthalle\n\
                 LS - Fahrschule\n\
                 LS - Strand\n\
-                LS - Victom Kleidergeschäft\n\
+                LS - Victim Kleidergeschäft\n\
                 LS - Neulingsspawn\n\
                 LS - Standesamt\n\
                 LS - Busbahnhof",
     sBusLinie2[]= "Linie 2:\n\
-                LS - Burger Binco\n\
+                LS - ZIP Kleidungshop\n\
                 LS - Zentralbank\n\
                 LS - 24/7 Shop\n\
-                LS - Burger Shot North\n\
-                LS - Ordnungsamt\n\
+                LS - Subway\n\
+                LS - Verwahrplatz\n\
                 LS - Einkaufszentrum\n\
                 LS - Busbahnhof",
     sBusLinie3[]="Linie 3:\n\
@@ -3060,7 +3060,7 @@ new
                 LS - Flughafen/Airport\n\
                 LS - Hafen\n\
                 LS - Binco Kleidergeschäft\n\
-                LS - Krankenhaus\n\
+                LS - Altes Krankenhaus\n\
                 LS - Alhambra (Disco)\n\
                 LS - Busbahnhof",
     sBusLinie4[]="Linie 4:\n\
@@ -3418,7 +3418,7 @@ enum ahSpawn
 new const Autospawns[11][ahSpawn] = {
     {1795.1863,-1884.0706,13.5724,264.0573}, // Los Santos - Intercars
     {1131.9783,-1675.7164,13.6739,268.5765}, // Los Santos - Luxusautohaus
-    { 2535.8975, -1520.9816, 23.5721 }, // Los Santos - Motorradhaus // BIKEDEALERSHIP_VEHICLE_SPAWN // TODO: can't use define here
+    {2535.8975, -1520.9816, 23.5721}, // Los Santos - Motorradhaus // BIKEDEALERSHIP_VEHICLE_SPAWN // TODO: can't use define here
     {1849.2611,-2545.6445,13.5469,90.8000}, // Los Santos Air Shop
     {946.9811,-1933.6057,-0.3639,92.2507}, //Bootshaus
     {679.9109,-1191.3190,16.2637,127.9095}, //Fahrradhaus
@@ -3648,12 +3648,11 @@ new Float:ATM[][] = {
 {1004.599915, -1131.191284, 23.465918}, //Clubvilla LS
 {1225.32947,-1811.68408,16.24608},
 {1420.52087, -980.45911, 1639.41125},
-{881.15, -1198.46, 16.61},
+{921.592407, -1207.274780, 16.619688},
 {1790.9886, -1303.7802, 119.8556},
 {1484.833862, -1805.827637, 14.740836},
 {59.964539, -1562.702515, 13.211584}
 };
-
 
 enum e_FahrpruefungCP {
     Float:F_fX,
@@ -4530,6 +4529,27 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\bankInteriorLv>
 #include <maps\amusementPark>
 
+enum E_VEHICLE_DEALERSHIP {
+    VEHICLE_DEALERSHIP_NAME[50],
+    Float:VEHICLE_DEALERSHIP_COORD_X,
+    Float:VEHICLE_DEALERSHIP_COORD_Y,
+    Float:VEHICLE_DEALERSHIP_COORD_Z
+}
+
+new const g_vehicleDealership[][E_VEHICLE_DEALERSHIP] = {
+    {"Autohaus - Günstig am Bahnhof in Los Santos", CHEAPCARDEALERSHIPLS_COORDS},
+    {"Autohaus - Günstig nahe der Ballas Base", CHEAPCARDEALERSHIPLS2_COORDS},
+    {"Autohaus - Günstig in Las Venturas", CHEAPCARDEALERSHIPLV_COORDS},
+    {"Fahrradladen in Los Santos", BICYCLEDEALERSHIP_COORDS},
+    {"Motorradhandel in Los Santos", BIKEDEALERSHIP_COORDS},
+    {"Luxus-Autohaus in Los Santos", LUXURYCARDEALERSHIP_COORDS},
+    {"Oldtimer Autohaus in Los Santos", OLDTIMERDEALERSHIP_COORDS},
+    {"Flugzeughandel in Los Santos", AIRPORTLS_PLANE_DEALERSHIP_POINT},
+    {"Flugzeughandel in Las Venturas", 1310.9393, 1342.6803, 10.8203},
+    {"Bootshandel in Los Santos", BOATDEALERSHIPLS_COORDS},
+    {"Bootshandel in San Fierro", BOATDEALERSHIPSF_COORDS}
+};
+
 enum e_KampfShop {
 	Float:KS_fX,
 	Float:KS_fY,
@@ -4567,43 +4587,46 @@ enum rInfo
     Float:sZ,
     sObject,
 };
+
 #define MAX_ROADBLOCKS 100
 new Roadblocks[MAX_ROADBLOCKS][rInfo];
 
 forward Lotto(number);
 public Lotto(number)
 {
-    new string[128];
-    if (Lottostand == 0) return SendClientMessageToAll(COLOR_RED, "Der Jackpot ist leer! Die Lottoziehung findet daher nicht statt.");
-    format(string, sizeof(string), "* Der heutige Lotto-Jackpot beträgt: $%s - Die Gewinnummer lautet: %d.", AddDelimiters(Lottostand), number);
-    SendClientMessageToAll(COLOR_YELLOW, string);
+    new message[128];
+    if (Lottostand == 0) return SendClientMessageToAll(COLOR_RED, "** [LOTTO] Der Jackpot ist leer! Die Lottoziehung findet daher nicht statt. **");
+    format(message, sizeof(message), "** [LOTTO] >> Der heutige Lotto-Jackpot beträgt: $%s - Die Gewinnummer lautet: %d. << **", AddDelimiters(Lottostand), number);
+    SendClientMessageToAll(COLOR_YELLOW, message);
 
-    new siegerzahl = 0, poolSize = GetPlayerPoolSize();
+    new winnerCount = 0, poolSize = GetPlayerPoolSize(), bool:winners[MAX_PLAYERS];
     for (new b; b <= poolSize; b++) {
         if (!gPlayerLogged[b]) continue;
-        if (Spieler[b][pLottoNr] == number) siegerzahl++;
-    }
-
-    if (siegerzahl == 0) return SendClientMessageToAll(COLOR_ORANGE, "Leider konnte in dieser Lottoziehung keiner den Jackpot knacken.");
-
-    if (siegerzahl > 1) {
-        format(string, sizeof(string), "*[LOTTO-JACKPOT] >> Da es %d Sieger gibt erhält jeder Sieger nur 1/%d des Jackpots! <<*", siegerzahl, siegerzahl);
-        SendClientMessageToAll(COLOR_GREEN, string);
-    }
-
-    new jackPot = Lottostand/siegerzahl, jackPotString[32];
-    jackPotString = AddDelimiters(jackPot);
-    for (new i = 0; i <= poolSize; i++) {
-        if (!gPlayerLogged[i]) continue;
-        if (Spieler[i][pLottoNr] == number) {
-            format(string, sizeof(string), "*[LOTTO-JACKPOT] >> %s mit der Nummer %d den heutigen Lotto-Jackpot in Höhe von $%s gewonnen! <<*", GetName(i), number, jackPotString);
-            SendClientMessageToAll(COLOR_GREEN, string);
-            format(string, sizeof(string), "Du erhältst deinen Lottogewinn in Höhe von: $%s", jackPotString);
-            SendClientMessage(i, COLOR_GREEN, string);
-            GivePlayerCash(i, jackPot);
+        if (Spieler[b][pLottoNr] == number) {
+            winnerCount++; 
+            winners[b] = true;
         }
 
-        Spieler[i][pLottoNr] = 0;
+        Spieler[b][pLottoNr] = 0;
+    }
+
+    if (winnerCount == 0) return SendClientMessageToAll(COLOR_ORANGE, "** [LOTTO] >> Leider konnte in dieser Lottoziehung keiner den Jackpot knacken. << **");
+
+    if (winnerCount > 1) {
+        format(message, sizeof(message), "** [LOTTO] >> Da es %d Sieger gibt erhält jeder Sieger nur 1/%d des Jackpots! << **", winnerCount, winnerCount    );
+        SendClientMessageToAll(COLOR_GREEN, message);
+    }
+
+    new jackPot = Lottostand/winnerCount, jackPotString[32];
+    jackPotString = AddDelimiters(jackPot);
+    for (new i = 0; i < MAX_PLAYERS; i++) {
+        if (!winners[i]) continue;
+        
+        format(message, sizeof(message), "** [LOTTO] >> %s hat mit der Nummer %d den heutigen Lotto-Jackpot in Höhe von $%s gewonnen! << **", GetName(i), number, jackPotString);
+        SendClientMessageToAll(COLOR_GREEN, message);
+        format(message, sizeof(message), "[LOTTO] {FFFFFF}Du erhältst deinen Lottogewinn in Höhe von: $%s.", jackPotString);
+        SendClientMessage(i, COLOR_GREEN, message);
+        GivePlayerCash(i, jackPot);
     }
 
     Lottostand = 0;
@@ -6086,7 +6109,7 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Waffenshop\n"COLOR_HEX_WHITE"Tippe /Clubwaffen", COLOR_WHITE, -2656.1047,1416.0248,906.2734, 8.0); // in Las Venturas
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Club Kueche\n"COLOR_HEX_WHITE"Tippe /Clubheal", COLOR_WHITE, -2653.5183,1413.5085,906.2734, 8.0); //in Las Venturas
    	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"KFZ-Versicherung\n"COLOR_HEX_WHITE"Keine Reparaturkosten für 7 Tage! Preis: $10.000\nTippe /Kfzversicherung", COLOR_WHITE, 2309.3276,-8.2968,26.7422, 25.0, .worldid = VW_REGISTRATIONOFFICE);
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steig in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Flugzeugverkauf - Las Venturas\n"COLOR_HEX_WHITE"Steige in ein beliebiges Flugzeug deiner Wahl ein!", COLOR_WHITE, 1310.9393,1342.6803,10.8203, 30.0);//Flugzeugverkauf LV
 
 	//Verkaus 3D Infotext 2
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kleidungs Shop\n"COLOR_HEX_WHITE"Tippe /Kleidung", COLOR_WHITE, 206.3740,-8.2494,1001.2109, 11.0, .worldid = 36);//Victim LS (Strand)
@@ -6404,10 +6427,8 @@ public OnPlayerConnect(playerid)
 	//ResetPlayerMoney(playerid);
 	// TODO: Peek anpassen.
 	SetPlayerMapIcon(playerid, 1, 1329.4666,-1559.4634,13.5469, 31, 0, 0);//Hotel
-	SetPlayerMapIcon(playerid, 2, 1461.5116,-1019.0845,24.5987, 52, 0, 0);//Bank
-	SetPlayerMapIcon(playerid,  6, 550.6537,-1264.4824,16.9693, 55, 0, 0);//Grottis
+    SetPlayerMapIcon(playerid, 2, 1154.4122, -1457.7490, 15.7968, 25, 0, 0); // 247 mall
 	SetPlayerMapIcon(playerid, 7, 1238.0809,-1814.2310,13.4292, 19, 0, 0);//Fahrschule
-
     SetPlayerMapIcon(playerid, 13, 1038.5304,-1339.6097,13.7266, 17, 0, 0);//Donatladen
     SetPlayerMapIcon(playerid, 14, 1833.2742,-1681.8307,13.4802, 49, 0, 0);//Bar
     SetPlayerMapIcon(playerid, 15, 1006.6136,-942.5633,42.0423, 42, 0, 0);//Tankstelle
@@ -6419,21 +6440,19 @@ public OnPlayerConnect(playerid)
     SetPlayerMapIcon(playerid, 21, -99.1346,-1166.1656,2.5805, 42, 0, 0);//Tankstelle
     SetPlayerMapIcon(playerid, 22, -1676.5607,412.4557,7.1797, 42, 0, 0);//Tankstelle
     SetPlayerMapIcon(playerid, 23, 2127.5486,2378.9626,10.8203, 48, 0, 0);//Clubvilla in LV
-    SetPlayerMapIcon(playerid, 24, 925.6447,-1352.1470,13.3761, 14, 0, 0);//Cluckin' Nord
     SetPlayerMapIcon(playerid, 25, 2422.1592,-1508.4604,23.9922, 14, 0, 0);//Cluckin' Süd
     SetPlayerMapIcon(playerid, 26, 1350.0214,-1754.2931,13.3554, 25, 0, 0);//247 lspd
     SetPlayerMapIcon(playerid, 27, 1316.0682,-906.5001,38.3864, 25, 0, 0);//247 bsn
     SetPlayerMapIcon(playerid, 28, 2098.0144,-1806.8236,13.5541, 29, 0, 0);//pizzaria
     SetPlayerMapIcon(playerid, 29, 1457.8679,-1140.2852,24.0735, 45, 0, 0);//Skin Shop Bank
     SetPlayerMapIcon(playerid, 30, 2244.6521,-1664.0035,15.4766, 45, 0, 0);//Skin Shop Grove
-    SetPlayerMapIcon(playerid, 31, 912.2803,-999.1210,38.0857, 36, 0, 0);//normale Bank
     SetPlayerMapIcon(playerid, 33, 817.6655,-1618.9307,13.7034, 10, 0, 0);//süd bsn
     SetPlayerMapIcon(playerid, 35, 1411.5352,-1699.5714,13.5395, 46, 0, 0);//Werbung in LS
     SetPlayerMapIcon(playerid, 36, 2400.5369,-1981.5837,13.5469, 18, 0, 0);//Nähe Ballasbase Ammunastion
     SetPlayerMapIcon(playerid, 39, 1380.9908,457.3878,19.9316, 42, 0, 0);//Tankstelle
 	SetPlayerMapIcon(playerid, 40, 2423.8147,-1742.4226,13.1120, 25, 0, 0);//247 grove street
  	SetPlayerMapIcon(playerid, 41, 1257.1144,-1339.0963,12.9213, 8, 0, 0);//Busbahnhof
- 	SetPlayerMapIcon(playerid,  43, 2008.1722,1169.3364,10.8203, 46, 0, 0);//Werbung in LV
+ 	SetPlayerMapIcon(playerid, 43, 2008.1722,1169.3364,10.8203, 46, 0, 0);//Werbung in LV
 
 
     // 36 für /DFINDE reserviert
@@ -7884,7 +7903,7 @@ CMD:suchatm(playerid)
         if ((distance = GetDistance(x, y, z, ATM[i][0], ATM[i][1], ATM[i][2])) < smallestDistance) index = i, smallestDistance = distance;
 
     SetPlayerCheckpointEx(playerid, ATM[index][0], ATM[index][1], ATM[index][2], 2.0, CP_NAVI1);
-    return SendClientMessage(playerid, COLOR_GREEN, "[INFO] {FFFFFF}Der nächste Bankautomat wurde dir auf der rot Karte markiert.");
+    return SendClientMessage(playerid, COLOR_GREEN, "[INFO] {FFFFFF}Der nächste Bankautomat wurde dir auf der Rot Karte markiert.");
 }
 
 CMD:flugzeugrepair(playerid)
@@ -11869,12 +11888,12 @@ CMD:startlotto(playerid, params[])
     new entry, string[128];
     if(sscanf(params, "i", entry))
     {
-        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Startlotto [Nummer]");
+        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /Startlotto [Nummer]");
         return 1;
     }
     if(Spieler[playerid][pAdmin] < 5)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     if(entry < 1 || entry > 100)return SendClientMessage(playerid, COLOR_ORANGE, "Die Nummer sollte zwischen 1 und 100 sein.");
-    format(string, sizeof(string), "* %s hat die Losziehung Manuell gestartet. Nummer: %d", GetName(playerid), entry);
+    format(string, sizeof(string), "** [LOTTO] >> %s hat die Losziehung manuell gestartet. Nummer: %d << **", GetName(playerid), entry);
     SendClientMessageToAll(COLOR_YELLOW, string);
     Lotto(entry);
     return 1;
@@ -11886,12 +11905,12 @@ CMD:lotto(playerid, params[])
     if(sscanf(params, "i", entry))
     {
         SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Lotto [Nummer] - Ein Ticket kostet $1.200");
-        format(string, sizeof(string), "* Lotto-Stand: $%s", AddDelimiters(Lottostand));
+        format(string, sizeof(string), "** Lotto-Stand: $%s", AddDelimiters(Lottostand));
         SendClientMessage(playerid, COLOR_GREY, string);
         return 1;
     }
     if( Spieler[playerid][pLevel] < 3 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst Level 3 sein, um bei der Lottoziehung teilzunehmen.");
+        return SendClientMessage(playerid, COLOR_RED, "Du musst Level 3 sein, um bei der Lottoziehung teilnehmen zu können.");
     }
     if(Spieler[playerid][pLottoNr] > 0)return SendClientMessage(playerid, COLOR_RED, "Du hast bereits ein Lottoticket.");
     if(GetPlayerMoney(playerid) < 1200)return SendClientMessage(playerid, COLOR_ORANGE, "Ein Lottoticket kostet dich 1.200$.");
@@ -11915,7 +11934,7 @@ CMD:supermarkt(playerid)
         if(IsPlayerInRangeOfPoint(playerid, 2.0, 2.2396,-29.0123,1003.5494))
         {
 
-            ShowPlayerDialog(playerid, DIALOG_MARKT, DIALOG_STYLE_LIST, "Super Markt", "Telefonbuch (400$)\n5 Kekse (150$)\n10 Zigaretten (225$)\nBrecheisen (3.500$)\nHelm (2.000$)\nMP3-Player (2.500$)\nKoffer (1.500$)\nRadarfallen-Warnung (15.000$)\nFallschirm (1.200$)", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_MARKT, DIALOG_STYLE_LIST, "Super Markt", "Telefonbuch ($400)\n5 Kekse ($150)\n10 Zigaretten ($225)\nBrecheisen ($3.500)\nHelm ($2.000)\nMP3-Player ($2.500)\nKoffer ($1.500)\nRadarfallen-Warnung ($15.000)\nFallschirm ($1.200)", "Kaufen", "Abbrechen");
             return 1;
         }
         else
@@ -13680,11 +13699,11 @@ CMD:lagerpunkt(playerid, params[]) {
     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
     if (Spieler[playerid][pJob] == 17) {
         SetPlayerCheckpointEx(playerid, -38.4148, 56.1184, 3.1172, 2.0, CP_NAVI1);
-        return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Der Lagerpunkt für Drogen wurde dir auf der Karte rot markiert.");
+        return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Der Lagerpunkt für Drogen wurde dir auf der Karte Rot markiert.");
     }
     else if (Spieler[playerid][pJob] == 18) {
         SetPlayerCheckpointEx(playerid, 2348.1086, -2302.4243, 13.5469, 2.0, CP_NAVI1);
-        return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Der Lagerpunkt für Waffenteile wurde dir auf der Karte rot markiert.");
+        return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Der Lagerpunkt für Waffenteile wurde dir auf der Karte Rot markiert.");
     }
 
     return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Für deinen Job gibt es keinen Lagerpunkt.");
@@ -13840,7 +13859,7 @@ CMD:stadthalle(playerid)
 CMD:illegalejobs(playerid)
 {
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, JEFF_COORDS)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei Jeff.");
-    SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt aus dem Van: Mh.. Du willst also dein Geld auf eine andere Weise verdienen?");
+    SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Mh.. Du willst also dein Geld auf eine andere Weise verdienen?");
     SendClientMessage(playerid, COLOR_WHITE, "Ich hab da so einige Jobs für dich auf Lager. Schau dich um!");
     ShowPlayerDialog(playerid, DIALOG_SCHWARZBERUF, DIALOG_STYLE_LIST, "ILLEGALE JOBS", COLOR_HEX_WHITE">> aktuellen Beruf kündigen\nDrogendealer\nWaffendealer\nTaschendieb\nProstituierte\nWanted-Hacker\nAutodieb", "Auswählen", "Abbrechen");
     return 1;
@@ -13854,7 +13873,7 @@ CMD:mieten(playerid)
     {
         return SendClientMessage(playerid, COLOR_RED, "Du bist nicht am Verleih.");
     }
-    ShowPlayerDialog(playerid, DIALOG_MIETEN, DIALOG_STYLE_LIST, "Mieten eines Fahrzeugs", "Bike - 250$\nMountain Bike - 300$\nBMX - 250$\nFaggio - 500$", "Mieten", "Abbrechen");
+    ShowPlayerDialog(playerid, DIALOG_MIETEN, DIALOG_STYLE_LIST, "Mieten eines Fahrzeugs", "Bike - $250\nMountain Bike - $300\nBMX - $250\nFaggio - $500", "Mieten", "Abbrechen");
     return 1;
 }
 
@@ -19448,7 +19467,7 @@ CMD:expertehelp(playerid)
 CMD:gotoliste(playerid)
 {
     if(Spieler[playerid][pAdmin] < 1)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    ShowPlayerDialog(playerid, DIALOG_GOTOLISTE, DIALOG_STYLE_LIST, "Goto-Liste", "Stadthalle\nBurger Shot North\nAmmunation\nLS Strand\nFahrschule\nAutohaus günstig\nAutohaus Luxus\nKrankenhaus\nBank\nLSPD\nMotorradverkauf\nFlugzeugverkauf\nNeulingsspawn\nClubvilla in Los Santos\nStandesamt\n", "Teleportieren", "Abbrechen");
+    ShowPlayerDialog(playerid, DIALOG_GOTOLISTE, DIALOG_STYLE_LIST, "Goto-Liste", "Stadthalle\nSubway\nAmmunation\nLS Strand\nFahrschule\nAutohaus günstig\nAutohaus Luxus\nKrankenhaus\nBank\nLSPD\nMotorradverkauf\nFlugzeugverkauf\nNeulingsspawn\nClubvilla in Los Santos\nStandesamt\n", "Teleportieren", "Abbrechen");
     return 1;
 }
 
@@ -21871,7 +21890,7 @@ CMD:accept(playerid, params[])
                         new vID = GetPlayerVehicleID(playerid);
                         GivePlayerCash(playerid, -RefillCarPreis[playerid]);
                         GivePlayerCash(RefillCar[playerid], RefillCarPreis[playerid]);
-                        format(string, sizeof(string), "* %s hat die Tankfüllung angenommen. Du erhälst $%s", GetName(playerid), AddDelimiters(RefillCarPreis[playerid]));
+                        format(string, sizeof(string), "* %s hat die Tankfüllung angenommen. Du erhältst $%s", GetName(playerid), AddDelimiters(RefillCarPreis[playerid]));
                         SendClientMessage(RefillCar[playerid], COLOR_BLUE, string);
                         SendClientMessage(playerid, COLOR_BLUE, "* Du hast die Tankfüllung angenommen.");
                         RefillCarPreis[playerid] = 0;
@@ -22253,7 +22272,7 @@ CMD:accept(playerid, params[])
                         }
                         GivePlayerCash(playerid, -RepairCarPreis[playerid]);
                         GivePlayerCash(RepairCar[playerid], RepairCarPreis[playerid]);
-                        format(string, sizeof(string), "* %s hat die Reperatur angenommen. Du erhälst $%s", GetName(playerid), AddDelimiters(RepairCarPreis[playerid]));
+                        format(string, sizeof(string), "* %s hat die Reperatur angenommen. Du erhältst $%s", GetName(playerid), AddDelimiters(RepairCarPreis[playerid]));
                         SendClientMessage(RepairCar[playerid], COLOR_BLUE, string);
                         SendClientMessage(playerid, COLOR_BLUE, "* Du hast die Reperatur angenommen.");
                         RepairCarPreis[playerid] = 0;
@@ -24393,7 +24412,7 @@ public OnPlayerWaitLinie(playerid)
                 else if(pCheckpoint[playerid] == CP_BUSLINIE2CP4)
                 {
                     SetPlayerCheckpointEx(playerid, 1143.1387,-941.4471,42.7462, 5.0, CP_BUSLINIE2CP5);
-                    format(string, sizeof(string), "Nächste Haltestelle: Burger Shot North in Los Santos");
+                    format(string, sizeof(string), "Nächste Haltestelle: Subway in Los Santos");
                     SendRoundMessage(x, y, z, COLOR_PURPLE, string);
                     UnfreezePlayer(playerid);
                     //KillTimer(buswait[playerid]);
@@ -29520,7 +29539,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         if (listitem < 0 || listitem > sizeof(seedPoints)) return SendClientMessage(playerid, COLOR_RED, "Ungültige Auswahl.");
 
         SetPlayerCheckpointEx(playerid, seedPoints[listitem][SEED_POINT_fX], seedPoints[listitem][SEED_POINT_fY], seedPoints[listitem][SEED_POINT_fZ], 3.0, CP_NAVI4);
-        return SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Samenpunkt wurde auf der Karte rot markiert.");
+        return SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Samenpunkt wurde auf der Karte Rot markiert.");
     }
     if (dialogid == DIALOG_CARSELL) {
         if (!response) return SendClientMessage(playerid, COLOR_RED, "Du hast den Fahrzeugverkauf abgebrochen.");
@@ -29601,7 +29620,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         // format(string3, sizeof(string3), "/Autos/%s_Car_%d.ini", playername3, PlayerKey[playerid]);
         // fremove(string3);
         PlayerHaveCar[playerid][PlayerKey[playerid]] = 0;
-        return SCMFormatted(playerid, COLOR_GREEN, "Du hast dein Fahrzeug '%s' verkauft. Du erhälst noch $%s dafür.", CarName[PlayerCar[playerid][PlayerKey[playerid]][CarModel] - 400], AddDelimiters(price));
+        return SCMFormatted(playerid, COLOR_GREEN, "Du hast dein Fahrzeug '%s' verkauft. Du erhältst noch $%s dafür.", CarName[PlayerCar[playerid][PlayerKey[playerid]][CarModel] - 400], AddDelimiters(price));
     }
     if (dialogid == DIALOG_WHEELMAN_OFFER) {
         if (response) {
@@ -29793,7 +29812,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 Haus[pHouse][hMieterAnzahl] = 0;
                 Haus[pHouse][hMieten] = 0;
                 if(Haus[pHouse][hKasse] > 0 ) {
-                    format(String,sizeof(String),"In deiner Hauskasse waren noch $%s. Du erhälst diese noch vor dem Verkauf zurück.", AddDelimiters(Haus[pHouse][hKasse]));
+                    format(String,sizeof(String),"In deiner Hauskasse waren noch $%s. Du erhältst diese noch vor dem Verkauf zurück.", AddDelimiters(Haus[pHouse][hKasse]));
                     SendClientMessage(playerid,COLOR_YELLOW,String);
                     Spieler[playerid][pBank] += Haus[pHouse][hKasse];
                 }
@@ -31141,7 +31160,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     sec;
                 Spieler[playerid][pZollValid] = gettime() + 7*24*60*60;
                 TimestampToDate( Spieler[playerid][pZollValid] , year,m,d,h,minute,sec,1,0);
-                format(String,sizeof(String),"Du hast einen Zollpass der bis %02d/%02d/%d gültig ist für $15.000 gekauft!",d,m,year );
+                format(String,sizeof(String),"Du hast einen Zollpass der bis zum %02d/%02d/%d gültig ist für $15.000 gekauft!",d,m,year );
                 SendClientMessage(playerid,COLOR_GREEN,String);
                 GivePlayerCash(playerid, -15000);
                 Kasse[Staat] += 15000;
@@ -31150,7 +31169,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         case DIALOG_RECHTSSCHUTZ: {
             if(response) {
                 if( Spieler[playerid][pCash] < 87000 ) {
-                 return SendClientMessage(playerid,COLOR_RED,"Die Rechtsschutz-Versicherung kostet $87.000. Du besitzt leider nicht so viel.");
+                 return SendClientMessage(playerid,COLOR_RED,"Die Rechtsschutzversicherung kostet $87.000. So viel Geld hast du nicht dabei.");
                 }
                 new
                     String[128],
@@ -31162,7 +31181,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     sec;
                 Spieler[playerid][pExperte] = gettime() + 62*24*60*60;
                 TimestampToDate( Spieler[playerid][pExperte] , year,m,d,h,minute,sec,1,0);
-                format(String,sizeof(String),"Du bist hast eine Rechtsschutzversicherung abgeschlossen! Gültig bis: %02d/%02d/%d. Preis: $87.000",d,m,year );
+                format(String,sizeof(String),"Du hast eine Rechtsschutzversicherung abgeschlossen! Gültig bis zum %02d/%02d/%d. Preis: $87.000",d,m,year );
                 SendClientMessage(playerid,COLOR_GREEN,String);
                 GivePlayerCash(playerid, -87000);
                 Kasse[Staat] += 87000;
@@ -31173,7 +31192,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem == 0 ) {
                     if(!(Spieler[playerid][pJob] == 1))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Farmer.");
                     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-                        SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+                        SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment.");
                         return 1;
                     }
                     new vID = GetPlayerVehicleID(playerid);
@@ -31199,7 +31218,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     PreloadAnimLib(playerid,"MISC");
                     PreloadAnimLib(playerid,"ROB_BANK");
 
-                    SendClientMessage(playerid,COLOR_YELLOW,"Begib dich zu den Kühen und melken sie");
+                    SendClientMessage(playerid,COLOR_YELLOW,"Begib dich zu den Kühen und melken sie.");
                     StartPlayerCow(playerid);
                     Spieler[playerid][pCowJob] = 2;
                 }
@@ -31211,11 +31230,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if( Spieler[playerid][pPlayerBiz] != 999 ) {
                         new
                             String[128];
-                        format(String,sizeof(String),"Dein aktives Biz ist immernoch %s",Biz[ Spieler[playerid][pPlayerBiz] ][bName]);
+                        format(String,sizeof(String),"Dein aktives Biz ist immernoch %s.",Biz[ Spieler[playerid][pPlayerBiz] ][bName]);
                         SendClientMessage(playerid,COLOR_YELLOW,String);
                     }
                     else {
-                        SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich");
+                        SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich.");
                     }
                 }
                 else if( listitem == 1 ) {
@@ -31229,16 +31248,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             // Keys switchen
                             new
                                 String[128];
-                            format(String,sizeof(String),"Du hast als aktives Biz %s ausgewählt",Biz[ temp ][bName]);
+                            format(String,sizeof(String),"Du hast als aktives Biz %s ausgewählt.",Biz[ temp ][bName]);
                             SendClientMessage(playerid,COLOR_YELLOW,String);
                         }
                         else {
                             // Leeren key gewählt
-                            SendClientMessage(playerid,COLOR_WHITE,"Du hast als aktives Biz einen freien Slot ausgewählt");
+                            SendClientMessage(playerid,COLOR_WHITE,"Du hast als aktives Biz einen freien Slot ausgewählt.");
                         }
                     }
                     else {
-                        SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich");
+                        SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich.");
                     }
                 }
             }
@@ -31250,15 +31269,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     Slot;
                 vehicleid = GetPlayerVehicleID(playerid);
                 if( !vehicleid ) {
-                    return SendClientMessage(playerid,COLOR_RED,"Du benötigst ein Fahrzeug für diese Funktion");
+                    return SendClientMessage(playerid,COLOR_RED,"Du benötigst ein Fahrzeug für diese Funktion.");
                 }
                 new owner = GetCarOwner( vehicleid );
                 if( owner != playerid ) {
-                    return SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug gehört nicht dir");
+                    return SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug gehört nicht dir.");
                 }
                 Slot = GetCarOwnerSlot( playerid, vehicleid );
                 if(listitem == 0 ) {
-                    SendClientMessage(playerid,COLOR_RED,"Club-Neon von deinem Fahrzeug entfernt");
+                    SendClientMessage(playerid,COLOR_RED,"Club-Neon von deinem Fahrzeug entfernt.");
                     PlayerCar[playerid][Slot][CarNeon1] = 0;
                     PlayerCar[playerid][Slot][CarNeon2] = 0;
                     DestroyDynamicObject(PlayerCar[playerid][Slot][ObjectIDNeon1]);
@@ -31268,7 +31287,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 else {
                     if( Spieler[playerid][pCash] < 10000 ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Du besitzt nicht genug Geld. Der Preis beträgt 10.000$");
+                        return SendClientMessage(playerid,COLOR_RED,"Du besitzt nicht genug Geld. Der Preis beträgt $10.000.");
                     }
                     if(listitem == 1 ) {
                         PlayerCar[playerid][Slot][CarNeon1] = 18648;
@@ -31316,7 +31335,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response) {
                 new
                     tank_index = Spieler[playerid][pPlayerTank];
-                if(tank_index == 999)return SendClientMessage(playerid, COLOR_RED, "Du besitzt garkeine Tanke.");
+                if(tank_index == 999)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keine Tankstelle.");
                 if(strcmp(GetName(playerid), Tanke[tank_index][tBesitzer], true) == 0)
                 {
                     if(IsPlayerInRangeOfPoint(playerid, 2.0, Tanke[tank_index][EnterX], Tanke[tank_index][EnterY], Tanke[tank_index][EnterZ]))
@@ -31329,7 +31348,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             SendClientMessage(playerid, COLOR_RED, "Deine Tankstelle hat bereits diese Feature.");
                             return 1;
                         }
-                        SendClientMessage(playerid,COLOR_GREEN,"Glückwunsch, du hast deine Tankstelle mit der Sicherheitsoption 'Videoüberwachung' ausgestattet");
+                        SendClientMessage(playerid,COLOR_GREEN,"Glückwunsch, du hast deine Tankstelle mit der Sicherheitsoption 'Videoüberwachung' ausgestattet.");
                         GivePlayerCash(playerid,-30000);
                         Tanke[tank_index][tVideoueberwachung] = true;
                     }
@@ -31350,7 +31369,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response) {
                 new
                     tank_index = Spieler[playerid][pPlayerTank];
-                if(tank_index == 999)return SendClientMessage(playerid, COLOR_RED, "Du besitzt garkeine Tanke.");
+                if(tank_index == 999)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keine Tankstelle.");
                 if(strcmp(GetName(playerid), Tanke[tank_index][tBesitzer], true) == 0)
                 {
                     if(IsPlayerInRangeOfPoint(playerid, 2.0, Tanke[tank_index][EnterX], Tanke[tank_index][EnterY], Tanke[tank_index][EnterZ]))
@@ -31363,7 +31382,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             SendClientMessage(playerid, COLOR_RED, "Deine Tankstelle hat bereits diese Feature.");
                             return 1;
                         }
-                        SendClientMessage(playerid,COLOR_GREEN,"Glückwunsch, du hast deine Tankstelle mit der Sicherheitsoption 'Automatischer Notruf' ausgestattet");
+                        SendClientMessage(playerid,COLOR_GREEN,"Glückwunsch, du hast deine Tankstelle mit der Sicherheitsoption 'Automatischer Notruf' ausgestattet.");
                         GivePlayerCash(playerid,-120000);
                         Tanke[tank_index][tAutomatischerNotruf] = true;
                     }
@@ -31385,7 +31404,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem == 0 ) { // video
                     ShowPlayerDialog(playerid,DIALOG_TANKSTELLEN_VIDEO,DIALOG_STYLE_MSGBOX,"Tankstelle - Videoüberwachung","\
                         {FFFFFF}Durch die Installation eines Videoüberwachungssystems werden Sie bei Überfällen an Ihrer\n\
-                        Tankstelle informiert, der Täter wird anhand den Aufnahmen zu erkennen sein.\n\
+                        Tankstelle informiert, der Täter wird anhand der Aufnahmen zu erkennen sein.\n\
                         {FF0000}ACHTUNG: Sollten Sie OFFLINE sein, kann Sie das Videoüberwachungssystem nicht über den Überfall informieren!\n\n\
                         {FFFFFF}PREIS: $30.000","Kaufen","Abbruch");
                 }
@@ -31490,17 +31509,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response) {
                 if( GetPlayerMoney(playerid) < g_WantedTicket[listitem][WT_iPrice] ) {
                     ShowWantedTicketList(playerid);
-                    SendClientMessage(playerid,COLOR_RED,"Du hast nicht genug Geld");
+                    SendClientMessage(playerid,COLOR_RED,"Du hast nicht genug Geld.");
                     return 1;
                 }
                 if( Spieler[playerid][pWanteds] < g_WantedTicket[listitem][WT_iPoints] ) {
                     ShowWantedTicketList(playerid);
-                    SendClientMessage(playerid,COLOR_RED,"Du benötigst so viele WantedTickets nicht");
+                    SendClientMessage(playerid,COLOR_RED,"Du benötigst so viele Wantedtickets nicht.");
                     return 1;
                 }
                 new
                     String[128];
-                format(String,sizeof(String),"Du hast %d Wanteds gelöscht für $%s",g_WantedTicket[listitem][WT_iPoints], AddDelimiters(g_WantedTicket[listitem][WT_iPrice]));
+                format(String,sizeof(String),"Du hast %d Wanteds gelöscht für $%s.",g_WantedTicket[listitem][WT_iPoints], AddDelimiters(g_WantedTicket[listitem][WT_iPrice]));
                 SendClientMessage(playerid,COLOR_YELLOW,String);
                 Spieler[playerid][pWanteds] -= g_WantedTicket[listitem][WT_iPoints];
                 GivePlayerCash(playerid,-g_WantedTicket[listitem][WT_iPrice]);
@@ -31510,24 +31529,24 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         case DIALOG_HAUSUPGRADE_WL_BUY: {
             if(response) {
                 if( Spieler[playerid][pCash] < 70000 ) {
-                    SendClientMessage(playerid,COLOR_RED,"Das Upgrade kostet 70.000$");
+                    SendClientMessage(playerid,COLOR_RED,"Das Upgrade kostet $70.000.");
                     return 1;
                 }
                 Spieler[playerid][pUpgradeWaffenlager] = 1;
                 GivePlayerCash(playerid,-70000);
-                SendClientMessage(playerid,COLOR_GREEN,"Haus-Upgrade für 70.000$ gekauft");
+                SendClientMessage(playerid,COLOR_GREEN,"Haus-Upgrade für $70.000$ gekauft.");
                 return cmd_hausupgrade(playerid,"");
             }
         }
         case DIALOG_HAUSUPGRADE_SB_BUY: {
             if(response) {
                 if( Spieler[playerid][pCash] < 200000 ) {
-                    SendClientMessage(playerid,COLOR_RED,"Das Upgrade kostet 200.000$");
+                    SendClientMessage(playerid,COLOR_RED,"Das Upgrade kostet $200.000.");
                     return 1;
                 }
                 Spieler[playerid][pUpgradeSafebox] = 1;
                 GivePlayerCash(playerid,-200000);
-                SendClientMessage(playerid,COLOR_GREEN,"Haus-Upgrade für 200.000$ gekauft");
+                SendClientMessage(playerid,COLOR_GREEN,"Haus-Upgrade für $200.000 gekauft.");
                 return cmd_hausupgrade(playerid,"");
             }
         }
@@ -31558,7 +31577,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         header[64];
                     item = Spieler[playerid][pHausSafeboxItem];
                     format(header,sizeof(header),"Hausupgrade - Safebox - %s - Nehmen",g_HouseUpgradeBezeichnung[item]);
-                    format(String,sizeof(String),"Gib die Menge an %s an,die du abheben möchtest",g_HouseUpgradeBezeichnung[item]);
+                    format(String,sizeof(String),"Gib die Menge an %s an, die du abheben möchtest:",g_HouseUpgradeBezeichnung[item]);
                     ShowPlayerDialog(playerid,DIALOG_HAUSUPGRADE_SB_NEHMEN,DIALOG_STYLE_INPUT,header,String,"Ablegen","Abbruch");
                 }
                 else if(listitem == 1 ) {
@@ -31568,7 +31587,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         header[64];
                     item = Spieler[playerid][pHausSafeboxItem];
                     format(header,sizeof(header),"Hausupgrade - Safebox - %s - Ablegen",g_HouseUpgradeBezeichnung[item]);
-                    format(String,sizeof(String),"Gib die Menge an %s an,die du abheben möchtest",g_HouseUpgradeBezeichnung[item]);
+                    format(String,sizeof(String),"Gib die Menge an %s an, die du ablegen möchtest:",g_HouseUpgradeBezeichnung[item]);
                     ShowPlayerDialog(playerid,DIALOG_HAUSUPGRADE_SB_ABLEGEN,DIALOG_STYLE_INPUT,header,String,"Ablegen","Abbruch");
                 }
             }
@@ -31587,21 +31606,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 item = Spieler[playerid][pHausSafeboxItem];
                 if(item == 0 ) {
                     if( Spieler[playerid][pHausSafeboxDrogen] < menge ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge befindet sich nicht im Koffer");
+                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge befindet sich nicht im Koffer.");
                     }
                     Spieler[playerid][pHausSafeboxDrogen] -= menge;
                     Spieler[playerid][pDrugs] += menge;
                 }
                 else if(item == 1 ) {
                     if( Spieler[playerid][pHausSafeboxSpice] < menge ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge befindet sich nicht im Koffer");
+                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge befindet sich nicht im Koffer.");
                     }
                     Spieler[playerid][pHausSafeboxSpice] -= menge;
                     Spieler[playerid][pSpice] += menge;
                 }
                 new
                     String[128];
-                format(String,sizeof(String),"Du hast %d Stk %s aus der Safebox genommen",menge,g_HouseUpgradeBezeichnung[item]);
+                format(String,sizeof(String),"Du hast %d Stk %s aus der Safebox genommen.",menge,g_HouseUpgradeBezeichnung[item]);
                 SendClientMessage(playerid,COLOR_YELLOW,String);
             }
         }
@@ -31620,21 +31639,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 item = Spieler[playerid][pHausSafeboxItem];
                 if(item == 0 ) {
                     if( Spieler[playerid][pDrugs] < menge ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge führst du nicht mit dir");
+                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge führst du nicht mit dir.");
                     }
                     Spieler[playerid][pHausSafeboxDrogen] += menge;
                     Spieler[playerid][pDrugs] -= menge;
                 }
                 else if(item == 1 ) {
                     if( Spieler[playerid][pSpice] < menge ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge führst du nicht mit dir");
+                        return SendClientMessage(playerid,COLOR_RED,"Diese Menge führst du nicht mit dir.");
                     }
                     Spieler[playerid][pHausSafeboxSpice] += menge;
                     Spieler[playerid][pSpice] -= menge;
                 }
                 new
                     String[128];
-                format(String,sizeof(String),"Du hast %d Stk %s in die Safebox gelegt",menge,g_HouseUpgradeBezeichnung[item]);
+                format(String,sizeof(String),"Du hast %d Stk %s in die Safebox gelegt.",menge,g_HouseUpgradeBezeichnung[item]);
                 SendClientMessage(playerid,COLOR_YELLOW,String);
             }
         }
@@ -31647,7 +31666,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         header[64];
                     //item = Spieler[playerid][pHausSafeboxItem];
                     format(header,sizeof(header),"Hausupgrade - Safebox - Waffe - Nehmen");
-                    format(String,sizeof(String),"Gib die Menge an Waffen an,die du abheben möchtest");
+                    format(String,sizeof(String),"Gib die Menge an Munition an, die du abheben möchtest:");
                     ShowPlayerDialog(playerid,DIALOG_HAUSUPGRADE_WL_NEHMEN,DIALOG_STYLE_INPUT,header,String,"Ablegen","Abbruch");
                 }
                 else if(listitem == 1 ) {
@@ -31657,7 +31676,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         header[64];
                     //item = Spieler[playerid][pHausSafeboxItem];
                     format(header,sizeof(header),"Hausupgrade - Safebox - Waffe - Ablegen");
-                    format(String,sizeof(String),"Gib die Menge an Waffen an,die du abheben möchtest");
+                    format(String,sizeof(String),"Gib die Waffen-ID und die Menge an Munition an, die du ablegen möchtest:");
                     ShowPlayerDialog(playerid,DIALOG_HAUSUPGRADE_WL_ABLEGEN,DIALOG_STYLE_INPUT,header,String,"Ablegen","Abbruch");
                 }
             }
@@ -31692,7 +31711,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 Class_SplitWeaponInfo( Spieler[playerid][pHausWaffenlager] ,safebox_waffe , safebox_ammo );
                 if( Spieler[playerid][pHausWaffenlager] != 0 ) {
                     if( safebox_waffe != waffe ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Es befindet sich bereits eine andere Waffe im Kofferraum");
+                        return SendClientMessage(playerid,COLOR_RED,"Es befindet sich bereits eine andere Waffe im Waffenlager.");
                     }
                 }
                 new
@@ -31700,7 +31719,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 GetWeaponNameEx(waffe,wname,sizeof(wname));
                 GivePlayerWeapon(playerid,waffe,-menge);
                 Spieler[playerid][pHausWaffenlager] = Class_CompressWeaponInfo( waffe , safebox_ammo + menge );
-                format(String,sizeof(String),"Du hast %s mit %d Munition in das Waffenlager gelegt",wname,menge);
+                format(String,sizeof(String),"Du hast %s mit %d Munition in das Waffenlager gelegt.",wname,menge);
                 SendClientMessage(playerid,COLOR_YELLOW,String);
             }
         }
@@ -31725,14 +31744,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     muni;
                 Class_SplitWeaponInfo( Spieler[playerid][pHausWaffenlager], weapon,muni);
                 if( muni < menge ) {
-                    return SendClientMessage(playerid,COLOR_RED,"Diese Menge befindet sich nicht im Koffer");
+                    return SendClientMessage(playerid,COLOR_RED,"Diese Menge befindet sich nicht im Hauslager.");
                 }
                 new
                     String[128];
                 GetWeaponNameEx(weapon,wname,sizeof(wname));
                 GivePlayerWeapon(playerid,weapon,menge);
                 Spieler[playerid][pHausWaffenlager] = Class_CompressWeaponInfo( weapon , muni - menge );
-                format(String,sizeof(String),"Du hast %s mit %d Munition aus der Safebox genommen",wname,menge);
+                format(String,sizeof(String),"Du hast %s mit %d Munition aus dem Waffenlager genommen.",wname,menge);
                 SendClientMessage(playerid,COLOR_YELLOW,String);
             }
         }
@@ -31747,8 +31766,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         //
                         ShowPlayerDialog(playerid,DIALOG_HAUSUPGRADE_WL_BUY,DIALOG_STYLE_MSGBOX,"HouseUpgrade - Waffenlager kaufen","\
                         Um deine Waffen im Haus lagern zu können, musst du einmalig $70.000 zahlen!\n\
-                        Es ist DEIN persönlicher Haus Waffenlager, keine kann deine eingelagerten Waffen herausnehmen!\n\
-                        Sobald du dich ausmietest oder du da Haus verkaufst, sind deine eingelagerten Waffen weg!","Kaufen","Abbruch");
+                        Es ist dein persönliches Hauswaffenlager, keiner kann deine eingelagerten Waffen herausnehmen.\n\
+                        Sobald du dich ausmietest oder das Haus verkaufst, sind deine eingelagerten Waffen weg.","Kaufen","Abbruch");
                     }
                 }
                 else if(listitem == 1 ) {
@@ -31760,9 +31779,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     else {
                         //
                         ShowPlayerDialog(playerid,DIALOG_HAUSUPGRADE_SB_BUY,DIALOG_STYLE_MSGBOX,"HouseUpgrade - Waffenlager kaufen","\
-                        Um deine Drogen(Spice, Drogen etc.) im Haus lagern zu können, musst du einmalig $200.000 zahlen!\n\
-                        Es ist DEINE persönliche Haus Safebox, keine kann deine eingelagerten Inventare herausnehmen!\n\
-                        Sobald du dich ausmietest oder du da Haus verkaufst, sind deine eingelagerten Inventare weg!","Kaufen","Abbruch");
+                        Um deine Drogen (Spice, Drogen) im Haus lagern zu können, musst du einmalig $200.000 zahlen!\n\
+                        Es ist deine persönliche Haussafebox, keiner kann deine eingelagerten Inventare herausnehmen.\n\
+                        Sobald du dich ausmietest oder das Haus verkaufst, sind deine eingelagerten Inventare weg.","Kaufen","Abbruch");
                     }
                 }
             }
@@ -31816,19 +31835,19 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     giveid;
                 TelefonzelleAn[playerid] = INVALID_PLAYER_ID;
                 if(sscanf(inputtext,"u",giveid) ) {
-                    SendClientMessage(playerid,COLOR_RED,"Spieler nicht gefunden");
+                    SendClientMessage(playerid,COLOR_RED,"Spieler nicht gefunden.");
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
                     return 1;
                 }
                 if( !IsPlayerConnected(giveid) ) {
-                    SendClientMessage(playerid,COLOR_RED,"Spieler nicht gefunden");
+                    SendClientMessage(playerid,COLOR_RED,"Spieler nicht gefunden.");
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
                     return 1;
                 }
                 if( giveid == playerid ) {
-                    SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich");
+                    SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich.");
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
                     return 1;
@@ -31842,7 +31861,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(Spieler[playerid][pTot] == 1) {
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
-                    return SendClientMessage(playerid, COLOR_RED, "Du kannst niemaden anrufen oder Anrufe entgegennehmen wenn du tot bist!");
+                    return SendClientMessage(playerid, COLOR_RED, "Du kannst niemanden anrufen, wenn du tot bist!");
                 }
 
                 if(Spieler[giveid][pHandyState] == 0) {
@@ -31870,7 +31889,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 else {
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
-                    SendClientMessage(playerid, COLOR_WHITE, "Leitung besetzt ...");
+                    SendClientMessage(playerid, COLOR_WHITE, "Leitung besetzt...");
                 }
                 return 1;
             }
@@ -31889,11 +31908,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 UnfreezePlayer(playerid);
                 TelefonzelleAn[playerid] = INVALID_PLAYER_ID;
                 if(!IsPlayerConnected(giveid)) {
-                    SendClientMessage(playerid,COLOR_RED,"Spieler nicht mehr Online");
+                    SendClientMessage(playerid,COLOR_RED,"Der Spieler ist nicht mehr online.");
                     return 1;
                 }
                 if(sscanf(inputtext,"s[160]",sms)) {
-                    SendClientMessage(playerid,COLOR_RED,"Du hast keine gültige Nachricht eingegeben");
+                    SendClientMessage(playerid,COLOR_RED,"Du hast keine gültige Nachricht eingegeben.");
                     return 1;
                 }
                 if(Spieler[giveid][pHandyState] == 0) {
@@ -31901,7 +31920,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     return 1;
                 }
 
-                format(String, sizeof(String), "[SMS]: %s, Von: %s ( Telefonzelle )", sms, GetName(playerid) );
+                format(String, sizeof(String), "[SMS]: %s, Von: %s (Telefonzelle)", sms, GetName(playerid) );
                 SendClientMessage(giveid, COLOR_YELLOW, String);
                 format(String, sizeof(String), "[SMS] Nachricht versendet - %s, An: %s (Nr: %d)", sms, GetName(giveid), Spieler[giveid][pHandyNr]);
                 SendClientMessage(playerid, COLOR_YELLOW, String);
@@ -31918,19 +31937,19 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     giveid;
                 TelefonzelleAn[playerid] = INVALID_PLAYER_ID;
                 if(sscanf(inputtext,"u",giveid) ) {
-                    SendClientMessage(playerid,COLOR_RED,"Spieler nicht gefunden");
+                    SendClientMessage(playerid,COLOR_RED, "Der Spieler wurde nicht gefunden.");
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
                     return 1;
                 }
                 if( !IsPlayerConnected(giveid) ) {
-                    SendClientMessage(playerid,COLOR_RED,"Spieler nicht gefunden");
+                    SendClientMessage(playerid,COLOR_RED,"Der Spieler wurde nicht gefunden.");
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
                     return 1;
                 }
                 if( giveid == playerid ) {
-                    SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich");
+                    SendClientMessage(playerid,COLOR_RED,"Diese Aktion ist nicht möglich.");
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_STOPUSECELLPHONE );
                     UnfreezePlayer(playerid);
                     return 1;
@@ -31945,24 +31964,24 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         case DIALOG_TELEFONZELLE: {
             if(response) {
                 if( IsPlayerAtTelefonzelle(playerid) == 999 ) {
-                    SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht an einer Telefonzelle");
+                    SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht an einer Telefonzelle.");
                     return 1;
                 }
                 if(listitem == 0 ) {
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_USECELLPHONE );
                     FreezePlayer(playerid);
                     ShowPlayerDialog(playerid,DIALOG_TELEFONZELLE_CALL,DIALOG_STYLE_INPUT,"Telefonzelle - Anruf",
-                    "Ein Anrufe über dieser Telefonzelle wird dich 100$ kosten!\n\
-                    Sobald der jenige abnimmt, werden die Telefonkosten aus deinem Bargeld abgezogen.\n\
-                    Gib unten den Namen / ID des Spielers an,den du anrufen möchtest\n\
+                    "Ein Anruf über dieser Telefonzelle wird dich $100 kosten!\n\
+                    Sobald derjenige abnimmt, werden die Telefonkosten von deinem Bargeld abgezogen.\n\
+                    Gib unten den Namen oder die ID des Spielers an, den du anrufen möchtest.\n\
                     Um dies zu bestätigen, drück auf 'Weiter', ansonsten auf 'Abbrechen'.","Weiter","Abbrechen");
                 }
                 else if(listitem == 1 ) {
                     SetPlayerSpecialAction( playerid, SPECIAL_ACTION_USECELLPHONE );
                     FreezePlayer(playerid);
                     ShowPlayerDialog(playerid,DIALOG_TELEFONZELLE_SMS,DIALOG_STYLE_INPUT,"Telefonzelle - SMS",
-                    "Sobald die SMS erfolgreich versendet wurde, werden die Kosten aus deinem Bargeld abgezogen.\n\
-                    Gib unten den Namen / ID des Spielers an,dem du eine SMS senden möchtest.\n\
+                    "Sobald die SMS erfolgreich versendet wurde, werden die Kosten von deinem Bargeld abgezogen.\n\
+                    Gib unten den Namen oder die ID des Spielers an, dem du eine SMS senden möchtest.\n\
                     Um dies zu bestätigen, drück auf 'Weiter', ansonsten auf 'Abbrechen'.","Weiter","Abbrechen");
                 }
             }
@@ -31982,7 +32001,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 Spieler[playerid][pKreditwert] = g_KreditLimit[listitem][KL_iKreditwert];
                 Spieler[playerid][pKreditGezahlt] = 0;
                 Spieler[playerid][pBank] += g_KreditLimit[listitem][KL_iKreditwert];
-                SendClientMessage(playerid,COLOR_GREEN,"Ihr Kredit wurde genehmigt, dass Geld befindet sich auf Ihrem Bankkonto!");
+                SendClientMessage(playerid,COLOR_GREEN,"Ihr Kredit wurde genehmigt, dass Geld befindet sich nun auf Ihrem Bankkonto!");
             }
         }
         case DIALOG_FAHRZEUGVERLEIH: {
@@ -31992,7 +32011,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response) {
                 if( !vID ) {
                     RemovePlayerFromVehicle(playerid);
-                    SendClientMessage(playerid,COLOR_RED,"Du besitzt nicht genug Geld");
                     return 1;
                 }
                 new
@@ -32014,7 +32032,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 price = g_FahrzeugVerleihFahrzeuge[index][FVF_iPrice];
                 if( GetPlayerMoney(playerid) < price ) {
                     RemovePlayerFromVehicle(playerid);
-                    SendClientMessage(playerid,COLOR_RED,"Du besitzt nicht genug Geld");
+                    SendClientMessage(playerid,COLOR_RED,"Du hast nicht genug Geld dabei.");
                     return 1;
                 }
                 spawn = GetFreeFahrzeugVerleihSpawn( g_FahrzeugVerleihFahrzeuge[index][FVF_iVerleihIndex] );
@@ -32032,12 +32050,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 //SetVehicleToRespawn( vehicleid );
                 g_FahrzeugVerleihSpawn[spawn][FVS_bFree] = false;
                 GetPlayerPos(playerid,px,py,pz);
-                format(String,sizeof(String),"Du hast das Fahrzeug %s für 3 Stunden geliehen",CarName[modelid-400]);
+                format(String,sizeof(String),"Du hast das Fahrzeug %s für 3 Stunden geliehen.",CarName[modelid-400]);
                 SendClientMessage(playerid,COLOR_GREEN,String);
-                SendClientMessage(playerid,COLOR_GREEN,"Dein Fahrzeug steht auf dem Parkplatz bereit");
+                SendClientMessage(playerid,COLOR_GREEN,"Dein Fahrzeug steht auf dem Parkplatz bereit.");
                 SendClientMessage(playerid,COLOR_YELLOW,"Hinweis: Mit /Mietlock schließt du dein Mietfahrzeug auf und zu.");
-                SendClientMessage(playerid,COLOR_YELLOW,"Hinweis: Mit /Findmietcar wird dir der Standort deines Mietfahrzeugs angezeigt.");
-                SendClientMessage(playerid,COLOR_YELLOW,"Hinweis: Solltest du den Server verlassen, ist die Zeit abgelaufen.");
+                SendClientMessage(playerid,COLOR_YELLOW,"Hinweis: Mit /Findmietcar wird dir der Standort deines Mietfahrzeuges angezeigt.");
+                SendClientMessage(playerid,COLOR_YELLOW,"Hinweis: Solltest du den Server verlassen, ist die Mietzeit abgelaufen.");
                 GivePlayerCash(playerid,-price);
                 // RemovePlayerFromVehicle(playerid);
                 aiVehicles[vehicleid] = VEH_PRIVATVERLEIH;
@@ -32112,7 +32130,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response) {
                 // Einlagern
                 if( Spieler[playerid][pFraktion] == 0 ) {
-                    SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion");
+                    SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
                     return 1;
                 }
                 if(listitem == 0 ) {
@@ -32133,22 +32151,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 new
                     menge;
                 if(sscanf(inputtext,"d",menge)) {
-                    SendClientMessage(playerid,COLOR_RED,"Ungültige Mengenangabe");
+                    SendClientMessage(playerid,COLOR_RED,"Ungültige Mengenangabe.");
                     ShowWaffenLager(playerid,0);
                     return 1;
                 }
                 if( menge < 1 ) {
-                    SendClientMessage(playerid,COLOR_RED,"Ungültige Mengenangabe");
+                    SendClientMessage(playerid,COLOR_RED,"Ungültige Mengenangabe.");
                     ShowWaffenLager(playerid,0);
                     return 1;
                 }
                 if( Spieler[playerid][pWaffenteile] < menge ) {
-                    SendClientMessage(playerid,COLOR_RED,"Du besitzt nicht diese Menge an Waffenteilen");
+                    SendClientMessage(playerid,COLOR_RED,"Du besitzt diese Menge an Waffenteilen nicht.");
                     ShowWaffenLager(playerid,0);
                     return 1;
                 }
                 if( Spieler[playerid][pFraktion] == 0 ) {
-                    SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion");
+                    SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
                     return 1;
                 }
                 new
@@ -32157,7 +32175,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 index = GetWaffenLagerIndex( Spieler[playerid][pFraktion] );
                 Spieler[playerid][pWaffenteile] -= menge;
                 g_WaffenLager[index][WL_iWaffenTeile] += menge;
-                format(String,sizeof(String),"Spieler %s hat %d Waffenteile in das Waffenlager gelegt",GetName(playerid),menge);
+                format(String,sizeof(String),"Spieler %s hat %d Waffenteile in das Waffenlager gelegt.",GetName(playerid),menge);
                 SendFraktionMessage( Spieler[playerid][pFraktion], COLOR_YELLOW, String);
                 ShowWaffenLager(playerid,0);
             }
@@ -32174,13 +32192,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     String[128],
                     index;
                 if( Spieler[playerid][pFraktion] == 0 ) {
-                    SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion");
+                    SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
                     return 1;
                 }
                 index = GetWaffenLagerIndex( Spieler[playerid][pFraktion] );
                 price = g_WaffenLagerConfig[listitem][WLC_iPrice];
                 if( g_WaffenLager[index][WL_iWaffenTeile] < price  ) {
-                    SendClientMessage(playerid,COLOR_RED,"Im Waffenlager befinden sich nicht genug Waffenteile");
+                    SendClientMessage(playerid,COLOR_RED,"Im Waffenlager befinden sich nicht genug Waffenteile.");
                     ShowWaffenLager(playerid,0);
                     return 1;
                 }
@@ -33992,7 +34010,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new string3[256];
                     new string4[768];
                     format(string1, sizeof(string1), "Geld verdienst du durchs arbeiten! Beim Arbeitsamt werden dir zahlreiche Berufe angeboten,\n");
-                    format(string2, sizeof(string2), "die auch bei jedem PayDay(alle 60 Minuten) bezahlt werden.\nAuch als Mitglied einer Fraktion erhälst du Gehalt.\n");
+                    format(string2, sizeof(string2), "die auch bei jedem PayDay(alle 60 Minuten) bezahlt werden.\nAuch als Mitglied einer Fraktion erhältst du Gehalt.\n");
                     format(string3, sizeof(string3), "\n{FF0000}Es ist STRENGST VERBOTEN Geld an andere zu verschenken/verleihen und kann mit einer Sperrung bestraft werden!\n");
                     format(string4, sizeof(string4), "\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
                     format(string4, sizeof(string4), "%s%s%s%s", string1, string2, string3, string4);
@@ -35705,7 +35723,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_RED, "Du hast bereits einen Job.");
                         return 1;
                     }
-                    ShowPlayerDialog(playerid, DIALOG_SPAWNMELDUNG, DIALOG_STYLE_MSGBOX, "ILLEGALE BERUFE", COLOR_HEX_WHITE"Illegale Berufe erhältst du nur bei Jeff,\nder in einem Van hinter der Stadthalle steht. ", "OK", "");
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "ILLEGALE BERUFE", COLOR_HEX_WHITE"Illegale Berufe erhältst du nur bei Jeff,\nder bei seinem Van in der Gasse\nhinter dem 24/7 östlich der Stadthalle steht.", "Ok", "");
                     return 1;
                 }
                 /*if(listitem==23)
@@ -35934,7 +35952,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_RED, "Du hast bereits einen Job.");
                         return 1;
                     }
-                    ShowPlayerDialog(playerid, DIALOG_SPAWNMELDUNG, DIALOG_STYLE_MSGBOX, "ILLEGALE BERUFE", COLOR_HEX_WHITE"Illegale Berufe erhältst du nur bei Jeff,\nder in einem Van hinter der Stadthalle steht. ", "OK", "");
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "ILLEGALE BERUFE", COLOR_HEX_WHITE"Illegale Berufe erhältst du nur bei Jeff,\nder bei seinem Van in der Gasse\nhinter dem 24/7 östlich der Stadthalle steht.", "OK", "");
                     return 1;
                 }
                 /*if(listitem==23)
@@ -36788,7 +36806,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             Biz[39][bKasse] += 150;
                             GivePlayerCash(playerid, -150);
                             Spieler[playerid][pKekse] = 5;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für 150$ gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
+                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                         }
                     }
                     if(pVW == 22)
@@ -36799,7 +36817,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[22][bKasse] += 150;
                         GivePlayerCash(playerid, -150);
                         Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für 150$ gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                     }
                     if(pVW == 23)
                     {
@@ -36809,7 +36827,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[23][bKasse] += 150;
                         GivePlayerCash(playerid, -150);
                         Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für 150$ gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                     }
                     if(pVW == 24)
                     {
@@ -36819,7 +36837,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[24][bKasse] += 150;
                         GivePlayerCash(playerid, -150);
                         Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für 150$ gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                     }
                     if(pVW == 26)
                     {
@@ -36829,7 +36847,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[26][bKasse] += 150;
                         GivePlayerCash(playerid, -150);
                         Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für 150$ gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                     }
                     if(pVW == 27)
                     {
@@ -36839,7 +36857,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[27][bKasse] += 150;
                         GivePlayerCash(playerid, -150);
                         Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für 150$ gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                     }
                     if(pVW == 28)
                     {
@@ -36849,7 +36867,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[28][bKasse] += 150;
                         GivePlayerCash(playerid, -150);
                         Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für 150$ gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                     }
                     ShowBuyInformation(playerid,"~y~Kekse ~w~gekauft!");
                 }
@@ -36866,7 +36884,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             Biz[39][bKasse] += 225;
                             GivePlayerCash(playerid, -225);
                             Spieler[playerid][pZigaretten] = 10;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für 225$ gekauft. Verwende sie per /Rauchzig.");
+                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                         }
                     }
                     if(pVW == 22)
@@ -36877,7 +36895,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[22][bKasse] += 225;
                         GivePlayerCash(playerid, -225);
                         Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für 225$ gekauft. Verwende sie per /Rauchzig.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                     }
                     if(pVW == 23)
                     {
@@ -36887,7 +36905,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[23][bKasse] += 225;
                         GivePlayerCash(playerid, -225);
                         Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für 225$ gekauft. Verwende sie per /Rauchzig.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                     }
                     if(pVW == 24)
                     {
@@ -36897,7 +36915,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[24][bKasse] += 225;
                         GivePlayerCash(playerid, -225);
                         Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für 225$ gekauft. Verwende sie per /Rauchzig.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                     }
                     if(pVW == 26)
                     {
@@ -36907,7 +36925,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[26][bKasse] += 225;
                         GivePlayerCash(playerid, -225);
                         Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für 225$ gekauft. Verwende sie per /Rauchzig.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                     }
                     if(pVW == 27)
                     {
@@ -36917,7 +36935,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[27][bKasse] += 225;
                         GivePlayerCash(playerid, -225);
                         Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für 225$ gekauft. Verwende sie per /Rauchzig.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                     }
                     if(pVW == 28)
                     {
@@ -36927,7 +36945,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[28][bKasse] += 225;
                         GivePlayerCash(playerid, -225);
                         Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für 225$ gekauft. Verwende sie per /Rauchzig.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                     }
                     ShowBuyInformation(playerid,"~y~Zigeretten ~w~gekauft!");
                 }
@@ -37026,7 +37044,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new preis = 2000;
                     new pVW = GetPlayerVirtualWorld(playerid);
                     if( Spieler[playerid][pHelm] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Helm");
+                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Helm.");
                     }
                     if(pVW == 0)
                     {
@@ -37108,7 +37126,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new preis = 1500;
                     new pVW = GetPlayerVirtualWorld(playerid);
                     if( Spieler[playerid][pMP3Player] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen MP3Player");
+                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen MP3-Player.");
                     }
                     if(pVW == 0)
                     {
@@ -37190,7 +37208,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new preis = 1500;
                     new pVW = GetPlayerVirtualWorld(playerid);
                     if( Spieler[playerid][pKoffer] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Koffer");
+                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Koffer.");
                     }
                     if(pVW == 0)
                     {
@@ -37272,7 +37290,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new preis = 15000;
                     new pVW = GetPlayerVirtualWorld(playerid);
                     if( Spieler[playerid][pRadarfallenWarnung] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits die Radarfallen-Warner");
+                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Radarfallen-Warner.");
                     }
                     if(pVW == 0)
                     {
@@ -37361,8 +37379,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             Biz[39][bWaren] -= 2;
                             Biz[39][bKasse] += 2500;
                             GivePlayerWeapon(playerid, 46, 1);
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Fallschirm für 2.500$ gekauft.");
-                            SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste Enter kannst du es im Sprung in die Tiefe öffnen.");
+                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                            SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                         }
                     }
                     if(pVW == 22)
@@ -37373,8 +37391,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[22][bKasse] += 2500;
                         GivePlayerCash(playerid, -2500);
                         GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Fallschirm für 2.500$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste Enter kannst du es im Sprung in die Tiefe öffnen.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                     }
                     if(pVW == 23)
                     {
@@ -37384,8 +37402,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[23][bKasse] += 2500;
                         GivePlayerCash(playerid, -2500);
                         GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Fallschirm für 2.500$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste Enter kannst du es im Sprung in die Tiefe öffnen.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                     }
                     if(pVW == 24)
                     {
@@ -37395,8 +37413,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[24][bKasse] += 2500;
                         GivePlayerCash(playerid, -2500);
                         GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Fallschirm für 2.500$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste Enter kannst du es im Sprung in die Tiefe öffnen.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                     }
                     if(pVW == 26)
                     {
@@ -37406,8 +37424,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[26][bKasse] += 2500;
                         GivePlayerCash(playerid, -2500);
                         GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Fallschirm für 2.500$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste Enter kannst du es im Sprung in die Tiefe öffnen.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                     }
                     if(pVW == 27)
                     {
@@ -37417,8 +37435,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[27][bKasse] += 2500;
                         GivePlayerCash(playerid, -2500);
                         GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Fallschirm für 2.500$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste Enter kannst du es im Sprung in die Tiefe öffnen.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                     }
                     if(pVW == 28)
                     {
@@ -37428,8 +37446,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[28][bKasse] += 2500;
                         GivePlayerCash(playerid, -2500);
                         GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Fallschirm für 2.500$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste Enter kannst du es im Sprung in die Tiefe öffnen.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                     }
                     ShowBuyInformation(playerid,"~y~Fallschirm ~w~gekauft!");
                 }
@@ -37449,7 +37467,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem==1)//Sani
                 {
-                    if(GetPlayerInterior(playerid) > 0)return SendClientMessage(playerid, COLOR_RED, "Du bist in einem Gebäude!");
+                    // if(GetPlayerInterior(playerid) > 0)return SendClientMessage(playerid, COLOR_RED, "Du bist in einem Gebäude!");
                     if (Spieler[playerid][pJailed] != 0) return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keine Sanitäter rufen!");
                     return cmd_anrufen(playerid,"112");
                 }
@@ -37501,7 +37519,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Ordnungsbeamter online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Ordnungsbeamter online.");
                         return 1;
                     }
                     NeedOAMT[playerid] = 1;
@@ -37527,7 +37545,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Taxifahrer online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Taxifahrer online.");
                         return 1;
                     }
                     NeedTAXI[playerid] = 1;
@@ -37553,7 +37571,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Pizzalieferant online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Pizzalieferant online.");
                         return 1;
                     }
                     NeedPIZZA[playerid] = 1;
@@ -37578,7 +37596,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Wheelman online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Wheelman online.");
                         return 1;
                     }
                     NeedWHEEL[playerid] = 1;
@@ -37604,7 +37622,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Anwalt online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Anwalt online.");
                         return 1;
                     }
                     NeedAWALT[playerid] = 1;
@@ -37622,7 +37640,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(GetPlayerInterior(playerid) == 1 ) index = GetBizIndexByID(54);
                 if( index == 0 ) return 0;
                 {
-                    if(Biz[index][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Geschäft ist ausverkauft!");
+                    if(Biz[index][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat keine Waren mehr.");
                     if(listitem==0)
                     {
                         if(GetPlayerMoney(playerid) < 750)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
@@ -39095,11 +39113,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 3)
                 {
-                    ShowPlayerDialog(playerid, AUTOHAUSER, DIALOG_STYLE_LIST, "Fahrzeugverkauf", "Luxuriöses Autohaus in Los Santos\nGünstiges Autohaus in Los Santos\nMotorradverkauf in Los Santos\nFlugzeugverkauf in Los Santos\nBootsverkauf in Los Santos\nFahrradladen in Los Santos\nOldtimer Autohaus in Los Santos", "Auswählen","Beenden");
+                    new dialogText[512];
+                    for (new i; i < sizeof(g_vehicleDealership); i++)
+                        format(dialogText, sizeof(dialogText), "%s\n%s", dialogText, g_vehicleDealership[i][VEHICLE_DEALERSHIP_NAME]);
+
+                    ShowPlayerDialog(playerid, AUTOHAUSER, DIALOG_STYLE_LIST, "Fahrzeugverkauf", dialogText, "Auswählen", "Beenden");
                 }
                 if(listitem == 4)
                 {
-                    ShowPlayerDialog(playerid, CARSHARING, DIALOG_STYLE_LIST, "CarSharing-Station", "Station am Coutt & Schutz in Los Santos\nStation am Neulingsspawn in Los Santos\nStation nähe Neulingsspawn in Los Santos\nStation am Hauptammunation in Los Santos\nStation Nähe dem Burger Shot North in Los Santos\nStation am Los Santos Strand\nStation in Las Venturas\nFlugzeugverleih in Los Santos\nBootsverleih in Los Santos", "Auswählen","Beenden");
+                    ShowPlayerDialog(playerid, CARSHARING, DIALOG_STYLE_LIST, "CarSharing-Station", "Station am Pizza Stack in Downtown, Los Santos\nStation am Neulingsspawn in Los Santos\nStation nähe Neulingsspawn in Los Santos\nStation am Hauptammunation in Los Santos\nStation Nähe dem Subway in Los Santos\nStation am Los Santos Strand\nStation in Las Venturas\nFlugzeugverleih in Los Santos\nBootsverleih in Los Santos", "Auswählen","Beenden");
                 }
                 if(listitem == 5)
                 {
@@ -39115,7 +39137,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 8)
                 {
-                    ShowPlayerDialog(playerid, DIESHOPS, DIALOG_STYLE_LIST, "24/7 Shops", "24/7 Shop in Los Santos, Nähe dem LSPD\n24/7 Shop in Los Santos, Nähe dem Burger Shot North\n24/7 Shop in Los Santos, Nähe der Grove Street\n24/7 Shop im Los Santos Shopping Markt", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, DIESHOPS, DIALOG_STYLE_LIST, "24/7 Shops", "24/7 Shop in Los Santos, Nähe dem LSPD\n24/7 Shop in Los Santos, Nähe dem Subway\n24/7 Shop in Los Santos, Nähe der Grove Street\n24/7 Shop im Los Santos Shopping Markt", "Auswählen", "Abbrechen");
                 }
                 if(listitem == 9)
                 {
@@ -39127,7 +39149,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 11)
                 {
-                    ShowPlayerDialog(playerid, RESTO, DIALOG_STYLE_LIST, "Restaurant", "Burger Shot North in Los Santos\nBurger Shot Shot in Los Santos\nPizzaria in Los Santos\nCluckin' Bell North in Los Santos\nCluckin' Bell South in Los Santos\nPizzaria in Las Venturas, Nähe des LVPD\nCluckin' Bell in Las Venturas, Nähe des LVPD", "Auswählen","Beenden");
+                    ShowPlayerDialog(playerid, RESTO, DIALOG_STYLE_LIST, "Restaurant", "Subway in Los Santos\nBurger Shot South in Los Santos\nPizzaria in Los Santos\nCluckin' Bell North in Los Santos\nCluckin' Bell South in Los Santos\nPizzaria in Las Venturas, Nähe des LVPD\nCluckin' Bell in Las Venturas, Nähe des LVPD", "Auswählen","Beenden");
                 }
                 if(listitem == 12)
                 {
@@ -39159,7 +39181,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 19)
                 {
-                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nSan News Agency", "Auswählen", "Abbrechen");
                 }
             }
         }
@@ -39280,47 +39302,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             }
             if(!response)return 1;
         }
+
         case AUTOHAUSER:
         {
-            if(response)
-            {
-                if(listitem==0)
-                {
-                    SetPlayerCheckpointEx(playerid, LUXURYCARDEALERSHIP_COORDS, 2.0, CP_NAVI8);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Das luxuriöse Autohaus in Los Santos wurde auf der Karte Rot markiert.");
-                }
-                if(listitem==1)
-                {
-                    SetPlayerCheckpointEx(playerid, CHEAPCARDEALERSHIPLS_COORDS, 2.0, CP_NAVI9);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Das günstige Autohaus in Los Santos wurde auf der Karte Rot markiert.");
-                }
-                if(listitem==2)
-                {
-                    SetPlayerCheckpointEx(playerid, BIKEDEALERSHIP_COORDS, 2.0, CP_NAVI10);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Motorradhandel in Los Santos wurde auf der Karte Rot markiert.");
-                }
-                if(listitem==3)
-                {
-                    SetPlayerCheckpointEx(playerid, AIRPORTLS_PLANE_DEALERSHIP_POINT, 2.0, CP_NAVI11);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Flugzeughandel in Los Santos wurde auf der Karte Rot markiert.");
-                }
-                if(listitem==4)
-                {
-                    SetPlayerCheckpointEx(playerid, BOATDEALERSHIPLS_COORDS, 2.0, CP_NAVI11);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Bootshandel in Los Santos wurde auf der Karte Rot markiert.");
-                }
-                if(listitem==5)
-                {
-                    SetPlayerCheckpointEx(playerid, BICYCLEDEALERSHIP_COORDS, 2.0, CP_NAVI11);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrradladen in Los Santos wurde auf der Karte Rot markiert.");
-                }
-                if(listitem==6)
-                {
-                    SetPlayerCheckpointEx(playerid, OLDTIMERDEALERSHIP_COORDS, 2.0, CP_NAVI11);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Das Oldtimer Autohaus in Los Santos wurde auf der Karte Rot markiert.");
-                }
-            }
-            if(!response)return 1;
+            if (!response) return 1;
+            if (listitem < 0 || listitem > sizeof(g_vehicleDealership)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] Keine gültige Auswahl.");
+            SetPlayerCheckpointEx(playerid, g_vehicleDealership[listitem][VEHICLE_DEALERSHIP_COORD_X], g_vehicleDealership[listitem][VEHICLE_DEALERSHIP_COORD_Y], 
+                g_vehicleDealership[listitem][VEHICLE_DEALERSHIP_COORD_Z], 2.0, CP_NAVI9);
+            return SCMFormatted(playerid, COLOR_GREEN, "[GPS] {FFFF00}%s {FFFFFF}wurde Rot markiert.", g_vehicleDealership[listitem][VEHICLE_DEALERSHIP_NAME]);
         }
         case CARSHARING:
         {
@@ -39329,7 +39318,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem==0)
                 {
                     SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_IDLEWOOD, 2.0, CP_NAVI11);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih am Coutt & Schutz in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih am Pizzastack in Downtown, Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
@@ -39349,7 +39338,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem==4)
                 {
                     SetPlayerCheckpointEx(playerid, CARRENTALSTATIONS_COORDS_BSN, 2.0, CP_NAVI11);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih in Los Santos, Nähe dem Burger Shot North, wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Fahrzeugverleih in Los Santos, Nähe dem Subway, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
@@ -39381,7 +39370,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem==0)
                 {
                     SetPlayerCheckpointEx(playerid, SUBWAY_DRIVEIN_COORDS, 2.0, CP_NAVI12);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Burger Shot North in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Subway in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
@@ -39517,7 +39506,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem==1)
                 {
                     SetPlayerCheckpointEx(playerid, 1316.0682,-906.5001,38.3864,2.0, CP_NAVI28);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop in Los Santos, Nähe des Burger Shot North, wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop in Los Santos, Nähe des Subway, wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
@@ -39907,6 +39896,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SetPlayerCheckpointEx(playerid, SHISHABAR_ENTER_COORDS, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Shisha-Bar in Los Santos wurde auf der Karte Rot markiert.");
                 }
+                if(listitem==15)
+                {
+                    SetPlayerCheckpointEx(playerid, SHISHABAR_ENTER_COORDS, 2.0, CP_NAVI76);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die San News Agency wurde auf der Karte Rot markiert.");
+                }
             }
             if(!response)return 1;
         }
@@ -40201,7 +40195,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 Spieler[playerid][pJob] = 17;
                 Spieler[playerid][pJobWechsel] = gettime() + (60*60);
-                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du dein Job. Jetzt hau ab, bevor uns jemand sieht!");
+                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du deinen Job. Jetzt hau ab, bevor uns jemand sieht!");
                 SendClientMessage(playerid, COLOR_LIGHTRED, "Du bist nun Drogendealer. Tippe /Help für Befehle!");
             }
             if(!response)
@@ -40219,7 +40213,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 Spieler[playerid][pJob] = 18;
                 Spieler[playerid][pJobWechsel] = gettime() + (60*60);
-                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du dein Job. Jetzt hau ab, bevor uns jemand sieht!");
+                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du deinen Job. Jetzt hau ab, bevor uns jemand sieht!");
                 SendClientMessage(playerid, COLOR_LIGHTRED, "Du bist nun Waffendealer. Tippe /Help für Befehle!");
             }
             if(!response)
@@ -40236,7 +40230,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 Spieler[playerid][pJob] = 19;
                 Spieler[playerid][pJobWechsel] = gettime() + (60*60);
-                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du dein Job. Jetzt hau ab, bevor uns jemand sieht!");
+                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du deinen Job. Jetzt hau ab, bevor uns jemand sieht!");
                 SendClientMessage(playerid, COLOR_LIGHTRED, "Du bist nun Taschendieb. Tippe /Help für Befehle!");
             }
             if(!response)
@@ -40250,7 +40244,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 Spieler[playerid][pJob] = 20;
                 Spieler[playerid][pJobWechsel] = gettime() + (60*60);
-                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du dein Job. Jetzt hau ab, bevor uns jemand sieht!");
+                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du deinen Job. Jetzt hau ab, bevor uns jemand sieht!");
                 SendClientMessage(playerid, COLOR_LIGHTRED, "Du bist nun eine Hure. Tippe /Help für Befehle!");
             }
             if(!response)
@@ -40264,7 +40258,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 Spieler[playerid][pJob] = 21;
                 Spieler[playerid][pJobWechsel] = gettime() + (60*60);
-                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du dein Job. Jetzt hau ab, bevor uns jemand sieht!");
+                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du deinen Job. Jetzt hau ab, bevor uns jemand sieht!");
                 SendClientMessage(playerid, COLOR_LIGHTRED, "Du bist nun ein Wanted-Hacker. Tippe /Help für Befehle!");
             }
             if(!response)
@@ -40278,7 +40272,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 Spieler[playerid][pJob] = 22;
                 Spieler[playerid][pJobWechsel] = gettime() + (60*60);
-                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du dein Job. Jetzt hau ab, bevor uns jemand sieht!");
+                SendClientMessage(playerid, COLOR_WHITE, "Jeff sagt: Hier hast du deinen Job. Jetzt hau ab, bevor uns jemand sieht!");
                 SendClientMessage(playerid, COLOR_LIGHTRED, "Du bist nun ein Autodieb. Tippe /Help für Befehle!");
             }
             if(!response)
@@ -40310,7 +40304,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Busfahrer online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Busfahrer online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_BUSLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Busfahrer-Liste",str2, "Schließen", "");
@@ -40332,7 +40326,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Trucker online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Trucker online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_TRUCKLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Truck-Liste",str2, "Schließen", "");
@@ -40354,7 +40348,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Pilot online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Pilot online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_PILOTLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Pilot-Liste",str2, "Schließen", "");
@@ -40376,7 +40370,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Es sind keine Mechatroniker online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es sind keine Mechatroniker online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_KFZLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"KFZ-Mech.-Liste",str2, "Schließen", "");
@@ -40398,7 +40392,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Anwalt online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Anwalt online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_ANWALTLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Anwalt-Liste",str2, "Schließen", "");
@@ -40420,7 +40414,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Taxifahrer online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Taxifahrer online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_TAXITLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Taxi-Liste",str2, "Schließen", "");
@@ -40442,7 +40436,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Teammitglied online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Teammitglied online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_ADMINLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Admin-Liste", str2, "Schließen", "");
@@ -40464,7 +40458,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein News Reporter online.");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein News Reporter online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_REPLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"News Reporter Liste",str2, "Schließen", "");
@@ -40486,7 +40480,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Sanitäter online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Sanitäter online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_SANILISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Sanitäter Liste",str2, "Schließen", "");
@@ -40508,7 +40502,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Ordnungsbeamter online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Ordnungsbeamter online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_OAMTLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Ordnungsbeamten Liste",str2, "Schließen", "");
@@ -40530,7 +40524,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(!IsOnline)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Kein Fahrlehrer online!");
+                        SendClientMessage(playerid, COLOR_RED, "Es ist kein Fahrlehrer online.");
                         return 1;
                     }
                     ShowPlayerDialog(playerid, DIALOG_FAHRLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Fahrlehrer Liste", str2, "Schließen", "");
@@ -40554,7 +40548,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         }
                         if(!IsOnline)
                         {
-                            SendClientMessage(playerid, COLOR_RED, "Keine Verbrecher online!");
+                            SendClientMessage(playerid, COLOR_RED, "Es sind keine Verbrecher online.");
                             return 1;
                         }
                         ShowPlayerDialog(playerid, DIALOG_WTDLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Verbrecher Liste",str2, "Schließen", "");
@@ -40576,7 +40570,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         }
                         if(!IsOnline)
                         {
-                            SendClientMessage(playerid, COLOR_RED, "Keine Toten online!");
+                            SendClientMessage(playerid, COLOR_RED, "Es ist niemand tot.");
                             return 1;
                         }
                         ShowPlayerDialog(playerid, DIALOG_TOTLISTE, DIALOG_STYLE_MSGBOX, COLOR_HEX_ORANGE"Gestorbenenliste",str2, "Schließen", "");
@@ -40977,7 +40971,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         new
                             String[256];
                         DestroyDynamic3DTextLabel(t3dBus[busIndex]);
-                        t3dBus[busIndex] = Text3D:CreateDynamic3DTextLabel("Initialisierung...", COLOR_GREY, 0.0, 0.0, 0.0 , 14.0 , .attachedvehicle = vehicleid, .testlos = 1 , .streamdistance = 30.0 );
+                        t3dBus[busIndex] = Text3D:CreateDynamic3DTextLabel("Initialisierung...", 0x00FFFFFF, 0.0, 0.0, 0.0 , 14.0 , .attachedvehicle = vehicleid, .testlos = 1 , .streamdistance = 30.0 );
 
                         Streamer_SetFloatData( STREAMER_TYPE_3D_TEXT_LABEL , t3dBus[busIndex] , E_STREAMER_ATTACH_OFFSET_X , 0.0 );
                         Streamer_SetFloatData( STREAMER_TYPE_3D_TEXT_LABEL , t3dBus[busIndex] , E_STREAMER_ATTACH_OFFSET_Y , 0.0 );
@@ -43146,7 +43140,7 @@ stock Stats(playerid, targetid)
             " #COL_LIGHTBLUE "Beruf:" #COL_DEFAULT "\nFraktion: [%s], Rang: [%s], Fraktionswarns: [%i/3], Beruf: [%s]\n\n\
             " #COL_LIGHTBLUE "Inventare:" #COL_DEFAULT "\nDrogen: [%s], Waffenteile: [%s], Wantedcodes: [%s], Spice: [%s] \n\
             Safebox Drogen: [%s], Safebox Waffenteile: [%s], Safebox Wantedcodes: [%s], Safebox Spice: [%s]\n\
-            Lotto-Ticket: [%d], Zigaretten: [%s], Kekse: [%s], Tankkanister: [%d]\nFische: [%d], Köder: [%d], Angel: [%s], Lobe: [%d]\n\n\
+            Lotto-Ticket: [%s], Zigaretten: [%s], Kekse: [%s], Tankkanister: [%d]\nFische: [%d], Köder: [%d], Angel: [%s], Lobe: [%d]\n\n\
             " #COL_LIGHTBLUE "Inventare:" #COL_DEFAULT "\nMorde: [%d], Verbrechen: [%d], Tode: [%d], KD-Rate: [%.2f],  Wantedtode: [%d], Wantedlevel: [%d], Knast: [%d]\n\n\
             " #COL_LIGHTBLUE "Sonstiges:" #COL_DEFAULT "\n",
             GetName(targetid), Spieler[targetid][pLevel], Spieler[targetid][pGeburtstag], Spieler[targetid][pExp], Spieler[targetid][pLevel] * 4,
@@ -52077,7 +52071,7 @@ COMMAND:kzsuchen(playerid,params[]) {
         return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /kzsuchen [Kennzeichen]");
     }
     if(!strcmp(kennzeichen,KEIN_KENNZEICHEN)) {
-        return SendClientMessage(playerid,COLOR_BLUE, "Ungültiges Kennzeichen");
+        return SendClientMessage(playerid,COLOR_BLUE, "Ungültiges Kennzeichen.");
     }
     new
         giveid = INVALID_PLAYER_ID,
@@ -52096,7 +52090,7 @@ COMMAND:kzsuchen(playerid,params[]) {
         }
     }
     if( giveid == INVALID_PLAYER_ID ) {
-        return SendClientMessage(playerid,COLOR_BLUE, "Kein Fahrzeughalter mit diesem Kennzeichen gefunden");
+        return SendClientMessage(playerid,COLOR_BLUE, "Kein Fahrzeughalter mit diesem Kennzeichen gefunden.");
     }
     /*
     _______KFZ-AKTE_______
@@ -52127,9 +52121,7 @@ COMMAND:kzsuchen(playerid,params[]) {
     SendClientMessage(playerid,COLOR_WHITE,String);
     format(String,sizeof(String),"Steuern: $%s", AddDelimiters(Spieler[giveid][pKFZSteuer]));
     SendClientMessage(playerid,COLOR_WHITE,String);
-    format(String,sizeof(String),"Bargeld: $%s", AddDelimiters(Spieler[giveid][pCash]));
-    SendClientMessage(playerid,COLOR_WHITE,String);
-    ReturnPlayerJob(playerid,job);
+    ReturnPlayerJob(giveid,job);
     format(String,sizeof(String),"Beruf: %s",job);
     SendClientMessage(playerid,COLOR_WHITE,String);
     return 1;
@@ -52672,14 +52664,14 @@ public cancelDrink(playerid) {
 }
 COMMAND:wcodes(playerid,params[]) {
     if(Spieler[playerid][pJob] != 21 ) {
-        SendClientMessage(playerid, COLOR_RED, "Du bist kein WantedHacker");
+        SendClientMessage(playerid, COLOR_RED, "Du bist kein Wantedhacker.");
         return 1;
     }
     if( !IsPlayerInRangeOfPoint(playerid,3.0, WANTEDHACKERBASE_POINT) ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht am WantedHacker Platz");
+        return SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht am Wantedhacker Platz.");
     }
     if( gettime() < Spieler[playerid][punixWantedCodes] ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du musst noch warten bis du erneut WantedCodes erhälst");
+        return SendClientMessage(playerid,COLOR_RED,"Du musst noch warten bis du erneut Wantedcodes erhältst.");
     }
     new
         String[128],
@@ -52687,7 +52679,7 @@ COMMAND:wcodes(playerid,params[]) {
     codes = 4 + random(6);
     Spieler[playerid][punixWantedCodes] = gettime() + 20*60;
     Spieler[playerid][pWantedCodes] += codes;
-    format(String,sizeof(String),"Du hast %d WantedCodes erhalten ( Hand: %d )",codes,Spieler[playerid][pWantedCodes]);
+    format(String,sizeof(String),"Du hast %d Wantedcodes erhalten (Hand: %d).",codes,Spieler[playerid][pWantedCodes]);
     SendClientMessage(playerid,COLOR_GREEN,String);
     return 1;
 }
@@ -52699,12 +52691,12 @@ COMMAND:wantedhacken(playerid,params[])
     vehicleid = GetPlayerVehicleID(playerid);
     if(Spieler[playerid][pJob] != 21 )
     {
-        SendClientMessage(playerid, COLOR_RED, "Du bist kein WantedHacker");
+        SendClientMessage(playerid, COLOR_RED, "Du bist kein Wantedhacker");
         return 1;
     }
     else if(!IsPlayerInDynamicArea(playerid,g_iWantedHackerZone))
     {
-        SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht in der nähe des Polizei Präsidiums");
+        SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht in der Nähe des Polizei Präsidiums.");
     }
     modelid = GetVehicleModel(vehicleid);
     if( (modelid != 413) &&  (modelid != 459) &&  (modelid != 482) ) {
@@ -52716,7 +52708,7 @@ COMMAND:wantedhacken(playerid,params[])
     }
     else if(Spieler[playerid][pWantedCodes]<=0)
     {
-        SendClientMessage(playerid,COLOR_RED,"Du hast keine WantedCodes auf der Hand");
+        SendClientMessage(playerid,COLOR_RED,"Du hast keine Wantedcodes auf der Hand.");
     }
     else
     {
@@ -52760,7 +52752,7 @@ public Pulse_WantedHacker(playerid,giveid,wantedcodes) {
         if( Spieler[giveid][pWanteds] == 0 ) {
             format(String,sizeof(String),"Der Spieler %s besitzt keine Wanteds. Du konntest daher keine Wanteds löschen!",GetName(giveid));
             SendClientMessage(playerid,COLOR_LIGHTRED2,String);
-            format(String,sizeof(String),"Du erhälst %d WantedCodes zurück",wantedcodes);
+            format(String,sizeof(String),"Du erhältst %d WantedCodes zurück",wantedcodes);
             SendClientMessage(playerid,COLOR_GREEN,String);
             Spieler[playerid][pWantedCodes] += wantedcodes;
             return 1;
@@ -52771,7 +52763,7 @@ public Pulse_WantedHacker(playerid,giveid,wantedcodes) {
             ueberschuss = wantedcodes - Spieler[giveid][pWanteds];
             format(String,sizeof(String),"Du hast versucht Spieler %s %d Wanteds zu reinigen,er hat aber nur %d Wanteds.",GetName(giveid),wantedcodes,Spieler[giveid][pWanteds]);
             SendClientMessage(playerid,COLOR_LIGHTRED2,String);
-            format(String,sizeof(String),"Daher erhälst du %d WantedCodes zurück",ueberschuss );
+            format(String,sizeof(String),"Daher erhältst du %d WantedCodes zurück",ueberschuss );
             SendClientMessage(playerid,COLOR_GREEN,String);
             Spieler[playerid][pWantedCodes] += ueberschuss;
             wantedcodes = ( wantedcodes - ueberschuss );
@@ -58649,7 +58641,7 @@ stock ShowPlayerHandyList(playerid) {
     for(new i ; i < sizeof(g_Mobiltelefon) ; i++) {
         format(String,sizeof(String),"%s%s - $%s\n",String, g_Mobiltelefon[i][M_sName], AddDelimiters(g_Mobiltelefon[i][M_iPrice]));
     }
-    ShowPlayerDialog(playerid, DIALOG_HANDYKAUFEN, DIALOG_STYLE_LIST, COLOR_HEX_ORANGE"Handy Kaufen", String , "Sofortkauf", "Abbrechen");
+    ShowPlayerDialog(playerid, DIALOG_HANDYKAUFEN, DIALOG_STYLE_LIST, COLOR_HEX_ORANGE"Handy kaufen", String , "Sofortkauf", "Abbrechen");
     return 1;
 }
 
@@ -63748,7 +63740,7 @@ CMD:bizverstaatlichen(playerid)
 
     if (Biz[b][bKasse] > 0) {
         Spieler[playerid][pBank] += Biz[b][bKasse];
-        format(message, sizeof(message), "In deiner Bizkasse waren noch $%s. Du erhälst diese noch vor dem Verkauf zurück.", AddDelimiters(Biz[b][bKasse]));
+        format(message, sizeof(message), "In deiner Bizkasse waren noch $%s. Du erhältst diese noch vor dem Verkauf zurück.", AddDelimiters(Biz[b][bKasse]));
         SendClientMessage(playerid, COLOR_YELLOW, message);
     }
 
@@ -63775,7 +63767,7 @@ CMD:tankeverstaatlichen(playerid)
         format(Tanke[t][tBesitzer],MAX_PLAYER_NAME,"Niemand");
         Spieler[playerid][pPlayerTank] = 999;
         if(Tanke[t][tKasse] > 0 ) {
-            format(String,sizeof(String),"In deiner Tankkasse waren noch $%s. Du erhälst diese noch vor dem Verkauf zurück.", AddDelimiters(Tanke[t][tKasse]));
+            format(String,sizeof(String),"In deiner Tankkasse waren noch $%s. Du erhältst diese noch vor dem Verkauf zurück.", AddDelimiters(Tanke[t][tKasse]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
             Spieler[playerid][pBank] += Tanke[t][tKasse];
         }
@@ -63897,7 +63889,7 @@ COMMAND:tankstelleankaufen(playerid,params[]) {
         return 1;
     }
     if( Spieler[playerid][pPlayerTank] != 999 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits ein Geschäft");
+        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits ein Geschäft.");
     }
     if( Spieler[giveid][pPlayerTank] == 999) {
         return SendClientMessage(playerid, COLOR_RED, "Der Verkäufer ist nicht mehr in Besitz der Angebotenen Tankstelle");
@@ -66193,10 +66185,10 @@ CMD:elektromarkt(playerid)
     if( IsPlayerInRangeOfPoint(playerid,5.0, ELECTRONICSSHOP_COORDS) )
     {
         if( Spieler[playerid][pHandyGeld] == HANDY_VERTRAG ) {
-            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy Kaufen\nHandyvertrag kündigen\nKamera kaufen ($750)\nMP3-Player ($1.500", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandyvertrag kündigen\nKamera kaufen ($750)\nMP3-Player ($1.500", "Kaufen", "Abbrechen");
         }
         else {
-            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy Kaufen\nHandy Vertrag ($1.500)\nKamera kaufen ($750)\nMP3-Player ($1.500)\nCallYa-Handykarte\nCallYa Guthaben", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandy Vertrag ($1.500)\nKamera kaufen ($750)\nMP3-Player ($1.500)\nCallYa-Handykarte\nCallYa Guthaben", "Kaufen", "Abbrechen");
         }
         return 1;
     }
@@ -67306,10 +67298,9 @@ stock ShowNextCow(playerid) {
 }
 
 COMMAND:zollpass(playerid,params[]) {
-	if( !IsPlayerInRangeOfPoint(playerid,3.0,CITYHALL_INTERIOR_DESK1))
-	    return SendClientMessage(playerid,COLOR_RED,"Du kannst hier keinen Zollpass kaufen.");
+	if (!IsPlayerInRangeOfPoint(playerid, 3.0, CITYHALL_INTERIOR_DESK1)) return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keinen Zollpass kaufen.");
 
-	ShowPlayerDialog(playerid,DIALOG_ZOLLPASS,DIALOG_STYLE_MSGBOX,"Zollpass","Du kannst für 15.000$ einen Zollpass kaufen.\nDamit kannst du für 7Tage gratis den Zollübergang durchschreiten","Kaufen","Abbruch");
+	ShowPlayerDialog(playerid, DIALOG_ZOLLPASS, DIALOG_STYLE_MSGBOX, "Zollpass", "Du kannst für $15.000 einen Zollpass kaufen.\nDamit kannst du für 7 Tage den Zoll ohne Zahlung passieren.", "Kaufen", "Abbruch");
 	return 1;
 }
 
@@ -69203,13 +69194,13 @@ COMMAND:kfzversicherung(playerid,params[]) {
 }
 
 COMMAND:rechtsschutz(playerid,params[]) {
-    if( !IsPlayerInRangeOfPoint(playerid, 3.0, CITYHALL_INTERIOR_DESK2)) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keine Rechtsschutzversicherung abschließen.");
-    }
+    if (!IsPlayerInRangeOfPoint(playerid, 3.0, CITYHALL_INTERIOR_DESK2)) return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keine Rechtsschutzversicherung abschließen.");
+    
     if( Spieler[playerid][pExperte] > gettime() ) {
         return SendClientMessage(playerid, COLOR_RED, "Deine Rechtsschutz-Versicherung läuft noch");
     }
-    ShowPlayerDialog(playerid,DIALOG_RECHTSSCHUTZ,DIALOG_STYLE_MSGBOX,"Rechtsschutz-Versicherung","Eine Rechtsschutzversicherung deckt im Falle eines Rechtsstreits entstandene Kosten ab.\n\nDie entstandenen Prozesskosten werden bis zu 40% von der Rechtsschutzversicherung gedeckt.\nDie Kosten für ein Rechtsanwalt werden bis zu 65% von der Rechtsschutzversicherung gedeckt, welches die Durchsetzung der rechtlichen Interesse vertritt.\n\nVersichert für: 62 Tage\nPreis: $87.000","Abschließen","Ablehnen");
+
+    ShowPlayerDialog(playerid, DIALOG_RECHTSSCHUTZ, DIALOG_STYLE_MSGBOX, "Rechtsschutz-Versicherung", "Eine Rechtsschutzversicherung deckt im Falle eines Rechtsstreits entstandene Kosten ab.\n\nDie entstandenen Prozesskosten werden bis zu 40% von der Rechtsschutzversicherung gedeckt.\nDie Kosten für einen Rechtsanwalt, welcher die Durchsetzung der rechtlichen Interesse vertritt,\nwerden bis zu 65% von der Rechtsschutzversicherung gedeckt.\n\nVersichert für: 62 Tage\nPreis: $87.000", "Abschließen", "Ablehnen");
     return 1;
 }
 

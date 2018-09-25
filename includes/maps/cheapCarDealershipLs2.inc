@@ -23,8 +23,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
+    // Map Icon
+    CreateDynamicMapIcon(CHEAPCARDEALERSHIPLS2_COORDS, 55, 0, VW_MAIN, MAPS_CHEAPCARDEALERSHIPLS2_INTERIOR);
+    
     // 3DTextLabels
-    text3D_cheapCarDealershipLs2[0] = _:CreateDynamic3DTextLabel("Autohaus - Coutt And Schutz\n" COLOR_HEX_WHITE "Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_BLUE, CHEAPCARDEALERSHIPLS2_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLS2_INTERIOR);
+    text3D_cheapCarDealershipLs2[0] = _:CreateDynamic3DTextLabel("Autohaus - Coutt And Schutz\n" COLOR_HEX_WHITE "Steige in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_BLUE, CHEAPCARDEALERSHIPLS2_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLS2_INTERIOR);
 	
     // Objects
 	object_cheapCarDealershipLs2[0] = CreateDynamicObject(19366, 2133.9816, -1124.0836, 25.1826, 0.0000, 0.0000, 82.5998, VW_MAIN, MAPS_CHEAPCARDEALERSHIPLS2_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall014

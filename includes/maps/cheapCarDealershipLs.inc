@@ -24,10 +24,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Map Icon
-    CreateDynamicMapIcon(CHEAPCARDEALERSHIPLS_COORDS, 9, 0, VW_MAIN, MAPS_CHEAPCARDEALERSHIPLS_INTERIOR);
+    CreateDynamicMapIcon(CHEAPCARDEALERSHIPLS_COORDS, 55, 0, VW_MAIN, MAPS_CHEAPCARDEALERSHIPLS_INTERIOR);
 
     // 3DTextLabels
-    text3D_cheapCarDealershipLs[0] = _:CreateDynamic3DTextLabel("Autohaus - Günstig\n" COLOR_HEX_WHITE "Steig in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_BLUE, CHEAPCARDEALERSHIPLS_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLS_INTERIOR);
+    text3D_cheapCarDealershipLs[0] = _:CreateDynamic3DTextLabel("Autohaus - Günstig\n" COLOR_HEX_WHITE "Steige in ein beliebiges Fahrzeug deiner Wahl ein!", COLOR_BLUE, CHEAPCARDEALERSHIPLS_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHEAPCARDEALERSHIPLS_INTERIOR);
 
     // Objects
 	object_cheapCarDealershipLs[0] = CreateDynamicObject(970, 1810.4207, -1881.6275, 13.0843, 0.0000, 0.0000, -89.5999, VW_MAIN, MAPS_CHEAPCARDEALERSHIPLS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fencesmallb
