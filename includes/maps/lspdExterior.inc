@@ -24,7 +24,7 @@ static Float:DRAWDISTANCE   = 350.0;
 #define LSPD_BARRIER_CLOSED_RY			        -90.0000
 
 // Map variables
-new object_lspdExterior[523];
+new object_lspdExterior[524];
 new pickup_lspdExterior[4];
 new text3D_lspdExterior[2];
 new vehicle_lspdExterior[34]; // using vehicle_lspdExterior for the alcatraz vehicles
@@ -1179,6 +1179,8 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(object_lspdExterior[521], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_lspdExterior[522] = CreateDynamicObject(18981, 939.8906, -1607.6700, 12.1070, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_LSPDEXTERIOR_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_lspdExterior[522], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_lspdExterior[523] = CreateDynamicObject(7909, 949.942139, -1605.317871, 21.017618, -90.0, 0.00000, 0.00000, VW_MAIN, MAPS_LSPDEXTERIOR_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lspdExterior[523], 0, 0, "INVALID", "INVALID", 0xFFFFFFFF);
 
     object_lspdExterior_barrier = object_lspdExterior[416];
 }

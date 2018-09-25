@@ -3651,7 +3651,7 @@ new Float:ATM[][] = {
 {921.592407, -1207.274780, 16.619688},
 {1790.9886, -1303.7802, 119.8556},
 {1484.833862, -1805.827637, 14.740836},
-{59.964539, -1562.702515, 13.211584}
+{959.964539, -1562.702515, 13.211584}
 };
 
 enum e_FahrpruefungCP {
@@ -11980,7 +11980,7 @@ CMD:drivein(playerid)
         new index;
         index = GetBizIndexByID(2);
         Biz[index][bKasse] += 50;
-        return SendClientMessage(playerid, COLOR_ORANGE, "[DRIVE-IN] {FFFFFF}Du hast dir einen Burger am Drive-In bestellt.");
+        return SendClientMessage(playerid, COLOR_ORANGE, "[DRIVE-IN] {FFFFFF}Du hast dir ein Chicken Teriyaki Sub am Drive-In bestellt.");
     }
 
     return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist an keinem Drive-In.");
@@ -18501,7 +18501,7 @@ CMD:clubheal(playerid)
 {
     if(IsPlayerInRangeOfPoint(playerid, 2.0, CLUBINTERIORLS_HEAL_POINT) || IsPlayerInRangeOfPoint(playerid, 2.0, -2653.5183,1413.5085,906.2734))//Clubheilen
     {
-        if(Spieler[playerid][pHeilReady] == 0)return SendClientMessage(playerid, COLOR_YELLOW, "In der Clubküche wird gerade für dich gekocht, warte ein Moment.");
+        if(Spieler[playerid][pHeilReady] == 0)return SendClientMessage(playerid, COLOR_YELLOW, "In der Clubküche wird gerade für dich gekocht, warte einen Moment.");
         Spieler[playerid][pHeilReady] = 0;
         SetPlayerHealth(playerid, 100);
         SetTimerEx("HeilReady", 6000, 0, "i", playerid);
@@ -18515,11 +18515,11 @@ CMD:info1(playerid)
     if(IsPlayerInRangeOfPoint(playerid, 2.0, 2306.2896,-13.4087,26.7422))//Info
     {
         SendClientMessage(playerid, COLOR_BLUE, "================INFORMATIONEN ZU WAFFEN================");
-        SendClientMessage(playerid, COLOR_WHITE, "Auf diesem Server gibt es Bereiche wo allgeim schlagen und schießen");
-        SendClientMessage(playerid, COLOR_WHITE, "strengst untersagt sind! Diese Bereiche nennen sich 'NODM ZONE'");
-        SendClientMessage(playerid, COLOR_WHITE, "Wer in einer NODM ZONE randerliert, wird administrativ bestraft.");
-        SendClientMessage(playerid, COLOR_WHITE, "NoDM Zonen sind oftmals Bereiche wo sich viele Neulinge und Dienstleistende aufhalten oder Behörden sind.");
-        SendClientMessage(playerid, COLOR_WHITE, "Waffen die sich auf dem Boden drehen kann man mit dem Befehl /PICKWAFFE aufheben.");
+        SendClientMessage(playerid, COLOR_WHITE, "Auf diesem Server gibt es Bereiche wo allgemein schlagen und schießen");
+        SendClientMessage(playerid, COLOR_WHITE, "strengstens untersagt ist! Diese Bereiche nennen sich 'NO-DM ZONE'");
+        SendClientMessage(playerid, COLOR_WHITE, "Wer in einer NO-DM ZONE DM betreibt, wird administrativ bestraft.");
+        SendClientMessage(playerid, COLOR_WHITE, "NO-DM Zonen sind oftmals Bereiche wo sich viele Neulinge und Dienstleistende aufhalten oder Behörden sind.");
+        SendClientMessage(playerid, COLOR_WHITE, "Waffen die sich auf dem Boden drehen kann man mit dem Befehl /Pickwaffe aufheben.");
     }
     return 1;
 }
@@ -22310,7 +22310,7 @@ CMD:startflug(playerid)
 {
     if(!(Spieler[playerid][pJob] == 4))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Pilot.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     for(new i=0;i<sizeof(vehicle_airportLs);i++)
@@ -22374,7 +22374,7 @@ CMD:startlinie(playerid)
 {
     if(!(Spieler[playerid][pJob] == 2))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Busfahrer.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     if(!(GetPlayerState(playerid) == PLAYER_STATE_DRIVER))return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Bus!");
@@ -22404,7 +22404,7 @@ CMD:startgarten(playerid)
 {
     if(!(Spieler[playerid][pJob] == 9))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Gärtner.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     new vID = GetPlayerVehicleID(playerid);
@@ -22423,7 +22423,7 @@ CMD:startreinigung(playerid)
 {
     if(!(Spieler[playerid][pJob] == 7))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Straßenreiniger.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     for(new i=0;i<sizeof(reinigung);i++)
@@ -22444,7 +22444,7 @@ CMD:startmuell(playerid)
 {
     if(!(Spieler[playerid][pJob] == 8))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Müllmann.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     new
@@ -22474,7 +22474,7 @@ CMD:startbauarbeiter(playerid)
 {
     if(!(Spieler[playerid][pJob] == 10))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Bauarbeiter.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     for(new i=0;i<sizeof(bauarb);i++)
@@ -22495,7 +22495,7 @@ CMD:startzug(playerid)
 {
     if(!(Spieler[playerid][pJob] == 23))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Zugfahrer.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     for(new i=0;i<sizeof(zugb);i++)
@@ -22520,7 +22520,7 @@ CMD:startschiff(playerid)
 {
     if(!(Spieler[playerid][pJob] == 11))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Schiffs-Fahrer.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     for(new i=0;i<sizeof(vehicle_boatCargoJob);i++)
@@ -22545,7 +22545,7 @@ CMD:starttransport(playerid)
         return 1;
     }
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         //return Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
     }
     new
@@ -35579,7 +35579,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new
                         String[128];
                     /*if( gettime() < Spieler[playerid][pJobWechsel] ) {
-                        SendClientMessage(playerid, COLOR_RED, "Du hast erst vor kurzem dein Beruf gewechselt, bitte warte ein moment!");
+                        SendClientMessage(playerid, COLOR_RED, "Du hast erst vor kurzem dein Beruf gewechselt, bitte warte einen Moment!");
                         return 1;
                     }*/
                     ShowPlayerDialog(playerid, DIALOG_STADTHALLE, DIALOG_STYLE_LIST, "Stadthalle", String, "Auswählen", "Abbrechen");
@@ -35587,7 +35587,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 else if(listitem==3)
                 {
                     /*if( gettime() < Spieler[playerid][pJobWechsel] ) {
-                        SendClientMessage(playerid, COLOR_RED, "Du hast erst vor kurzem dein Beruf gewechselt, bitte warte ein moment!");
+                        SendClientMessage(playerid, COLOR_RED, "Du hast erst vor kurzem dein Beruf gewechselt, bitte warte einen Moment!");
                         return 1;
                     }*/
                     ShowPlayerDialog(playerid, DIALOG_AMT, DIALOG_STYLE_LIST, "Arbeitsamt", COLOR_HEX_WHITE">> aktuellen Beruf kündigen\nBauer\nBusfahrer\nTrucker\nPilot\nStraßenreiniger\nMüllmann\nGärtner\nBauarbeiter\nSchiffs-Fahrer\nGeld-Transportfahrer\n=> Illegale Berufe", "Auswählen", "Abbrechen");
@@ -35595,7 +35595,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 else if(listitem==4)
                 {
                     /*if( gettime() < Spieler[playerid][pJobWechsel] ) {
-                        SendClientMessage(playerid, COLOR_RED, "Du hast erst vor kurzem dein Beruf gewechselt, bitte warte ein moment!");
+                        SendClientMessage(playerid, COLOR_RED, "Du hast erst vor kurzem dein Beruf gewechselt, bitte warte einen Moment!");
                         return 1;
                     }*/
                     ShowPlayerDialog(playerid, DIALOG_SELBSTBERUF, DIALOG_STYLE_LIST, "Selbständigkeit", COLOR_HEX_WHITE">> aktuellen Beruf kündigen\nKFZ-Mechatroniker\nAnwalt\nTaxifahrer\nEisverkäufer\nDetektiv\nPizzalieferant\nHotdogmann\n=> Illegale Berufe", "Auswählen", "Abbrechen");
@@ -39581,7 +39581,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem==4)
                 {
-                    SetPlayerCheckpointEx(playerid, LSPD_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI48);
+                    SetPlayerCheckpointEx(playerid, LCN_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI48);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die La Cosa Nostra Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
@@ -39898,7 +39898,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem==15)
                 {
-                    SetPlayerCheckpointEx(playerid, SHISHABAR_ENTER_COORDS, 2.0, CP_NAVI76);
+                    SetPlayerCheckpointEx(playerid, SANABASE_DONATION_POINT, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die San News Agency wurde auf der Karte Rot markiert.");
                 }
             }
@@ -58699,6 +58699,7 @@ CMD:inventar(playerid, params[]) {
     SCMFormatted(giveid, COLOR_YELLOW, "Spice: {FFFFFF}%s Gramm", AddDelimiters(Spieler[playerid][pSpice]));
     SCMFormatted(giveid, COLOR_YELLOW, "Waffenteile: {FFFFFF}%s Stück", AddDelimiters(Spieler[playerid][pWaffenteile]));
     SCMFormatted(giveid, COLOR_YELLOW, "Wantedcodes: {FFFFFF}%s Stück", AddDelimiters(Spieler[playerid][pWantedCodes]));
+    SCMFormatted(giveid, COLOR_YELLOW, "Kanister: {FFFFFF}%d Stück", Spieler[playerid][pKanister]);
     SCMFormatted(giveid, COLOR_YELLOW, "Kekse: {FFFFFF}%s Stück", AddDelimiters(Spieler[playerid][pKekse]));
     SCMFormatted(giveid, COLOR_YELLOW, "Zigaretten: {FFFFFF}%s Stück", AddDelimiters(Spieler[playerid][pZigaretten]));
     if (Spieler[playerid][pZollValid] == 0) SendClientMessage(giveid, COLOR_YELLOW, "Zollpass: {FFFFFF}Nicht vorhanden");
@@ -67106,7 +67107,7 @@ stock PlayerSkillUpgrade(playerid, SpielerDaten:attribute, skill, points ) {
 COMMAND:startbauer(playerid,params[]) {
     if(!(Spieler[playerid][pJob] == 1))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Farmer.");
     if( Spieler[playerid][tickJobCheckpoint] > gettime() ) {
-        SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte ein Moment!");
+        SendClientMessage(playerid, COLOR_RED, "Du kannst nur alle 5 Minuten arbeiten, bitte warte einen Moment!");
         return 1;
     }
     if( Spieler[playerid][pCowJob] != 0 ) {
