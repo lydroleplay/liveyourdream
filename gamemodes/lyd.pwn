@@ -20642,8 +20642,8 @@ CMD:mparkkralle(playerid)
                             SendClientMessage(besitzer, COLOR_RED, str);
                             format(str, sizeof(str), "Ordnungsbeamter %s hat dein Fahrzeug kostenpflichtig abgeschleppt! Kaufe es am Ordnungsamt wieder frei!", GetName(playerid));
                             SendClientMessage(besitzer, COLOR_RED, str);
-                            Spieler[playerid][pPayCheck] += 200;
-                            GameTextForPlayer(playerid, "~g~+$200", 2000, 1);
+                            Spieler[playerid][pPayCheck] += 700;
+                            GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
                             SavePlayerCar(besitzer,Slot);
                             format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von %s abgeschleppt!",GetName(playerid),GetName(besitzer));
                             SendFraktionMessage(5, COLOR_RED, str);
@@ -70059,8 +70059,8 @@ CMD:fparken(playerid)
                     new str[128];
                     format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400],GetName(playerid));
                     SendFraktionMessage(fraktion, COLOR_RED, str);
-                    Spieler[playerid][pPayCheck] += 200;
-                    GameTextForPlayer(playerid, "~g~+$200", 2000, 1);
+                    Spieler[playerid][pPayCheck] += 700;
+                    GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
                     new
                         frakname[50];
                     ReturnFraktionByID( fraktion , frakname );
@@ -70125,8 +70125,8 @@ CMD:fmparkkralle(playerid)
                             new str[128];
                             format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400],GetName(playerid));
                             SendFraktionMessage(fraktion, COLOR_RED, str);
-                            Spieler[playerid][pPayCheck] += 200;
-                            GameTextForPlayer(playerid, "~g~+$200", 2000, 1);
+                            Spieler[playerid][pPayCheck] += 700;
+                            GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
                             new frakname[50];
                             ReturnFraktionByID( fraktion , frakname );
                             format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!",GetName(playerid),frakname);
