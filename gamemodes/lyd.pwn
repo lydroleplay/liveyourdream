@@ -2348,9 +2348,9 @@ enum {
 //Testserver
 #if defined Testserveran
 #define     SQL_HOST            "localhost"
-#define     SQL_USER            "1231" // Server: gtaserver3173 - Test Server: ni89284_1_DB
-#define     SQL_PASS            "samp6511" // Server: Vy4Cwwif - Test Server: Vy4Cwwif
-#define     SQL_DATA            "samp6511_benny" // Server: gtaserver3173 - Test Server: ni89284_1_DB
+#define     SQL_USER            "samp6100" // Server: gtaserver3173 - Test Server: ni89284_1_DB
+#define     SQL_PASS            "Hallo500" // Server: Vy4Cwwif - Test Server: Vy4Cwwif
+#define     SQL_DATA            "samp6100_test" // Server: gtaserver3173 - Test Server: ni89284_1_DB
 #else
 #define     SQL_HOST            "31.172.86.143"
 #define     SQL_USER            "samp" // Server: gtaserver3173 - Test Server: ni89284_1_DB
@@ -20516,10 +20516,10 @@ public GetCarOwner(veh)
 }
 
 CMD:ofreistellen(playerid, params[]) {
-    if (!(Spieler[playerid][pFraktion] == 5)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist kein Ordnungsbeamter.");
+    if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist kein Ordnungsbeamter.");
     new vehicleid;
     if (!isnull(params)) {
-        if (sscanf(params, "%i", vehicleid)) {
+        if (sscanf(params, "i", vehicleid)) {
             SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Ofreistellen [Fahrzeug-ID]");
             return SendClientMessage(playerid, COLOR_BLUE, "[INFO] {FFFFFF}Du kannst auch in dem Fahrzeug sitzen.");
         }
@@ -20527,20 +20527,25 @@ CMD:ofreistellen(playerid, params[]) {
         if (!GetVehicleModel(vehicleid)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du musst eine gültige Fahrzeug-ID angeben.");
     }
     else {
-        if (!(vehicleid = GetPlayerVehicleID(playerid))) {
+        vehicleid = GetPlayerVehicleID(playerid);
+        if (!vehicleid) {
             SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Ofreistellen [Fahrzeug-ID]");
             return SendClientMessage(playerid, COLOR_BLUE, "[INFO] {FFFFFF}Du kannst auch in dem Fahrzeug sitzen.");
         }
     }
 
-    new besitzer = GetCarOwner(vehicleid), slot = GetCarOwnerSlot(besitzer, vehicleid);
+    new besitzer = GetCarOwner(vehicleid);
+    if (besitzer == INVALID_PLAYER_ID) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Das Fahrzeug gehört keinem Spieler.");
+
+    new slot = GetCarOwnerSlot(besitzer, vehicleid);
+    if (slot == 555) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Das Fahrzeug gehört keinem Spieler.");
     if (PlayerCar[besitzer][slot][CarState] != e_Vehicle_Status_Towed)
         return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Das Fahrzeug ist nicht abgeschleppt.");
 
     PlayerCar[besitzer][slot][CarState] = e_Vehicle_Status_Normal;
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Du hast das Fahrzeug wieder freigestellt.");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Es muss nun wieder per /Parken ordentlich geparkt werden.");
-    UnfreezePlayer(playerid);
+    Spieler[playerid][pPayCheck] -= 700;
     ShowBuyInformation(playerid,"~y~Fahrzeug ~w~freigestellt!");
     SCMFormatted(besitzer, COLOR_LIGHTBLUE, "Ordnungsbeamter %s hat dein Fahrzeug wieder freigestellt.", GetName(playerid));
     return 1;
