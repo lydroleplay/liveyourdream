@@ -57858,7 +57858,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             if(strcmp(Biz[i][bBesitzer], "Niemand", true) == 0)
             {
                 format(bStr, sizeof(bStr), "{FFFFFF}[ {FFB732}%s {FFFFFF}]\n{FFB732}Dieses Geschäft ist zu verkaufen\n{FFB732}Preis: {FFFFFF}$%s\n{FFB732}Öffnungszeiten: {FFFFFF}%d Uhr bis %d Uhr\n\n{E0E5E7}Zum Kaufen tippe /Bizkaufen ein", Biz[i][bName], AddDelimiters(Biz[i][bPreis]),Biz[i][bLadenAuf],Biz[i][bLadenZu]);
-                Biz[i][bPickup] = CreateDynamicPickup(1273, 1, Biz[i][EnterX], Biz[i][EnterY], Biz[i][EnterZ], 0);
+                Biz[i][bPickup] = CreateDynamicPickup(1318, 1, Biz[i][EnterX], Biz[i][EnterY], Biz[i][EnterZ], 0);
                 Biz[i][bText] = CreateDynamic3DTextLabel(bStr, COLOR_PROP, Biz[i][EnterX], Biz[i][EnterY], Biz[i][EnterZ], 8, .worldid = 0);
             }
             else
