@@ -39190,7 +39190,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 19)
                 {
-                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nSan News Agency", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nShisha-Bar\nSan News Agency", "Auswählen", "Abbrechen");
                 }
             }
         }
@@ -41622,7 +41622,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response)
             {
                 new betrag=strval(inputtext);
-                if(betrag >= 1 && betrag <= 10000000)
+                if(betrag >= 1 && betrag <= 100000000)
                 {
                     if(Spieler[playerid][pBank] >= betrag)
                     {
@@ -41631,9 +41631,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     else
                     {
-                        SendClientMessage(playerid, COLOR_RED,"Soviel Geld hast du nicht auf der Bank.");
+                        SendClientMessage(playerid, COLOR_RED, "Soviel Geld hast du nicht auf der Bank.");
                         return 1;
                     }
+                }
+                else {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du kannst maximal $100.000.000 überweisen.");
+                    return ShowPlayerDialog(playerid, DIALOG_BANKWERT, DIALOG_STYLE_INPUT, COLOR_HEX_ORANGE"Überweisung", COLOR_HEX_WHITE"Bitte gebe den gewünschten Betrag an.", "Weiter", "Abbrechen");
                 }
             }
             if(!response)
@@ -70600,7 +70604,6 @@ stock GetPlayerDrogenSkillValue(playerid) {
     }
     return value;
 }
-
 
 stock GetPlayerWaffenteileSkillLevel(playerid) {
     new
