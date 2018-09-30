@@ -47,9 +47,9 @@ hook OnGameModeInit() {
 
     // 3DTextLabels
     text3D_yakuzaInterior[0] = _:CreateDynamic3DTextLabel("Yakuza Spawn\n" COLOR_HEX_WHITE "Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum Heilen", COLOR_BLUE, YAKUZA_INTERIOR_SPAWN_POINT, 15.0, .testlos = 1, .worldid = VW_YAKUZAINTERIOR, .interiorid = MAPS_YAKUZAINTERIOR_INTERIOR); // Spawn point
-    text3D_yakuzaInterior[2] = _:CreateDynamic3DTextLabel("Yakuza - Gangshop\n" COLOR_HEX_WHITE "Tippe /Gangitem", COLOR_YELLOW, YAKUZA_INTERIOR_GANGSHOP_POINT, 15.0, .testlos = 1, .worldid = VW_YAKUZAINTERIOR, .interiorid = MAPS_YAKUZAINTERIOR_INTERIOR); // Gangshop point
-    text3D_yakuzaInterior[3] = _:CreateDynamic3DTextLabel("Yakuza - Waffenlager\n" COLOR_HEX_WHITE "Tippe /Waffenlager", COLOR_YELLOW, YAKUZA_INTERIOR_WEAPONS_DEPOT_POINT, 15.0, .testlos = 1, .worldid = VW_YAKUZAINTERIOR, .interiorid = MAPS_YAKUZAINTERIOR_INTERIOR); // Weapons depot point
-    text3D_yakuzaInterior[1] = _:CreateDynamic3DTextLabel("Safebox der Yakuza\n" COLOR_HEX_WHITE "Tippe /FSafebox", COLOR_YELLOW, YAKUZA_INTERIOR_SAFEBOX_POINT, 15.0, .testlos = 1, .worldid = VW_YAKUZAINTERIOR, .interiorid = MAPS_YAKUZAINTERIOR_INTERIOR); // Safebox point
+    text3D_yakuzaInterior[1] = _:CreateDynamic3DTextLabel("Yakuza - Gangshop\n" COLOR_HEX_WHITE "Tippe /Gangitem", COLOR_YELLOW, YAKUZA_INTERIOR_GANGSHOP_POINT, 15.0, .testlos = 1, .worldid = VW_YAKUZAINTERIOR, .interiorid = MAPS_YAKUZAINTERIOR_INTERIOR); // Gangshop point
+    text3D_yakuzaInterior[2] = _:CreateDynamic3DTextLabel("Yakuza - Waffenlager\n" COLOR_HEX_WHITE "Tippe /Waffenlager", COLOR_YELLOW, YAKUZA_INTERIOR_WEAPONS_DEPOT_POINT, 15.0, .testlos = 1, .worldid = VW_YAKUZAINTERIOR, .interiorid = MAPS_YAKUZAINTERIOR_INTERIOR); // Weapons depot point
+    text3D_yakuzaInterior[3] = _:CreateDynamic3DTextLabel("Safebox der Yakuza\n" COLOR_HEX_WHITE "Tippe /FSafebox", COLOR_YELLOW, YAKUZA_INTERIOR_SAFEBOX_POINT, 15.0, .testlos = 1, .worldid = VW_YAKUZAINTERIOR, .interiorid = MAPS_YAKUZAINTERIOR_INTERIOR); // Safebox point
 
     // Actors
 
