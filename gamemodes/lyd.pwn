@@ -4531,6 +4531,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\triadsExterior>
 #include <maps\triadsInterior>
 #include <maps\paintballGymLs>
+#include <maps\paintballBasement>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
@@ -7461,6 +7462,13 @@ public OnPlayerDisconnect(playerid, reason)
     if(gPlayerLogged[playerid]){
         SaveAccount(playerid);
     }
+
+    if (PlayerIsPaintballing[playerid]) {
+        new message[145];
+        format(message, sizeof(message), "%s hat die Paintball-Halle verlassen.", GetName(playerid));
+        SendPaintballMessage(COLOR_ORANGE, message);
+    }
+
     damagesperre[playerid]=0;
     adventmin[playerid]=0;
     Spieler[playerid][pLevel] = 1;
@@ -10530,8 +10538,8 @@ public SetPlayerSpawn(playerid)
 				SetPlayerFacingAngle(playerid,272.3657);
 			}
 			Spieler[playerid][pTot] = 0;
-			GivePlayerWeapon(playerid, 24, 150);
 			GivePlayerWeapon(playerid, 29, 150);
+            GivePlayerWeapon(playerid, 24, 150);
 			SetPlayerVirtualWorld(playerid, 39);
 			SetPlayerInterior(playerid, 1);
 			return 1;
@@ -11659,7 +11667,7 @@ public OnPlayerText(playerid, text[])
     if(CurrentPhone[playerid] == 999)
     {
         if(Spieler[playerid][pMuted]== 1){
-            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist Gemutet.");
+            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist gemutet.");
             return 0;
         }
 
@@ -11675,6 +11683,12 @@ public OnPlayerText(playerid, text[])
         else {
             SetTimerEx("Cooldown_ChatSpam",3001,false,"d",playerid);
         }*/
+
+        if (PlayerIsPaintballing[playerid]) {
+            format(String, sizeof(String), "%s: %s", sName, text);
+            SendPaintballMessage(COLOR_YELLOW, String);
+            return 0;
+        }
 
         new Float:x, Float:y, Float:z;
         GetPlayerPos(playerid, x,y,z);
@@ -11692,7 +11706,7 @@ public OnPlayerText(playerid, text[])
     // Notruf POLIZEI
     else if(CurrentPhone[playerid] == INVALID_PLAYER_ID ) {
         if(Spieler[playerid][pMuted]== 1){
-            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist Gemutet.");
+            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist gemutet.");
             return 0;
         }
         new
@@ -11720,7 +11734,7 @@ public OnPlayerText(playerid, text[])
     // Notruf RETTUNGSDIENST
     else if(CurrentPhone[playerid] == INVALID_PLAYER_ID + 1 ) {
         if(Spieler[playerid][pMuted]== 1){
-            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist Gemutet.");
+            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist gemutet.");
             return 0;
         }
         new
@@ -11748,7 +11762,7 @@ public OnPlayerText(playerid, text[])
     // Notruf ORDNUNGSAMT
     else if(CurrentPhone[playerid] == INVALID_PLAYER_ID + 2 ) {
         if(Spieler[playerid][pMuted]== 1){
-            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist Gemutet.");
+            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist gemutet.");
             return 0;
         }
         new
@@ -11776,7 +11790,7 @@ public OnPlayerText(playerid, text[])
     // Service Wheelmen
     else if(CurrentPhone[playerid] == INVALID_PLAYER_ID + 3 ) {
         if(Spieler[playerid][pMuted]== 1){
-            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist Gemutet.");
+            SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist gemutet.");
             return 0;
         }
         new
@@ -23255,7 +23269,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         new typ, string[256], modelid;
         vehicleid = GetPlayerVehicleID(playerid);
         modelid = GetVehicleModel(vehicleid);
-        AddVehiclePassenger(vehicleid,playerid);
+        if (!(Spieler[playerid][pFraktion] == 15 && Spieler[playerid][bMaske])) AddVehiclePassenger(vehicleid,playerid);
         if(!(Spieler[playerid][pFraktion] == 8 || pFahrStunde[playerid] == 1))
         {
             for(new i=0;i<sizeof(fscars);i++)
@@ -27190,6 +27204,14 @@ CMD:textp(playerid)
 	return 1;
 }*/
 
+CMD:okamera(playerid) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist nicht beim Ordnungsamt.");
+
+    SetPlayerAmmo(playerid, WEAPON_CAMERA, 50);
+    return 1;
+}
+
 CMD:olight(playerid)
 {
     if(Spieler[playerid][pFraktion] == 5)
@@ -28892,8 +28914,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                         ResetPlayerWeapons(playerid);
                         SetPlayerHealth(playerid, 100.0);
                         SetPlayerArmour(playerid, 0.0);
-                        GivePlayerWeapon(playerid, WEAPON_MP5, 100);
-                        GivePlayerWeapon(playerid,24,100);
+                        GivePlayerWeapon(playerid, WEAPON_MP5, 150);
+                        GivePlayerWeapon(playerid, 24, 150);
                         new message[145];
                         format(message, sizeof(message), "%s hat die Paintball-Halle betreten.", GetName(playerid));
                         SendPaintballMessage(COLOR_GREEN, message);
@@ -33784,7 +33806,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     else if(Spieler[playerid][pFraktion] == 3)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* SA-MD *: {FFFFFF}/Dienst, /Wiederbeleben, /Sheilen, /Mv, /M, /Fc, /Kasse, /Kassenstand");
+                        SendClientMessage(playerid, COLOR_BLUE, "* SA-MD *: {FFFFFF}/Dienst, /Wiederbeleben, /Sheilen, /Samdgarage, /Mv, /M, /Fc, /Kasse, /Kassenstand");
                         SendClientMessage(playerid, COLOR_BLUE, "* SA-MD *: {FFFFFF}/Mitglieder, /Sfinden, /Bc, /Sliste, /Rtwsirene, /Meinsatz, /Bk, /Dtasche [Links/Rechts]");
                     }
                     else if(Spieler[playerid][pFraktion] == 4)
@@ -33793,7 +33815,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     else if(Spieler[playerid][pFraktion] == 5)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* O-AMT ALLGEMEIN*: {FFFFFF}/Dienst, /Ov, /Tor, /Oamt, /Beamteon, /Mitglieder, /Zollamt, /Dienstmarke, /Kasse, /Kassenstand");
+                        SendClientMessage(playerid, COLOR_BLUE, "* O-AMT ALLGEMEIN*: {FFFFFF}/Dienst, /Ov, /Tor, /Oamt, /Beamteon, /Mitglieder, /Zollamt, /Dienstmarke, /Kasse, /Kassenstand, /Okamera");
                         SendClientMessage(playerid, COLOR_BLUE, "* O-AMT VOLLSTRECKUNG*: {FFFFFF}/Fpunkte, /Ticket, /Strafzettel, /Parkstrafe, /Entnehmen, /Koffereinziehen, /Scheinentziehen, /Blitzerabbauen");
                         SendClientMessage(playerid, COLOR_BLUE, "* O-AMT VOLLSTRECKUNG*: {FFFFFF}/Tierverbot, /Deltierverbot, /Oparken, /Ofreistellen, /Fmparkkralle, /Mparkkralle/Blitzeraufstellen");
                         SendClientMessage(playerid, COLOR_BLUE, "* O-AMT KONTROLLEN*: {FFFFFF}/Durchsuchen /Kofferdurchsuchen, /Vamt, /Pakte, /Kzsuchen, /Kfzsuchen, /Promille");
@@ -36585,31 +36607,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SetPlayerPos(playerid, 1310.3245,-1383.1377,13.7432);
                         SetCameraBehindPlayer(playerid);
                     }
-                }
-            }
-        }
-
-        case DIALOG_MEMBERS:
-        {
-            if(response)
-            {
-                pCurrentSite[playerid] = 0;
-                return 1;
-            }
-            if(!response)
-            {
-                pCurrentSite[playerid] ++;
-                if(pCurrentSite[playerid] == 1)
-                {
-                    new query[128]/*, pName[24], level[11]*/;
-                    format(query, sizeof(query), "SELECT `Name`, `Level`, `Rank`, `Fraktion` FROM `accounts` WHERE `Fraktion` =%d LIMIT 20,40", Spieler[playerid][pFraktion]);
-                    mysql_pquery(query,THREAD_DIALOGMEMBERS,playerid,gSQL,MySQLThreadOwner);
-                }
-                else if(pCurrentSite[playerid] == 2)
-                {
-                    new query[128]/*, pName[24], level[11]*/;
-                    format(query, sizeof(query), "SELECT `Name`, `Level`, `Rank`, `Fraktion` FROM `accounts` WHERE `Fraktion` =%d LIMIT 40,60", Spieler[playerid][pFraktion]);
-                    mysql_pquery(query,THREAD_DIALOGMEMBERS,playerid,gSQL,MySQLThreadOwner);
                 }
             }
         }
@@ -47842,7 +47839,7 @@ COMMAND:s(playerid,params[]) {
         return 0;
     }
     if(Spieler[playerid][pMuted]== 1){
-        SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist Gemutet.");
+        SendClientMessage(playerid, COLOR_CHAT_MUTED, "Du bist gemutet.");
         return 0;
     }
     return SendSchreiMessage(playerid,params);
@@ -56150,7 +56147,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
         new frakname[50];
         ReturnPlayerFraktion(extraid, frakname);
         format(titel, sizeof(titel), "%s - Mitgliederliste", frakname);
-        ShowPlayerDialog(extraid, DIALOG_NO_RESPONSE, DIALOG_STYLE_TABLIST_HEADERS, titel, str2, "Schließen", "");
+        ShowPlayerDialog(extraid, DIALOG_MEMBERS, DIALOG_STYLE_TABLIST_HEADERS, titel, str2, "Schließen", "");
     }
     else if( resultid == THREAD_ACCEPTMARRIAGE ) {
 
