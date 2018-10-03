@@ -7,7 +7,12 @@
 // static Float:STREAMDISTANCE = 350.0;
 // static Float:DRAWDISTANCE   = 350.0;
 
+#define PAINTBALLBASEMENT_SPAWN_POINT          2169.4611, 1618.7983, 999.9765
+#define PAINTBALLBASEMENT_SPAWN_POINT_FACING   90.0
+
 // Map variables
+
+new pickup_paintballBasement[1];
 
 hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 1775, 2209.9063, 1607.1953, 1000.0547, 0.25);
@@ -19,9 +24,27 @@ hook OnPlayerConnect(playerid) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    // ---
+    if (newkeys & KEY_SECONDARY_ATTACK) {
+        if (IsPlayerInRangeOfPoint(playerid, 2.0, PAINTBALLBASEMENT_SPAWN_POINT)) { // Exit
+            SetPlayerInterior(playerid, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR);
+            SetPlayerVirtualWorld(playerid, VW_PAINTBALLLOBBY);
+            SetPlayerPos(playerid, PAINTBALLLOBBYINTERIOR_SPAWN_POINT1);
+            SetPlayerFacingAngle(playerid, PAINTBALLLOBBYINTERIOR_SPAWN_FACING);
+            SetCameraBehindPlayer(playerid);
+            ResetPlayerWeapons(playerid);
+            ReStore_PlayerWeapons(playerid);
+            new message[145];
+            format(message, sizeof(message), "%s hat die Paintball-Halle verlassen.", GetName(playerid));
+            SendPaintballMessage(COLOR_ORANGE, message);
+            PlayerIsPaintballing[playerid] = 0;
+            return 1;
+        }
+    }
+
+    return 1;
 }
 
 hook OnGameModeInit() {
+    pickup_paintballBasement[0] = CreateDynamicPickup(19197, 1, PAINTBALLBASEMENT_SPAWN_POINT, VW_PAINTBALLBASEMENT, MAPS_PAINTBALLBASEMENT_INTERIOR); // Exit
     // Objects
 }
