@@ -704,7 +704,8 @@ enum {
     THREAD_OFFTBAN,
     THREAD_OFFCPRISON,
     THREAD_OFFBWSTRAFE,
-    THREAD_OFFBWSTRAFE_CHECK
+    THREAD_OFFBWSTRAFE_CHECK,
+    THREAD_BWSTRAFEN
     //THREAD_SETUP_POST
 }
 
@@ -2039,6 +2040,7 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_SELLGUN_PRICE 1362
 #define     DIALOG_FILLUP_PAYMETHOD 1363
 #define     DIALOG_FILLUP_ECPIN 1364
+#define     DIALOG_BWSTRAFEN 1365
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -4129,7 +4131,7 @@ enum SpielerDaten
     Float:pArmourInfo,
     Float:pHealthInfo,
     pSuspendedSentence,
-    pSusSentenceReason[64]
+    pSusSentenceReason[128]
 }
 
 enum e_FahrPruefung {
@@ -6457,7 +6459,7 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][ID] = 0;
     Spieler[playerid][pfrakwarn] = 0;
     Spieler[playerid][pSuspendedSentence] = 0;
-    format(Spieler[playerid][pSusSentenceReason], 64, "");
+    format(Spieler[playerid][pSusSentenceReason], 128, "");
     Spieler[playerid][pAdmin] = 0;
     Spieler[playerid][pDonateRank] = 0;
     Spieler[playerid][pHours] = 0;
@@ -7488,7 +7490,7 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][ID] = 0;
     Spieler[playerid][pfrakwarn] = 0;
     Spieler[playerid][pSuspendedSentence] = 0;
-    format(Spieler[playerid][pSusSentenceReason], 64, "");
+    format(Spieler[playerid][pSusSentenceReason], 128, "");
     Spieler[playerid][pAdmin] = 0;
     Spieler[playerid][pDonateRank] = 0;
     Spieler[playerid][pHours] = 0;
@@ -10959,7 +10961,7 @@ public OnPlayerJail(playerid)
 				NeedAWALT[playerid] = 0;
 			    SetPlayerFacingAngle(playerid, LSPD_INTERIOR_ENTER_FACING);
 			    SetCameraBehindPlayer(playerid);
-			    SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS +0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
+			    SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
 				UnfreezePlayer(playerid);
 				paydaywait[playerid]=0;
 			}
@@ -14508,6 +14510,14 @@ CMD:auftanken(playerid, params[])
     return SCMFormatted(playerid, COLOR_LIGHTBLUE, "* Du hast das Fahrzeug mit der ID %i vollgetankt.", vehid);
 }
 
+CMD:bwstrafen(playerid) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Dafür hast du keine Berechtigung.");
+    SetPVarInt(playerid, "BW.PAGE", 0);
+    mysql_pquery("SELECT `Name`, `BWStrafe`, `BWStrafeGrund` FROM `accounts` WHERE `BWStrafe` > 0 ORDER BY `BWStrafe` DESC LIMIT 0,21", THREAD_BWSTRAFEN, playerid, gSQL,MySQLThreadOwner);
+    return 1;
+}
+
 CMD:bwstrafe(playerid, params[]) {
     if (isnull(params) || Spieler[playerid][pAdmin] < 3) {
         if (Spieler[playerid][pSuspendedSentence] <= 0) SendClientMessage(playerid, COLOR_GREEN, "[INFO] {FFFFFF}Du hast keine Bewährungsstrafe.");
@@ -14530,8 +14540,8 @@ CMD:bwstrafe(playerid, params[]) {
 CMD:setbwstrafe(playerid, params[]) {
     if (Spieler[playerid][pAdmin] < 4) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     if (GetPVarInt(playerid, "OFFBW.HOURS") != 0) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du erteilst gerade noch eine Bewährungsstrafe.");
-    new pID, hours, playerName[MAX_PLAYER_NAME], reason[64];
-    if (sscanf(params, "u i s[64]", pID, hours, reason)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Setbwstrafe [Spieler ID/Name] [Spielstunden] [Grund]");
+    new pID, hours, playerName[MAX_PLAYER_NAME], reason[128];
+    if (sscanf(params, "u i s[128]", pID, hours, reason)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Setbwstrafe [Spieler ID/Name] [Spielstunden] [Grund]");
     if (pID == INVALID_PLAYER_ID && (sscanf(params, "s[24] i s[64]", playerName, hours, reason) || strlen(playerName) < 3))
         return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Der eingegebene Wert ist kein gültiger Spieler.");
 
@@ -14551,7 +14561,7 @@ CMD:setbwstrafe(playerid, params[]) {
 
     new message[256];
     Spieler[pID][pSuspendedSentence] = hours;
-    format(Spieler[pID][pSusSentenceReason], 64, reason);
+    format(Spieler[pID][pSusSentenceReason], 128, reason);
     SCMFormatted(playerid, COLOR_LIGHTBLUE, "[INFO] {FFFFFF}Du hast die Bewährungsstrafe von %s auf %d Spielstunden gesetzt.", GetName(pID), hours);
     SCMFormatted(playerid, COLOR_LIGHTBLUE, "[INFO] {FFFFFF}Grund: %s", reason);
     SCMFormatted(pID, COLOR_LIGHTBLUE, "[INFO] {FFFFFF}Deine Bewährungsstrafe wurde von %s auf %d Spielstunden gesetzt.", GetName(playerid), hours);
@@ -14560,6 +14570,7 @@ CMD:setbwstrafe(playerid, params[]) {
     AdminLog(message);
     format(message, sizeof(message), "%s %s hat die Bewährungsstrafe von %s auf %d Spielstunden gesetzt. Grund: %s", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), hours, reason);
     SendUCPAktenEintrag(playerid, GetName(playerid), GetName(pID), message);
+    SaveAccount(pID);
     return 1;
 }
 
@@ -15285,12 +15296,12 @@ public Servername()
 {
     if(serverhost == 1)
     {
-        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay [STARTBONUS]");
+        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay [MAP-UPDATE]");
         serverhost = 2;
     }
     else if(serverhost == 2)
     {
-        SendRconCommand("hostname ** Live your Dream ~ Roleplay [STARTBONUS] **");
+        SendRconCommand("hostname Live your Dream ~ Roleplay [ENTBANN-EVENT]");
         serverhost = 1;
     }
 }
@@ -17098,11 +17109,10 @@ CMD:supauto(playerid, params[])
 CMD:makeadmin(playerid, params[])
 {
     new pID, admid, string[128];
-    if(Spieler[playerid][pAdmin] < 6)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    if(sscanf(params, "ui", pID, admid))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Makeadmin [SpielerID/Name] [Admin-Rank]");
-    if(!IsPlayerConnected(playerid))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
-    if(admid >= 0 && admid <= 7)
-    {
+    if (Spieler[playerid][pAdmin] < 6 && !IsPlayerAdmin(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if (sscanf(params, "ui", pID, admid)) return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /Makeadmin [SpielerID/Name] [Admin-Rank]");
+    if (!IsPlayerConnected(playerid)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if (admid >= 0 && admid <= 7) {
         Spieler[pID][pAdmin] = admid;
         format(string, sizeof(string), "[ADMIN]: %s wurde von %s zum %s ernannt.", GetName(pID), GetName(playerid), GetPlayerAdminRang(pID));
         return SendClientMessageToAll(COLOR_DARKRED, string);
@@ -29495,6 +29505,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         if( inputtext[i] == '%' ) inputtext[i] = ' ';
     }
     if(Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if (dialogid == DIALOG_BWSTRAFEN) {
+        if (!response) return ClosePlayerDialog(playerid);
+
+        if (GetPVarInt(playerid, "BW.PAGES.END")) return ClosePlayerDialog(playerid);
+        new bwPage = GetPVarInt(playerid, "BW.PAGE") + 1;
+        SetPVarInt(playerid, "BW.PAGE", bwPage);
+        new query[256];
+        format(query, sizeof(query), "SELECT `Name`, `BWStrafe`, `BWStrafeGrund` FROM `accounts` WHERE `BWStrafe` > 0 ORDER BY `BWStrafe` DESC LIMIT %i,21", bwPage * 20);
+        mysql_pquery(query, THREAD_BWSTRAFEN, playerid, gSQL,MySQLThreadOwner);
+        return 1;
+    }
     if (dialogid == DIALOG_SELLGUN_MAIN) {
         if (!response) return 1;
         if (Spieler[playerid][pJob] != 18) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist kein Waffendealer mehr.");
@@ -34002,7 +34023,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem /Atafelentmieten");
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Setbwstrafe");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
@@ -43072,12 +43093,14 @@ public PayDay()
             if (Spieler[playerid][pSuspendedSentence] > 0) {
                 Spieler[playerid][pSuspendedSentence]--;
                 if (Spieler[playerid][pSuspendedSentence] == 0) {
-                    format(Spieler[playerid][pSusSentenceReason], 64, "");
+                    format(Spieler[playerid][pSusSentenceReason], 128, "");
                     SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Deine Bewährungsstrafe ist abgelaufen.");
                 }
             }
+
+            SaveAccount(playerid);
         }
-        
+
         UpdatePayDayTextdraw(playerid);
     }
     }
@@ -55950,6 +55973,33 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
         ShowPlayerBan(extraid);
         Ban(extraid);
     }
+    else if (resultid == THREAD_BWSTRAFEN) {
+        new playerName[MAX_PLAYER_NAME], reason[128], dialogText[2500], hours;
+        dialogText = "Name\tStunden\tGrund\n";
+        new i = 0, rows = cache_get_row_count(connectionHandle);
+        if (!rows) return ShowPlayerDialog(extraid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "{FF9900}Geltende Bewährungsstrafen", 
+            "{FFFFFF}Es gibt zurzeit keine laufenden Bewährungsstrafen.", "Schließen", "");
+
+        while (i < rows) {
+            cache_get_field_content(i, "Name", playerName, connectionHandle);
+            cache_get_field_content(i, "BWStrafeGrund", reason, connectionHandle);
+            hours = cache_get_field_content_int(i, "BWStrafe", connectionHandle);
+            format(dialogText, sizeof(dialogText), "%s%s\t%i\t%s\n", dialogText, playerName, hours, reason);
+            i++;
+            if (i == 20) break;
+        }
+
+        if (rows > 20) {
+            SetPVarInt(extraid, "BW.PAGES.END", 0);
+            ShowPlayerDialog(extraid, DIALOG_BWSTRAFEN, DIALOG_STYLE_TABLIST_HEADERS, "{FF9900}Geltende Bewährungsstrafen", dialogText, "Weiter", "Schließen");
+        }
+        else {
+            SetPVarInt(extraid, "BW.PAGES.END", 1);
+            ShowPlayerDialog(extraid, DIALOG_BWSTRAFEN, DIALOG_STYLE_TABLIST_HEADERS, "{FF9900}Geltende Bewährungsstrafen", dialogText, "Schließen", "");
+        }
+
+        return 1; 
+    }
     else if( resultid == THREAD_MITGLIEDER ) {
         new pName[24], lv, str2[2500], string[128], count, rk,fID, rank[35], salary;
         str2 = "Status\tName\tLevel\tRank\n";
@@ -57442,7 +57492,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             return SendClientMessage(extraid, COLOR_RED, "[FEHLER] {FFFFFF}Der Spieler existiert nicht.");
         }
 
-        new playerName[MAX_PLAYER_NAME], reason[64], query1[256];
+        new playerName[MAX_PLAYER_NAME], reason[128], query1[256];
         GetPVarString(extraid, "OFFBW.NAME", playerName, sizeof(playerName));
         GetPVarString(extraid, "OFFBW.REASON", reason, sizeof(reason));
         format(query1, sizeof(query1), "UPDATE `accounts` SET `BwStrafe` = %i, `BwStrafeGrund` = '%s' WHERE `Name` = '%s'", GetPVarInt(extraid, "OFFBW.HOURS"), reason, playerName);
@@ -57450,7 +57500,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
         return 1;
     }
     else if (resultid == THREAD_OFFBWSTRAFE) {
-        new playerName[MAX_PLAYER_NAME], reason[64], hours;
+        new playerName[MAX_PLAYER_NAME], reason[128], hours;
         GetPVarString(extraid, "OFFBW.NAME", playerName, sizeof(playerName));
         GetPVarString(extraid, "OFFBW.REASON", reason, sizeof(reason));
         hours = GetPVarInt(extraid, "OFFBW.HOURS");
@@ -57462,7 +57512,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
         new message[256];
         SCMFormatted(extraid, COLOR_LIGHTBLUE, "[INFO] {FFFFFF}Du hast die Bewährungsstrafe von %s auf %d Spielstunden gesetzt (Offline).", playerName, hours);
         SCMFormatted(extraid, COLOR_LIGHTBLUE, "[INFO] {FFFFFF}Grund: %s", reason);
-        format(message, sizeof(message), "%s %s hat die Daten von Spieler %s überarbeitet! (BWStrafe gesetzt auf: %d, Grund: %s)", GetPlayerAdminRang(extraid), playerName, hours, reason);
+        format(message, sizeof(message), "%s %s hat die Daten von Spieler %s überarbeitet! (BWStrafe gesetzt auf: %d, Grund: %s)", GetPlayerAdminRang(extraid), GetName(extraid), playerName, hours, reason);
         AdminLog(message);
         format(message, sizeof(message), "%s %s hat die Bewährungsstrafe von %s auf %d Spielstunden gesetzt. Grund: %s", GetPlayerAdminRang(extraid), GetName(extraid), playerName, hours, reason);
         SendUCPAktenEintrag(extraid, GetName(extraid), playerName, message);
