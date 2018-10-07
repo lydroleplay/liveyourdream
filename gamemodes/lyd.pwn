@@ -452,6 +452,12 @@ new const g_sellGuns[][E_SELL_GUNS] = {
     {"Sniper",            34, 400, 100, "eine"}
 };
 
+enum {
+    CARKEY_TYPE_NORMAL,
+    CARKEY_TYPE_MOVE1,
+    CARKEY_TYPE_MOVE2
+}
+
 new jobNames[][] = {
     "Arbeitslos",
     "Bauer",
@@ -2041,6 +2047,8 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_FILLUP_PAYMETHOD 1363
 #define     DIALOG_FILLUP_ECPIN 1364
 #define     DIALOG_BWSTRAFEN 1365
+#define     DIALOG_MOVECARKEY1 1366
+#define     DIALOG_MOVECARKEY2 1367
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -8006,7 +8014,7 @@ CMD:tuningabbauen(playerid)
                 PlayerCar[playerid][PlayerKey[playerid]][CarPos_y] = Y;
                 PlayerCar[playerid][PlayerKey[playerid]][CarPos_z] = Z;
                 PlayerCar[playerid][PlayerKey[playerid]][CarRotate] = z_rot;
-                SendClientMessage(playerid, COLOR_GREEN, "Dein Tuning wurde vollständig für 3.000$ abgebaut.");
+                SendClientMessage(playerid, COLOR_GREEN, "Dein Tuning wurde vollständig für $3.000 abgebaut.");
                 SavePlayerCar( playerid, PlayerKey[playerid] );
                 PlayerCarSpawn(playerid,PlayerKey[playerid]);
                 Spieler[playerid][pCash]-=3000;
@@ -8018,7 +8026,7 @@ CMD:tuningabbauen(playerid)
             }
             else
             {
-                SendClientMessage(playerid,COLOR_RED,"Du hast nicht genügend Geld. Du benötigst 3.000$.");
+                SendClientMessage(playerid,COLOR_RED,"Du hast nicht genügend Geld. Du benötigst $3.000.");
             }
         }
         else
@@ -11463,10 +11471,10 @@ public OnVehicleDeath(vehicleid, killerid)
                             if( Spieler[playerid][pKFZVersicherung] > gettime() ) {
                                 format(String,sizeof(String),"Dein %s ist explodiert und wird in der Werkstatt wieder repariert!", CarName[ PlayerCar[playerid][x][CarModel] - 400] );
                                 SendClientMessage(playerid,COLOR_YELLOW,String);
-                                SendClientMessage(playerid,COLOR_YELLOW,"Die Reparaturkosten übernimmt deine abgeschlossene KFZ-Versicherung");
+                                SendClientMessage(playerid,COLOR_YELLOW,"Die Reparaturkosten übernimmt deine abgeschlossene KFZ-Versicherung.");
                             }
                             else {
-                                format(String,sizeof(String),"Dein %s ist explodiert! Die Reparaturkosten in Höhe von 1.500$ musst du manuell begleichen mit /Fahrzeugreparieren.", CarName[ PlayerCar[playerid][x][CarModel] - 400] );
+                                format(String,sizeof(String),"Dein %s ist explodiert! Die Reparaturkosten in Höhe von $1.500 musst du manuell begleichen mit /Fahrzeugreparieren.", CarName[ PlayerCar[playerid][x][CarModel] - 400] );
                                 SendClientMessage(playerid,COLOR_ORANGE,String);
                                 PlayerCar[playerid][x][CarState] = e_Vehicle_Status_Destroyed;
                                 PlayerCar[playerid][x][CarTank] = gGas[PlayerCar[playerid][x][CarId]];
@@ -13861,7 +13869,7 @@ CMD:stadthalle(playerid)
         String[228];
     String = COLOR_HEX_WHITE"Personalausweis beantragen"COLOR_HEX_ORANGE" ($200)"COLOR_HEX_WHITE"\n------------\nArbeitsamt:\nBerufe\nSelbstständigkeit\n------------";
     if( Spieler[playerid][pHartz4]  == 0) {
-        format(String,sizeof(String),"%s\nArbeitslosengeld beantragen ( +"#HARTZ4_GELD"$ )",String);
+        format(String,sizeof(String),"%s\nArbeitslosengeld beantragen (+$"#HARTZ4_GELD")",String);
     }
     else {
         format(String,sizeof(String),"%s\nArbeitslosengeld stornieren",String);
@@ -14655,13 +14663,14 @@ CMD:configplayer(playerid, params[])
     {
         if(wert < 0 || wert > 22) return SendClientMessage(playerid, COLOR_ORANGE, "Der Wert sollte zwischen 0 und 21 liegen.");
         Spieler[pID][pFraktion] = wert;
+        if (wert == 15) AddPlayerToPlantArrayData(pID);
+        else RemovePlayerFromPlantArrayData(pID);
         format(string, sizeof(string), "Deine Fraktion wurde von %s %s auf %s gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), factionNames[wert]);
         SendClientMessage(pID, COLOR_LIGHTBLUE, string);
         format(string, sizeof(string), "Du hast die Fraktion von %s auf %s [%d] gesetzt.", GetName(pID), factionNames[wert], wert);
         SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
         printf("%s ändert Fraktion von %s in %d", GetName(playerid), GetName(pID), wert);
-        new
-            String[140];
+        new String[140];
         format(String,sizeof(String),"%s %s hat die Daten von Spieler %s überarbeitet! ( [%s gesetzt auf: %d] )", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), entry, wert);
         AdminLog(String);
         return 1;
@@ -15513,6 +15522,7 @@ CMD:feuern(playerid, params[])
     Spieler[pID][pFrakLohn] = 0;
     Spieler[pID][pRank] = 0;
     Spieler[pID][pfrakwarn]=0;
+    RemovePlayerFromPlantArrayData(pID);
     SaveAccount(pID);
     printf("%s feuert %s aus Fraktion %d", GetName(playerid), GetName(pID), Spieler[playerid][pFraktion]);
     return 1;
@@ -16427,9 +16437,8 @@ CMD:carsellto(playerid, params[])
 }
 */
 stock CreatePlayerCar(playerid,Float:x,Float:y,Float:z,Float:rot,model,color1,color2) {
-    new
-        query[650];
-    format(query,sizeof(query),"INSERT INTO `playercar` (`id`, `owner`, `model`, `posX`, `posY`, `posZ`, `rot`, `nitro`, `hyd`, `wheel`, `ausp`, `sideL`, `sideR`, `fb`, `rb`, `spoiler`, `roof`, `hood`, `vents`, `lamps`, `pj`, `c1`, `c2`, `preis`, `tank`, `state`, `neon1`, `neon2`, `specialtuned`, `numberplate`,`peilsender`,`distance`,`tuv`) VALUES (NULL, '%s', %d, %.2f, %.2f, %.2f, %.2f, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d,'', %d, %d, %d);",
+    new query[650];
+    format(query,sizeof(query),"INSERT INTO `playercar` (`id`, `owner`, `model`, `posX`, `posY`, `posZ`, `rot`, `nitro`, `hyd`, `wheel`, `ausp`, `sideL`, `sideR`, `fb`, `rb`, `spoiler`, `roof`, `hood`, `vents`, `lamps`, `pj`, `c1`, `c2`, `preis`, `tank`, `state`, `neon1`, `neon2`, `specialtuned`, `numberplate`,`peilsender`,`distance`,`tuv`,`slot`) VALUES (NULL, '%s', %d, %.2f, %.2f, %.2f, %.2f, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d,'', %d, %d, %d, %d);",
         GetName(playerid),
         model,
         x,
@@ -16440,7 +16449,7 @@ stock CreatePlayerCar(playerid,Float:x,Float:y,Float:z,Float:rot,model,color1,co
         -1,color1,color2,
         0,0,0,
         0,
-        0,0,0,0,0,0,0);
+        0,0,0,0,0,0,0, PlayerKey[playerid]);
     mysql_pquery(query,THREAD_CREATEPLAYERCAR,playerid,gSQL,MySQLThreadOwner);
     return 1;
 }
@@ -16496,6 +16505,7 @@ stock SavePlayerCar(playerid,slot) {
         `peilsender` = %d,\
         `specialtuned` = %d, \
         `tuv` = %d, \
+        `slot` = %d, \
         `distance` = %d \
         WHERE `id` = %d",
         query,
@@ -16515,6 +16525,7 @@ stock SavePlayerCar(playerid,slot) {
         PlayerCar[playerid][slot][CarPeilsender],
         PlayerCar[playerid][slot][isSpecialTuned],
         PlayerCar[playerid][slot][TUV],
+        slot,
         g_VehicleDistance[ PlayerCar[playerid][slot][CarId] ],
         PlayerCar[playerid][slot][Id]);
     mysql_oquery(query,THREAD_SAVEPLAYERCAR,playerid,gSQL);
@@ -16800,9 +16811,12 @@ CMD:carlock(playerid)
     return 1;
 }
 
-CMD:carkey(playerid)
-{
+CMD:movecarkey(playerid, params[]) {
     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt.");
+    return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE1);
+}
+
+stock ShowPlayerCarkeys(playerid, type) {
     new dialogText[1024], statusText[128], numberPlate[32], hasLicence;
     dialogText = "{FFFFFF}Slot\t{FFFFFF}Fahrzeug\t{FFFFFF}Status\t{FFFFFF}Kennzeichen\n";
     for (new i = 0; i < MaxVehicles(playerid); i++) {
@@ -16820,9 +16834,17 @@ CMD:carkey(playerid)
         }
         else format(dialogText, sizeof(dialogText), "%s%d)\t{00AA00}- %sSchlüssel frei -\n", dialogText, i + 1, i == 5 ? "Premium " : "");
     }
-
-    ShowPlayerDialog(playerid, DIALOG_CARKEY, DIALOG_STYLE_TABLIST_HEADERS, "Privatfahrzeugübersicht", dialogText, "Auswählen", "Abbrechen");
+    new dialogCaption[64];
+    format(dialogCaption, sizeof(dialogCaption), "Privatfahrzeugübersicht%s", type == CARKEY_TYPE_NORMAL ? "" : " - Verschieben");
+    ShowPlayerDialog(playerid, type == CARKEY_TYPE_NORMAL ? DIALOG_CARKEY : (type == CARKEY_TYPE_MOVE1 ? DIALOG_MOVECARKEY1 : DIALOG_MOVECARKEY2), 
+        DIALOG_STYLE_TABLIST_HEADERS, dialogCaption, dialogText, "Auswählen", "Abbrechen");
     return 1;
+}
+
+CMD:carkey(playerid)
+{
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt.");
+    return ShowPlayerCarkeys(playerid, CARKEY_TYPE_NORMAL);
 }
 
 CMD:findcar(playerid)
@@ -17174,6 +17196,7 @@ CMD:afkick(playerid, params[])
     SendClientMessage(pID, COLOR_DARKRED, string);
     format(string, sizeof(string), "* Du hast %s zum Zivilist gemacht.", GetName(pID));
     SendClientMessage(playerid, COLOR_DARKRED, string);
+    RemovePlayerFromPlantArrayData(pID);
     SaveAccount(pID);
     return 1;
 }
@@ -21960,6 +21983,7 @@ CMD:accept(playerid, params[])
             else if(frakid == 21){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 111); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 111);}}
             FrakInviteID[playerid] = 999;
             SpawnPlayerEx(playerid);
+            if (frakid == 15) AddPlayerToPlantArrayData(playerid);
             SaveAccount(playerid);
         }
     }
@@ -33463,7 +33487,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SendClientMessage(playerid, COLOR_BLUE, "* CASINO-BEFEHLE *: {FFFFFF}/Spielautomat, /Wettspiel, /Kartenspiel, /Gluecksrad");
                 }
                 else if(listitem == 2 ) {
-                        SendClientMessage(playerid, COLOR_BLUE, "* FAHRZEUG *: {FFFFFF}/Radio, /Carlock, /Carkey, /Findcar, /Flock, /Tanken, /Carsell");
+                        SendClientMessage(playerid, COLOR_BLUE, "* FAHRZEUG *: {FFFFFF}/Radio, /Carlock, /Carkey, /Movecarkey, /Findcar, /Flock, /Tanken, /Carsell");
                         SendClientMessage(playerid, COLOR_BLUE, "* FAHRZEUG *: {FFFFFF}/Parken, /Licht, /Motor, /Rauswerfen, /Kanister, /Kofferraum, /Kofferraumansehen");
                         SendClientMessage(playerid, COLOR_BLUE, "* AUSWEISUNG *: {FFFFFF}/Fahrzeugschein, /Scheine, /Scheinsperre, /Fahrzeuginfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* FAHRZEUG MIETEN *: {FFFFFF}/Lock, /Mieten, /Entmieten, /Mietlock, /Findmietcar");
@@ -33844,7 +33868,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* LSPD ALLGEMEIN*: {FFFFFF} /Clear, /Tor, /Dienst, /sliste, /Mitglieder, /Dienstmarke, /sp, /Staatskasse, /Haussuchen, /RufDetektiv, /Beamteon");
                         SendClientMessage(playerid, COLOR_BLUE, "* LSPD VOLLSTRECKUNG*: {FFFFFF}/Reinziehen, /Freilassen, /Verhaften, /Entnehmen, /Koffereinziehen, /Offlinearrest");
                         SendClientMessage(playerid, COLOR_BLUE, "* LSPD VOLLSTRECKUNG*: {FFFFFF}/Scheinentziehen, /Arrest, /W (Wantedvergabe), /Caufbrechen, /Zollamt, /Ticket, /Schutzgeldstop");
-                        SendClientMessage(playerid, COLOR_BLUE, "* LSPD VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzen verbennen, /Zollsperre, /Parkstrafe, /Strafzettel");
+                        SendClientMessage(playerid, COLOR_BLUE, "* LSPD VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzeverbrennen, /Zollsperre, /Parkstrafe, /Strafzettel");
                         SendClientMessage(playerid, COLOR_BLUE, "* LSPD CHAT*: {FFFFFF}/Fc, /Bc, /Vk(VERSTÄRKUNG), /Pvk(VERSTÄRKUNG BEI EINZELNE PERSON), /Cpartner, /Ve");
                         SendClientMessage(playerid, COLOR_BLUE, "* LSPD KONTROLLEN*: {FFFFFF}/Kofferdurchsuchen, /Durchsuchen /Promille, /Pakte, /Gefangene, /Meldestelle, /Parkscheinkontrolle, /Vamt");
                         SendClientMessage(playerid, COLOR_BLUE, "* LSPD AUSRÜSTUNG*: {FFFFFF}/Copman, /Copfrau, /Rank, /Copcap, /Copcapf, /Copmuetze, /Pschild, /Copbrille, /Pswat, /Waffenspind");
@@ -33856,7 +33880,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* FBI ALLGEMEIN*: {FFFFFF} /Clear, /Tor, /Dienst, /Mitglieder, /Sliste, /Dienstmarke, /Ngb, /Staatskasse, /Haussuchen, /RufDetektiv, /Beamteon");
                         SendClientMessage(playerid, COLOR_BLUE, "* FBI VOLLSTRECKUNG*: {FFFFFF}/Reinziehen, /Freilassen, /Verhaften, /Entnehmen, /Koffereinziehen, /Offlinearrest");
                         SendClientMessage(playerid, COLOR_BLUE, "* FBI VOLLSTRECKUNG*: {FFFFFF}/Scheinentziehen, /Arrest, /W (Wantedvergabe), /Caufbrechen, /Zollamt");
-                        SendClientMessage(playerid, COLOR_BLUE, "* FBI VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzen verbrennen, /Zollsperre, /Ticket, /Schutzgeldstop");
+                        SendClientMessage(playerid, COLOR_BLUE, "* FBI VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzeverbrennen, /Zollsperre, /Ticket, /Schutzgeldstop");
                         SendClientMessage(playerid, COLOR_BLUE, "* FBI CHAT*: {FFFFFF}/Fc, /Bc, /Vk(VERSTÄRKUNG), /Pvk(VERSTÄRKUNG BEI EINZELNE PERSON), /Cpartner, /Ve");
                         SendClientMessage(playerid, COLOR_BLUE, "* FBI KONTROLLEN*: {FFFFFF}/Kofferdurchsuchen, /Durchsuchen, /Promille, /Pakte, /Gefangene, /Meldestelle, /Vamt");
                         SendClientMessage(playerid, COLOR_BLUE, "* FBI AUSRÜSTUNG*: {FFFFFF}/Cop, /Copcap, /Pschild, /Pswat, /Copbrille, /Rcv");
@@ -33954,7 +33978,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* ARMY ALLGEMEIN*: {FFFFFF} /Clear, /Dienst, /Mitglieder, /Dienstmarke, /Staatskasse, /Beamteon");
                         SendClientMessage(playerid, COLOR_BLUE, "* ARMY VOLLSTRECKUNG*: {FFFFFF}/Reinziehen, /Freilassen, /Verhaften, /Entnehmen, /Koffereinziehen, /Offlinearrest");
                         SendClientMessage(playerid, COLOR_BLUE, "* ARMY VOLLSTRECKUNG*: {FFFFFF}/Scheinentziehen, /Arrest, /W (Wantedvergabe), /Caufbrechen");
-                        SendClientMessage(playerid, COLOR_BLUE, "* ARMY VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzen verbrennen");
+                        SendClientMessage(playerid, COLOR_BLUE, "* ARMY VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzeverbrennen");
                         SendClientMessage(playerid, COLOR_BLUE, "* ARMY CHAT*: {FFFFFF}/Fc, /Bc, /Vk(VERSTÄRKUNG), /Pvk(VERSTÄRKUNG BEI EINZELNE PERSON)");
                         SendClientMessage(playerid, COLOR_BLUE, "* ARMY KONTROLLEN*: {FFFFFF}/Kofferdurchsuchen, /Durchsuchen, /Promille, /Pakte, /Gefangene, /Meldestelle, /Vamt");
                         SendClientMessage(playerid, COLOR_BLUE, "* ARMY SIGNALE*: {FFFFFF}/Vrk, /Hsirene, /Ermitteln, /Pein");
@@ -33969,7 +33993,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* LVPD ALLGEMEIN*: {FFFFFF} /Clear, /Dienst, /Mitglieder, /Sliste, /Dienstmarke, /Ngb, /Staatskasse, /Haussuchen, /Beamteon");
                         SendClientMessage(playerid, COLOR_BLUE, "* LVPD VOLLSTRECKUNG*: {FFFFFF}/Reinziehen, /Freilassen, /Verhaften, /Entnehmen, /Koffereinziehen, /Offlinearrest");
                         SendClientMessage(playerid, COLOR_BLUE, "* LVPD VOLLSTRECKUNG*: {FFFFFF}/Scheinentziehen, /Arrest, /W (Wantedvergabe), /Caufbrechen, /Zollamt, /Schutzgeldstop");
-                        SendClientMessage(playerid, COLOR_BLUE, "* LVPD VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzen verbrennen, /Zollsperre, /Parkstrafe, /Strafzettel");
+                        SendClientMessage(playerid, COLOR_BLUE, "* LVPD VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Knastzeit, /Finden, /Pflanzeverbrennen, /Zollsperre, /Parkstrafe, /Strafzettel");
                         SendClientMessage(playerid, COLOR_BLUE, "* LVPD CHAT*: {FFFFFF}/Fc, /Bc, /Vk(VERSTÄRKUNG), /Pvk(VERSTÄRKUNG BEI EINZELNE PERSON), /Cpartner, /Ve");
                         SendClientMessage(playerid, COLOR_BLUE, "* LVPD KONTROLLEN*: {FFFFFF}/Kofferdurchsuchen, /Durchsuchen, /Promille, /Pakte, /Gefangene, /Meldestelle, /Parkscheinkontrolle, /Vamt");
                         SendClientMessage(playerid, COLOR_BLUE, "* LVPD SIGNALE*: {FFFFFF}/Vrk, /Hsirene, /Ermitteln, /Pein");
@@ -34001,7 +34025,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT ALLGEMEIN*: {FFFFFF} /Clear, /Dienst, /Mitglieder, /Dienstmarke, /Staatskasse");
                         SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT VOLLSTRECKUNG*: {FFFFFF}/Reinziehen, /Freilassen, /Verhaften, /Entnehmen, /Koffereinziehen");
                         SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT VOLLSTRECKUNG*: {FFFFFF}/Scheinentziehen, /Arrest, /W (Wantedvergabe), /Caufbrechen, /Zollamt");
-                        SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Finden, /Pflanzen verbrennen, /Zollsperre");
+                        SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT VOLLSTRECKUNG*: {FFFFFF}/Aufbrechen, /Finden, /Pflanzeverbrennen, /Zollsperre");
                         SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT CHAT*: {FFFFFF}/Fc, /Bc, /Vk(VERSTÄRKUNG), /Zvk(VERSTÄRKUNG BEI EINZELNE PERSON)");
                         SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT KONTROLLEN*: {FFFFFF}/Kofferdurchsuchen, /Durchsuchen, /Promille, /Pakte, /Gefangene, /Meldestelle, /Vamt");
                         SendClientMessage(playerid, COLOR_BLUE, "* ZOLLAMT SIGNALE*: {FFFFFF}/Vrk, /Hsirene");
@@ -35663,15 +35687,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if( Spieler[playerid][pHartz4] == 0 ) {
                         if( Spieler[playerid][pJob] == 0 ) {
                             Spieler[playerid][pHartz4] = 1;
-                            SendClientMessage(playerid,COLOR_YELLOW,"Du hast Hartz4 beantrag und erhälts nun pro PayDay "#HARTZ4_GELD"$");
+                            SendClientMessage(playerid,COLOR_YELLOW,"Du hast Hartz 4 beantragt und erhältst nun pro PayDay $"#HARTZ4_GELD".");
                         }
                         else {
-                            SendClientMessage(playerid,COLOR_YELLOW,"Da du einen Job hast,kannst du kein Hartz4 beantragen");
+                            SendClientMessage(playerid,COLOR_YELLOW,"Da du einen Job hast, kannst du kein Hartz 4 beantragen.");
                         }
                     }
                     else {
                         Spieler[playerid][pHartz4] = 0;
-                        SendClientMessage(playerid,COLOR_YELLOW,"Du beziehst ab nun kein Hartz 4 mehr");
+                        SendClientMessage(playerid,COLOR_YELLOW,"Du beziehst ab nun kein Hartz 4 mehr.");
                     }
                 }
             }
@@ -35702,7 +35726,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 }
                 if(Spieler[playerid][pHartz4]) {
-                    SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Job annehmen, da du noch Hartz4 beziehst");
+                    SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Job annehmen, da du noch Hartz 4 beziehst.");
                     return 1;
                 }
                 if(listitem==1)
@@ -35831,7 +35855,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 }
                 if(Spieler[playerid][pHartz4]) {
-                    SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Job annehmen, da du noch Hartz4 beziehst");
+                    SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Job annehmen, da du noch Hartz 4 beziehst.");
                     return 1;
                 }
                 if(listitem==1)
@@ -41116,17 +41140,41 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         }
         case DIALOG_CARKEY:
         {
-            if(response)
-            {
-                PlayerKey[playerid] = listitem;
-            }
-            else
-            {
-                return 1;
-            }
+            if (!response) return 1;
+            if (listitem < 0 || listitem >= (Spieler[playerid][pPremiumCarSlot] ? MaxVeh : MaxVeh - 1))
+                return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
+            
+            PlayerKey[playerid] = listitem;
             return 1;
         }
+        case DIALOG_MOVECARKEY1:
+        {
+            if (!response) return 1;
+            if (listitem < 0 || listitem >= (Spieler[playerid][pPremiumCarSlot] ? MaxVeh : MaxVeh - 1))
+                return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
 
+            SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast Slot %i (%s) zum Verschieben ausgewählt.", listitem + 1, CarName[PlayerCar[playerid][listitem][CarModel] - 400]);
+            SetPVarInt(playerid, "MOVE.CARKEY", listitem);
+            return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE2);
+        }
+        case DIALOG_MOVECARKEY2:
+        {
+            if (!response) return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE1);
+            if (listitem < 0 || listitem >= (Spieler[playerid][pPremiumCarSlot] ? MaxVeh : MaxVeh - 1))
+                return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
+
+            new firstSlot = GetPVarInt(playerid, "MOVE.CARKEY"), temp[cInfo], temp2[cInfo];
+            if (firstSlot == listitem) {
+                SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Wieso willst du... das ergibt doch... ach versuch's einfach nochmal!");
+                return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE1);
+            }
+            SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast Slot %i (%s) mit Slot %i (%s) getauscht.", firstSlot + 1, CarName[PlayerCar[playerid][firstSlot][CarModel] - 400], listitem + 1, CarName[ PlayerCar[playerid][listitem][CarModel] - 400]);
+            temp = PlayerCar[playerid][listitem];
+            temp2 = PlayerCar[playerid][firstSlot];
+            PlayerCar[playerid][listitem] = temp2;
+            PlayerCar[playerid][firstSlot] = temp;
+            return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE1);
+        }
         case DIALOG_MUSIK:
         {
             if(response) {
@@ -45232,7 +45280,7 @@ stock LoadPlayerCars(playerid) {
         PlayerCar[playerid][i][CarId] = INVALID_VEHICLE_ID;
         PlayerHaveCar[playerid][i] = 0;
     }
-    format(Query,sizeof(Query),"SELECT * FROM `playercar` WHERE `Owner` = '%s' LIMIT %d",GetName(playerid), MaxVehicles(playerid) );
+    format(Query,sizeof(Query),"SELECT * FROM `playercar` WHERE `Owner` = '%s' ORDER BY `slot` ASC LIMIT %d", GetName(playerid), MaxVehicles(playerid) );
     mysql_pquery(Query , THREAD_LOADPLAYERCARS , playerid,gSQL,MySQLThreadOwner);
     // -> THREADED
     return 1;
@@ -56545,6 +56593,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             if (Spieler[playerid][pSuspendedSentence] > 0)
                 SCMFormatted(playerid, COLOR_YELLOW, "SERVER: Du hast noch eine Bewährungsstrafe für %i Spielstunden (/Bwstrafe).", Spieler[playerid][pSuspendedSentence]);
 
+            AddPlayerToPlantArrayData(playerid);
             /*
             if(Spieler[playerid][pLevel] < 99)
             {
@@ -56749,56 +56798,56 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             mysql_pquery(querystring,THREAD_AKTENEINTRAG,extraid,gWebSQL,MySQLThreadOwner);
         }
         else {
-            SendClientMessage(extraid,COLOR_RED,"Der Spieler existiert nicht");
+            SendClientMessage(extraid,COLOR_RED,"Der Spieler existiert nicht.");
         }
     }
     else if( resultid == THREAD_OFFPRISON ) {
-        SendClientMessage(extraid,COLOR_YELLOW,"Der Spieler wurde OFFLINE ins Prison gesteckt");
+        SendClientMessage(extraid,COLOR_YELLOW,"Der Spieler wurde OFFLINE ins Prison gesteckt.");
     }
     else if( resultid == THREAD_LOADPLAYERCARS ) {
-        new
-            playerid = extraid,
-            x,
-            rows = cache_get_row_count(connectionHandle);
+        new playerid = extraid, x, slot, rows = cache_get_row_count(connectionHandle);
         if( rows ) {
             while( x < rows ) {
-                PlayerCar[playerid][x][Id] = cache_get_row_int(x,0,connectionHandle);
-                cache_get_row(x,1,PlayerCar[playerid][x][CarOwner],connectionHandle,MAX_PLAYER_NAME);
-                PlayerCar[playerid][x][CarModel] = cache_get_row_int(x,2,connectionHandle);
-                PlayerCar[playerid][x][CarPos_x] = cache_get_row_float(x,3,connectionHandle);
-                PlayerCar[playerid][x][CarPos_y] = cache_get_row_float(x,4,connectionHandle);
-                PlayerCar[playerid][x][CarPos_z] = cache_get_row_float(x,5,connectionHandle);
-                PlayerCar[playerid][x][CarRotate] = cache_get_row_float(x,6,connectionHandle);
-                PlayerCar[playerid][x][CarNitro] = cache_get_row_int(x,7,connectionHandle);
-                PlayerCar[playerid][x][CarHyd] = cache_get_row_int(x,8,connectionHandle);
-                PlayerCar[playerid][x][CarWheel] = cache_get_row_int(x,9,connectionHandle);
-                PlayerCar[playerid][x][CarAusp] = cache_get_row_int(x,10,connectionHandle);
-                PlayerCar[playerid][x][CarSideL] = cache_get_row_int(x,11,connectionHandle);
-                PlayerCar[playerid][x][CarSideR] = cache_get_row_int(x,12,connectionHandle);
-                PlayerCar[playerid][x][CarFB] = cache_get_row_int(x,13,connectionHandle);
-                PlayerCar[playerid][x][CarRB] = cache_get_row_int(x,14,connectionHandle);
-                PlayerCar[playerid][x][CarSpoiler] = cache_get_row_int(x,15,connectionHandle);
-                PlayerCar[playerid][x][CarRoof] = cache_get_row_int(x,16,connectionHandle);
-                PlayerCar[playerid][x][CarHood] = cache_get_row_int(x,17,connectionHandle);
-                PlayerCar[playerid][x][CarVents] = cache_get_row_int(x,18,connectionHandle);
-                PlayerCar[playerid][x][CarLamps] = cache_get_row_int(x,19,connectionHandle);
-                PlayerCar[playerid][x][CarPJ] = cache_get_row_int(x,20,connectionHandle);
-                PlayerCar[playerid][x][CarC1] = cache_get_row_int(x,21,connectionHandle);
-                PlayerCar[playerid][x][CarC2] = cache_get_row_int(x,22,connectionHandle);
-                PlayerCar[playerid][x][CarPreis] = cache_get_row_int(x,23,connectionHandle);
-                PlayerCar[playerid][x][CarTank] = cache_get_row_int(x,24,connectionHandle);
-                PlayerCar[playerid][x][CarState] = cache_get_row_int(x,25,connectionHandle);
-                PlayerCar[playerid][x][CarNeon1] = cache_get_row_int(x,26,connectionHandle);
-                PlayerCar[playerid][x][CarNeon2] = cache_get_row_int(x,27,connectionHandle);
-                PlayerCar[playerid][x][isSpecialTuned] = cache_get_row_int(x,28,connectionHandle);
-                cache_get_row(x,29,PlayerCar[playerid][x][CarNumberplate],connectionHandle,32);
-                if( isnull(PlayerCar[playerid][x][CarNumberplate]))  {
-                    format(PlayerCar[playerid][x][CarNumberplate] ,32, KEIN_KENNZEICHEN );
+                slot = cache_get_row_int(x, 33, connectionHandle);
+                if (slot == -1) slot = x;
+
+                PlayerCar[playerid][slot][Id] = cache_get_row_int(x,0,connectionHandle);
+                cache_get_row(x,1,PlayerCar[playerid][slot][CarOwner],connectionHandle,MAX_PLAYER_NAME);
+                PlayerCar[playerid][slot][CarModel] = cache_get_row_int(x,2,connectionHandle);
+                PlayerCar[playerid][slot][CarPos_x] = cache_get_row_float(x,3,connectionHandle);
+                PlayerCar[playerid][slot][CarPos_y] = cache_get_row_float(x,4,connectionHandle);
+                PlayerCar[playerid][slot][CarPos_z] = cache_get_row_float(x,5,connectionHandle);
+                PlayerCar[playerid][slot][CarRotate] = cache_get_row_float(x,6,connectionHandle);
+                PlayerCar[playerid][slot][CarNitro] = cache_get_row_int(x,7,connectionHandle);
+                PlayerCar[playerid][slot][CarHyd] = cache_get_row_int(x,8,connectionHandle);
+                PlayerCar[playerid][slot][CarWheel] = cache_get_row_int(x,9,connectionHandle);
+                PlayerCar[playerid][slot][CarAusp] = cache_get_row_int(x,10,connectionHandle);
+                PlayerCar[playerid][slot][CarSideL] = cache_get_row_int(x,11,connectionHandle);
+                PlayerCar[playerid][slot][CarSideR] = cache_get_row_int(x,12,connectionHandle);
+                PlayerCar[playerid][slot][CarFB] = cache_get_row_int(x,13,connectionHandle);
+                PlayerCar[playerid][slot][CarRB] = cache_get_row_int(x,14,connectionHandle);
+                PlayerCar[playerid][slot][CarSpoiler] = cache_get_row_int(x,15,connectionHandle);
+                PlayerCar[playerid][slot][CarRoof] = cache_get_row_int(x,16,connectionHandle);
+                PlayerCar[playerid][slot][CarHood] = cache_get_row_int(x,17,connectionHandle);
+                PlayerCar[playerid][slot][CarVents] = cache_get_row_int(x,18,connectionHandle);
+                PlayerCar[playerid][slot][CarLamps] = cache_get_row_int(x,19,connectionHandle);
+                PlayerCar[playerid][slot][CarPJ] = cache_get_row_int(x,20,connectionHandle);
+                PlayerCar[playerid][slot][CarC1] = cache_get_row_int(x,21,connectionHandle);
+                PlayerCar[playerid][slot][CarC2] = cache_get_row_int(x,22,connectionHandle);
+                PlayerCar[playerid][slot][CarPreis] = cache_get_row_int(x,23,connectionHandle);
+                PlayerCar[playerid][slot][CarTank] = cache_get_row_int(x,24,connectionHandle);
+                PlayerCar[playerid][slot][CarState] = cache_get_row_int(x,25,connectionHandle);
+                PlayerCar[playerid][slot][CarNeon1] = cache_get_row_int(x,26,connectionHandle);
+                PlayerCar[playerid][slot][CarNeon2] = cache_get_row_int(x,27,connectionHandle);
+                PlayerCar[playerid][slot][isSpecialTuned] = cache_get_row_int(x,28,connectionHandle);
+                cache_get_row(x,29,PlayerCar[playerid][slot][CarNumberplate],connectionHandle,32);
+                if( isnull(PlayerCar[playerid][slot][CarNumberplate]))  {
+                    format(PlayerCar[playerid][slot][CarNumberplate] ,32, KEIN_KENNZEICHEN );
                 }
-                PlayerCar[playerid][x][CarPeilsender]  = cache_get_row_int(x,30,connectionHandle);
-                PlayerCar[playerid][x][CarDistance] = cache_get_row_int(x,31,connectionHandle);
-                PlayerCar[playerid][x][TUV]  = cache_get_row_int(x,32,connectionHandle);
-                PlayerCarSpawn(playerid,x);
+                PlayerCar[playerid][slot][CarPeilsender]  = cache_get_row_int(x,30,connectionHandle);
+                PlayerCar[playerid][slot][CarDistance] = cache_get_row_int(x,31,connectionHandle);
+                PlayerCar[playerid][slot][TUV]  = cache_get_row_int(x,32,connectionHandle);
+                PlayerCarSpawn(playerid,slot);
                 // printf("distance %d meter",distance);
                 x++;
             }
