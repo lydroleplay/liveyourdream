@@ -16,7 +16,7 @@ static Float:DRAWDISTANCE   = 350.0;
 
 // Map variables
 new object_pooInterior[403];
-new pickup_pooInterior[3];
+new pickup_pooInterior[4];
 new actor_pooInterior[1];
 
 hook OnPlayerConnect(playerid) {
@@ -30,6 +30,12 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             SetCameraBehindPlayer(playerid);
 			SetPlayerPosEx(playerid, POO_INTERIOR_ENTER_COORDS + 0.5, MAPS_POOEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
+        } else if (IsPlayerInRangeOfPoint(playerid, 2.0, POO_INTERIOR_ROOF_POINT)) { // Roof Exit
+            if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keine gültige Schlüsselkarte für das Oamt-Gebäude.");
+            SetPlayerFacingAngle(playerid, POO_ROOF_POINT_FACING);
+            SetCameraBehindPlayer(playerid);
+            SetPlayerPosEx(playerid, POO_ROOF_POINT + 0.5, MAPS_POOEXTERIOR_INTERIOR, VW_MAIN);
+            return 1;
         }
     }
 
@@ -41,6 +47,7 @@ hook OnGameModeInit() {
     pickup_pooInterior[0] = CreateDynamicPickup(19197, 1, POO_INTERIOR_EXIT_COORDS, VW_POOINTERIOR, MAPS_POOEXTERIOR_INTERIOR); // Exit
     pickup_pooInterior[1] = CreateDynamicPickup(1240, 1, POO_INTERIOR_DUTY_POINT, VW_POOINTERIOR, MAPS_POOEXTERIOR_INTERIOR); // Duty
     pickup_pooInterior[2] = CreateDynamicPickup(1275, 1, POO_INTERIOR_FSKIN_POINT, VW_POOINTERIOR, MAPS_POOEXTERIOR_INTERIOR); // FSKIN
+    pickup_pooInterior[3] = CreateDynamicPickup(19197, 1, POO_INTERIOR_ROOF_POINT, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR); // Roof Exit
 
     // Actors
     actor_pooInterior[0] = CreateDynamicActor(71, 1944.6857, -2010.3633, 823.4130, 90.0000, .worldid = VW_POOINTERIOR, .interiorid = MAPS_POOINTERIOR_INTERIOR); // Maindesk
@@ -597,13 +604,16 @@ hook OnGameModeInit() {
     object_pooInterior[276] = CreateDynamicObject(1744, 1948.9276, -2034.2625, 822.4575, 0.0000, 0.0000, 180.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
     object_pooInterior[277] = CreateDynamicObject(1744, 1952.9681, -2034.2625, 822.4575, 0.0000, 0.0000, 180.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
     object_pooInterior[278] = CreateDynamicObject(1744, 1945.4985, -2034.2625, 822.4575, 0.0000, 0.0000, 180.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
-    object_pooInterior[279] = CreateDynamicObject(1744, 1944.5677, -2024.3210, 822.4575, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
+    object_pooInterior[279] = CreateDynamicObject(14819, 1944.8978, -2024.5760, 823.5524, 0.0000, 0.0000, -180.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Door to roof
     object_pooInterior[280] = CreateDynamicObject(1744, 1952.0089, -2024.3210, 822.4575, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
     object_pooInterior[281] = CreateDynamicObject(11729, 1951.0793, -2024.7110, 822.3690, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
     object_pooInterior[282] = CreateDynamicObject(11730, 1950.4068, -2024.7020, 822.3690, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerOpen1
     object_pooInterior[283] = CreateDynamicObject(11730, 1949.7364, -2024.7020, 822.3690, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerOpen1
-    object_pooInterior[284] = CreateDynamicObject(11730, 1946.3355, -2024.7020, 822.3690, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerOpen1
-    object_pooInterior[285] = CreateDynamicObject(11730, 1947.0161, -2024.7020, 822.3690, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerOpen1
+    object_pooInterior[284] = CreateDynamicObject(19175, 1944.4941, -2024.5609, 824.1935, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+    SetDynamicObjectMaterialText(object_pooInterior[284], 0, "Dach", 90, "Arial", 15, 1, 0xFFFFFFFF, 0x0, 1);
+    SetDynamicObjectMaterial(object_pooInterior[284], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+    object_pooInterior[285] = CreateDynamicObject(19565, 1944.4792, -2024.5208, 824.0584, 0.0000, 0.0000, -180.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    SetDynamicObjectMaterial(object_pooInterior[285], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
     object_pooInterior[286] = CreateDynamicObject(1744, 1947.9284, -2024.3210, 822.4575, 0.0000, 0.0000, 0.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
     object_pooInterior[287] = CreateDynamicObject(1744, 1953.7885, -2030.7523, 823.4077, 0.0000, 0.0000, -90.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
     object_pooInterior[288] = CreateDynamicObject(1744, 1953.7885, -2026.6816, 823.4077, 0.0000, 0.0000, -90.0000, VW_POOINTERIOR, MAPS_POOINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF

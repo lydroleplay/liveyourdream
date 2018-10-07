@@ -23,7 +23,7 @@ static Float:DRAWDISTANCE   = 350.0;
 
 // Map variables
 new object_lspdInterior[538];
-new pickup_lspdInterior[8];
+new pickup_lspdInterior[9];
 new text3D_lspdInterior[3];
 new actor_lspdInterior[7];
 new object_duty_door_lspdInterior;
@@ -77,7 +77,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_INTERIOR_EXIT_COORDS)) { // Exit
             SetPlayerFacingAngle(playerid, LSPD_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
+            SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_INTERIOR_HELI_STAIRS_POINT)) { // Helicopter Stairway
             if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18))
@@ -85,14 +85,19 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             
             SetPlayerFacingAngle(playerid, LSPD_HELI_STAIRS_POINT_FACING);
             SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, LSPD_HELI_STAIRS_POINT + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
+            SetPlayerPosEx(playerid, LSPD_HELI_STAIRS_POINT + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
+            return 1;
+        } else if (IsPlayerInRangeOfPoint(playerid, 1.5, LSPD_INTERIOR_GARAGE_POINT)) { // Garage Door
+            SetPlayerFacingAngle(playerid, LSPD_GARAGE_POINT_FACING);
+            SetCameraBehindPlayer(playerid);
+            SetPlayerPosEx(playerid, LSPD_GARAGE_POINT + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 1.5, LSPD_INTERIOR_DUTY_ROOM_DOOR_POINT)) { // Duty Room Door
             if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18))
                 return PlayerPlaySound(playerid, 1085, LSPD_INTERIOR_DUTY_ROOM_DOOR_POINT);
             
             new Float:fX, Float:fY, Float:fZ;
-	        GetDynamicObjectPos(object_duty_door_lspdInterior, fX, fY, fZ);
+            GetDynamicObjectPos(object_duty_door_lspdInterior, fX, fY, fZ);
 
             if (fX != LSPD_INTERIOR_DUTY_ROOM_DOOR_OPEN_X && (lspdInterior_pIDControllingDoor == playerid || lspdInterior_pIDControllingDoor == INVALID_PLAYER_ID))
                 MoveDynamicObject(object_duty_door_lspdInterior, LSPD_INTERIOR_DUTY_ROOM_DOOR_OPEN_X, fY, fZ, 1.0);
@@ -117,7 +122,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 hook OnGameModeInit() {
-	// Pickups
+    // Pickups
     pickup_lspdInterior[0] = CreateDynamicPickup(19197, 1, LSPD_INTERIOR_EXIT_COORDS, VW_LSPDINTERIOR, MAPS_LSPDEXTERIOR_INTERIOR); // Exit
     pickup_lspdInterior[1] = CreateDynamicPickup(19197, 1, LSPD_INTERIOR_HELI_STAIRS_POINT, VW_LSPDINTERIOR, MAPS_LSPDEXTERIOR_INTERIOR); // Helicopter Stairway
     pickup_lspdInterior[2] = CreateDynamicPickup(1240, 1, LSPD_INTERIOR_DUTY_POINT, VW_LSPDINTERIOR, MAPS_LSPDEXTERIOR_INTERIOR); // Duty
@@ -126,6 +131,7 @@ hook OnGameModeInit() {
     pickup_lspdInterior[5] = CreateDynamicPickup(1275, 1, LSPD_INTERIOR_LAWYER_SKIN_POINT, VW_LSPDINTERIOR, MAPS_LSPDEXTERIOR_INTERIOR); // Lawyer Skin Point
     pickup_lspdInterior[6] = CreateDynamicPickup(1239, 1, LSPD_INTERIOR_WANTED_TICKET_POINT, VW_LSPDINTERIOR, MAPS_LSPDEXTERIOR_INTERIOR); // Wanted Ticket Point
     pickup_lspdInterior[7] = CreateDynamicPickup(1247, 1, LSPD_INTERIOR_SURRENDER_POINT, VW_LSPDINTERIOR, MAPS_LSPDEXTERIOR_INTERIOR); // Surrender Point
+    pickup_lspdInterior[8] = CreateDynamicPickup(19197, 1, LSPD_INTERIOR_GARAGE_POINT, VW_LSPDINTERIOR, MAPS_LSPDEXTERIOR_INTERIOR); // Garage Point
 
     // 3DTextLabels
     text3D_lspdInterior[0] = _:CreateDynamic3DTextLabel("Arbeitskleidung für Anwälte\n" COLOR_HEX_WHITE "Tippe /Jobkleidung", COLOR_YELLOW, LSPD_INTERIOR_LAWYER_SKIN_POINT, 25.0, .testlos = 1, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // Lawyer Skin Point
@@ -147,8 +153,8 @@ hook OnGameModeInit() {
     actor_lspdInterior[6] = CreateDynamicActor(31, 1625.1361, -1384.8080, 1962.4068, 0.0000, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // Old woman waiting
     ApplyDynamicActorAnimation(actor_lspdInterior[6], "MISC", "SEAT_LR", 4.0, 1, 0, 0, 0, 0);
 
-	// Objects
-	object_lspdInterior[0] = CreateDynamicObject(18981, 1631.1151, -1348.8780, 1961.0068, 0.0000, 90.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    // Objects
+    object_lspdInterior[0] = CreateDynamicObject(18981, 1631.1151, -1348.8780, 1961.0068, 0.0000, 90.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_lspdInterior[0], 0, 14853, "gen_pol_vegas", "blue_carpet_256", 0xFFFFFFFF);
     object_lspdInterior[1] = CreateDynamicObject(18981, 1656.0627, -1348.8780, 1961.0068, 0.0000, 90.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
     SetDynamicObjectMaterial(object_lspdInterior[1], 0, 14853, "gen_pol_vegas", "blue_carpet_256", 0xFFFFFFFF);
@@ -889,8 +895,9 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(object_lspdInterior[362], 0, 3820, "boxhses_sfsx", "ws_mixedbrick", 0xFFFFFFFF);
     object_lspdInterior[363] = CreateDynamicObject(1744, 1640.3961, -1388.7314, 1961.4934, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
     SetDynamicObjectMaterial(object_lspdInterior[363], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
-    object_lspdInterior[364] = CreateDynamicObject(1744, 1643.6877, -1388.7314, 1961.4934, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
-    SetDynamicObjectMaterial(object_lspdInterior[364], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
+    object_lspdInterior[364] = CreateDynamicObject(14819, 1643.2189, -1388.7459, 1962.6756, 0.0000, 0.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Door to garage
+    // object_lspdInterior[364] = CreateDynamicObject(1744, 1643.6877, -1388.7314, 1961.4934, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
+    // SetDynamicObjectMaterial(object_lspdInterior[364], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
     object_lspdInterior[365] = CreateDynamicObject(11729, 1637.6395, -1385.1153, 1961.5113, 0.0000, 0.0000, 90.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
     SetDynamicObjectMaterial(object_lspdInterior[365], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF4C75B7);
     object_lspdInterior[366] = CreateDynamicObject(11729, 1637.6395, -1385.7557, 1961.5113, 0.0000, 0.0000, 90.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
@@ -913,12 +920,21 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(object_lspdInterior[374], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF4C75B7);
     object_lspdInterior[375] = CreateDynamicObject(11729, 1640.5611, -1388.8243, 1961.5113, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
     SetDynamicObjectMaterial(object_lspdInterior[375], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF4C75B7);
-    object_lspdInterior[376] = CreateDynamicObject(11729, 1642.5421, -1388.8243, 1961.5113, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
-    SetDynamicObjectMaterial(object_lspdInterior[376], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF4C75B7);
-    object_lspdInterior[377] = CreateDynamicObject(11729, 1643.1921, -1388.8243, 1961.5113, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
-    SetDynamicObjectMaterial(object_lspdInterior[377], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF2A77A1);
-    object_lspdInterior[378] = CreateDynamicObject(11729, 1643.8625, -1388.8243, 1961.5113, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
-    SetDynamicObjectMaterial(object_lspdInterior[378], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF4C75B7);
+    // object_lspdInterior[376] = CreateDynamicObject(11729, 1642.5421, -1388.8243, 1961.5113, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
+    // SetDynamicObjectMaterial(object_lspdInterior[376], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF4C75B7);
+    // object_lspdInterior[377] = CreateDynamicObject(11729, 1643.1921, -1388.8243, 1961.5113, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
+    // SetDynamicObjectMaterial(object_lspdInterior[377], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF2A77A1);
+    // object_lspdInterior[378] = CreateDynamicObject(11729, 1643.8625, -1388.8243, 1961.5113, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1
+    // SetDynamicObjectMaterial(object_lspdInterior[378], 0, 14788, "ab_sfgymbits01", "lockers", 0xFF4C75B7);
+
+    object_lspdInterior[376] = CreateDynamicObject(19565, 1644.1601, -1388.8129, 1963.1772, 0.0000, 0.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    SetDynamicObjectMaterial(object_lspdInterior[376], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
+    object_lspdInterior[377] = CreateDynamicObject(19565, 1643.6998, -1388.8131, 1963.1772, 0.0000, 0.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //IceCreamBarsBox1
+    SetDynamicObjectMaterial(object_lspdInterior[377], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
+    object_lspdInterior[378] = CreateDynamicObject(19175, 1643.9245, -1388.7736, 1963.3092, 0.0000, 0.0000, 180.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
+    SetDynamicObjectMaterialText(object_lspdInterior[378], 0, "Garage", 90, "Arial", 15, 1, 0xFFFFFFFF, 0x0, 1);
+    SetDynamicObjectMaterial(object_lspdInterior[378], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
+
     object_lspdInterior[379] = CreateDynamicObject(1744, 1641.2054, -1380.7584, 1961.4934, 0.0000, 0.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //MED_SHELF
     SetDynamicObjectMaterial(object_lspdInterior[379], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0xFFFFFFFF);
     object_lspdInterior[380] = CreateDynamicObject(11729, 1639.6794, -1380.6943, 1961.5113, 0.0000, 0.0000, 0.0000, VW_LSPDINTERIOR, MAPS_LSPDINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //GymLockerClosed1

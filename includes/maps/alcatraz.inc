@@ -94,14 +94,14 @@ hook OnGameModeInit() {
     // 3DTextLabels
 
     // Vehicles
-    vehicle_lspdExterior[26] = AddStaticVehicleEx(596, 2869.2363, 1945.4760, 11.2655, 239.8570, 0, 1, -1); // Alcatraz
-    vehicle_lspdExterior[27] = AddStaticVehicleEx(596, 2865.6960, 1943.5454, 11.2670, 237.4763, 0, 1, -1); // Alcatraz
-    vehicle_lspdExterior[28] = AddStaticVehicleEx(599, 2864.1147, 1938.1427, 11.7587, 270.0002, 0, 1, -1); // Alcatraz
-    vehicle_lspdExterior[29] = AddStaticVehicleEx(599, 2864.0491, 1934.2194, 11.7524, 269.4765, 0, 1, -1); // Alcatraz
-    vehicle_lspdExterior[30] = AddStaticVehicleEx(601, 2864.3555, 1927.5724, 11.3028, 304.6344, 0, 0, -1); // Alcatraz
-    vehicle_lspdExterior[31] = AddStaticVehicleEx(601, 2868.2207, 1924.4236, 11.3097, 299.9103, 0, 0, -1); // Alcatraz
-    vehicle_lspdExterior[32] = AddStaticVehicleEx(497, 2852.9485, 1820.1101, 11.7223, 269.9985, 0, 1, -1); // Alcatraz
-    vehicle_lspdExterior[33] = AddStaticVehicleEx(497, 2852.9485, 1835.6248, 11.7322, 269.9992, 0, 1, -1); // Alcatraz
+    vehicle_lspdExterior[27] = AddStaticVehicleEx(596, 2869.2363, 1945.4760, 11.2655, 239.8570, 0, 1, -1); // Alcatraz
+    vehicle_lspdExterior[28] = AddStaticVehicleEx(596, 2865.6960, 1943.5454, 11.2670, 237.4763, 0, 1, -1); // Alcatraz
+    vehicle_lspdExterior[29] = AddStaticVehicleEx(599, 2864.1147, 1938.1427, 11.7587, 270.0002, 0, 1, -1); // Alcatraz
+    vehicle_lspdExterior[30] = AddStaticVehicleEx(599, 2864.0491, 1934.2194, 11.7524, 269.4765, 0, 1, -1); // Alcatraz
+    vehicle_lspdExterior[31] = AddStaticVehicleEx(601, 2864.3555, 1927.5724, 11.3028, 304.6344, 0, 0, -1); // Alcatraz
+    vehicle_lspdExterior[32] = AddStaticVehicleEx(601, 2868.2207, 1924.4236, 11.3097, 299.9103, 0, 0, -1); // Alcatraz
+    vehicle_lspdExterior[33] = AddStaticVehicleEx(497, 2852.9485, 1820.1101, 11.7223, 269.9985, 0, 1, -1); // Alcatraz
+    vehicle_lspdExterior[34] = AddStaticVehicleEx(497, 2852.9485, 1835.6248, 11.7322, 269.9992, 0, 1, -1); // Alcatraz
 
     // Objects
     object_alcatraz[0] = CreateDynamicObject(2961, 2869.3137, 1853.4460, 11.9336, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break
