@@ -13594,7 +13594,7 @@ CMD:gmx(playerid)
         }
         SaveAll();
         GMXMode = 1;
-        gmxtimer = SetTimer("GMXModeTimer", 3000, 1);
+        gmxtimer = SetTimer("GMXModeTimer", 10000, 1);
         SendAdminMessage(COLOR_YELLOW, "Der Server kann nun restartet werden!");
     }
     return 1;
@@ -13612,6 +13612,8 @@ public GMXModeTimer()
             return 1;
         }
     }
+
+    SendRconCommand("/rcon exit");
     return 1;
 }
 
@@ -21272,11 +21274,10 @@ CMD:samdgarage(playerid, params[]) {
 CMD:sfinden(playerid, params[])
 {
     new pID, string[128];
-    if(!(Spieler[playerid][pFraktion] == 3))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Sanitäter.");
-    if (!Spieler[playerid][pDuty]) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht im Dienst.");
-    if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Sfinden [SpielerID/Name]");
-    if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
-    if(Spieler[pID][pTot] == 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht tot.");
+    if(!(Spieler[playerid][pFraktion] == 3)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Sanitäter.");
+    if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Sfinden [SpielerID/Name]");
+    if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if(Spieler[pID][pTot] == 0) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht tot.");
     SetPlayerCheckpointEx(playerid, Spieler[pID][pTotX], Spieler[pID][pTotY], Spieler[pID][pTotZ], 5.0, CP_TOT);
     format(string, sizeof(string), "* %s wurde auf der Karte makiert, Gebäude-Komplex: %d. Fahre schnell zu ihm/ihr!", GetName(pID), GetPlayerInterior(pID));
     SendClientMessage(playerid, COLOR_LIGHTRED2, string);
@@ -26856,6 +26857,24 @@ public OnPlayerLeaveRaceCheckpoint(playerid)
 
 public OnRconCommand(cmd[])
 {
+    if (!strcmp(cmd, "saveandrestart", true)) { 
+        SendClientMessageToAll(COLOR_ORANGE, "[SERVER-UPDATE] {FFFFFF}Der Server wird zwecks eines Updates nun neugestartet.");
+        SendClientMessageToAll(COLOR_ORANGE, "[SERVER-UPDATE] {FFFFFF}Im Forum könnt ihr im Update-Thread die Neuerungen nachlesen.");
+        for(new i = 0 ; i <= GetPlayerPoolSize() ; i++)
+        {
+            SetPlayerInterior(i, 0);
+            SetPlayerVirtualWorld(i, 0);
+            SetPlayerPos(i, 381.1510, -1881.4520, 3.7626);
+            InterpolateCameraPos(i, 369.837097, -2046.207153, 7.430351, 370.996215, -1818.170532, 8.961493, 60000);
+            InterpolateCameraLookAt(i, 370.090270, -2041.220214, 7.687465, 371.139587, -1813.225585, 9.687144, 60000);
+            SendClientMessage(i, COLOR_RED, "Speichere Daten...");
+        }
+
+        SaveAll();
+        SetTimer("GMXModeTimer", 5000, 1);
+        return 0;
+    }
+
     return 1;
 }
 
@@ -44089,37 +44108,37 @@ CMD:showjob(playerid)
 }
 CMD:warenverkaufsstelle1(playerid)
 {
-    SetPlayerCheckpointEx(playerid, 2187.6926,-2263.8967,13.4674, 7.0, CP_SHOWJOB1);
-    SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Warenverkaufsplatz in Los Santos gesetzt.");
+    SetPlayerCheckpointEx(playerid, 2187.6926,-2263.8967,13.4674, 3.0, CP_SHOWJOB1);
+    SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Warenverkaufsplatz in Los Santos (Lagerhalle) gesetzt.");
     return 1;
 }
 CMD:warenverkaufsstelle2(playerid)
 {
-    SetPlayerCheckpointEx(playerid, 2571.6233,-2226.6980,13.3550, 7.0, CP_SHOWJOB1);
-    SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Warenverkaufsplatz in San Fierro gesetzt.");
+    SetPlayerCheckpointEx(playerid, 2571.6233,-2226.6980,13.3550, 3.0, CP_SHOWJOB1);
+    SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Warenverkaufsplatz in Los Santos (Hafen) gesetzt.");
     return 1;
 }
 CMD:warenverkaufsstelle3(playerid)
 {
-    SetPlayerCheckpointEx(playerid, 1035.9789,2135.8733,10.8203, 7.0, CP_SHOWJOB1);
+    SetPlayerCheckpointEx(playerid, 1035.9789,2135.8733,10.8203, 3.0, CP_SHOWJOB1);
     SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Warenverkaufsplatz in Las Venturas gesetzt.");
     return 1;
 }
 CMD:spritverkaufsstelle1(playerid)
 {
-    SetPlayerCheckpointEx(playerid, -1034.6223,-626.2365,32.0078, 7.0, CP_SHOWJOB1);
+    SetPlayerCheckpointEx(playerid, -1034.6223,-626.2365,32.0078, 3.0, CP_SHOWJOB1);
     SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Spritverkaufsplatz im Vorort Los Santos gesetzt.");
     return 1;
 }
 CMD:spritverkaufsstelle2(playerid)
 {
-    SetPlayerCheckpointEx(playerid, 2482.8813,-2084.2239,13.5469, 7.0, CP_SHOWJOB1);
+    SetPlayerCheckpointEx(playerid, 2482.8813,-2084.2239,13.5469, 3.0, CP_SHOWJOB1);
     SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Spritverkaufsplatz in der Stadt Los Santos gesetzt.");
     return 1;
 }
 CMD:spritverkaufsstelle3(playerid)
 {
-    SetPlayerCheckpointEx(playerid, 585.5286,1211.6166,12.0090, 7.0, CP_SHOWJOB1);
+    SetPlayerCheckpointEx(playerid, 585.5286,1211.6166,12.0090, 3.0, CP_SHOWJOB1);
     SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Spritverkaufsplatz in Las Venturas gesetzt.");
     return 1;
 }
@@ -65037,7 +65056,7 @@ stock GetPlayerLawyerStateShare(playerid) {
 }
 COMMAND:clubneon(playerid,paramas[]) {
     if( !IsPlayerInRangeOfPoint(playerid,6.0,1747.8992,2243.8093,10.8203)) {
-        return SendClientMessage(playerid,COLOR_RED,"Du kannst diese Funktion hier nicht aufrufen");
+        return SendClientMessage(playerid,COLOR_RED,"Du kannst diese Funktion hier nicht aufrufen.");
     }
     if( Spieler[playerid][pDonateRank] != 2 ) {
         return SendClientMessage(playerid,COLOR_RED,"Aufgrund eines Fehlers werden zeitweise keine Neonröhren verkauft!");
@@ -65047,11 +65066,11 @@ COMMAND:clubneon(playerid,paramas[]) {
     }*/
     new vehicleid = GetPlayerVehicleID(playerid);
     if( !vehicleid ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du benötigst ein Fahrzeug für diese Funktion");
+        return SendClientMessage(playerid,COLOR_RED,"Du benötigst ein Fahrzeug für diese Funktion.");
     }
     new owner = GetCarOwner( vehicleid );
     if( owner != playerid ) {
-        return SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug gehört nicht dir");
+        return SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug gehört nicht dir.");
     }
     ShowPlayerDialog(playerid,DIALOG_CLUBNEON,DIALOG_STYLE_LIST,"Clubneon","{FF0000}Entfernen{FFFFFF}\nWeiß\nBlau\nGrün\nRot\nPink\nGelb","Anbringen","Abbruch");
 
@@ -65060,17 +65079,17 @@ COMMAND:clubneon(playerid,paramas[]) {
 
 COMMAND:entladen(playerid,params[]) {
     if( Spieler[playerid][pJob] != 3 ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du musst Trucker sein, für diese Funktion");
+        return SendClientMessage(playerid,COLOR_RED,"Du musst Trucker sein, für diese Funktion.");
     }
     if( CP_TRUCKERWAREN == pCheckpoint[playerid] || CP_TRUCKERWAREN2 == pCheckpoint[playerid]) {
         // Waren
         new vehicleid = GetPlayerVehicleID(playerid);
         if( !vehicleid ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du sitzt in keinem Fahrzeug");
+            return SendClientMessage(playerid,COLOR_RED,"Du sitzt in keinem Fahrzeug.");
         }
         new modelid = GetVehicleModel(vehicleid);
         if ( !(modelid == 514 || modelid == 515) ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du musst in einem LKW sitzen für diese Funktion");
+            return SendClientMessage(playerid,COLOR_RED,"Du musst in einem LKW sitzen für diese Funktion.");
         }
         new trailer = GetVehicleTrailer(vehicleid);
         if( !trailer ) {
@@ -65080,18 +65099,18 @@ COMMAND:entladen(playerid,params[]) {
                 return SendClientMessage(playerid, COLOR_RED, "Du hast nicht den passenden Anhänger dran.");
         }
         if( Waren[vehicleid] < 1 ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du hast keine Waren aufgeladen");
+            return SendClientMessage(playerid,COLOR_RED,"Du hast keine Waren aufgeladen.");
         }
         if( CP_TRUCKERWAREN == pCheckpoint[playerid] && !IsPlayerInRangeOfPoint(playerid,6.0,2187.6926,-2263.8967,13.4674) ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du kannst die Ware hier nicht abladen");
+            return SendClientMessage(playerid,COLOR_RED,"Du kannst die Ware hier nicht abladen.");
         }
         if( CP_TRUCKERWAREN2 == pCheckpoint[playerid] && !IsPlayerInRangeOfPoint(playerid,6.0,2571.6233,-2226.6980,13.3550) ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du kannst die Ware hier nicht abladen");
+            return SendClientMessage(playerid,COLOR_RED,"Du kannst die Ware hier nicht abladen.");
         }
         new ppw = RandomEx(14,16);
         new preis = ppw * Waren[vehicleid];
         new String[128];
-        format(String,sizeof(String),"Du hast %d Waren für je $%d pro Ware Verkauft ($%s)",Waren[vehicleid],ppw, AddDelimiters(preis));
+        format(String,sizeof(String),"Du hast %d Waren für je $%d pro Ware verkauft ($%s).",Waren[vehicleid],ppw, AddDelimiters(preis));
         SendClientMessage(playerid,COLOR_YELLOW,String);
         GivePlayerCash(playerid,preis);
         Spieler[playerid][tickJobCheckpoint] = gettime() + (3*60);
@@ -65110,11 +65129,11 @@ COMMAND:entladen(playerid,params[]) {
         // Benzin
         new vehicleid = GetPlayerVehicleID(playerid);
         if( !vehicleid ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du sitzt in keinem Fahrzeug");
+            return SendClientMessage(playerid,COLOR_RED,"Du sitzt in keinem Fahrzeug.");
         }
         new modelid = GetVehicleModel(vehicleid);
         if( modelid != 514 ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du musst in einem Tanklaster sitzen für diese Funktion");
+            return SendClientMessage(playerid,COLOR_RED,"Du musst dafür in einem Tanklaster sitzen.");
         }
         new trailer = GetVehicleTrailer(vehicleid);
         if( !trailer ) {
@@ -65127,15 +65146,15 @@ COMMAND:entladen(playerid,params[]) {
             return SendClientMessage(playerid,COLOR_RED,"Du hast kein Benzin beladen.");
         }
         if( CP_TRUCKERTANK == pCheckpoint[playerid] && !IsPlayerInRangeOfPoint(playerid,6.0,-1034.6223,-626.2365,32.0078) ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du kannst den Benzin hier nicht abladen");
+            return SendClientMessage(playerid,COLOR_RED,"Du kannst den Benzin hier nicht abladen.");
         }
         if( CP_TRUCKERTANK2 == pCheckpoint[playerid] && !IsPlayerInRangeOfPoint(playerid,6.0,2482.8813,-2084.2239,13.5469) ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du kannst den Benzin hier nicht abladen");
+            return SendClientMessage(playerid,COLOR_RED,"Du kannst den Benzin hier nicht abladen.");
         }
         new ppw = RandomEx(10,11);
         new preis = ppw * Benzin[trailer];
         new String[128];
-        format(String,sizeof(String),"Du hast %d Liter Benzin für je $%d pro Liter Verkauft ($%s)",Benzin[trailer],ppw, AddDelimiters(preis));
+        format(String,sizeof(String),"Du hast %d Liter Benzin für je $%d pro Liter verkauft ($%s).",Benzin[trailer],ppw, AddDelimiters(preis));
         SendClientMessage(playerid,COLOR_YELLOW,String);
         GivePlayerCash(playerid,preis);
         Spieler[playerid][tickJobCheckpoint] = gettime() + (3*60);
@@ -65151,7 +65170,7 @@ COMMAND:entladen(playerid,params[]) {
         DisablePlayerCheckpointEx(playerid);
     }
     else {
-        return SendClientMessage(playerid,COLOR_ORANGE,"Du hast die Mission gar nicht gestartet");
+        return SendClientMessage(playerid,COLOR_ORANGE,"Du hast die Mission gar nicht gestartet.");
     }
     return 1;
 }
@@ -65244,26 +65263,26 @@ COMMAND:tankkaufen(playerid,params[]) {
         idx = 3;
     }
     if( idx == -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keinem Ort, wo du Benzin kaufen kannst");
+        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keinem Ort, wo du Benzin kaufen kannst.");
     }
     new indextanke = Spieler[playerid][pPlayerTank];
     if( indextanke == 999) {
         return SendClientMessage(playerid, COLOR_RED, "Du besitzt keine Tankstelle!");
     }
     if( StaticBiz[idx][SBD_iWaren] < menge ) {
-        return SendClientMessage(playerid, COLOR_RED, "Das Lager kann deinen Bedarf am Benzin nicht decken");
+        return SendClientMessage(playerid, COLOR_RED, "Das Lager kann deinen Bedarf am Benzin nicht decken.");
     }
     new
         String[128];
     if( Tanke[indextanke][tMaxBenzin] < Tanke[indextanke][tBenzin] + menge ) {
-        format(String,sizeof(String),"Diese Menge kannst du nicht kaufen,da deine Tanke nur Maximal %d Liter Benzin halten kann ( Noch %d )",Tanke[indextanke][tMaxBenzin],( Tanke[indextanke][tMaxBenzin] - Tanke[indextanke][tBenzin] ) );
-        return SendClientMessage(playerid, COLOR_RED, String );
+        format(String,sizeof(String),"Diese Menge kannst du nicht kaufen, da deine Tanke nur maximal %d Liter Benzin halten kann (noch %d).",Tanke[indextanke][tMaxBenzin],( Tanke[indextanke][tMaxBenzin] - Tanke[indextanke][tBenzin] ) );
+        return SendClientMessage(playerid, COLOR_RED, String);
     }
     new price = menge * 25;
     if( Spieler[playerid][pCash] < price ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genug Geld. Jeder Liter kostet 25$");
+        return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genug Geld. Jeder Liter kostet $25.");
     }
-    format(String,sizeof(String),"Du hast für deine Tankstelle %d Liter Benzin für je 25$ pro Liter gekauft (-$%s)",menge, AddDelimiters(price));
+    format(String,sizeof(String),"Du hast für deine Tankstelle %d Liter Benzin für je $25 pro Liter gekauft (-$%s).",menge, AddDelimiters(price));
     SendClientMessage(playerid,COLOR_YELLOW,String);
     GivePlayerCash(playerid,-price);
     Tanke[indextanke][tBenzin] += menge;
@@ -65272,42 +65291,35 @@ COMMAND:tankkaufen(playerid,params[]) {
     return 1;
 }
 COMMAND:warenkaufen(playerid,params[]) {
-    new
-        idx = -1,
-        menge;
-    if(sscanf(params,"d",menge)) {
-        return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Warenkaufen [Menge]");
-    }
-    if( menge < 1 ) {
-        return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Warenkaufen [Menge]");
-    }
-    if( IsPlayerInRangeOfPoint(playerid,6.0,2187.6926,-2263.8967,13.4674) ) {
+    new idx = -1, menge;
+    if (sscanf(params, "d", menge) || menge < 1) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Warenkaufen [Menge]");
+    if (IsPlayerInRangeOfPoint(playerid, 6.0, 2187.6926, -2263.8967, 13.4674)) {
         idx = 0;
     }
-    if( IsPlayerInRangeOfPoint(playerid,6.0,2571.6233,-2226.6980,13.3550) ) {
+    if( IsPlayerInRangeOfPoint(playerid,6.0, 2571.6233, -2226.6980, 13.3550) ) {
         idx = 1;
     }
     if( idx == -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keinem Ort,wo du Benzin kaufen kannst");
+        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keinem Ort, wo du Benzin kaufen kannst.");
     }
     new indexbiz = Spieler[playerid][pPlayerBiz];
     if( indexbiz == 999) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein Biz!");
+        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein BIZ!");
     }
     if( StaticBiz[idx][SBD_iWaren] < menge ) {
-        return SendClientMessage(playerid, COLOR_RED, "Das Lager kann deinen Bedarf an Waren nicht decken");
+        return SendClientMessage(playerid, COLOR_RED, "Das Lager kann deinen Bedarf an Waren nicht decken.");
     }
     new
         String[128];
     if( Biz[indexbiz][bMaxWaren] < Biz[indexbiz][bWaren] + menge ) {
-        format(String,sizeof(String),"Diese Menge kannst du nicht kaufen,da dein Biz nur Maximal %d Waren halten kann ( Noch %d )",Biz[indexbiz][bMaxWaren],( Biz[indexbiz][bMaxWaren] - Biz[indexbiz][bWaren] ) );
+        format(String,sizeof(String),"Diese Menge kannst du nicht kaufen, da dein BIZ nur maximal %d Waren halten kann (noch %d).",Biz[indexbiz][bMaxWaren],( Biz[indexbiz][bMaxWaren] - Biz[indexbiz][bWaren] ) );
         return SendClientMessage(playerid, COLOR_RED, String );
     }
     new price = menge * 20;
     if( Spieler[playerid][pCash] < price ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genug Geld. Jede Ware kostet 20$");
+        return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genug Geld. Jede Ware kostet $20.");
     }
-    format(String,sizeof(String),"Du hast für dein Biz %d Waren für je 20$ pro Ware gekauft (-$%s)",menge, AddDelimiters(price));
+    format(String,sizeof(String),"Du hast für dein BIZ %d Waren für je $20 pro Ware gekauft (-$%s).",menge, AddDelimiters(price));
     SendClientMessage(playerid,COLOR_YELLOW,String);
     GivePlayerCash(playerid,-price);
     Biz[indexbiz][bWaren] += menge;

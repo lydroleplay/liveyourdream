@@ -58,7 +58,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			SetCameraBehindPlayer(playerid);
 		} else if (IsPlayerInRangeOfPoint(playerid, 2.0, SHISHABAR_EXIT_COORDS) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Lounge Exit
 			SetPlayerPos(playerid, SHISHABAR_ENTER_COORDS);
-            SetPlayerFacingAngle(playerid, SHISHABAR_ENTER_FACING + 180.0);
+            SetPlayerFacingAngle(playerid, SHISHABAR_ENTER_FACING);
 			SetCameraBehindPlayer(playerid);
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, SHISHABAR_VIP_ENTER)) { // VIP Enter
 			if (Spieler[playerid][pCash] < 25000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei, um den VIP-Bereich zu betreten.");
@@ -108,15 +108,15 @@ hook OnGameModeInit() {
     text3D_shishaBar[6] = _:CreateDynamic3DTextLabel("SHISHA - LOUNGE\n" COLOR_HEX_BLUE "Befehl: /Shisha", COLOR_YELLOW, SHISHABAR_PIPES_POINT, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR);
 
     // Actors
-    actor_shishaBar[0] = CreateDynamicActor(178, 1773.0791, -1305.8956, 120.8335, 309.2963, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR); // STR_C2
+    actor_shishaBar[0] = CreateDynamicActor(178, 1773.0791, -1305.8956, 120.8335, 309.2963, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR, .streamdistance = STREAMDISTANCE); // STR_C2
     ApplyDynamicActorAnimation(actor_shishaBar[0], "STRIP", "STR_C2", 4.0, 1, 0, 0, 0, 0);
-    actor_shishaBar[1] = CreateDynamicActor(244, 1773.3668, -1301.5859, 120.8335, 244.9450, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR); // STR_LOOP_B
+    actor_shishaBar[1] = CreateDynamicActor(244, 1773.3668, -1301.5859, 120.8335, 244.9450, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR, .streamdistance = STREAMDISTANCE); // STR_LOOP_B
     ApplyDynamicActorAnimation(actor_shishaBar[1], "STRIP", "STR_LOOP_B", 4.0, 1, 0, 0, 0, 0);
-    actor_shishaBar[2] = CreateDynamicActor(246, 1776.0927, -1306.4264, 120.8335, 352.8502, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR); // STR_A2B
+    actor_shishaBar[2] = CreateDynamicActor(246, 1776.0927, -1306.4264, 120.8335, 352.8502, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR, .streamdistance = STREAMDISTANCE); // STR_A2B
     ApplyDynamicActorAnimation(actor_shishaBar[2], "STRIP", "STR_A2B", 4.0, 1, 0, 0, 0, 0);
-    actor_shishaBar[3] = CreateDynamicActor(257, 1780.1315, -1300.4202, 120.7395, 342.7451, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR); // STR_B2C
+    actor_shishaBar[3] = CreateDynamicActor(257, 1780.1315, -1300.4202, 120.7395, 342.7451, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR, .streamdistance = STREAMDISTANCE); // STR_B2C
     ApplyDynamicActorAnimation(actor_shishaBar[3], "STRIP", "STR_B2C", 4.0, 1, 0, 0, 0, 0);
-    actor_shishaBar[4] = CreateDynamicActor(238, 1786.6031, -1311.8911, 120.2656, 180.0000, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR); // STRIP_G
+    actor_shishaBar[4] = CreateDynamicActor(238, 1786.6031, -1311.8911, 120.2656, 180.0000, .worldid = VW_MAIN, .interiorid = MAPS_SHISHABAR_INTERIOR, .streamdistance = STREAMDISTANCE); // STRIP_G
     ApplyDynamicActorAnimation(actor_shishaBar[4], "STRIP", "STRIP_G", 4.0, 1, 0, 0, 0, 0);
 
 	// Objects
