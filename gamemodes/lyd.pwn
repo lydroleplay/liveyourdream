@@ -4449,7 +4449,7 @@ new g_GangZone[MAX_GANGZONES][e_GangZone];
 new alcatrazGateHackTimeout   = 0;
 new alcatrazGateHackTimestamp = 0;
 
-
+// Systems
 #include <drogen>
 #include <werbebanner>
 #include <extfire_0.4>
@@ -4464,6 +4464,7 @@ new alcatrazGateHackTimestamp = 0;
 //#include <hausmoebel>
 //#include <gears>
 #include <robbing>
+#include <paintball>
 
 // MAPS
 #include <maps\samdExterior>
@@ -4490,7 +4491,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\ammuStreet>
 #include <maps\yakuzaExterior>
 #include <maps\yakuzaInterior>
-#include <maps\cheapCarDealerShipLv>
+#include <maps\cheapCarDealershipLv>
 #include <maps\boatDealershipLs>
 #include <maps\electronicsShop>
 #include <maps\fishingShop>
@@ -4550,7 +4551,6 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\paintballBasement>
 #include <maps\gsfExterior>
 #include <maps\gsfInterior>
-#include <paintball>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
