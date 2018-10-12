@@ -4464,7 +4464,6 @@ new alcatrazGateHackTimestamp = 0;
 //#include <hausmoebel>
 //#include <gears>
 #include <robbing>
-#include <paintball>
 
 // MAPS
 #include <maps\samdExterior>
@@ -4551,6 +4550,9 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\paintballBasement>
 #include <maps\gsfExterior>
 #include <maps\gsfInterior>
+
+// Systems
+#include <paintball>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
