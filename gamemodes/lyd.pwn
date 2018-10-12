@@ -128,7 +128,6 @@ Yakuza:
 // Threads
 
 //#define DEVELOPMENT
-//#define Testserveran
 #define PREIS_SCHEIDUNG 32000
 #define SOUND_ALHAMBRA "http://lyd-roleplay.de/musik/disco.mp3"
 #define URL_LOGINMUSIC "http://42oo.de/loginmusiklyd.mp3"
@@ -2361,17 +2360,17 @@ enum {
     CP_GELDT_ENTLEEREN,// 163
     CP_GELDTFINISH
 }
-//Testserver
-#if defined Testserveran
-#define     SQL_HOST            "localhost"
-#define     SQL_USER            "samp6100" // Server: gtaserver3173 - Test Server: ni89284_1_DB
-#define     SQL_PASS            "Hallo500" // Server: Vy4Cwwif - Test Server: Vy4Cwwif
-#define     SQL_DATA            "samp6100_test" // Server: gtaserver3173 - Test Server: ni89284_1_DB
+
+#if defined TEST
+	#define     SQL_HOST            "localhost"
+	#define     SQL_USER            "samp"
+	#define     SQL_PASS            "Cs4FVusLWpzEZb9R"
+	#define     SQL_DATA            "samp_test"
 #else
-#define     SQL_HOST            "31.172.86.143"
-#define     SQL_USER            "samp" // Server: gtaserver3173 - Test Server: ni89284_1_DB
-#define     SQL_PASS            "Cs4FVusLWpzEZb9R" // Server: Vy4Cwwif - Test Server: Vy4Cwwif
-#define     SQL_DATA            "samp" // Server: gtaserver3173 - Test Server: ni89284_1_DB
+	#define     SQL_HOST            "localhost"
+	#define     SQL_USER            "samp"
+	#define     SQL_PASS            "Cs4FVusLWpzEZb9R"
+	#define     SQL_DATA            "samp"
 #endif
 
 #define     WEBSQL_HOST         "31.172.86.143"
@@ -4599,8 +4598,9 @@ new const g_KampfStyle[][e_KampfStyle] = {
 
 main()
 {
-    print("\n----------------------------------");
-    print("Live your Dream Roleplay by Puma");
+    print("----------------------------------");
+    print("Live your Dream Roleplay");
+    printf("Compiled on %s %s", __date, __time);
     print("----------------------------------\n");
 }
 enum rInfo
@@ -45871,76 +45871,25 @@ public MySQL_Connection_Check() {
         print("<-| [MYSQL] Es konnte keine Verbindung zur Datenbank hergestellt werden!");
         SendRconCommand("exit");
     }
-    #if defined Testserveran
-    #else
-    else if( MySQLConnected == 1 ) {
-        print("<-| [MYSQL] WebSQL Es konnte keine Verbindung zur Datenbank hergestellt werden!");
-        SendRconCommand("exit");
-    }
+
+    #if !defined TEST
+        if( MySQLConnected == 1 ) {
+            print("<-| [MYSQL] WebSQL Es konnte keine Verbindung zur Datenbank hergestellt werden!");
+            SendRconCommand("exit");
+        }
     #endif
-    else if( MySQLConnected == 2 ) {
-    }
+    
     return 1;
 }
 stock Connect_To_Database()
 {
-    #if defined Testserveran
-    mysql_log( LOG_ALL , LOG_TYPE_HTML);
+    #if defined TEST
+        mysql_log(LOG_ALL, LOG_TYPE_HTML);
     #endif
-    gSQL = mysql_connect(SQL_HOST, SQL_USER, SQL_DATA, SQL_PASS); //Wir versuchen mit den Angaben die wir oben im Script gemacht haben uns mit dem MySQL Server zu verbinden.
-    mysql_oquery("SELECT 1", THREAD_CONNECTION_CHECK1 , INVALID_PLAYER_ID ,gSQL);
-    tMySQL = SetTimer("MySQL_Connection_Check",5003,false);
-/*    if(mysql_ping() == 1) //Es wird überprüft ob die Verbindung steht.
-    {
-        //Falls ja wird das in die Console geschrieben und die Funktion wird beendet.
-        print("<-| [MYSQL] Verbindung zur Datenbank wurde erfolgreich hergestellt!");
-    }
-    else
-    {
-        //Falls nicht wird erneut versucht eine Verbindung aufzubauen.
-        print("<-| [MYSQL] Es konnte keine Verbindung zur Datenbank hergestellt werden!");
-        print("<-| [MYSQL] Es wird erneut versucht eine Verbindung zur Datenbank herzustellen!");
-        gSQL = mysql_connect(SQL_HOST, SQL_USER, SQL_DATA, SQL_PASS);
-        if(mysql_ping() == 1)
-        {
-            print("<-| [MYSQL] Es konnte im 2 Versuch eine Verbindung hergestellt werden!");
-        }
-        else
-        {
-            //Falls das auch nicht Funktioniert wird der Server zur Sicherheit wieder heruntergefahren.
-            print("<-| [MYSQL] Es konnte keine Verbindung zur Datenbank hergestellt werden!");
-            print("<-| [MYSQL] Der Server wird nun beendet!");
-            SendRconCommand("exit");
-        }
-    }
- //   gWebSQL = mysql_connect(WEBSQL_HOST, WEBSQL_USER, WEBSQL_DATA, WEBSQL_PASS);
-    if(mysql_ping(gWebSQL) == 1) //Es wird überprüft ob die Verbindung steht.
-    {
-        //Falls ja wird das in die Console geschrieben und die Funktion wird beendet.
-        print("<-| [MYSQL] WebSQL Verbindung zur Datenbank wurde erfolgreich hergestellt!");
-        return true;
-    }
-    else
-    {
-        //Falls nicht wird erneut versucht eine Verbindung aufzubauen.
-        print("<-| [MYSQL] WebSQL Es konnte keine Verbindung zur Datenbank hergestellt werden!");
-        print("<-| [MYSQL] WebSQL Es wird erneut versucht eine Verbindung zur Datenbank herzustellen!");
-        gWebSQL = mysql_connect(WEBSQL_HOST, WEBSQL_USER, WEBSQL_DATA, WEBSQL_PASS);
-        if(mysql_ping(gWebSQL) == 1)
-        {
-            print("<-| [MYSQL] WebSQL Es konnte im 2 Versuch eine Verbindung hergestellt werden!");
-            return true;
-        }
-        else
-        {
-            //Falls das auch nicht Funktioniert wird der Server zur Sicherheit wieder heruntergefahren.
-            print("<-| [MYSQL] WebSQL Es konnte keine Verbindung zur Datenbank hergestellt werden!");
-            print("<-| [MYSQL] WebSQL Der Server wird nun beendet!");
-            SendRconCommand("exit");
-            return true;
-        }
-    }
-    */
+
+    gSQL = mysql_connect(SQL_HOST, SQL_USER, SQL_DATA, SQL_PASS);
+    mysql_oquery("SELECT 1", THREAD_CONNECTION_CHECK1, INVALID_PLAYER_ID ,gSQL);
+    tMySQL = SetTimer("MySQL_Connection_Check", 5003, false);
 }
 
 stock mysql_CheckAccount(playerid)
@@ -45953,19 +45902,6 @@ stock mysql_CheckAccount(playerid)
     // -> THREADED
     return 1;
 }
-/*
-stock mysql_CheckName( name[] ) {
-    new Query[128],count;
-    mysql_real_escape_string(name, name);
-    format(Query, sizeof(Query), "SELECT * FROM `accounts` WHERE `Name` = '%s'", name);
-    mysql_oquery(Query,THREAD_CHECKNAME,INVALID_PLAYER_ID,gSQL);
-    if( mysql_store_result() ) {
-        count = mysql_num_rows();
-        mysql_free_result();
-    }
-    return count;
-}*/
-
 
 stock CreateAccount(playerid, pass[])
 {
