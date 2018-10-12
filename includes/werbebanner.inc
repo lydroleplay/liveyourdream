@@ -95,7 +95,9 @@ public CheckWerbebanner() {
 
 forward SaveWerbebannerEx(index);
 public SaveWerbebannerEx(index) {
-	new query[800];
+	new query[800], text[256], font[32];
+    mysql_real_escape_string(g_Werbebanner[index][W_sText], text, gSQL, sizeof(text));
+    mysql_real_escape_string(g_Werbebanner[index][W_iFontFace], font, gSQL, sizeof(font));
     format(query, sizeof(query), "UPDATE `werbetafel` SET \
         `IconX` = '%.2f',\
         `IconY` = '%.2f',\
@@ -129,10 +131,10 @@ public SaveWerbebannerEx(index) {
 			g_Werbebanner[index][W_fObjRotX],
 			g_Werbebanner[index][W_fObjRotY],
 			g_Werbebanner[index][W_fObjRotZ],
-			g_Werbebanner[index][W_sText],
+			text,
 			g_Werbebanner[index][W_iMaterialIndex],
 			g_Werbebanner[index][W_iMaterialSize],
-			g_Werbebanner[index][W_iFontFace],
+			font,
 			g_Werbebanner[index][W_iFontSize],
 			g_Werbebanner[index][W_iBold],
 			g_Werbebanner[index][W_iFontColor],
@@ -148,8 +150,10 @@ public SaveWerbebannerEx(index) {
 
 forward SaveWerbebanner();
 public SaveWerbebanner() {
-	new query[800];
+	new query[800], text[256], font[32];
 	for (new i; i < g_iWerbebanner; i++) {
+        mysql_real_escape_string(g_Werbebanner[i][W_sText], text, gSQL, sizeof(text));
+        mysql_real_escape_string(g_Werbebanner[i][W_iFontFace], font, gSQL, sizeof(font));
 	    format(query, sizeof(query), "UPDATE `werbetafel` SET \
 	        `IconX` = '%.2f',\
 	        `IconY` = '%.2f',\
@@ -183,11 +187,11 @@ public SaveWerbebanner() {
 				g_Werbebanner[i][W_fObjRotX],
 				g_Werbebanner[i][W_fObjRotY],
 				g_Werbebanner[i][W_fObjRotZ],
-				g_Werbebanner[i][W_sText],
+				text,
 				g_Werbebanner[i][W_iMaterialIndex],
 				g_Werbebanner[i][W_iMaterialSize],
 				g_Werbebanner[i][W_iFontFace],
-				g_Werbebanner[i][W_iFontSize],
+				font,
 				g_Werbebanner[i][W_iBold],
 				g_Werbebanner[i][W_iFontColor],
 				g_Werbebanner[i][W_iBackColor],
@@ -399,7 +403,7 @@ stock Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, input
 	if (dialogid == DIALOG_ADBOARD_TEXTSIZE) {
 		if (!response) return ShowWerbetafelMenu(playerid);
 		new textSize;
-		if (sscanf(inputtext, "%i", textSize) || textSize < 1) {
+		if (sscanf(inputtext, "i", textSize) || textSize < 1) {
 			SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Gebe eine positive Ganzzahl als Textgröße an.");
 			return ShowWerbetafelMenu(playerid);
 		}
