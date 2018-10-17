@@ -3459,6 +3459,7 @@ enum aHaus
     Tank,
 };
 
+new dealerShipBizIndex[] = {31, 32, 33, 34, 46, 47, 19, 20, 28, 44, 43};
 
 new Kaufliste[84][aHaus] = {
 
@@ -41098,7 +41099,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if (listitem < 0 || listitem >= (Spieler[playerid][pPremiumCarSlot] ? MaxVeh : MaxVeh - 1))
                 return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
 
-            SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast Slot %i (%s) zum Verschieben ausgewählt.", listitem + 1, CarName[PlayerCar[playerid][listitem][CarModel] - 400]);
+            // new message[145];
+            // format(message, sizeof(message), "~y~Slot %i (%s) zum Verschieben ausgewählt", listitem + 1,\
+            //     !PlayerHaveCar[playerid][listitem] ? "FREI" : CarName[PlayerCar[playerid][listitem][CarModel] - 400]);
+            // ShowBuyInformation(playerid, message);
+
+            SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast Slot %i (%s) zum Verschieben ausgewählt.", listitem + 1,\
+                !PlayerHaveCar[playerid][listitem] ? "FREI" : CarName[PlayerCar[playerid][listitem][CarModel] - 400]);
+            
             SetPVarInt(playerid, "MOVE.CARKEY", listitem);
             return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE2);
         }
@@ -41113,11 +41121,25 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Wieso willst du... das ergibt doch... ach versuch's einfach nochmal!");
                 return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE1);
             }
-            SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast Slot %i (%s) mit Slot %i (%s) getauscht.", firstSlot + 1, CarName[PlayerCar[playerid][firstSlot][CarModel] - 400], listitem + 1, CarName[ PlayerCar[playerid][listitem][CarModel] - 400]);
+
+            // new message[145];
+            // format(message, sizeof(message), "~y~Slot %i (%s) mit Slot %i (%s) getauscht", firstSlot + 1,\
+            //     !PlayerHaveCar[playerid][firstSlot] ? "FREI" : CarName[PlayerCar[playerid][firstSlot][CarModel] - 400], listitem + 1,\
+            //     !PlayerHaveCar[playerid][listitem] ? "FREI" : CarName[PlayerCar[playerid][listitem][CarModel] - 400]);
+            // ShowBuyInformation(playerid, message);
+
+            SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast Slot %i (%s) mit Slot %i (%s) getauscht.", firstSlot + 1,\
+                !PlayerHaveCar[playerid][firstSlot] ? "FREI" : CarName[PlayerCar[playerid][firstSlot][CarModel] - 400], listitem + 1,\
+                !PlayerHaveCar[playerid][listitem] ? "FREI" : CarName[PlayerCar[playerid][listitem][CarModel] - 400]);
+
             temp = PlayerCar[playerid][listitem];
             temp2 = PlayerCar[playerid][firstSlot];
             PlayerCar[playerid][listitem] = temp2;
             PlayerCar[playerid][firstSlot] = temp;
+
+            new temp3 = PlayerHaveCar[playerid][listitem];
+            PlayerHaveCar[playerid][listitem] = PlayerHaveCar[playerid][firstSlot]; 
+            PlayerHaveCar[playerid][firstSlot] = temp3;
             return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE1);
         }
         case DIALOG_MUSIK:
@@ -66064,177 +66086,98 @@ COMMAND:ageld(playerid,params[]) {
 }
 
 stock BuyCar(playerid,paymethod) {
-    //print("BuyCar D1");
-    if(Spectating[playerid][0]!=-1)
-    {
-        //print("BuyCar D2");
-        if(!PlayerHaveCar[playerid][PlayerKey[playerid]])
-        {
-            //print("BuyCar D3");
-            new preis = Kaufliste[Spectating[playerid][0]][aPreis];
-            //print("BuyCar D4");
-            if( ( paymethod == 1 && GetPlayerMoney(playerid) >= preis) || ( paymethod == 2 && Spieler[playerid][pBank] >= preis) )
-            {
-                //print("BuyCar D5");
-                new index;
-                new autohaus = Kaufliste[Spectating[playerid][0]][Autohaus];
-                if(autohaus == 0)
-                {
-                    index = GetBizIndexByID(32);
-                    if(Biz[index][bWaren] < 5)
-                    {
-                        SendClientMessage(playerid, COLOR_RED, "Das Autohaus hat nicht genügend Waren.");
-                        UnfreezePlayer(playerid);
-                        RemovePlayerFromVehicle(playerid);
-                        return 1;
-                    }
-                }
-                else if(autohaus == 1)
-                {
-                    index = GetBizIndexByID(33);
-                    if(Biz[index][bWaren] < 5)
-                    {
-                        SendClientMessage(playerid, COLOR_RED, "Das Autohaus hat nicht genügend Waren.");
-                        UnfreezePlayer(playerid);
-                        RemovePlayerFromVehicle(playerid);
-                        return 1;
-                    }
-                }
-                else if(autohaus == 2)
-                {
-                    index = GetBizIndexByID(34);
-                    if(Biz[index][bWaren] < 5)
-                    {
-                        SendClientMessage(playerid, COLOR_RED, "Das Motorrad-Verkaufshaus hat nicht genügend Waren.");
-                        UnfreezePlayer(playerid);
-                        RemovePlayerFromVehicle(playerid);
-                        return 1;
-                    }
-                }
-                else if(autohaus == 3)
-                {
-                    index = GetBizIndexByID(35);
-                    if(Biz[index][bWaren] < 5)
-                    {
-                        SendClientMessage(playerid, COLOR_RED, "Das Flugzeug-Verkaufshaus hat nicht genügend Waren.");
-                        UnfreezePlayer(playerid);
-                        RemovePlayerFromVehicle(playerid);
-                        return 1;
-                    }
-                }
-                else if(autohaus == 4)
-                {
-                    index = GetBizIndexByID(47);
-                    if(Biz[index][bWaren] < 5)
-                    {
-                        SendClientMessage(playerid, COLOR_RED, "Das Boots-Verkaufshaus hat nicht genügend Waren.");
-                        UnfreezePlayer(playerid);
-                        RemovePlayerFromVehicle(playerid);
-                        return 1;
-                    }
-                }
-                else if(autohaus == 5)
-                {
-                    index = GetBizIndexByID(48);
-                    if(Biz[index][bWaren] < 5)
-                    {
-                        SendClientMessage(playerid, COLOR_RED, "Das Fahrradgeschäft hat nicht genügend Waren.");
-                        UnfreezePlayer(playerid);
-                        RemovePlayerFromVehicle(playerid);
-                        return 1;
-                    }
-                }
-                if( paymethod == 1 ) {
-                    GivePlayerCash(playerid, -preis);
-                }
-                else if( paymethod == 2 ) {
-                    Spieler[playerid][pBank] -= preis;
-                }
-                new prname[MAX_PLAYER_NAME];
-                GetPlayerName(playerid, prname, sizeof prname);
-                CreatePlayerCar(playerid, Autospawns[autohaus][CarPos_x] , Autospawns[autohaus][CarPos_y] , Autospawns[autohaus][CarPos_z] ,Autospawns[autohaus][CarRotate],Kaufliste[Spectating[playerid][0]][Modelid] , -1 , -1 );
-                // -> THREADED PlayerCar[playerid][PlayerKey[playerid]][Id] = cache_insert_id (); // WICHTIG! Nie löschen!
-                PlayerCar[playerid][PlayerKey[playerid]][Id] = 0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarOwner] = prname;
-                PlayerCar[playerid][PlayerKey[playerid]][CarId]=Spectating[playerid][0];
-                PlayerCar[playerid][PlayerKey[playerid]][CarModel]=Kaufliste[Spectating[playerid][0]][Modelid];
-                PlayerCar[playerid][PlayerKey[playerid]][CarPos_x]=Autospawns[autohaus][CarPos_x];
-                PlayerCar[playerid][PlayerKey[playerid]][CarPos_y]=Autospawns[autohaus][CarPos_y];
-                PlayerCar[playerid][PlayerKey[playerid]][CarPos_z]=Autospawns[autohaus][CarPos_z];
-                PlayerCar[playerid][PlayerKey[playerid]][CarRotate]=Autospawns[autohaus][CarRotate];
-                PlayerCar[playerid][PlayerKey[playerid]][CarNitro]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarHyd]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarWheel]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarAusp]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarSideL]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarSideR]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarFB]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarRB]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarSpoiler]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarRoof]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarHood]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarVents]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarLamps]=0;
-                PlayerCar[playerid][PlayerKey[playerid]][CarPJ]=-1;
-                PlayerCar[playerid][PlayerKey[playerid]][CarC1]=1;
-                PlayerCar[playerid][PlayerKey[playerid]][CarC2]=1;
-                PlayerCar[playerid][PlayerKey[playerid]][CarPreis]=preis/2;
-                PlayerCar[playerid][PlayerKey[playerid]][CarTank]=Kaufliste[Spectating[playerid][0]][Tank];
-                PlayerCar[playerid][PlayerKey[playerid]][CarState]=e_Vehicle_Status_Normal;
-                PlayerCar[playerid][PlayerKey[playerid]][TUV]=0;
-                //new snp[24];
-                // format(snp, 24, "%s", GetName(playerid));
-                PlayerCar[playerid][PlayerKey[playerid]][CarId] = CreateVehicle(PlayerCar[playerid][PlayerKey[playerid]][CarModel],PlayerCar[playerid][PlayerKey[playerid]][CarPos_x],PlayerCar[playerid][PlayerKey[playerid]][CarPos_y],PlayerCar[playerid][PlayerKey[playerid]][CarPos_z],PlayerCar[playerid][PlayerKey[playerid]][CarRotate],PlayerCar[playerid][PlayerKey[playerid]][CarC1],PlayerCar[playerid][PlayerKey[playerid]][CarC2], -1);/*vehicle spawn*/
-                g_VehicleDistance[ PlayerCar[playerid][PlayerKey[playerid]][CarId] ] = 0;
-                aiVehicles[PlayerCar[playerid][PlayerKey[playerid]][CarId]] = VEH_PRIVAT;
-                SetVehicleNumberPlate(PlayerCar[playerid][PlayerKey[playerid]][CarId], "");
-                format( PlayerCar[playerid][PlayerKey[playerid]][CarNumberplate] ,32 , KEIN_KENNZEICHEN );
-                gGas[PlayerCar[playerid][PlayerKey[playerid]][CarId]] = Kaufliste[Spectating[playerid][0]][Tank];
-                gMaxGas[PlayerCar[playerid][PlayerKey[playerid]][CarId]] = Kaufliste[Spectating[playerid][0]][Tank];
-                LockCar(PlayerCar[playerid][PlayerKey[playerid]][CarId]);
-                PlayerHaveCar[playerid][PlayerKey[playerid]] = 1;
-                PlayerPlaySound(playerid,1054,0.0,0.0,0.0);
-
-
-                SCMFormatted(playerid, COLOR_GREEN, "Du hast dir eine(n) %s gekauft.", CarName[PlayerCar[playerid][PlayerKey[playerid]][CarModel] - 400]);
-                SendClientMessage(playerid, COLOR_RED, "Unter /Help oder /Hilfekonsole siehst du alle Befehle, die du für die Nutzung und Verwaltung deines Fahrzeuges wissen musst.");
-                if (!IsBicycle(PlayerCar[playerid][PlayerKey[playerid]][CarModel])) {
-                    SendClientMessage(playerid, COLOR_ORANGE, "Vergiss nicht, dein Fahrzeug amtlich noch anzumelden!");
-                    SendClientMessage(playerid, COLOR_ORANGE, "Unter /Navi -> Behörden -> Fahrzeug Zulassungsstelle kannst du dein Fahrzeug amtlich zulassen.");
-                }
-                new sInfo[64];
-                format(sInfo,sizeof(sInfo),"~y~Fahrzeug ~w~gekauft! ( %s )", paymethod == 1 ? ("Barzahlung") : ("EC-Karte") );
-                ShowBuyInformation(playerid, sInfo);
-
-                //preis = Autopreis
-                new CarMoneyFinal = (preis/100)*30;//0,08%
-                Kasse[Staat] += (preis-CarMoneyFinal);
-                TogglePlayerControllable(playerid,false);
-
-                SetTimerEx("DelayCameraMove",59,false,"ddffffff",playerid,3500,Autospawns[autohaus][CarPos_x],Autospawns[autohaus][CarPos_y],Autospawns[autohaus][CarPos_z],7.0,-3.0,3.0);
-                Biz[index][bKasse] += CarMoneyFinal;
-                Biz[index][bWaren] -= 5;
-            }
-            else
-            {
-                if( paymethod == 1) SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei!");
-                else if( paymethod == 2) SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld auf der Bank!");
-                FreezePlayer(playerid);
-                RemovePlayerFromVehicle(playerid);
-                UnfreezePlayer(playerid);
-                return 1;
-            }
-        }
-        else
-        {
-            FreezePlayer(playerid);
-            RemovePlayerFromVehicle(playerid);
-            SendClientMessage(playerid, COLOR_ORANGE, "Du hast bereits ein Fahrzeug auf diesem Carkey. Wechsele ihn per /Carkey.");
-            UnfreezePlayer(playerid);
-            return 0;
-        }
+    if (Spectating[playerid][0] == -1) return 1;
+    if (PlayerHaveCar[playerid][PlayerKey[playerid]]) {
+        RemovePlayerFromVehicle(playerid);
+        SendClientMessage(playerid, COLOR_ORANGE, "Du hast bereits ein Fahrzeug auf diesem Carkey. Wechsele ihn per /Carkey.");
+        UnfreezePlayer(playerid);
+        return 1;
     }
-    return 0;
+
+    new preis = Kaufliste[Spectating[playerid][0]][aPreis];
+    if ((paymethod == 1 && GetPlayerMoney(playerid) < preis) || (paymethod == 2 && Spieler[playerid][pBank] < preis)) {
+        if (paymethod == 1) SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei!");
+        else SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld auf der Bank!");
+        RemovePlayerFromVehicle(playerid);
+        UnfreezePlayer(playerid);
+        return 1;
+    }
+
+    new autohaus = Kaufliste[Spectating[playerid][0]][Autohaus];
+    new index = dealerShipBizIndex[autohaus];
+    if (Biz[index][bWaren] < 5) {
+        SendClientMessage(playerid, COLOR_RED, "Das BIZ hat nicht genügend Waren.");
+        UnfreezePlayer(playerid);
+        RemovePlayerFromVehicle(playerid);
+        return 1;
+    }
+    
+    if (paymethod == 1) GivePlayerCash(playerid, -preis);
+    else Spieler[playerid][pBank] -= preis;
+    
+    new prname[MAX_PLAYER_NAME];
+    GetPlayerName(playerid, prname, sizeof prname);
+    CreatePlayerCar(playerid, Autospawns[autohaus][CarPos_x] , Autospawns[autohaus][CarPos_y] , Autospawns[autohaus][CarPos_z] ,Autospawns[autohaus][CarRotate],Kaufliste[Spectating[playerid][0]][Modelid] , -1 , -1 );
+    // -> THREADED PlayerCar[playerid][PlayerKey[playerid]][Id] = cache_insert_id (); // WICHTIG! Nie löschen!
+    PlayerCar[playerid][PlayerKey[playerid]][Id] = 0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarOwner] = prname;
+    PlayerCar[playerid][PlayerKey[playerid]][CarId]=Spectating[playerid][0];
+    PlayerCar[playerid][PlayerKey[playerid]][CarModel]=Kaufliste[Spectating[playerid][0]][Modelid];
+    PlayerCar[playerid][PlayerKey[playerid]][CarPos_x]=Autospawns[autohaus][CarPos_x];
+    PlayerCar[playerid][PlayerKey[playerid]][CarPos_y]=Autospawns[autohaus][CarPos_y];
+    PlayerCar[playerid][PlayerKey[playerid]][CarPos_z]=Autospawns[autohaus][CarPos_z];
+    PlayerCar[playerid][PlayerKey[playerid]][CarRotate]=Autospawns[autohaus][CarRotate];
+    PlayerCar[playerid][PlayerKey[playerid]][CarNitro]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarHyd]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarWheel]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarAusp]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarSideL]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarSideR]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarFB]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarRB]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarSpoiler]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarRoof]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarHood]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarVents]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarLamps]=0;
+    PlayerCar[playerid][PlayerKey[playerid]][CarPJ]=-1;
+    PlayerCar[playerid][PlayerKey[playerid]][CarC1]=1;
+    PlayerCar[playerid][PlayerKey[playerid]][CarC2]=1;
+    PlayerCar[playerid][PlayerKey[playerid]][CarPreis]=preis/2;
+    PlayerCar[playerid][PlayerKey[playerid]][CarTank]=Kaufliste[Spectating[playerid][0]][Tank];
+    PlayerCar[playerid][PlayerKey[playerid]][CarState]=e_Vehicle_Status_Normal;
+    PlayerCar[playerid][PlayerKey[playerid]][TUV]=0;
+    //new snp[24];
+    // format(snp, 24, "%s", GetName(playerid));
+    PlayerCar[playerid][PlayerKey[playerid]][CarId] = CreateVehicle(PlayerCar[playerid][PlayerKey[playerid]][CarModel],PlayerCar[playerid][PlayerKey[playerid]][CarPos_x],PlayerCar[playerid][PlayerKey[playerid]][CarPos_y],PlayerCar[playerid][PlayerKey[playerid]][CarPos_z],PlayerCar[playerid][PlayerKey[playerid]][CarRotate],PlayerCar[playerid][PlayerKey[playerid]][CarC1],PlayerCar[playerid][PlayerKey[playerid]][CarC2], -1);/*vehicle spawn*/
+    g_VehicleDistance[ PlayerCar[playerid][PlayerKey[playerid]][CarId] ] = 0;
+    aiVehicles[PlayerCar[playerid][PlayerKey[playerid]][CarId]] = VEH_PRIVAT;
+    SetVehicleNumberPlate(PlayerCar[playerid][PlayerKey[playerid]][CarId], "");
+    format( PlayerCar[playerid][PlayerKey[playerid]][CarNumberplate] ,32 , KEIN_KENNZEICHEN );
+    gGas[PlayerCar[playerid][PlayerKey[playerid]][CarId]] = Kaufliste[Spectating[playerid][0]][Tank];
+    gMaxGas[PlayerCar[playerid][PlayerKey[playerid]][CarId]] = Kaufliste[Spectating[playerid][0]][Tank];
+    LockCar(PlayerCar[playerid][PlayerKey[playerid]][CarId]);
+    PlayerHaveCar[playerid][PlayerKey[playerid]] = 1;
+    PlayerPlaySound(playerid,1054,0.0,0.0,0.0);
+
+    SCMFormatted(playerid, COLOR_GREEN, "Du hast dir eine(n) %s gekauft.", CarName[PlayerCar[playerid][PlayerKey[playerid]][CarModel] - 400]);
+    SendClientMessage(playerid, COLOR_RED, "Unter /Help oder /Hilfekonsole siehst du alle Befehle, die du für die Nutzung und Verwaltung deines Fahrzeuges wissen musst.");
+    if (!IsBicycle(PlayerCar[playerid][PlayerKey[playerid]][CarModel])) {
+        SendClientMessage(playerid, COLOR_ORANGE, "Vergiss nicht, dein Fahrzeug amtlich noch anzumelden!");
+        SendClientMessage(playerid, COLOR_ORANGE, "Unter /Navi -> Behörden -> Fahrzeug Zulassungsstelle kannst du dein Fahrzeug amtlich zulassen.");
+    }
+    new sInfo[64];
+    format(sInfo,sizeof(sInfo),"~y~Fahrzeug ~w~gekauft! ( %s )", paymethod == 1 ? ("Barzahlung") : ("EC-Karte") );
+    ShowBuyInformation(playerid, sInfo);
+
+    new CarMoneyFinal = (preis/100)*30;//0,08%
+    Kasse[Staat] += (preis-CarMoneyFinal);
+    TogglePlayerControllable(playerid,false);
+
+    SetTimerEx("DelayCameraMove",59,false,"ddffffff",playerid,3500,Autospawns[autohaus][CarPos_x],Autospawns[autohaus][CarPos_y],Autospawns[autohaus][CarPos_z],7.0,-3.0,3.0);
+    Biz[index][bKasse] += CarMoneyFinal;
+    Biz[index][bWaren] -= 5;
+    return 1;
 }
 
 CMD:elektromarkt(playerid)
