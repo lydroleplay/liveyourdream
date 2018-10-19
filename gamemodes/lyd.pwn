@@ -433,6 +433,27 @@ new const g_shishaPipes[][E_SHISHA_PIPE] = {
     {"Blue NRG",        1200,   "{2BFFC4}"}
 };
 
+enum E_EVENT_REWARD {
+    EVENT_REWARD_POINTS,
+    EVENT_REWARD_NAME[40]
+}
+
+new const g_EventRewards[][E_EVENT_REWARD] = {
+    {25, "+5 Respektpunkte"},
+    {50, "+1 Level-Up"},
+    {75, "$800.000 Cash"},
+    {100, "Ein Fahrzeug aus dem Motorradhandel"},
+    {175, "Ein Fahrzeug aus dem Flugzeughandel"},
+    {215, "Ein Fahrzeug aus dem Luxus-Autohaus"},
+    {250, "+1 Skill-Up nach Wahl"},
+    {300, "Bronze Premium (1 Monat)"},
+    {350, "Wunschfahrzeug"},
+    {400, "+1 Carkey"},
+    {475, "Namechange"},
+    {500, "Neon Premium (Permanent)"},
+    {700, "Silber Premium (3 Monate)"}
+};
+
 enum E_SELL_GUNS {
     SELL_GUN_NAME[20],
     SELL_GUN_ID,
@@ -711,7 +732,9 @@ enum {
     THREAD_OFFCPRISON,
     THREAD_OFFBWSTRAFE,
     THREAD_OFFBWSTRAFE_CHECK,
-    THREAD_BWSTRAFEN
+    THREAD_BWSTRAFEN,
+    THREAD_OFFEPOINTS,
+    THREAD_OFFEPOINTS_CHECK,
     //THREAD_SETUP_POST
 }
 
@@ -2049,6 +2072,7 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_BWSTRAFEN 1365
 #define     DIALOG_MOVECARKEY1 1366
 #define     DIALOG_MOVECARKEY2 1367
+#define     DIALOG_EVENTREWARDS 1368
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -4140,7 +4164,8 @@ enum SpielerDaten
     Float:pArmourInfo,
     Float:pHealthInfo,
     pSuspendedSentence,
-    pSusSentenceReason[128]
+    pSusSentenceReason[128],
+    pEventPoints
 }
 
 enum e_FahrPruefung {
@@ -14517,8 +14542,8 @@ CMD:bwstrafe(playerid, params[]) {
 
 CMD:setbwstrafe(playerid, params[]) {
     if (Spieler[playerid][pAdmin] < 4) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    if (GetPVarInt(playerid, "OFFBW.HOURS") != 0) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du erteilst gerade noch eine Bewährungsstrafe.");
     new pID, hours, playerName[MAX_PLAYER_NAME], reason[128];
+    if (GetPVarString(playerid, "OFFBW.NAME", reason, sizeof(reason)) != 0) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du erteilst gerade noch eine Bewährungsstrafe."); 
     if (sscanf(params, "u i s[128]", pID, hours, reason)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Setbwstrafe [Spieler ID/Name] [Spielstunden] [Grund]");
     if (pID == INVALID_PLAYER_ID && (sscanf(params, "s[24] i s[64]", playerName, hours, reason) || strlen(playerName) < 3))
         return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Der eingegebene Wert ist kein gültiger Spieler.");
@@ -14562,13 +14587,27 @@ CMD:configplayer(playerid, params[])
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Level, Respektpunkte, Geld, Job, Fraktion, Fraktionsrank, Gehalt, NeonPremium, Spice, Drogen,");
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Safewantedcodes, Waffenteile, Wantedcodes, SafeSpice, SafeDrogen, SafeWaffenteile, Waffensperre");
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Bankpin, Bankkonto, Skin, Geschlecht, Premium, Spielstunden, Kekse");
-        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Alizsperre, Flizsperre, Glizsperre, Lkwlizsperre, Mlizsperre");
+        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Alizsperre, Flizsperre, Glizsperre, Lkwlizsperre, Mlizsperre, Eventpunkte");
         return 1;
     }
     
     if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler nicht online.");
-    
-    if(strcmp(entry, "level", true) == 0)
+
+    if(strcmp(entry, "eventpunkte", true) == 0)
+    {
+        Spieler[pID][pEventPoints] = wert;
+        format(string, sizeof(string), "Deine Eventpunkte wurden von %s %s auf %d gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), wert);
+        SendClientMessage(pID, COLOR_LIGHTBLUE, string);
+        format(string, sizeof(string), "Du hast die Eventpunkte von %s auf %d gesetzt.", GetName(pID), wert);
+        SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
+        printf("%s ändert Eventpunkte von %s in %d", GetName(playerid), GetName(pID), wert);
+        new
+            String[140];
+        format(String,sizeof(String),"%s %s hat die Daten von Spieler %s überarbeitet! ( [%s gesetzt auf: %d] )", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), entry, wert);
+        AdminLog(String);
+        return 1;
+    }
+    else if(strcmp(entry, "level", true) == 0)
     {
         if(wert < 1 || wert > 100)return SendClientMessage(playerid, COLOR_ORANGE, "Der Wert sollte zwischen 1 und 100 liegen.");
         Spieler[pID][pLevel] = wert;
@@ -15010,6 +15049,12 @@ CMD:configplayer(playerid, params[])
         UpdatePayDayTextdraw(pID);
         return SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
     }
+
+    SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Configplayer [SpielerID/Name] [Eingabe] [Wert]");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Level, Respektpunkte, Geld, Job, Fraktion, Fraktionsrank, Gehalt, NeonPremium, Spice, Drogen,");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Safewantedcodes, Waffenteile, Wantedcodes, SafeSpice, SafeDrogen, SafeWaffenteile, Waffensperre");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Bankpin, Bankkonto, Skin, Geschlecht, Premium, Spielstunden, Kekse");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Alizsperre, Flizsperre, Glizsperre, Lkwlizsperre, Mlizsperre, Eventpunkte");
     return 1;
 }
 
@@ -33991,7 +34036,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Check, /Gotoliste, /Gotopos, /Gotohaus, /Veh, /Delveh, /Delallvehs, /Spec, /Specoff, /Changeweather");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem /Atafelentmieten");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
                     }
@@ -41110,6 +41155,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             SetPVarInt(playerid, "MOVE.CARKEY", listitem);
             return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE2);
         }
+        case DIALOG_EVENTREWARDS: {
+            if (!response) return 1;
+            if (listitem < 0 || listitem > sizeof(g_EventRewards)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
+            if (g_EventRewards[listitem][EVENT_REWARD_POINTS] > Spieler[playerid][pEventPoints])
+                return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Dafür hast du nicht genügend Eventpunkte.");
+
+            return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Melde dich bei einem Moderator oder höher um diesen Preis einzulösen.");
+        }
         case DIALOG_MOVECARKEY2:
         {
             if (!response) return ShowPlayerCarkeys(playerid, CARKEY_TYPE_MOVE1);
@@ -42229,7 +42282,8 @@ stock SaveAccount(playerid)
                 `MarriageName` = '%s', \
                 `Deakaccadmin` = '%s', \
                 `BwStrafe` = %d, \
-                `BwStrafeGrund` = '%s'",
+                `BwStrafeGrund` = '%s', \
+                `Eventpoints` = %d",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -42252,7 +42306,8 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pMarriageName],
                     pdeaccadmin[playerid],
                     Spieler[playerid][pSuspendedSentence],
-                    Spieler[playerid][pSusSentenceReason]);
+                    Spieler[playerid][pSusSentenceReason],
+                    Spieler[playerid][pEventPoints]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -42422,7 +42477,8 @@ new const PlayerColumns[][] = {
     {"MarriageName"},
     {"frakwarn"},
     {"BwStrafe"},
-    {"BwStrafeGrund"}
+    {"BwStrafeGrund"},
+    {"Eventpoints"}
 };
 
 new
@@ -43210,9 +43266,9 @@ stock Stats(playerid, targetid)
             " #COL_LIGHTBLUE "Beruf:" #COL_DEFAULT "\nFraktion: [%s], Rang: [%s], Fraktionswarns: [%i/3], Beruf: [%s]\n\n\
             " #COL_LIGHTBLUE "Inventare:" #COL_DEFAULT "\nDrogen: [%s], Waffenteile: [%s], Wantedcodes: [%s], Spice: [%s] \n\
             Safebox Drogen: [%s], Safebox Waffenteile: [%s], Safebox Wantedcodes: [%s], Safebox Spice: [%s]\n\
-            Lotto-Ticket: [%s], Zigaretten: [%s], Kekse: [%s], Tankkanister: [%d]\nFische: [%d], Köder: [%d], Angel: [%s], Lobe: [%d]\n\n\
-            " #COL_LIGHTBLUE "Inventare:" #COL_DEFAULT "\nMorde: [%d], Verbrechen: [%d], Tode: [%d], KD-Rate: [%.2f],  Wantedtode: [%d], Wantedlevel: [%d], Knast: [%d]\n\n\
-            " #COL_LIGHTBLUE "Sonstiges:" #COL_DEFAULT "\n",
+            Lotto-Ticket: [%s], Zigaretten: [%s], Kekse: [%s], Tankkanister: [%d]\nFische: [%d], Köder: [%d], Angel: [%s]\n\n\
+            " #COL_LIGHTBLUE "Statistiken:" #COL_DEFAULT "\nMorde: [%d], Verbrechen: [%d], Tode: [%d], KD-Rate: [%.2f], Wantedtode: [%d], Wantedlevel: [%d]\
+            , Knast: [%d]\nLobe: [%d], Eventpunkte: [%d]\n\n"#COL_LIGHTBLUE "Sonstiges:" #COL_DEFAULT "\n",
             GetName(targetid), Spieler[targetid][pLevel], Spieler[targetid][pGeburtstag], Spieler[targetid][pExp], Spieler[targetid][pLevel] * 4,
             Spieler[targetid][pHours], Spieler[targetid][pSex] == 1 ? "Männlich" : "Weiblich", 60 - Spieler[targetid][pPayDay],
             Spieler[targetid][pDonateRank] == 0 ? "Normaler User" : "Clubmitglied", Spieler[targetid][pAdmin], Spieler[targetid][pWarns],
@@ -43223,9 +43279,9 @@ stock Stats(playerid, targetid)
             AddDelimiters(Spieler[targetid][pSpice]), AddDelimiters(Spieler[targetid][pSafeDrogen]), AddDelimiters(Spieler[targetid][pSafeTeile]),
             AddDelimiters(Spieler[targetid][pSafeWantedCodes]), AddDelimiters(Spieler[targetid][pSafeSpice]), lotto, AddDelimiters(Spieler[targetid][pZigaretten]),
             AddDelimiters(Spieler[targetid][pKekse]), Spieler[targetid][pKanister], Spieler[targetid][pFische], Spieler[targetid][pKoeder],
-            Spieler[targetid][pAngel] ? "Ja" : "Nein", Spieler[targetid][pLobe], Spieler[targetid][pKills], Spieler[targetid][pCrimes], Spieler[targetid][pDeaths],
+            Spieler[targetid][pAngel] ? "Ja" : "Nein", Spieler[targetid][pKills], Spieler[targetid][pCrimes], Spieler[targetid][pDeaths],
             Spieler[targetid][pDeaths] == 0 ? float(Spieler[targetid][pKills]) : float(Spieler[targetid][pKills]) / float(Spieler[targetid][pDeaths]),
-            Spieler[targetid][pWantedDeaths], Spieler[targetid][pWanteds], Spieler[targetid][pArrested]
+            Spieler[targetid][pWantedDeaths], Spieler[targetid][pWanteds], Spieler[targetid][pArrested], Spieler[targetid][pLobe], Spieler[targetid][pEventPoints]
         );
 
 
@@ -53125,7 +53181,6 @@ stock IsBizOpened(biz) {
 }
 
 COMMAND:geben(playerid,params[]) {
-
     new
         methode,
         giveid,
@@ -53296,6 +53351,43 @@ stock GetWeaponSlot(weaponid)
     case 44 .. 46: slot = 11;
     }
     return slot;
+}
+
+CMD:eventpreise(playerid) {
+    new dialogText[512], dialogCaption[64];
+    format(dialogCaption, sizeof(dialogCaption), "{FF9900}Eventpreise - Du hast {FFFFFF}%d {FF9900}Punkte", Spieler[playerid][pEventPoints]);
+    dialogText = "Preis\tPunkte\n";
+    for (new i = 0; i < sizeof(g_EventRewards); i++) 
+        format(dialogText, sizeof(dialogText), "%s%s\t{FF9900}%d\n", dialogText, g_EventRewards[i][EVENT_REWARD_NAME], g_EventRewards[i][EVENT_REWARD_POINTS]);
+
+    return ShowPlayerDialog(playerid, DIALOG_EVENTREWARDS, DIALOG_STYLE_TABLIST_HEADERS, dialogCaption, dialogText, "Einlösen", "Abbrechen");
+}
+
+CMD:giveeventpoints(playerid, params[]) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new playerName[MAX_PLAYER_NAME], pID, points;
+    if (GetPVarString(playerid, "OFFEP.NAME", playerName, sizeof(playerName)) != 0) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du verteilst gerade noch Eventpunkte.");
+    if (sscanf(params, "ui", pID, points) || !points) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Giveeventpoints [Spieler ID/Name] [Punkte]");
+    if (pID == INVALID_PLAYER_ID) {
+        if (sscanf(params, "s[24] i", playerName, points)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du hast keinen gültigen Spieler angegeben.");
+        new query[256];
+        mysql_real_escape_string(playerName, playerName);
+        format(query, sizeof(query), "SELECT * FROM `accounts` WHERE `Name` = '%s'", playerName);
+        SetPVarString(playerid, "OFFEP.NAME", playerName);
+        SetPVarInt(playerid, "OFFEP.POINTS", points);
+        mysql_pquery(query, THREAD_OFFEPOINTS_CHECK, playerid, gSQL, MySQLThreadOwner);
+        return 1;
+    }
+
+    Spieler[playerid][pEventPoints] += points;
+    SCMFormatted(playerid, COLOR_ORANGE, "[EVENT] {FFFFFF}Du hast %s %d Eventpunkte gegeben.", GetName(pID), points);
+    SCMFormatted(pID, COLOR_ORANGE, "[EVENT] {FFFFFF}%s %s hat dir %d Eventpunkte gegeben.", GetPlayerAdminRang(playerid), GetName(playerid), points);
+
+    new message[145];
+    format(message, sizeof(message), "%s %s hat die Daten von Spieler %s überarbeitet! (Eventpunkte gegeben: %d)", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), points);
+    AdminLog(message);
+    return 1;
 }
 
 CMD:sanagarage(playerid, params[]) {
@@ -56429,6 +56521,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pfrakwarn] = cache_get_row_int(0,138,connectionHandle);
             Spieler[playerid][pSuspendedSentence] = cache_get_row_int(0,139,connectionHandle);
             cache_get_row(0, 140, Spieler[playerid][pSusSentenceReason], connectionHandle);
+            Spieler[playerid][pEventPoints] = cache_get_row_int(0,141,connectionHandle);
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
@@ -57435,6 +57528,33 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             ShowPlayerDialog(extraid,0,DIALOG_STYLE_MSGBOX,"Sie wurden Gesperrt",String,"Exit","");
         }
         KickDelay(extraid);
+    }
+    else if (resultid == THREAD_OFFEPOINTS_CHECK) {
+        if (!cache_get_row_count(connectionHandle)) {
+            DeletePVar(extraid, "OFFEP.NAME");
+            DeletePVar(extraid, "OFFEP.POINTS");
+            return SendClientMessage(extraid, COLOR_RED, "[FEHLER] {FFFFFF}Der Spieler existiert nicht.");
+        }
+
+        new playerName[MAX_PLAYER_NAME], query1[256];
+        GetPVarString(extraid, "OFFEP.NAME", playerName, sizeof(playerName));
+        format(query1, sizeof(query1), "UPDATE `accounts` SET `Eventpoints` = %i WHERE `Name` = '%s'", GetPVarInt(extraid, "OFFEP.POINTS"), playerName);
+        mysql_pquery(query1, THREAD_OFFEPOINTS, extraid, gSQL, MySQLThreadOwner);
+        return 1;
+    }
+    else if (resultid == THREAD_OFFEPOINTS) {
+        new playerName[MAX_PLAYER_NAME], points;
+        GetPVarString(extraid, "OFFEP.NAME", playerName, sizeof(playerName));
+        points = GetPVarInt(extraid, "OFFEP.POINTS");
+
+        DeletePVar(extraid, "OFFEP.NAME");
+        DeletePVar(extraid, "OFFEP.POINTS");
+
+        new message[256];
+        SCMFormatted(extraid, COLOR_LIGHTBLUE, "[INFO] {FFFFFF}Du hast %s %d Eventpunkte gegeben (Offline).", playerName, points);
+        format(message, sizeof(message), "%s %s hat die Daten von Spieler %s überarbeitet! (Eventpunkte gegeben: %d)", GetPlayerAdminRang(extraid), GetName(extraid), playerName, points);
+        AdminLog(message);
+        return 1;
     }
     else if (resultid == THREAD_OFFBWSTRAFE_CHECK) {
         if (!cache_get_row_count(connectionHandle)) {
