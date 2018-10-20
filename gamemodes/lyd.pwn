@@ -162,7 +162,8 @@ enum
 	VW_CLUBINTERIORLS,
 	VW_BANKINTERIORLV,
     VW_TRIADSINTERIOR,
-    VW_PAINTBALLBASEMENT
+    VW_PAINTBALLBASEMENT,
+    VW_PARCOUR
 }
 
 #define INFO_STRING "* Benutze: {00CC00}"
@@ -464,7 +465,7 @@ enum E_SELL_GUNS {
 
 new const g_sellGuns[][E_SELL_GUNS] = {
     {"Schlagring",         1,  80,   1, "einen"},
-    {"Baseball Schläger",  5, 100,   1, "einen"},
+    {"Baseballschläger",   5, 100,   1, "einen"},
     {"Desert Eagle",      24, 210, 200, "eine"},
     {"MP5",               29, 230, 200, "eine"},
     {"Shotgun",           25, 230, 200, "eine"},
@@ -753,7 +754,6 @@ enum e_Faction {
 new g_Faction[22][e_Faction];
 
 new g_WantedKillZone[3];
-new eventitemactive;
 enum e_Bots {
     Bot_sName[MAX_PLAYER_NAME],
     Bot_iSkinID,
@@ -2073,6 +2073,11 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_MOVECARKEY1 1366
 #define     DIALOG_MOVECARKEY2 1367
 #define     DIALOG_EVENTREWARDS 1368
+#define     DIALOG_EVENT_ITEM_MENU 1369
+#define     DIALOG_EVENT_ITEM_WEAPONS 1370
+#define     DIALOG_EVENT_ITEM_REACTIVATE 1371
+#define     DIALOG_EVENT_ITEM_AMMO 1372
+#define     DIALOG_EVENT_ITEM_CHANGE 1373
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -3990,7 +3995,7 @@ enum SpielerDaten
     pAutoknackerVehicleID,
 
     pTaxiPreis,
-    Text:tdTaxi,
+    PlayerText:tdTaxi,
 
     pTaxiVehicle,
     pTaxiKunden[MAX_TAXI_KUNDEN],
@@ -4044,7 +4049,6 @@ enum SpielerDaten
 	unixSpiceCooldown,
 	pGeburtstag[20],
 	pSpice,
-	unixGetSamenCooldown,
 	pSafeSpice,
 	pHandy,
 	pFightstyle,
@@ -4576,6 +4580,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\paintballBasement>
 #include <maps\gsfExterior>
 #include <maps\gsfInterior>
+#include <maps\parcour>
 
 // Systems
 #include <paintball>
@@ -5965,10 +5970,6 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1279, 1, 635.8752,862.5970,-42.6892, 0);//Steine laden
 	CreateDynamicPickup(1279, 1, 607.7939,863.4465,-42.0452, 0);//Steine laden
 	CreateDynamicPickup(1279, 1, 382.3929,871.6203,21.9523, 0);//steine entladen
-	CreateDynamicPickup(1279, 1, -85.5813,2.2551,3.1172, 0);//Spice Drogenfarm  Punkt 1
-	CreateDynamicPickup(1279, 1, 797.5535, -617.8438, 16.3359, 0);//Spice Drogenfarm Punkt 2
-	CreateDynamicPickup(1279, 1, 760.4858, 378.9008, 23.1683, 0);//Spice Drogenfarm Punkt 3
-
 
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 2288.5466,2444.9841,3.2734, 10.0);
 	// CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Staats-Reparatur\n"COLOR_HEX_WHITE"Tippe /Staatrepair", COLOR_WHITE, 621.3207,-584.6555,17.2330, 10.0);
@@ -6023,9 +6024,6 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Steineladen", COLOR_WHITE, 635.8752,862.5970,-42.6892, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Steineladen", COLOR_WHITE, 607.7939,863.4465,-42.0452, 10.0, .worldid = 0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Steineentladen", COLOR_WHITE, 382.3929,871.6203,21.9523, 10.0, .worldid = 0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, -85.5813,2.2551,3.1172, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, 797.5535, -617.8438, 16.3359, 15.0);
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Spice Drogensamen\n"COLOR_HEX_WHITE"Tippe /Getsamen", COLOR_WHITE, 760.4858, 378.9008, 23.1683, 15.0);
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waren-Vergabe Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadwaren", COLOR_WHITE, 577.4390,1221.7273,11.2689, 20.0);//Loadware in LV
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Öl-Raffinerie Las Venturas\n"COLOR_HEX_WHITE"Tippe /Loadbenzin", COLOR_WHITE, 268.9609,1384.2981,10.1610, 20.0);//Loadbenzin in LV
 
@@ -6611,7 +6609,6 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][unixFeuerwerk] = _gettime;
     Spieler[playerid][unixFeuerwerkleucht] = _gettime;
     Spieler[playerid][pDrogenSamen] = 0;
-    Spieler[playerid][unixGetSamenCooldown] = 0;
     Spieler[playerid][pAutoknackerExtraLohn] = 0;
     Spieler[playerid][punixFSperre] = 0;
     Spieler[playerid][punixFBSperre] = 0;
@@ -6747,7 +6744,7 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][pBizAngebot][1] = 0;
     Spieler[playerid][pTankeAngebot][0] = INVALID_PLAYER_ID;
     Spieler[playerid][pTankeAngebot][1] = 0;
-    Spieler[playerid][tdTaxi] = Text:INVALID_TEXT_DRAW;
+    Spieler[playerid][tdTaxi] = PlayerText:INVALID_TEXT_DRAW;
     Spieler[playerid][pTaxiVehicle] = INVALID_VEHICLE_ID;
     Spieler[playerid][pTruckerBlock] = _gettime;
     permissionleavegz[playerid]=0;
@@ -7638,7 +7635,6 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pLoginVersuch] = 0;
     Spieler[playerid][pJobWechsel] = 0;
     Spieler[playerid][pDrogenSamen] = 0;
-    Spieler[playerid][unixGetSamenCooldown] = 0;
     Spieler[playerid][pAutoknackerExtraLohn] = 0;
     Spieler[playerid][punixFSperre] = 0;
     Spieler[playerid][punixFBSperre] = 0;
@@ -7773,7 +7769,7 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pBizAngebot][1] = 0;
     Spieler[playerid][pTankeAngebot][0] = INVALID_PLAYER_ID;
     Spieler[playerid][pTankeAngebot][1] = 0;
-    Spieler[playerid][tdTaxi] = Text:INVALID_TEXT_DRAW;
+    Spieler[playerid][tdTaxi] = PlayerText:INVALID_TEXT_DRAW;
     Spieler[playerid][pTaxiVehicle] = INVALID_VEHICLE_ID;
     permissionleavegz[playerid]=0;
     for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
@@ -8925,97 +8921,137 @@ tuv
     }
     return 1;
 }*/
-CMD:aeventitem(playerid,params[])
-{
-    new eventitem;
-    if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte");
-    if(sscanf(params,"i",eventitem)&&eventitemactive==0)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Aeventitem [Item]");
-    if(eventitem>=1&&eventitem<=5)
-    {
-        eventitemactive=eventitem;
-        new eventstr[100];
-        format(eventstr,100,"%s %s hat Eventitem %d freigeschaltet.", GetPlayerAdminRang(playerid), GetName(playerid), eventitem);
-        for(new i;i<MAX_PLAYERS;i++)
-        {
-            if(IsPlayerConnected(i))
-            {
-                if(Spieler[i][pAdmin]>=1)
-                {
-                    SendClientMessage(i,COLOR_GREEN,eventstr);
-                }
+
+enum E_AEVENT_ITEM {
+    AEVENT_ITEM_INDEX,
+    AEVENT_ITEM_AMMO
+}
+
+#define MAX_EVENT_ITEMS 32
+new aEventItems[12][E_AEVENT_ITEM];
+new bool:gEventItem;
+new bool:gEventItemType;
+
+enum {
+    WEAPON_MELEE,
+    WEAPON_SPRAY,
+    WEAPON_GUN,
+    WEAPON_THROWABLE,
+    WEAPON_OTHER
+}
+
+enum E_EVENT_ITEM {
+    EVENT_ITEM_TYPE,
+    EVENT_ITEM_SLOT,
+    EVENT_ITEM_ID,
+    EVENT_ITEM_NAME[30]
+}
+
+new const g_EventItems[][E_EVENT_ITEM] = {
+    {WEAPON_GUN,     2, 24, "Desert Eagle"},
+    {WEAPON_GUN,     4, 29, "MP5"},
+    {WEAPON_GUN,     5, 31, "M4"},
+    {WEAPON_GUN,     5, 30, "AK-47"},
+    {WEAPON_GUN,     6, 34, "Sniper"},
+    {WEAPON_GUN,     3, 25, "Schrotflinte"},
+    {WEAPON_GUN,     2, 22, "9mm Pistole"},
+    {WEAPON_GUN,     2, 23, "Schallgedämpfte Pistole"},
+    {WEAPON_GUN,     3, 26, "Abgesägte Schrotflinte"},
+    {WEAPON_GUN,     3, 27, "Combat Shotgun"},
+    {WEAPON_GUN,     4, 28, "Uzi"},
+    {WEAPON_GUN,     4, 32, "Tec-9"},
+    {WEAPON_GUN,     6, 33, "Jagdgewehr"},
+    {WEAPON_MELEE,   0,  1, "Schlagring"},
+    {WEAPON_MELEE,   1,  5, "Baseballschläger"},
+    {WEAPON_MELEE,   1,  8, "Katana"},
+    {WEAPON_MELEE,   1,  2, "Golfschläger"},
+    {WEAPON_MELEE,   1,  3, "Schlagstock"},
+    {WEAPON_MELEE,   1,  6, "Schaufel"},
+    {WEAPON_MELEE,   1,  7, "Pool Cue"},
+    {WEAPON_MELEE,   1,  9, "Kettensäge"},
+    {WEAPON_MELEE,  10, 10, "Violetter Dildo"},
+    {WEAPON_MELEE,  10, 11, "Normaler Dildo"},
+    {WEAPON_MELEE,  10, 12, "Vibrator"},
+    {WEAPON_MELEE,  10, 13, "Silbener Vibrator"},
+    {WEAPON_MELEE,  10, 14, "Blumenstrauß"},
+    {WEAPON_MELEE,  10, 15, "Gehstock"},
+    {WEAPON_SPRAY,   9, 41, "Spraydose"},
+    {WEAPON_SPRAY,   9, 42, "Feuerlöscher"},
+    {WEAPON_OTHER,   0, -1, "Schutzweste"},
+    {WEAPON_OTHER,  11, 46, "Fallschirm"},
+    {WEAPON_OTHER,   9, 43, "Kamera"}
+};
+
+stock ShowEventItemDialog(playerid, type = DIALOG_EVENT_ITEM_MENU, extravar = 0) {
+    new dialogText[512], dialogCaption[64];
+    switch (type) {
+        case DIALOG_EVENT_ITEM_MENU: {
+            format(dialogText, sizeof(dialogText), "{FFFFFF}Status: %s%s\n{FFFFFF}Typ: %s{FFFFFF}\nFür einen Spieler wieder freischalten\n{FFFFFF}Für alle wieder \
+                freischalten\nEinstellungen zurücksetzen\n- - - {7599FF}Items hinzufügen {FFFFFF}- - -\nSchusswaffen\nNahkampfwaffen\nWeiteres\n\
+                - - - {7599FF}Ausgewählte Items {FFFFFF}- - -\n", gEventItem ? "{00FF00}" : "{FF0000}", gEventItem ? "aktiviert" : "deaktiviert"
+                , gEventItemType ? "Einmal nutzbar" : "Immer nutzbar");
+
+            for (new i = 0; i < sizeof(aEventItems); i++) {
+                if (!aEventItems[i][AEVENT_ITEM_INDEX]) continue;
+                format(dialogText, sizeof(dialogText), "%s%s - %d\n", dialogText, g_EventItems[aEventItems[i][AEVENT_ITEM_INDEX] - 1][EVENT_ITEM_NAME], aEventItems[i][AEVENT_ITEM_AMMO]);
             }
+            
+            return ShowPlayerDialog(playerid, DIALOG_EVENT_ITEM_MENU, DIALOG_STYLE_LIST, "{FF9900}Eventitems - Übersicht", dialogText, "Weiter", "Schließen");
+        }
+        case DIALOG_EVENT_ITEM_REACTIVATE: {
+            return ShowPlayerDialog(playerid, DIALOG_EVENT_ITEM_REACTIVATE, DIALOG_STYLE_INPUT, "{FF9900}Eventitems - Spieler freischalten", "{FFFFFF}Gebe die ID \
+                oder den Namen des Spielers ein,\nfür den du die Eventitems wieder freischalten willst:", "Freischalten", "Zurück");
+        }
+        case DIALOG_EVENT_ITEM_WEAPONS: {
+            for (new i = 0; i < sizeof(g_EventItems); i++)
+                if (g_EventItems[i][EVENT_ITEM_TYPE] == extravar || extravar == WEAPON_MELEE && g_EventItems[i][EVENT_ITEM_TYPE] == WEAPON_SPRAY) 
+                    format(dialogText, sizeof(dialogText), "%s%s\n", dialogText, g_EventItems[i][EVENT_ITEM_NAME]);
+
+            format(dialogCaption, sizeof(dialogCaption), "{FF9900}Eventitems - %s", extravar == WEAPON_GUN ? "Schusswaffen" : (extravar == WEAPON_MELEE ? "Nahkampfwaffen" : "Weiteres"));
+            SetPVarInt(playerid, "EVENTITEM_TYPE", extravar);
+            return ShowPlayerDialog(playerid, DIALOG_EVENT_ITEM_WEAPONS, DIALOG_STYLE_LIST, dialogCaption, dialogText, "Auswählen", "Zurück");
+        }
+        case DIALOG_EVENT_ITEM_AMMO: {
+            format(dialogText, sizeof(dialogText), "{FFFFFF}Item: {7599FF}%s\n{FFFFFF}Gebe an, wieviel Munition bzw. welchen Wert das Item haben soll:"
+                , g_EventItems[GetPVarInt(playerid, "EVENTITEM_INDEX")][EVENT_ITEM_NAME]);
+
+            return ShowPlayerDialog(playerid, DIALOG_EVENT_ITEM_AMMO, DIALOG_STYLE_INPUT, "{FF9900}Eventitems - Munition", dialogText, "Hinzufügen", "Abbrechen");
+        }
+        case DIALOG_EVENT_ITEM_CHANGE: {
+            new index = GetPVarInt(playerid, "EVENTITEM_INDEX");
+            format(dialogText, sizeof(dialogText), "Löschen%s", g_EventItems[index][EVENT_ITEM_TYPE] == WEAPON_MELEE 
+                || !strcmp(g_EventItems[index][EVENT_ITEM_NAME], "Fallschirm") ? "" : "\nÄndern");
+
+            format(dialogCaption, sizeof(dialogCaption), "{FF9900}Eventitems - %s", g_EventItems[index][EVENT_ITEM_NAME]);
+            return ShowPlayerDialog(playerid, DIALOG_EVENT_ITEM_CHANGE, DIALOG_STYLE_LIST, dialogCaption, dialogText, "Weiter", "Zurück");
         }
     }
-    else if(eventitemactive!=0)
-    {
-        new eventstr[100];
-        format(eventstr,100,"%s %s hat Eventitem %d wieder deaktiviert.", GetPlayerAdminRang(playerid), GetName(playerid), eventitemactive);
-        for(new i;i<MAX_PLAYERS;i++)
-        {
-            if(IsPlayerConnected(i))
-            {
-                if(Spieler[i][pAdmin]>=1)
-                {
-                    SendClientMessage(i,COLOR_GREEN,eventstr);
-                }
-            }
-        }
-        eventitemactive=0;
-    }
-    else
-    {
-        SendClientMessage(playerid, COLOR_RED, "Ungültige Item ID (1-3)");
-    }
+
     return 1;
 }
+
+CMD:aeventitem(playerid, params[]) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    return ShowEventItemDialog(playerid);
+}
+
 CMD:eventitem(playerid)
 {
-    if(eventitemactive>=1&&eventitemactive<=5)
-    {
-        if(eventitemactive==1)
-        {
-            ResetPlayerWeapons(playerid);
-            GivePlayerWeapon(playerid,10,1);
-            SetPlayerHealth(playerid, 100);
-            SetPlayerArmour(playerid, 100);
-        }
-        else if(eventitemactive==2)
-        {
-            ResetPlayerWeapons(playerid);
-            GivePlayerWeapon(playerid,29,100);
-            GivePlayerWeapon(playerid,24,100);
-            GivePlayerWeapon(playerid,34,15);
-            GivePlayerWeapon(playerid,25,30);
-            SetPlayerHealth(playerid, 100);
-            SetPlayerArmour(playerid, 100);
-        }
-        else if(eventitemactive==3)
-        {
-            ResetPlayerWeapons(playerid);
-            SetPlayerHealth(playerid, 100);
-            SetPlayerArmour(playerid, 100);
-        }
-        else if(eventitemactive==4)
-        {
-            ResetPlayerWeapons(playerid);
-            GivePlayerWeapon(playerid,24,100);
-            SetPlayerHealth(playerid, 100);
-            SetPlayerArmour(playerid, 100);
-        }
-        else if(eventitemactive==5)
-        {
-            ResetPlayerWeapons(playerid);
-            GivePlayerWeapon(playerid,46,1);
-            SetPlayerHealth(playerid, 100);
-            SetPlayerArmour(playerid, 100);
-        }
-        SendClientMessage(playerid, COLOR_GREEN,"Du hast die Eventitems erhalten!");
+    if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst mindestens Level 3 dafür sein.");
+    if (!gEventItem) return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Die Eventitems sind nicht aktiv.");
+    if (gEventItemType && GetPVarInt(playerid, "EVENTITEM")) return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Die Eventitems können nur einmal genutzt werden.");
+    
+    ResetPlayerWeapons(playerid);
+    SetPlayerHealth(playerid, 100.0);
+    SetPlayerArmour(playerid, aEventItems[0][AEVENT_ITEM_AMMO]);
+    for (new i = 1; i < sizeof(aEventItems); i++) {
+        if (!aEventItems[i][AEVENT_ITEM_INDEX]) continue;
+        GivePlayerWeapon(playerid, g_EventItems[aEventItems[i][AEVENT_ITEM_INDEX] - 1][EVENT_ITEM_ID], aEventItems[i][AEVENT_ITEM_AMMO]);
     }
-    else
-    {
-        SendClientMessage(playerid, COLOR_RED, "Der Befehl ist nicht von einem Teammitglied aktiviert worden.");
-    }
-    return 1;
+
+    SetPVarInt(playerid, "EVENTITEM", 1);
+    return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Eventitems erhalten.");
 }
 
 CMD:namechange(playerid, params[])
@@ -10329,7 +10365,8 @@ public OnPlayerSpawn(playerid)
     }
     #endif
 
-    SetPVarInt(playerid, "MP3.PLAYER", 0);
+    DeletePVar(playerid, "MP3.PLAYER");
+    DeletePVar(playerid, "EVENTITEM");
     if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING && g_evidenceRoomHeist[EVIDENCEROOM_HEIST_RAIDER] == playerid) {
         KillTimer(g_evidenceRoomHeist[EVIDENCEROOM_HEIST_TIMER]);
         g_evidenceRoomHeist[EVIDENCEROOM_HEIST_TIMER] = INVALID_TIMER_ID;
@@ -17114,6 +17151,7 @@ CMD:veh(playerid, params[])
     GetPlayerPos(playerid, x,y,z);
     new vehicle;
     vehicle = CreateVehicle(vID, x,y,z, angle, color1, color2, -1);
+    SetVehicleVirtualWorld(vehicle, GetPlayerVirtualWorld(playerid));
     PutPlayerInVehicle(playerid, vehicle, 0);
     gGas[vehicle] = GetMaxTank(vehicle);
     gMaxGas[vehicle] = GetMaxTank(vehicle);
@@ -17134,6 +17172,7 @@ CMD:supauto(playerid, params[])
     GetPlayerPos(playerid, x,y,z);
     new vehicle;
     vehicle = CreateVehicle(560, x, y, z, angle, 3, 3, -1);
+    SetVehicleVirtualWorld(vehicle, GetPlayerVirtualWorld(playerid));
     PutPlayerInVehicle(playerid, vehicle, 0);
     gGas[vehicle] = GetMaxTank(vehicle);
     gMaxGas[vehicle] = GetMaxTank(vehicle);
@@ -23344,7 +23383,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
                         return 1;
                     }
                     */
-                    format(String,sizeof(String),"Fahrgast %s ist in deinem Taxi eingestiegen. Die Fahrt beginnt, nachdem er diese bestätigt",GetName(playerid));
+                    format(String,sizeof(String),"Fahrgast %s ist in deinem Taxi eingestiegen. Die Fahrt beginnt, nachdem er diese bestätigt.",GetName(playerid));
                     SendClientMessage(driver,COLOR_YELLOW,String);
                     format(String,sizeof(String),"Taxi Informationen:\n\nFahrer: %s\nTaxikosten: $%s je 100m",GetName(driver), AddDelimiters(Spieler[driver][pTaxiPreis]));
                     ShowPlayerDialog(playerid,DIALOG_TAXI,DIALOG_STYLE_MSGBOX,"Taxifahrt",String,"Starten","Aussteigen");
@@ -29520,6 +29559,122 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         if( inputtext[i] == '%' ) inputtext[i] = ' ';
     }
     if(Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if (dialogid == DIALOG_EVENT_ITEM_MENU) {
+        if (!response || listitem < 0) return 1;
+        new message[145];
+        switch (listitem) {
+            case 0: {
+                gEventItem = !gEventItem;
+                format(message, sizeof(message), "%s %s hat die Eventitems %s", GetPlayerAdminRang(playerid), GetName(playerid), gEventItem ? "aktiviert (/Eventitem)!" : "deaktiviert!");
+                SendClientMessageToAll(gEventItem ? COLOR_GREEN : COLOR_ORANGE, message);
+                return ShowEventItemDialog(playerid);
+            }
+            case 1: {
+                gEventItemType = !gEventItemType;
+                return ShowEventItemDialog(playerid);
+            }
+            case 2: { // Reactivate Items for one player
+                return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_REACTIVATE);
+            }
+            case 3: { // Reactivate Items for all players
+                for (new i = 0; i <= GetPlayerPoolSize(); i++) DeletePVar(i, "EVENTITEM");
+                format(message, sizeof(message), "%s %s hat die Eventitems für alle erneut freigeschaltet!", GetPlayerAdminRang(playerid), GetName(playerid));
+                return SendClientMessageToAll(COLOR_GREEN, message);
+            }
+            case 4: {
+                if (gEventItem) {
+                    format(message, sizeof(message), "%s %s hat die Eventitems deaktiviert!", GetPlayerAdminRang(playerid), GetName(playerid));
+                    SendClientMessageToAll(COLOR_ORANGE, message);
+                }
+
+                gEventItem = false;
+                gEventItemType = false;
+                new temp[12][E_AEVENT_ITEM];
+                aEventItems = temp;
+                return ShowEventItemDialog(playerid);
+            }
+            case 5, 9: return ShowEventItemDialog(playerid);
+            case 6, 7, 8: { // Show weapon menu
+                return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_WEAPONS, listitem == 6 ? WEAPON_GUN : (listitem == 7 ? WEAPON_MELEE : WEAPON_OTHER));
+            }
+            default: { // Change added weapon
+                new index;
+                for (new i = 0; i < sizeof(aEventItems); i++) {
+                    if (!aEventItems[i][AEVENT_ITEM_INDEX]) continue;
+                    if (listitem - 10 == index) {
+                        SetPVarInt(playerid, "EVENTITEM_INDEX", aEventItems[i][AEVENT_ITEM_INDEX] - 1);
+                        return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_CHANGE, i);
+                    }
+
+                    index++;
+                }
+
+                return ShowEventItemDialog(playerid);
+            }
+        }
+    }
+    if (dialogid == DIALOG_EVENT_ITEM_REACTIVATE) {
+        if (!response) return ShowEventItemDialog(playerid);
+        new pID;
+        if (sscanf(inputtext, "u", pID) || pID == INVALID_PLAYER_ID) {
+            SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du hast keinen gültigen Spieler angegeben.");
+            return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_REACTIVATE);
+        }
+
+        DeletePVar(pID, "EVENTITEM");
+        SCMFormatted(playerid, COLOR_GREEN, "[INFO] {FFFFFF}Du hast die Eventitems für %s wieder freigeschaltet.", GetName(pID));
+        return SCMFormatted(pID, COLOR_GREEN, "[INFO] {FFFFFF}%s %s hat die Eventitems für dich wieder freigeschaltet.", GetPlayerAdminRang(playerid), GetName(playerid));
+    }
+    if (dialogid == DIALOG_EVENT_ITEM_WEAPONS) {
+        if (!response) return ShowEventItemDialog(playerid);
+        if (listitem < 0 || listitem > sizeof(g_EventItems)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Ungültige Auswahl.");
+
+        new index, slot = -1, type = GetPVarInt(playerid, "EVENTITEM_TYPE");
+        for (new i = 0; i < sizeof(g_EventItems); i++) {
+            if (g_EventItems[i][EVENT_ITEM_TYPE] != type && !(type == WEAPON_MELEE && g_EventItems[i][EVENT_ITEM_TYPE] == WEAPON_SPRAY)) continue;
+
+            if (index == listitem) {
+                index = i;
+                slot = g_EventItems[i][EVENT_ITEM_SLOT];
+                type = g_EventItems[i][EVENT_ITEM_TYPE];
+                break;
+            }
+
+            index++;
+        }
+
+        if (slot == -1) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Ungültige Auswahl.");
+        if (type == WEAPON_MELEE || !strcmp(g_EventItems[index][EVENT_ITEM_NAME], "Fallschirm")) {
+            aEventItems[slot][AEVENT_ITEM_INDEX] = index + 1;
+            aEventItems[slot][AEVENT_ITEM_AMMO] = 1;
+            return ShowEventItemDialog(playerid);
+        }
+
+        SetPVarInt(playerid, "EVENTITEM_INDEX", index);
+        return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_AMMO, slot);
+    }
+    if (dialogid == DIALOG_EVENT_ITEM_CHANGE) {
+        if (!response || listitem < 0 || listitem > 1) return ShowEventItemDialog(playerid);
+        new slot = g_EventItems[GetPVarInt(playerid, "EVENTITEM_INDEX")][EVENT_ITEM_SLOT];
+        if (listitem) return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_AMMO, slot);
+
+        aEventItems[slot][AEVENT_ITEM_INDEX] = 0;
+        aEventItems[slot][AEVENT_ITEM_AMMO] = 0;
+        return ShowEventItemDialog(playerid);
+    }
+    if (dialogid == DIALOG_EVENT_ITEM_AMMO) {
+        if (!response) return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_WEAPONS, GetPVarInt(playerid, "EVENTITEM_TYPE"));
+        new ammo;
+        if (sscanf(inputtext, "d", ammo) || ammo < 1 || ammo > 100000) {
+            SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Gebe einen Wert zwischen 1 und 100.000 an.");
+            return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_AMMO, GetPVarInt(playerid, "EVENTITEM_INDEX"));
+        }
+
+        new index = GetPVarInt(playerid, "EVENTITEM_INDEX");
+        aEventItems[g_EventItems[index][EVENT_ITEM_SLOT]][AEVENT_ITEM_AMMO] = ammo;
+        aEventItems[g_EventItems[index][EVENT_ITEM_SLOT]][AEVENT_ITEM_INDEX] = index + 1;
+        return ShowEventItemDialog(playerid);
+    }
     if (dialogid == DIALOG_BWSTRAFEN) {
         if (!response) return ClosePlayerDialog(playerid);
 
@@ -45728,12 +45883,13 @@ stock isNumeric(const string[])
 stock ForbiddenGun(playerid)
 {
     new weap = GetPlayerWeapon(playerid);
-    if( weap == 7 || weap == 15 || weap == 16 || weap == 18 || weap == 26 || weap == 28|| weap == 32 || weap == 35 || weap == 36 || weap == 37 || weap== 38 || weap == 44 || weap == 45)
+    if (weap == 16 || weap == 18 || weap == 35 || weap == 36 || weap == 37 || weap== 38 || weap == 44 || weap == 45)
     {
         return 1;
     }
     return 0;
 }
+
 stock LoadPlayerWeaponArray(playerid) {
     new
         weapon,
@@ -52969,147 +53125,100 @@ public SetPlayerView(playerid,step) {
     return 1;
 }
 
-stock DestroyTaxiTextdraw(playerid) {
-    //printf("DestroyTaxiTextdraw(%s) %d Text:%d",GetName(playerid),playerid,_:Spieler[playerid][tdTaxi]);
-    TextDrawHideForAll(Spieler[playerid][tdTaxi]);
-    TextDrawDestroy(Spieler[playerid][tdTaxi]);
-    Spieler[playerid][tdTaxi] = Text:INVALID_TEXT_DRAW;
+DestroyTaxiTextdraw(playerid) {
+    PlayerTextDrawDestroy(playerid, Spieler[playerid][tdTaxi]);
+    Spieler[playerid][tdTaxi] = PlayerText:INVALID_TEXT_DRAW;
     return 1;
 }
 
-stock CreateTaxiTextdraw(playerid) {
-    new Text:Textdraw0 = Text:0;
-    new fails = 0;
-    do {
-        Textdraw0 = TextDrawCreate(320.000000, 361.000000, "~y~Taxameter~n~~n~~w~Wird geladen ..");
-        //printf("CreateTaxiTextdraw(%s) %d Text:%d - 0 - f:%d",GetName(playerid),playerid, _:Spieler[playerid][tdTaxi] , fails);
-        fails++;
-    }
-    while( _:Textdraw0 == 0 && fails <= 5 );
-    TextDrawAlignment(Textdraw0, 2);
-    TextDrawBackgroundColor(Textdraw0, 255);
-    TextDrawFont(Textdraw0, 1);
-    new
-        Float:height = 0.30;
-    TextDrawLetterSize(Textdraw0, height, height * 4.0625 ); // 4.0625
-    TextDrawColor(Textdraw0, -1);
-    TextDrawSetOutline(Textdraw0, 0);
-    TextDrawSetProportional(Textdraw0, 1);
-    TextDrawSetShadow(Textdraw0, 1);
-    TextDrawUseBox(Textdraw0, 1);
-    TextDrawBoxColor(Textdraw0, 102);
-    TextDrawTextSize(Textdraw0, 426.000000, 162.000000);
-    Spieler[playerid][tdTaxi] = Textdraw0;
-    TextDrawShowForPlayer(playerid,Spieler[playerid][tdTaxi]);
-    //printf("CreateTaxiTextdraw(%s) %d Text:%d",GetName(playerid),playerid, _:Spieler[playerid][tdTaxi] );
+CreateTaxiTextdraw(playerid) {
+    Spieler[playerid][tdTaxi] = CreatePlayerTextDraw(playerid, 320.0, 361.0, "~y~Taxameter~n~~n~~w~Wird geladen...");
+    PlayerTextDrawAlignment(playerid, Spieler[playerid][tdTaxi], 2);
+    PlayerTextDrawBackgroundColor(playerid, Spieler[playerid][tdTaxi], 255);
+    PlayerTextDrawFont(playerid, Spieler[playerid][tdTaxi], 1);
+    new Float:height = 0.30;
+    PlayerTextDrawLetterSize(playerid, Spieler[playerid][tdTaxi], height, height * 4.0625); // 4.0625
+    PlayerTextDrawColor(playerid, Spieler[playerid][tdTaxi], -1);
+    PlayerTextDrawSetOutline(playerid, Spieler[playerid][tdTaxi], 0);
+    PlayerTextDrawSetProportional(playerid, Spieler[playerid][tdTaxi], 1);
+    PlayerTextDrawSetShadow(playerid, Spieler[playerid][tdTaxi], 1);
+    PlayerTextDrawUseBox(playerid, Spieler[playerid][tdTaxi], 1);
+    PlayerTextDrawBoxColor(playerid, Spieler[playerid][tdTaxi], 102);
+    PlayerTextDrawTextSize(playerid, Spieler[playerid][tdTaxi], 426.0, 162.0);
+    PlayerTextDrawShow(playerid, Spieler[playerid][tdTaxi]);
     return 1;
 }
-
-/*stock CreateTaxiTextdraw(playerid) {
-    new Text:Textdraw0;
-    Textdraw0 = TextDrawCreate(320.000000, 361.000000, "~y~Taxameter~n~~n~~w~Wird geladen ..");
-    TextDrawAlignment(Textdraw0, 2);
-    TextDrawBackgroundColor(Textdraw0, 255);
-    TextDrawFont(Textdraw0, 1);
-    new
-        Float:height = 0.30;
-    TextDrawLetterSize(Textdraw0, height, height * 4.0625 ); // 4.0625
-    TextDrawColor(Textdraw0, -1);
-    TextDrawSetOutline(Textdraw0, 0);
-    TextDrawSetProportional(Textdraw0, 1);
-    TextDrawSetShadow(Textdraw0, 1);
-    TextDrawUseBox(Textdraw0, 1);
-    TextDrawBoxColor(Textdraw0, 102);
-    TextDrawTextSize(Textdraw0, 426.000000, 162.000000);
-    Spieler[playerid][tdTaxi] = Textdraw0;
-    TextDrawShowForPlayer(playerid,Spieler[playerid][tdTaxi]);
-    printf("CreateTaxiTextdraw(%s) %d Text:%d",GetName(playerid),playerid, _:Spieler[playerid][tdTaxi] );
-    return 1;
-}*/
 
 forward Pulse_Taxi();
 public Pulse_Taxi() {
-    //printf("Pulse_Taxi %d",gettime());
-    new
-        vehicleid,
-        Float:fHealth,
-        Mitfahrer[128],
-        String[256],
-        preis;
-    for(new driverid ; driverid < MAX_PLAYERS ; driverid++) {
-        if( IsPlayerConnected(driverid)) {
-            if( Spieler[driverid][pJob] == 16 ) {
-                vehicleid = Spieler[driverid][pTaxiVehicle];
-                if( vehicleid != INVALID_VEHICLE_ID ) {
-                    //printf("Taxifahrer %s(%d) Text:%d #1",GetName(driverid),driverid, _:Spieler[driverid][tdTaxi] );
-                    if( _:g_t3dTaxi[vehicleid] != INVALID_3DTEXT_ID ) {
-                        //printf("Taxifahrer %s(%d) Text:%d #2",GetName(driverid),driverid, _:Spieler[driverid][tdTaxi] );
-                        if( HasPlayerTaxiCustomers(driverid) ) {
-                            //
-                            for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-                                if( Spieler[driverid][pTaxiKunden][i] != INVALID_PLAYER_ID ) {
-                                    format(Mitfahrer,sizeof(Mitfahrer),"%s~y~~h~%s~w~: ~g~$%d", Mitfahrer , GetName(Spieler[driverid][pTaxiKunden][i]), GetPlayerTaxiCosts(driverid,Spieler[driverid][pTaxiKunden][i]) );
-                                }
-                            }
-                            //
-                            preis = Spieler[driverid][pTaxiPreis];
-                            format(String,sizeof(String),"~y~Taxameter (ID: %d)~n~~n~~w~\
-                                %s\
-                                ~n~~w~Preis:~g~$%d~w~/~y~100m",driverid,Mitfahrer,preis,Spieler[driverid][pTaxiPreis]
-                            );
-                            GetVehicleHealth(vehicleid,fHealth);
-                            //printf("vehicleid %d",vehicleid);
-                            if( g_iVehicleFixNotation{vehicleid} == 1 || fHealth <= 400.0 ) {
-                                CancelTaxi(driverid,vehicleid,3);
-                            }
-                        }
-                        else {
-                            preis = Spieler[driverid][pTaxiPreis];
-                            format(String,sizeof(String),"~y~Taxameter (ID: %d)~n~~n~~w~\
-                                ~p~Keine Fahrgaeste\
-                                ~n~~w~Preis:~g~$%d~w~/~y~100m",driverid,preis,Spieler[driverid][pTaxiPreis]
-                            );
-                        }
-                        TextDrawSetString( Spieler[driverid][tdTaxi] , String );
-                    }
-                }
+    new vehicleid, Float:fHealth, Mitfahrer[128], String[256];
+    for (new driverid; driverid <= GetPlayerPoolSize(); driverid++) {
+        if (!IsPlayerConnected(driverid) || Spieler[driverid][pJob] != 16) continue;
+        vehicleid = Spieler[driverid][pTaxiVehicle];
+        if (vehicleid == INVALID_VEHICLE_ID || _:g_t3dTaxi[vehicleid] == INVALID_3DTEXT_ID) continue;
+
+        if (HasPlayerTaxiCustomers(driverid)) {
+            for (new i; i < MAX_TAXI_KUNDEN; i++) {
+                if (Spieler[driverid][pTaxiKunden][i] == INVALID_PLAYER_ID) continue;
+                format(Mitfahrer, sizeof(Mitfahrer), "%s~y~~h~%s~w~: ~g~$%d", Mitfahrer, GetName(Spieler[driverid][pTaxiKunden][i]), 
+                    GetPlayerTaxiCosts(driverid, Spieler[driverid][pTaxiKunden][i]));
+            }
+
+            format(String, sizeof(String), "~y~Taxameter (ID: %d)~n~~n~~w~%s~n~~w~Preis: ~g~$%d~w~/~y~100m", driverid, Mitfahrer, 
+                Spieler[driverid][pTaxiPreis], Spieler[driverid][pTaxiPreis]);
+
+            GetVehicleHealth(vehicleid, fHealth);
+            if (g_iVehicleFixNotation{vehicleid} == 1 || fHealth <= 400.0) CancelTaxi(driverid, vehicleid, 3);
+
+            for (new i; i < MAX_TAXI_KUNDEN; i++) {
+                if (Spieler[driverid][pTaxiKunden][i] == INVALID_PLAYER_ID) continue;
+                if (Spieler[Spieler[driverid][pTaxiKunden][i]][tdTaxi] == PlayerText:INVALID_TEXT_DRAW) CreateTaxiTextdraw(Spieler[driverid][pTaxiKunden][i]);
+                PlayerTextDrawSetString(Spieler[driverid][pTaxiKunden][i], Spieler[Spieler[driverid][pTaxiKunden][i]][tdTaxi], String);
             }
         }
+        else
+            format(String, sizeof(String), "~y~Taxameter (ID: %d)~n~~n~~w~~p~Keine Fahrgaeste~n~~w~Preis: ~g~$%d~w~/~y~100m", driverid, Spieler[driverid][pTaxiPreis], Spieler[driverid][pTaxiPreis]);
+
+        PlayerTextDrawSetString(driverid, Spieler[driverid][tdTaxi], String);
     }
     return 1;
 }
 
-forward CancelTaxi(driverid,vehicle,mode);
-public CancelTaxi(driverid,vehicle,mode) {
-    //printf("CancelTaxi(%s,%d,%d)",GetName(driverid),vehicle,mode);
-    new
-        String[128];
-    if(mode == 0 ) {
-        format(String,sizeof(String),"** Taxifahrt abgebrochen.Der Fahrer %s hat den Server verlassen! Es werden keine Kosten berechnet",GetName(driverid));
+forward CancelTaxi(driverid, vehicle, mode);
+public CancelTaxi(driverid, vehicle, mode) {
+    new String[128];
+
+    if (mode == 0) {
+        format(String, sizeof(String), "** Taxifahrt abgebrochen. Der Fahrer %s hat den Server verlassen! Es werden keine Kosten berechnet.", GetName(driverid));
         SetVehicleToRespawn(vehicle);
     }
-    else if(mode == 1 ) {
-        format(String,sizeof(String),"** Taxifahrt abgebrochen.Der Fahrer %s hat das Fahrzeug vollkommen zerstört!",GetName(driverid));
-        // SetVehicleToRespawn(vehicle);
-        SendClientMessage(driverid,COLOR_ORANGE,"Taxifahrt abgebrochen. Du hast das Taxi komplett zerstört.");
+    else if (mode == 1) {
+        format(String, sizeof(String), "** Taxifahrt abgebrochen. Der Fahrer %s hat das Fahrzeug vollkommen zerstört!", GetName(driverid));
+        SendClientMessage(driverid, COLOR_ORANGE, "Taxifahrt abgebrochen. Du hast das Taxi komplett zerstört.");
     }
-    else if(mode == 2 ) {
-        format(String,sizeof(String),"** Taxifahrt abgebrochen.Der Fahrer %s ist geflüchtet. Es werden keine Fahrkosten berechnet",GetName(driverid));
+    else if (mode == 2) {
+        format(String, sizeof(String), "** Taxifahrt abgebrochen. Der Fahrer %s ist geflüchtet. Es werden keine Fahrkosten berechnet.", GetName(driverid));
         SetVehicleToRespawn(vehicle);
         SendClientMessage(driverid,COLOR_ORANGE,"Taxifahrt abgebrochen. Du hast das Fahrzeug verlassen.");
     }
-    else if(mode == 3 ) {
-        format(String,sizeof(String),"** Taxifahrt abgebrochen. Das Fahrzeug ist zu sehr beschädigt, dir werden keine Fahrkosten berechnet");
+    else if (mode == 3) {
+        format(String,sizeof(String),"** Taxifahrt abgebrochen. Das Fahrzeug ist zu sehr beschädigt, dir werden keine Fahrkosten berechnet.");
         SendClientMessage(driverid,COLOR_ORANGE,String);
     }
+
     Spieler[driverid][pTaxiVehicle] = INVALID_VEHICLE_ID;
-    SendTaxiMessage(driverid,COLOR_ORANGE,String);
-    ClearPlayerTaxiSlots(driverid,1);
-    DestroyTaxiTextdraw(driverid);
-    if( vehicle != INVALID_VEHICLE_ID && _:g_t3dTaxi[vehicle] != INVALID_3DTEXT_ID ) {
-        Delete3DTextLabel( g_t3dTaxi[vehicle] );
+    SendTaxiMessage(driverid, COLOR_ORANGE, String);
+    for (new i; i < MAX_TAXI_KUNDEN; i++) {
+        if (Spieler[driverid][pTaxiKunden][i] == INVALID_PLAYER_ID) continue;
+        RemovePlayerFromTaxi(driverid, Spieler[driverid][pTaxiKunden][i]);
+    }
+
+    ClearPlayerTaxiSlots(driverid, 1);
+    if (vehicle != INVALID_VEHICLE_ID && _:g_t3dTaxi[vehicle] != INVALID_3DTEXT_ID) {
+        Delete3DTextLabel(g_t3dTaxi[vehicle]);
         g_t3dTaxi[vehicle] = Text3D:INVALID_3DTEXT_ID;
     }
+
     return 1;
 }
 
@@ -61880,7 +61989,8 @@ stock SavePremiumWeaponData(playerid,bool:clear = false) {
         }
         else {
             GetPlayerWeaponData(playerid, i, Waffen[0], Waffen[1]);
-            info = Class_CompressWeaponInfo( Waffen[0], Waffen[1] );
+            if (Waffen[0] == WEAPON_CHAINSAW) continue;
+            info = Class_CompressWeaponInfo( Waffen[0], Waffen[1]);
             if( Waffen[0] && Waffen[1] > 0 ) {
                 format(query,sizeof(query),"%s `weapondata_slot%02d` = %d ",query,i,info);
             }
@@ -70277,140 +70387,91 @@ public SetVehicleZAngleEx(vehicleid,Float:angle) {
 
 
 // - - - - - - - - - -
-stock IsPlayerTaxiCustomer(driverid,playerid) {
-    for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-        if( Spieler[driverid][pTaxiKunden][i] == playerid ) {
+// IsPlayerTaxiCustomer(driverid,playerid) {
+//     for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
+//         if( Spieler[driverid][pTaxiKunden][i] == playerid) {
+//             return 1;
+//         }
+//     }
+//     return 0;
+// }
+
+RemovePlayerFromTaxi(driverid, playerid) {
+    for (new i; i < MAX_TAXI_KUNDEN; i++) {
+        if (Spieler[driverid][pTaxiKunden][i] == playerid) {
+            Spieler[driverid][pTaxiKunden][i] = INVALID_PLAYER_ID;
+            Spieler[driverid][pTaxiKundenStart][i] = 0;
+            PlayerTextDrawDestroy(playerid, Spieler[playerid][tdTaxi]);
             return 1;
         }
     }
+
     return 0;
 }
 
-stock RemovePlayerFromTaxi(driverid,playerid) {
-    for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-        if( Spieler[driverid][pTaxiKunden][i] == playerid ) {
-            Spieler[driverid][pTaxiKunden][i] = INVALID_PLAYER_ID;
-            Spieler[driverid][pTaxiKundenStart][i] = 0;
-            TextDrawHideForPlayer(playerid,Spieler[driverid][tdTaxi]);
-            //RemovePlayerFromVehicle(playerid);
-            return 1;
-        }
-    }
-    return 0;
-}
-stock ClearPlayerTaxiSlots(playerid, cancel = 0) {
-    if(cancel) {
-        for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-            if( Spieler[playerid][pTaxiKunden][i] != INVALID_PLAYER_ID ) {
-                RemovePlayerFromVehicle(Spieler[playerid][pTaxiKunden][i]);
-            }
-            TextDrawHideForPlayer( Spieler[playerid][pTaxiKunden][i] ,Spieler[playerid][tdTaxi]);
-            Spieler[playerid][pTaxiKunden][i] = INVALID_PLAYER_ID;
-            Spieler[playerid][pTaxiKundenStart][i] = 0;
-        }
-    }
-    else {
-        for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-            TextDrawHideForPlayer( Spieler[playerid][pTaxiKunden][i] ,Spieler[playerid][tdTaxi]);
-            Spieler[playerid][pTaxiKunden][i] = INVALID_PLAYER_ID;
-            Spieler[playerid][pTaxiKundenStart][i] = 0;
-        }
+ClearPlayerTaxiSlots(playerid, cancel = 0) {
+    for (new i; i < MAX_TAXI_KUNDEN; i++) {
+        if (Spieler[playerid][pTaxiKunden][i] == INVALID_PLAYER_ID) continue;
+        if (cancel) RemovePlayerFromVehicle(Spieler[playerid][pTaxiKunden][i]);
+        PlayerTextDrawDestroy(Spieler[playerid][pTaxiKunden][i], Spieler[Spieler[playerid][pTaxiKunden][i]][tdTaxi]);
+        Spieler[playerid][pTaxiKunden][i] = INVALID_PLAYER_ID;
+        Spieler[playerid][pTaxiKundenStart][i] = 0;
     }
     return 1;
 }
 
-stock HasPlayerTaxiCustomers(playerid) {
-    if( !IsPlayerNPC(playerid)) {
-        for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-            if( Spieler[playerid][pTaxiKunden][i] != INVALID_PLAYER_ID ) {
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
-stock HasPlayerFreeTaxiSlot(playerid) {
-    if( !IsPlayerNPC(playerid)) {
-        for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-            if( Spieler[playerid][pTaxiKunden][i] == INVALID_PLAYER_ID ) {
-                return 1;
-            }
-        }
-    }
+HasPlayerTaxiCustomers(playerid) {
+    if (IsPlayerNPC(playerid)) return 0;
+    for (new i; i < MAX_TAXI_KUNDEN; i++) if (Spieler[playerid][pTaxiKunden][i] != INVALID_PLAYER_ID) return 1;
     return 0;
 }
 
-stock AddPlayerTaxiSlot(playerid,targetid) {
-    //printf("AddPlayerTaxiSlot(%s,%s) %d %d",GetName(playerid),GetName(targetid),playerid,targetid);
-    for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-        if( Spieler[playerid][pTaxiKunden][i] == INVALID_PLAYER_ID ) {
-            new
-                vehicleid = GetPlayerVehicleID(playerid);
-            Spieler[playerid][pTaxiKunden][i] = targetid;
-            Spieler[playerid][pTaxiKundenStart][i] = g_VehicleDistance[vehicleid];
-            TextDrawShowForPlayer(targetid,Spieler[playerid][tdTaxi]);
-            TextDrawShowForPlayer(playerid,Spieler[playerid][tdTaxi]);
-            //printf("AddPlayerTaxiSlot(%s,%s) %d %d slot %d",GetName(playerid),GetName(targetid),playerid,targetid,i);
-            return 1;
-        }
+// HasPlayerFreeTaxiSlot(playerid) {
+//     if (IsPlayerNPC(playerid)) return 0;
+//     for (new i; i < MAX_TAXI_KUNDEN; i++) if( Spieler[playerid][pTaxiKunden][i] == INVALID_PLAYER_ID) return 1;
+//     return 0;
+// }
+
+AddPlayerTaxiSlot(playerid, targetid) {
+    for (new i; i < MAX_TAXI_KUNDEN; i++) {
+        if (Spieler[playerid][pTaxiKunden][i] != INVALID_PLAYER_ID) continue;
+        new vehicleid = GetPlayerVehicleID(playerid);
+        Spieler[playerid][pTaxiKunden][i] = targetid;
+        Spieler[playerid][pTaxiKundenStart][i] = g_VehicleDistance[vehicleid];
+        CreateTaxiTextdraw(playerid);
+        CreateTaxiTextdraw(targetid);
+        return 1;
     }
+
     return 0;
 }
 
-
-stock GetTaxiDriverCustomerSlot(driver,playerid) {
-    for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-        if( Spieler[driver][pTaxiKunden][i] == playerid ) {
-            return i;
-        }
-    }
+GetTaxiDriverCustomerSlot(driver, playerid) {
+    for (new i; i < MAX_TAXI_KUNDEN; i++) if (Spieler[driver][pTaxiKunden][i] == playerid) return i;
     return -1;
 }
-stock GetPlayerTaxiDistance(driver,playerid) {
-    new
-        slot,
-        vehicleid,
-        distance;
-    vehicleid = Spieler[driver][pTaxiVehicle];
-    slot = GetTaxiDriverCustomerSlot(driver,playerid);
-    if(slot != -1 ) {
-        distance =  (g_VehicleDistance[vehicleid] - Spieler[driver][pTaxiKundenStart][slot]);
-    }
-    return distance;
-}
 
-stock GetPlayerTaxiCosts(driver,playerid) {
-    new
-        slot,
-        vehicleid,
-        distance,
-        costs;
-    vehicleid = Spieler[driver][pTaxiVehicle];
-    slot = GetTaxiDriverCustomerSlot(driver,playerid);
-    if(slot != -1 ) {
-        distance =  (g_VehicleDistance[vehicleid] - Spieler[driver][pTaxiKundenStart][slot]);
+GetPlayerTaxiCosts(driver, playerid) {
+    new distance, costs, vehicleid = Spieler[driver][pTaxiVehicle], slot = GetTaxiDriverCustomerSlot(driver,playerid);
+    if (slot != -1) {
+        distance = g_VehicleDistance[vehicleid] - Spieler[driver][pTaxiKundenStart][slot];
         costs = (distance / 100) * Spieler[driver][pTaxiPreis];
     }
+
     return costs;
 }
-stock IsPlayerAnyTaxiCustomer(playerid) {
-    for(new i ; i < MAX_PLAYERS ; i++) {
-        if( IsPlayerConnected(i) && playerid != i ) {
-            for(new j ; j < MAX_TAXI_KUNDEN ; j++) {
-                if( Spieler[i][pTaxiKunden][j] == playerid ) {
-                    return i;
-                }
-            }
-        }
+
+IsPlayerAnyTaxiCustomer(playerid) {
+    for (new i; i < MAX_PLAYERS; i++) {
+        if (!IsPlayerConnected(i) || playerid == i) continue;
+        for (new j; j < MAX_TAXI_KUNDEN; j++) if (Spieler[i][pTaxiKunden][j] == playerid) return i;
     }
+
     return -1;
 }
-stock SendTaxiMessage(driver,color,msg[]) {
-    for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-        if( Spieler[driver][pTaxiKunden][i] != INVALID_PLAYER_ID ) {
-            SendClientMessage(Spieler[driver][pTaxiKunden][i],color,msg);
-        }
-    }
+
+SendTaxiMessage(driver,color,msg[]) {
+    for (new i; i < MAX_TAXI_KUNDEN; i++) if (Spieler[driver][pTaxiKunden][i] != INVALID_PLAYER_ID) SendClientMessage(Spieler[driver][pTaxiKunden][i], color, msg);
     return 1;
 }
 

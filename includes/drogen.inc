@@ -8,6 +8,8 @@
 #define DROGENPFLANZEN_WASSER_COOLDOWN 30*60
 #define DROGENPFLANZEN_WASSER_NOTICE 10*60
 
+#define MAX_SAMEN 10
+
 enum e_DrogenPflanzen {
     Float:DP_fX,
     Float:DP_fY,
@@ -47,8 +49,10 @@ enum E_SEED_POINT {
 
 new const seedPoints[][E_SEED_POINT] = {
     {-85.5813, 2.2551, 3.1172, "Bauernhof in Blueberry Acres"},
-    {760.485779, 378.900787, 23.168301, "Hütte in Red County"},
-    {797.553528, -617.843811, 16.335899, "Garage in Dillimore"}
+    {760.4857, 378.9007, 23.1683, "Hütte in Red County"},
+    {797.5535, -617.8438, 16.3358, "Garage in Dillimore"},
+    {-1669.6538, 2598.6924, 81.4453, "Hütte in LV"},
+    {-2533.2542, -21.5024, 25.6172, "Markt in SF"}
 };
 
 new g_DrogenPflanzenCount = 0;
@@ -60,6 +64,13 @@ new g_DrogenPflanzen[MAX_DROGEN_PFLANZEN][e_DrogenPflanzen];
 hook OnPlayerDisconnect(playerid, reason) {
     RemovePlayerFromPlantArrayData(playerid);
     return 1;
+}
+
+hook OnGameModeInit() {
+    for (new i = 0; i < sizeof(seedPoints); i++) {
+        CreateDynamicPickup(1279, 1, seedPoints[i][SEED_POINT_fX], seedPoints[i][SEED_POINT_fY], seedPoints[i][SEED_POINT_fZ], 0);
+        CreateDynamic3DTextLabel("Spice Drogensamen\n" COLOR_HEX_WHITE "Tippe /Getsamen", COLOR_YELLOW, seedPoints[i][SEED_POINT_fX], seedPoints[i][SEED_POINT_fY], seedPoints[i][SEED_POINT_fZ], 15.0);
+    }
 }
 
 // Custom functions
@@ -216,6 +227,7 @@ public Pulse_DrogenPflanzen() {
 // Commands
 
 COMMAND:pflanzeverbrennen(playerid) {
+    if (!IsPlayerExecutive(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Exekutivbeamter.");
     new pflanze = GetClosestDrogenPflanze(playerid, 3.0);
     if (pflanze == -1) return SendClientMessage(playerid, COLOR_RED, "Es ist keine Spicepflanze in deiner Nähe.");
     SendClientMessage(playerid, COLOR_YELLOW, "Die Spicepflanze wurde verbrannt.");
@@ -388,16 +400,8 @@ COMMAND:sellspice(playerid,params[]) {
     return 1;
 }
 
-COMMAND:getsamen(playerid,params[]) {
-    if( Spieler[playerid][pFraktion] != 15 ) {
-        SendClientMessage(playerid,COLOR_RED,"Du kannst mit Samen nichts anfangen.");
-        return 1;
-    }
-    if( Spieler[playerid][pDrogenSamen] >= 3 ) {
-        SendClientMessage(playerid,COLOR_RED,"Du besitzt bereits die maximale Anzahl an Samen.");
-        return 1;
-    }
-
+COMMAND:getsamen(playerid, params[]) {
+    if (Spieler[playerid][pFraktion] != 15) return SendClientMessage(playerid, COLOR_RED, "Du kannst mit Samen nichts anfangen.");
     new bool:bAtPoint = false;
     for (new i = 0; i < sizeof(seedPoints); i++) {
         if (IsPlayerInRangeOfPoint(playerid, 3.0, seedPoints[i][SEED_POINT_fX], seedPoints[i][SEED_POINT_fY], seedPoints[i][SEED_POINT_fZ])) {
@@ -406,19 +410,10 @@ COMMAND:getsamen(playerid,params[]) {
         }
     }
 
-    if (!bAtPoint) return SendClientMessage(playerid, COLOR_RED, "Du bist an keinem Samenpunkt (/samenpunkte).");
-
-    new
-        total,
-        String[128],
-        drogensamen;
-    drogensamen = RandomEx(8,10);
-    total = Spieler[playerid][pDrogenSamen] + drogensamen;
-    if( total > 15 ) total = 15;
-    format(String,sizeof(String),"Du hast nun insgesamt %d Samen (+ %d Stk)", total , total - Spieler[playerid][pDrogenSamen]);
-    SendClientMessage(playerid,COLOR_YELLOW,String);
-    Spieler[playerid][pDrogenSamen] = total;
-    Spieler[playerid][unixGetSamenCooldown] = gettime() + 60*60;
+    if (!bAtPoint) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist an keinem Samenpunkt (/samenpunkte).");
+    if (Spieler[playerid][pDrogenSamen] >= MAX_SAMEN) return SCMFormatted(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast bereits %d Samen bei dir.", MAX_SAMEN);
+    SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast nun %d Samen (+ %d Stück).", MAX_SAMEN, MAX_SAMEN - Spieler[playerid][pDrogenSamen]);
+    Spieler[playerid][pDrogenSamen] = MAX_SAMEN;
     return 1;
 }
 
