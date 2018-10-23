@@ -9,7 +9,7 @@ static Float:DRAWDISTANCE   = 350.0;
 
 // Parcour points
 #define PARCOUR_SPAWN_POINT          1432.9171, -1459.6316, 125.3672
-#define PARCOUR_SPAWN_POINT_FACING   180.0
+#define PARCOUR_SPAWN_POINT_FACING   312.0
 
 // Map variables
 new object_parcour[56];

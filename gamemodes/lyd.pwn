@@ -37820,7 +37820,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     if (Spieler[playerid][pJailed] == 0) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht im Gefängnis!");
                     if (Spieler[playerid][pJailed] != 1) return SendClientMessage(playerid, COLOR_RED, "Du kannst hier keinen Anwalt rufen!");
-                    SendClientMessage(playerid, COLOR_BLUE, "Du hast ein Anwalt beantragt, warte auf eine Rückmeldung!");
+                    SendClientMessage(playerid, COLOR_BLUE, "Du hast einen Anwalt beantragt, warte auf eine Rückmeldung!");
                     if(NeedAWALT[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Du hast bereits einen Anwalt gerufen, warte auf die Annahme!");
                     new bool:IsOnline;
                     for(new i = 0 ; i < MAX_PLAYERS ; i++)
@@ -37890,7 +37890,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==4)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 2100)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 22, 50);
                         GivePlayerCash(playerid, -2100);
@@ -37899,7 +37899,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==5)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 50)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 23, 50);
                         GivePlayerCash(playerid, -2600);
@@ -37908,7 +37908,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==6)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 3300)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 24, 50);
                         GivePlayerCash(playerid, -3300);
@@ -37917,7 +37917,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==7)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 6400)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 25, 20);
                         GivePlayerCash(playerid, -6400);
@@ -37926,7 +37926,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==8)
                     {
-                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe");
+                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 4500)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 29, 130);
                         GivePlayerCash(playerid, -6800);
@@ -37935,7 +37935,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==9)
                     {
-                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe");
+                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 11000)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 31, 130);
                         GivePlayerCash(playerid, -11000);
@@ -37953,7 +37953,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==11)
                     {
-                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe");
+                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 12000)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 33, 30);
                         GivePlayerCash(playerid, -12000);
@@ -37998,56 +37998,56 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(listitem==4)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 1500)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 22, 100);
                         GivePlayerCash(playerid, -1500);
                     }
                     if(listitem==5)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 1800)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 23, 100);
                         GivePlayerCash(playerid, -1800);
                     }
                     if(listitem==6)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 2600)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 24, 100);
                         GivePlayerCash(playerid, -2600);
                     }
                     if(listitem==7)
                     {
-                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe");
+                        if(!Spieler[playerid][pGunLic]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse A für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 5000)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 25, 50);
                         GivePlayerCash(playerid, -5000);
                     }
                     if(listitem==8)
                     {
-                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe");
+                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 5200)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 29, 150);
                         GivePlayerCash(playerid, -5200);
                     }
                     if(listitem==9)
                     {
-                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe");
+                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 8200)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 31, 200);
                         GivePlayerCash(playerid, -8200);
                     }
                     if(listitem==10)
                     {
-                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe");
+                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 9200)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 30, 200);
                         GivePlayerCash(playerid, -9200);
                     }
                     if(listitem==11)
                     {
-                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe");
+                        if(!Spieler[playerid][pGunLicB]) return SendClientMessage(playerid,COLOR_RED,"Du benötigt die Waffenschein Klasse B für diese Waffe.");
                         if(GetPlayerMoney(playerid) < 10000)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht genügend Geld!");
                         GivePlayerWeapon(playerid, 33, 50);
                         GivePlayerCash(playerid, -10000);
