@@ -398,6 +398,13 @@ new savewetterid;
 // Global vars
 new JAIL_TIMEOUT = 120;
 
+enum {
+    WEAPON_DEPOT_OWN,
+    WEAPON_DEPOT_OTHER,
+    WEAPON_DEPOT_CLOSED,
+    WEAPON_DEPOT_NONE
+}
+
 //Badwords für Badwordsystem
 new waffenlagerzu[25];
 new word[11][]= {
@@ -7880,6 +7887,8 @@ CMD:sp(playerid)
 
 CMD:nagelband(playerid) return cmd_sp(playerid);
 
+CMD:findatm(playerid) return cmd_suchatm(playerid);
+
 CMD:suchatm(playerid)
 {
     new Float:x, Float:y, Float:z, Float:distance, Float:smallestDistance = 10000, index = 0;
@@ -7888,7 +7897,7 @@ CMD:suchatm(playerid)
         if ((distance = GetDistance(x, y, z, ATM[i][0], ATM[i][1], ATM[i][2])) < smallestDistance) index = i, smallestDistance = distance;
 
     SetPlayerCheckpointEx(playerid, ATM[index][0], ATM[index][1], ATM[index][2], 2.0, CP_NAVI1);
-    return SendClientMessage(playerid, COLOR_GREEN, "[INFO] {FFFFFF}Der nächste Bankautomat wurde dir auf der Rot Karte markiert.");
+    return SendClientMessage(playerid, COLOR_GREEN, "[INFO] {FFFFFF}Der nächste Bankautomat wurde dir auf der Karte Rot markiert.");
 }
 
 CMD:flugzeugrepair(playerid)
@@ -9012,8 +9021,12 @@ stock ShowEventItemDialog(playerid, type = DIALOG_EVENT_ITEM_MENU, extravar = 0)
             return ShowPlayerDialog(playerid, DIALOG_EVENT_ITEM_WEAPONS, DIALOG_STYLE_LIST, dialogCaption, dialogText, "Auswählen", "Zurück");
         }
         case DIALOG_EVENT_ITEM_AMMO: {
-            format(dialogText, sizeof(dialogText), "{FFFFFF}Item: {7599FF}%s\n{FFFFFF}Gebe an, wieviel Munition bzw. welchen Wert das Item haben soll:"
-                , g_EventItems[GetPVarInt(playerid, "EVENTITEM_INDEX")][EVENT_ITEM_NAME]);
+            new index = aEventItems[extravar][AEVENT_ITEM_INDEX] - 1, replaceString[128];
+            if (index < 0) replaceString = "";
+            else if (index == GetPVarInt(playerid, "EVENTITEM_INDEX")) format(replaceString, sizeof(replaceString), "{FFFFFF}Eingestellter Wert: {7599FF}%d\n", aEventItems[extravar][AEVENT_ITEM_AMMO]);
+            else format(replaceString, sizeof(replaceString), "{FFFFFF}Ersetzt: {7599FF}%s\n", g_EventItems[index][EVENT_ITEM_NAME]);
+            format(dialogText, sizeof(dialogText), "{FFFFFF}Item: {7599FF}%s\n%s\n{FFFFFF}Gebe an, wieviel Munition bzw. welchen Wert das Item haben soll:"
+                , g_EventItems[GetPVarInt(playerid, "EVENTITEM_INDEX")][EVENT_ITEM_NAME], replaceString);
 
             return ShowPlayerDialog(playerid, DIALOG_EVENT_ITEM_AMMO, DIALOG_STYLE_INPUT, "{FF9900}Eventitems - Munition", dialogText, "Hinzufügen", "Abbrechen");
         }
@@ -10999,8 +11012,7 @@ public OnPlayerJail(playerid)
 				NeedAWALT[playerid] = 0;
 			    SetPlayerFacingAngle(playerid, LSPD_INTERIOR_ENTER_FACING);
 			    SetCameraBehindPlayer(playerid);
-			    SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
-				UnfreezePlayer(playerid);
+			    SetPlayerPosEx(playerid, 960.7043, -1580.0457, 13.5469, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
 				paydaywait[playerid]=0;
 			}
 		}
@@ -17152,6 +17164,7 @@ CMD:veh(playerid, params[])
     new vehicle;
     vehicle = CreateVehicle(vID, x,y,z, angle, color1, color2, -1);
     SetVehicleVirtualWorld(vehicle, GetPlayerVirtualWorld(playerid));
+    LinkVehicleToInterior(vehicle, GetPlayerInterior(playerid));
     PutPlayerInVehicle(playerid, vehicle, 0);
     gGas[vehicle] = GetMaxTank(vehicle);
     gMaxGas[vehicle] = GetMaxTank(vehicle);
@@ -17173,6 +17186,7 @@ CMD:supauto(playerid, params[])
     new vehicle;
     vehicle = CreateVehicle(560, x, y, z, angle, 3, 3, -1);
     SetVehicleVirtualWorld(vehicle, GetPlayerVirtualWorld(playerid));
+    LinkVehicleToInterior(vehicle, GetPlayerInterior(playerid));
     PutPlayerInVehicle(playerid, vehicle, 0);
     gGas[vehicle] = GetMaxTank(vehicle);
     gMaxGas[vehicle] = GetMaxTank(vehicle);
@@ -25088,15 +25102,13 @@ public OnPlayerEnterCheckpoint(playerid)
     }
     else if( CP_PRISONRUN == pCheckpoint[playerid] ) {
         Spieler[playerid][pPrisonRunCount]++;
-        Spieler[playerid][pPrisonRunStep]++;
         DisablePlayerCheckpointEx(playerid);
         if( Spieler[playerid][pPrisonRunCount] >= Spieler[playerid][pPrisonRun] ) {
             Spieler[playerid][pPrisonRunCount] = 0;
             Spieler[playerid][pPrisonRun] = 0;
-            SetPlayerPos(playerid,1544.4974,-1675.7938,13.5585);
-            SetPlayerInterior(playerid,0);
-            SetPlayerVirtualWorld(playerid,0);
+            SetPlayerFacingAngle(playerid, LSPD_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
+            SetPlayerPosEx(playerid, 960.7043, -1580.0457, 13.5469, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
             SendClientMessage(playerid,COLOR_GREEN,"Du hast alle Checkpoints durchlaufen. Hoffentlich war das eine Lehre für dich!");
         }
         else {
@@ -29667,7 +29679,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         new ammo;
         if (sscanf(inputtext, "d", ammo) || ammo < 1 || ammo > 100000) {
             SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Gebe einen Wert zwischen 1 und 100.000 an.");
-            return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_AMMO, GetPVarInt(playerid, "EVENTITEM_INDEX"));
+            return ShowEventItemDialog(playerid, DIALOG_EVENT_ITEM_AMMO, g_EventItems[GetPVarInt(playerid, "EVENTITEM_INDEX")][EVENT_ITEM_SLOT]);
         }
 
         new index = GetPVarInt(playerid, "EVENTITEM_INDEX");
@@ -32356,7 +32368,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             }
         }
         case DIALOG_WAFFENLAGER: {
-            if(response) {
+            if (response) {
+                if (IsPlayerAtWaffenlager(playerid) != WEAPON_DEPOT_OWN) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht mehr am Waffenlager.");
                 // Einlagern
                 if( Spieler[playerid][pFraktion] == 0 ) {
                     SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
@@ -32377,6 +32390,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         }
         case DIALOG_WAFFENLAGER_LAGERN: {
             if(response) {
+                if (IsPlayerAtWaffenlager(playerid) != WEAPON_DEPOT_OWN) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht mehr am Waffenlager.");
                 new
                     menge;
                 if(sscanf(inputtext,"d",menge)) {
@@ -32413,13 +32427,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             }
         }
         case DIALOG_WAFFENLAGER_BAUEN: {
-            if(response) {
-                new
-                    waffenid,
-                    waffe[24],
-                    price,
-                    String[128],
-                    index;
+            if (response) {
+                if (IsPlayerAtWaffenlager(playerid) != WEAPON_DEPOT_OWN) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht mehr am Waffenlager.");
+                new waffenid, waffe[24], price, String[128], index;
                 if( Spieler[playerid][pFraktion] == 0 ) {
                     SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
                     return 1;
@@ -32451,6 +32461,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             }
         }
         case DIALOG_WAFFENLAGER_INFO: {
+            if (IsPlayerAtWaffenlager(playerid) != WEAPON_DEPOT_OWN) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht mehr am Waffenlager.");
             ShowWaffenLager(playerid,0);
         }
         case DIALOG_SELLSPICE: {
@@ -33238,20 +33249,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 GetPlayerPos(playerid,x,y,z);
                 if(listitem == 0) { // Auto
                     if( Spieler[playerid][pCarLic] == 1 ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Du hast bereits einen Auto Führerschein");
+                        return SendClientMessage(playerid,COLOR_RED,"Du hast bereits einen Auto Führerschein.");
                     }
                     if( gettime() < Spieler[playerid][punixFSperre] ) {
-                        return SendClientMessage(playerid,COLOR_YELLOW,"Du hast noch eine Fahrlizenz Sperre");
+                        return SendClientMessage(playerid,COLOR_YELLOW,"Du hast noch eine Fahrlizenz Sperre.");
                     }
                     modelid = 445;
                     preis = 10000;
                 }
                 else if(listitem == 1 ) { // Motorrad
                     if( Spieler[playerid][pMotoLic] == 1 ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Du hast bereits einen Motorrad Führerschein");
+                        return SendClientMessage(playerid,COLOR_RED,"Du hast bereits einen Motorrad Führerschein.");
                     }
                     if( gettime() < Spieler[playerid][punixMotoSperre] ) {
-                        return SendClientMessage(playerid,COLOR_YELLOW,"Du hast noch eine Fahrlizenz Sperre");
+                        return SendClientMessage(playerid,COLOR_YELLOW,"Du hast noch eine Fahrlizenz Sperre.");
                     }
                     preis = 15000;
                     modelid = 461;
@@ -61030,40 +61041,32 @@ COMMAND:newsspenden(playerid,params[]) {
     SendClientMessageToAll(COLOR_YELLOW,String);
     return 1;
 }
+
+IsPlayerAtWaffenlager(playerid) {
+    for (new i; i < g_iWaffenLager; i++) {
+        if (!IsPlayerInRangeOfPoint(playerid, 3.0, g_WaffenLager[i][WL_fX], g_WaffenLager[i][WL_fY], g_WaffenLager[i][WL_fZ])) continue;
+        if (Spieler[playerid][pFraktion] != g_WaffenLager[i][WL_iFraktion]) return WEAPON_DEPOT_OTHER;
+        if (!waffenlagerzu[Spieler[playerid][pFraktion]]) return WEAPON_DEPOT_OWN;
+        return WEAPON_DEPOT_CLOSED;
+    }
+
+    return WEAPON_DEPOT_NONE;
+}
+
 COMMAND:waffenlager(playerid,params[]) {
-    if(HasWeaponBlock(playerid))
-    {
-        SendClientMessage(playerid,COLOR_RED,"Du kannst diesen Befehl nicht ausführen!");
+    if (!Spieler[playerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
+    if (HasWeaponBlock(playerid)) {
+        SendClientMessage(playerid, COLOR_RED, "Du kannst diesen Befehl nicht ausführen!");
         return SendWeaponBlockInfo(playerid);
     }
-    if( Spieler[playerid][pFraktion] == 0 )
-    {
-        SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
-        return 1;
+
+    switch (IsPlayerAtWaffenlager(playerid)) {
+        case WEAPON_DEPOT_OWN: return ShowWaffenLager(playerid, 0);
+        case WEAPON_DEPOT_OTHER: return SendClientMessage(playerid, COLOR_RED, "Das ist nicht das Waffenlager deiner Fraktion.");
+        case WEAPON_DEPOT_CLOSED: return SendClientMessage(playerid, COLOR_RED, "Das Waffenlager ist geschlossen!");
+        case WEAPON_DEPOT_NONE: return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der Nähe eines Waffenlagers.");
     }
-    for(new i ; i < g_iWaffenLager ; i++)
-    {
-        if( IsPlayerInRangeOfPoint(playerid,3.0,g_WaffenLager[i][WL_fX],g_WaffenLager[i][WL_fY],g_WaffenLager[i][WL_fZ]))
-        {
-            if( Spieler[playerid][pFraktion] == g_WaffenLager[i][WL_iFraktion] )
-            {
-                if(waffenlagerzu[Spieler[playerid][pFraktion]]==0)
-                {
-                    ShowWaffenLager(playerid,0);
-                }
-                else
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Das Waffenlager ist geschlossen!");
-                }
-            }
-            else
-            {
-                SendClientMessage(playerid, COLOR_RED, "Das ist nicht das Waffenlager deiner Fraktion.");
-            }
-            return 1;
-        }
-    }
-    SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der Nähe eines Waffenlagers.");
+
     return 1;
 }
 
@@ -61075,6 +61078,7 @@ stock GetWaffenLagerIndex( fraktion ) {
     }
     return -1;
 }
+
 stock ShowWaffenLager(playerid, menuid ) {
     if( menuid == 0 ) {
         ShowPlayerDialog(playerid,DIALOG_WAFFENLAGER,DIALOG_STYLE_LIST, COLOR_HEX_LIGHTBLUE "Waffenlager","Einlagern\nWaffe bauen\nLagerinformation","Weiter","Abbruch");
@@ -65783,7 +65787,7 @@ public GangZone_Pulse() {
                 format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$50.000 und das Gebiet geht an die %s",GetFactionNameOfFaction(winner));
                 SendFraktionMessage(winner,COLOR_YELLOW,String);
                 SendFraktionMessage(loser,COLOR_YELLOW,String);
-                format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben das Gangfight mit %dP. gegen die %s gewonnen!",GetFactionNameOfFaction(winner),score,GetFactionNameOfFaction(loser));
+                format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben den Gangfight mit %dP. gegen die %s gewonnen!",GetFactionNameOfFaction(winner),score,GetFactionNameOfFaction(loser));
                 SendClientMessageToAll(COLOR_YELLOW, String);
                 //
                 new team1_killer = GZ_GetBestKiller(winner);
@@ -66113,13 +66117,13 @@ COMMAND:gangfightstop(playerid,params[]) {
         format(gangfightwettenp[b],32,"");
     }
 
-    format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF} Die %s hat das Gangfight aufgegeben. Die %s haben gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
+    format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF} Die %s hat den Gangfight aufgegeben. Die %s haben gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
     SendFraktionMessage( winner , COLOR_YELLOW, String );
     SendFraktionMessage( loser , COLOR_YELLOW, String );
     format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$40.000 + 25.000 Waffenteile und das Gebiet geht an die %s. ",GetFactionNameOfFaction(winner));
     SendFraktionMessage( winner , COLOR_YELLOW, String );
     SendFraktionMessage( loser , COLOR_YELLOW, String );
-    format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben das Gangfight aufgegeben. Die %s haben somit gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
+    format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben den Gangfight aufgegeben. Die %s haben somit gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
     SendClientMessageToAll(COLOR_YELLOW, String);
     GangZoneStopFlashForAll( g_GangZone[index][GZ_iGangZoneID] );
 
@@ -67072,9 +67076,9 @@ stock SetPlayerPrisonRun(playerid) {
     SetPlayerPos(playerid,-1403.6885,-254.3693,1043.6117);
     SetPlayerVirtualWorld(playerid,0);
     SetPlayerInterior(playerid,7);
+    Spieler[playerid][pPrisonRunStep] = 0;
     DisablePlayerCheckpointEx(playerid);
     SetPlayerPrisonRunCheckpoint(playerid);
-    Spieler[playerid][pPrisonRunStep] = 0;
     return 1;
 }
 stock RemovePlayerPrisonRun(playerid) {
@@ -67083,11 +67087,10 @@ stock RemovePlayerPrisonRun(playerid) {
     return 1;
 }
 stock SetPlayerPrisonRunCheckpoint(playerid) {
-    new index;
-    index = Spieler[playerid][pPrisonRunStep] % sizeof(g_PrisonRunCheckpoint);
-    // printf("SetPlayerPrisonRunCheckpoint index %d pPrisonRunStep %d",index,Spieler[playerid][pPrisonRunStep]);
-
+    new index = Spieler[playerid][pPrisonRunStep];
     SetPlayerCheckpointEx(playerid, g_PrisonRunCheckpoint[index][PRC_fX], g_PrisonRunCheckpoint[index][PRC_fY], g_PrisonRunCheckpoint[index][PRC_fZ], 4.0 , CP_PRISONRUN );
+    Spieler[playerid][pPrisonRunStep]++;
+    if (Spieler[playerid][pPrisonRunStep] >= sizeof(g_PrisonRunCheckpoint)) Spieler[playerid][pPrisonRunStep] = 0;
     return 1;
 }
 
@@ -70688,6 +70691,8 @@ stock ResetVehiclePassengers(vehicleid) {
     }
     return 1;
 }
+
+CMD:fixcar(playerid, params[]) return cmd_fahrzeugreparieren(playerid, params);
 
 COMMAND:fahrzeugreparieren(playerid,params[]) {
     #pragma unused params
