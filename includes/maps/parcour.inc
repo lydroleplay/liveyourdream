@@ -28,6 +28,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 hook OnPlayerSpawn(playerid) {
     if (GetPVarInt(playerid, "PARCOUR")) {
         SetPlayerPos(playerid, PARCOUR_SPAWN_POINT);
+        SetPlayerFacingAngle(playerid, PARCOUR_SPAWN_POINT_FACING);
+        SetCameraBehindPlayer(playerid);
         SetPlayerSkin(playerid, Spieler[playerid][pSkin]);
         SetPlayerHealth(playerid, 100.0);
         DeletePVar(playerid, "PARCOUR");

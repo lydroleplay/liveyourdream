@@ -179,6 +179,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             GivePlayerWeapon(playerid, 24, 150);
             new message[145];
             format(message, sizeof(message), "%s hat die Paintball-Halle betreten.", GetName(playerid));
+            paintballInfo[playerid][E_PB_INFO_STATUS] = PAINTBALL_STATUS_NORMAL;
             SendPaintballMessage(COLOR_GREEN, message);
             return 1;
         }
@@ -508,7 +509,7 @@ CMD:paintball(playerid, params[]) {
     paintballInfo[playerid][E_PB_INFO_STATUS] = PAINTBALL_STATUS_MENU;
 
     new playerCount;
-    for (new i = 0; i <= GetPlayerPoolSize(); i++) if (paintballInfo[playerid][E_PB_INFO_STATUS] == PAINTBALL_STATUS_NORMAL) playerCount++;
+    for (new i = 0; i <= GetPlayerPoolSize(); i++) if (PlayerIsPaintballing[i]) playerCount++;
     new dialogText[128];
     format(dialogText, sizeof(dialogText), "Normaler Modus (%d Spieler)\n1v1 Match\n{86989A}Weitere werden folgen...", playerCount);
     ShowPlayerDialog(playerid, DIALOG_PAINTBALL_MODE, DIALOG_STYLE_LIST, "{47A1AE}Paintball - Modus", dialogText, "Weiter", "Abbrechen");

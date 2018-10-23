@@ -55,7 +55,7 @@ hook OnGameModeInit() {
     object_paintballLobbyInterior[4] = CreateDynamicObject(1656, 2228.8217, -1150.5118, 1027.6429, -90.0000, 0.0000, 90.0000, VW_PAINTBALLLOBBY, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Esc_step
     SetDynamicObjectMaterial(object_paintballLobbyInterior[4], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0x00000000);
     object_paintballLobbyInterior[5] = CreateDynamicObject(19172, 2228.7055, -1150.5008, 1027.6279, 0.0000, 0.0000, -90.0000, VW_PAINTBALLLOBBY, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
-    SetDynamicObjectMaterialText(object_paintballLobbyInterior[5], 0, "LEER", OBJECT_MATERIAL_SIZE_256x128, "Arial", 20, 1, 0xFFFFFFFF, 0x00000000, 1);
+    SetDynamicObjectMaterialText(object_paintballLobbyInterior[5], 0, "STAFF", OBJECT_MATERIAL_SIZE_256x128, "Arial", 20, 1, 0xFFFFFFFF, 0x00000000, 1);
     SetDynamicObjectMaterial(object_paintballLobbyInterior[5], 1, 19297, "matlights", "invisible", 0x00000000);
     object_paintballLobbyInterior[6] = CreateDynamicObject(19464, 2227.8601, -1143.8398, 1025.8220, 0.0000, 0.0000, 90.0000, VW_PAINTBALLLOBBY, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_paintballLobbyInterior[6], 0, 19853, "mihouse1", "brownwall1", 0xFFBC8F8F);
@@ -102,7 +102,7 @@ hook OnGameModeInit() {
     object_paintballLobbyInterior[44] = CreateDynamicObject(18075, 2218.4812, -1149.1440, 1028.3675, 0.0000, 0.0000, 0.0000, VW_PAINTBALLLOBBY, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lightD
     object_paintballLobbyInterior[45] = CreateDynamicObject(2987, 2223.5493, -1155.4150, 1026.0246, 0.0000, 0.0000, 180.0000, VW_PAINTBALLLOBBY, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lxr_motel_doorsim
     object_paintballLobbyInterior[46] = CreateDynamicObject(19172, 2223.5305, -1155.3131, 1027.5378, 0.0000, 0.0000, -180.0000, VW_PAINTBALLLOBBY, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
-    SetDynamicObjectMaterialText(object_paintballLobbyInterior[46], 0, "LEER", OBJECT_MATERIAL_SIZE_256x128, "Arial", 20, 1, 0xFFFFFFFF, 0x00000000, 1);
+    SetDynamicObjectMaterialText(object_paintballLobbyInterior[46], 0, "STAFF", OBJECT_MATERIAL_SIZE_256x128, "Arial", 20, 1, 0xFFFFFFFF, 0x00000000, 1);
     SetDynamicObjectMaterial(object_paintballLobbyInterior[46], 1, 19297, "matlights", "invisible", 0x00000000);
     object_paintballLobbyInterior[47] = CreateDynamicObject(1656, 2223.5266, -1155.4348, 1027.5531, -90.0000, 90.0000, 90.0000, VW_PAINTBALLLOBBY, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Esc_step
     SetDynamicObjectMaterial(object_paintballLobbyInterior[47], 0, 14581, "ab_mafiasuitea", "cof_wood2", 0x00000000);

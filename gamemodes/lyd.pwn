@@ -6756,8 +6756,8 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][pTruckerBlock] = _gettime;
     permissionleavegz[playerid]=0;
     for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-        Spieler[playerid][pTaxiKundenStart][0] = 0;
-        Spieler[playerid][pTaxiKunden][0] = INVALID_PLAYER_ID;
+        Spieler[playerid][pTaxiKundenStart][i] = 0;
+        Spieler[playerid][pTaxiKunden][i] = INVALID_PLAYER_ID;
     }
 
     //Player 3DText's
@@ -7484,6 +7484,7 @@ public OnPlayerDisconnect(playerid, reason)
     if (PlayerIsPaintballing[playerid]) {
         new message[145];
         format(message, sizeof(message), "%s hat die Paintball-Halle verlassen.", GetName(playerid));
+        paintballInfo[playerid][E_PB_INFO_STATUS] = PAINTBALL_STATUS_NONE;
         SendPaintballMessage(COLOR_ORANGE, message);
     }
 
@@ -7780,8 +7781,8 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pTaxiVehicle] = INVALID_VEHICLE_ID;
     permissionleavegz[playerid]=0;
     for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-        Spieler[playerid][pTaxiKundenStart][0] = 0;
-        Spieler[playerid][pTaxiKunden][0] = INVALID_PLAYER_ID;
+        Spieler[playerid][pTaxiKundenStart][i] = 0;
+        Spieler[playerid][pTaxiKunden][i] = INVALID_PLAYER_ID;
     }
     return 1;
 }
@@ -33678,7 +33679,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* HAUSTIER BEFEHLE *: {FFFFFF}/Haustier, /Sellhaustier, /Fuettern, /Haustiershop");
                 }
                 else if(listitem == 8 ) {
-                        SendClientMessage(playerid, COLOR_BLUE, "* WEITERE BEFEHLE *: {FFFFFF}/Leaderhelp, /Clubhelp, /Werbetafelkaufen, /Werbetafelfinden, /Werbetafel");
+                        SendClientMessage(playerid, COLOR_BLUE, "* WEITERE BEFEHLE *: {FFFFFF}/Leaderhelp, /Clubhelp, /Werbetafelkaufen, /Werbetafelfinden, /Werbetafel, /Eventpreise");
                 }
                 else if(listitem == 9 ) {
                     if(Spieler[playerid][pJob] == 1)
@@ -34470,7 +34471,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             String[128];
                         driver = VehicleDriverID(vehicleid);
                         if( IsPlayerConnected(driver) ) {
-                            format(String,sizeof(String),"Fahrgast %s hat deine Taxi-Fahrt bestätigt.",GetName(playerid));
+                            format(String,sizeof(String),"Fahrgast %s hat deine Taxifahrt bestätigt.",GetName(playerid));
                             SendClientMessage(driver,COLOR_GREEN,String);
                             format(String,sizeof(String),"Deine Taxifahrt beginnt nun. Die Fahrt kostet dich $%d pro 100m Fahrt!",Spieler[driver][pTaxiPreis]);
                             SendClientMessage(playerid,COLOR_ORANGE,String);
@@ -52840,7 +52841,7 @@ COMMAND:starttaxi(playerid,params[]) {
         return SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht in einem Taxi");
     }
     if( HasPlayerTaxiCustomers(playerid)) {
-        return SendClientMessage(playerid,COLOR_RED,"Du hast bereits Fahrgäste. Aktion ist daher nicht möglich");
+        return SendClientMessage(playerid,COLOR_RED,"Du hast bereits Fahrgäste. Aktion ist daher nicht möglich.");
     }
     new
         String[64];
@@ -53131,6 +53132,7 @@ DestroyTaxiTextdraw(playerid) {
 }
 
 CreateTaxiTextdraw(playerid) {
+    if (Spieler[playerid][tdTaxi] != PlayerText:INVALID_TEXT_DRAW) return 1;
     Spieler[playerid][tdTaxi] = CreatePlayerTextDraw(playerid, 320.0, 361.0, "~y~Taxameter~n~~n~~w~Wird geladen...");
     PlayerTextDrawAlignment(playerid, Spieler[playerid][tdTaxi], 2);
     PlayerTextDrawBackgroundColor(playerid, Spieler[playerid][tdTaxi], 255);
@@ -53159,7 +53161,7 @@ public Pulse_Taxi() {
         if (HasPlayerTaxiCustomers(driverid)) {
             for (new i; i < MAX_TAXI_KUNDEN; i++) {
                 if (Spieler[driverid][pTaxiKunden][i] == INVALID_PLAYER_ID) continue;
-                format(Mitfahrer, sizeof(Mitfahrer), "%s~y~~h~%s~w~: ~g~$%d", Mitfahrer, GetName(Spieler[driverid][pTaxiKunden][i]), 
+                format(Mitfahrer, sizeof(Mitfahrer), "%s~y~~h~%s~w~: ~g~$%d\n", Mitfahrer, GetName(Spieler[driverid][pTaxiKunden][i]), 
                     GetPlayerTaxiCosts(driverid, Spieler[driverid][pTaxiKunden][i]));
             }
 
@@ -53217,6 +53219,8 @@ public CancelTaxi(driverid, vehicle, mode) {
         Delete3DTextLabel(g_t3dTaxi[vehicle]);
         g_t3dTaxi[vehicle] = Text3D:INVALID_3DTEXT_ID;
     }
+
+    DestroyTaxiTextdraw(driverid);
 
     return 1;
 }
@@ -53470,6 +53474,8 @@ CMD:eventpreise(playerid) {
 
     return ShowPlayerDialog(playerid, DIALOG_EVENTREWARDS, DIALOG_STYLE_TABLIST_HEADERS, dialogCaption, dialogText, "Einlösen", "Abbrechen");
 }
+
+CMD:eventpunkte(playerid, params[]) return cmd_giveeventpoints(playerid, params);
 
 CMD:giveeventpoints(playerid, params[]) {
     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
@@ -70392,7 +70398,7 @@ RemovePlayerFromTaxi(driverid, playerid) {
         if (Spieler[driverid][pTaxiKunden][i] == playerid) {
             Spieler[driverid][pTaxiKunden][i] = INVALID_PLAYER_ID;
             Spieler[driverid][pTaxiKundenStart][i] = 0;
-            PlayerTextDrawDestroy(playerid, Spieler[playerid][tdTaxi]);
+            DestroyTaxiTextdraw(playerid);
             return 1;
         }
     }
@@ -70404,8 +70410,7 @@ ClearPlayerTaxiSlots(playerid, cancel = 0) {
     for (new i; i < MAX_TAXI_KUNDEN; i++) {
         if (Spieler[playerid][pTaxiKunden][i] == INVALID_PLAYER_ID) continue;
         if (cancel) RemovePlayerFromVehicle(Spieler[playerid][pTaxiKunden][i]);
-        PlayerTextDrawDestroy(Spieler[playerid][pTaxiKunden][i], Spieler[Spieler[playerid][pTaxiKunden][i]][tdTaxi]);
-        Spieler[playerid][pTaxiKunden][i] = INVALID_PLAYER_ID;
+        DestroyTaxiTextdraw(Spieler[playerid][pTaxiKunden][i]);
         Spieler[playerid][pTaxiKundenStart][i] = 0;
     }
     return 1;
