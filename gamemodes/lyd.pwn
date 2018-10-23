@@ -44364,12 +44364,6 @@ CMD:warenverkaufsstelle2(playerid)
     SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Warenverkaufsplatz in Los Santos (Hafen) gesetzt.");
     return 1;
 }
-CMD:warenverkaufsstelle3(playerid)
-{
-    SetPlayerCheckpointEx(playerid, 1035.9789,2135.8733,10.8203, 3.0, CP_SHOWJOB1);
-    SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Warenverkaufsplatz in Las Venturas gesetzt.");
-    return 1;
-}
 CMD:spritverkaufsstelle1(playerid)
 {
     SetPlayerCheckpointEx(playerid, -1034.6223,-626.2365,32.0078, 3.0, CP_SHOWJOB1);
@@ -44380,12 +44374,6 @@ CMD:spritverkaufsstelle2(playerid)
 {
     SetPlayerCheckpointEx(playerid, 2482.8813,-2084.2239,13.5469, 3.0, CP_SHOWJOB1);
     SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Spritverkaufsplatz in der Stadt Los Santos gesetzt.");
-    return 1;
-}
-CMD:spritverkaufsstelle3(playerid)
-{
-    SetPlayerCheckpointEx(playerid, 585.5286,1211.6166,12.0090, 3.0, CP_SHOWJOB1);
-    SendClientMessage(playerid, COLOR_WHITE, "Es wurde ein Checkpoint auf der Karte zum Spritverkaufsplatz in Las Venturas gesetzt.");
     return 1;
 }
 CMD:scheinentziehen(playerid, params[])

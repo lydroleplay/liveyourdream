@@ -506,6 +506,11 @@ CMD:paintball(playerid, params[]) {
 
     if (IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du darfst dafür nicht im Fahrzeug sitzen.");
     paintballInfo[playerid][E_PB_INFO_STATUS] = PAINTBALL_STATUS_MENU;
-    ShowPlayerDialog(playerid, DIALOG_PAINTBALL_MODE, DIALOG_STYLE_LIST, "{47A1AE}Paintball - Modus", "Normaler Modus\n1v1 Match\n{86989A}Weitere werden folgen...", "Weiter", "Abbrechen");
+
+    new playerCount;
+    for (new i = 0; i <= GetPlayerPoolSize(); i++) if (paintballInfo[playerid][E_PB_INFO_STATUS] == PAINTBALL_STATUS_NORMAL) playerCount++;
+    new dialogText[128];
+    format(dialogText, sizeof(dialogText), "Normaler Modus (%d Spieler)\n1v1 Match\n{86989A}Weitere werden folgen...", playerCount);
+    ShowPlayerDialog(playerid, DIALOG_PAINTBALL_MODE, DIALOG_STYLE_LIST, "{47A1AE}Paintball - Modus", dialogText, "Weiter", "Abbrechen");
     return 1;
 }
