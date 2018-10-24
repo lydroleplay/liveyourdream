@@ -7257,8 +7257,7 @@ public OnPlayerDisconnect(playerid, reason)
         preis = GetPlayerTaxiCosts(driverid,playerid);
         format(String,sizeof(String),"Dein Fahrgast %s hat den Server verlassen. Die Fahrtkosten in Höhe von $%s werden dennoch abgebucht und dir bezahlt.", sName, AddDelimiters(preis));
         SendClientMessage( driverid ,COLOR_YELLOW,String);
-        format(String,sizeof(String),"UPDATE `accounts` SET `Bank` = `Bank` - %d WHERE `Name` = '%s'",preis,sName);
-        mysql_oquery(String,THREAD_DUMMY,driverid,gSQL);
+        Spieler[playerid][pCash] -= preis;
         Spieler[driverid][pCash] += preis;
         RemovePlayerFromTaxi(driverid,playerid);
     }
@@ -17194,6 +17193,7 @@ CMD:supauto(playerid, params[])
     GetPlayerPos(playerid, x,y,z);
     new vehicle;
     vehicle = CreateVehicle(560, x, y, z, angle, 3, 3, -1);
+    SetVehicleNumberPlate(vehicle, "SUPPORT");
     SetVehicleVirtualWorld(vehicle, GetPlayerVirtualWorld(playerid));
     LinkVehicleToInterior(vehicle, GetPlayerInterior(playerid));
     PutPlayerInVehicle(playerid, vehicle, 0);
