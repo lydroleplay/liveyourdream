@@ -32,7 +32,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, SAMD_INTERIOR_EXIT_COORDS)) { // Exit
             SetPlayerFacingAngle(playerid, SAMD_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, SAMD_INTERIOR_ENTER_COORDS + 0.5, MAPS_SAMDEXTERIOR_INTERIOR, VW_MAIN);
+			SetPlayerPosEx(playerid, SAMD_INTERIOR_ENTER_COORDS, MAPS_SAMDEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         /*} else if (IsPlayerInRangeOfPoint(playerid, 1.0, SAMD_INTERIOR_ELEVATOR_1_DOWN_COORDS) && GetPlayerVirtualWorld(playerid) == VW_SAMDINTERIOR) { // Elevator 1
             SetPlayerFacingAngle(playerid, SAMD_INTERIOR_ELEVATOR_UP_FACING);

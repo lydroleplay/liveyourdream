@@ -915,7 +915,7 @@ stock AddDeathIcon( string[], Float:x,Float:y,Float:z,interior,virtualworld) {
     if(index != -1 ) {
         g_DeathIcon[index][DI_iPickup] = CreateDynamicPickup(1254,1,x,y,z,interior,virtualworld);
         g_DeathIcon[index][DI_iTimer] = SetTimerEx ("DestroyDeathIcon",3*60*1000,false,"i",index);
-        g_DeathIcon[index][DI_t3dLabel] = CreateDynamic3DTextLabel(string,0xFF0000FF,x,y,z + 0.3,25.0, .worldid = virtualworld, .testlos = 1);
+        g_DeathIcon[index][DI_t3dLabel] = CreateDynamic3DTextLabel(string,0xFF0000FF,x,y,z + 0.3,25.0, .worldid = virtualworld, .interiorid = interior, .testlos = 1);
         return 1;
     }
     return 0;
@@ -5798,10 +5798,8 @@ OnGameModeInit2() {
 	CreateDynamicPickup(19197, 1,  264.3734,191.1904,1008.1719,0);//FBI Innen
 
 	CreateDynamicPickup(1318, 1, 2127.5486,2378.9626,10.8203, 0);//Clubmitglied enter in Las Venturas
-
 	CreateDynamicPickup(1318, 1, -2636.6230,1403.3202,906.4609, 0);//Ausgangclub in Las Venturas
 
-	CreateDynamicPickup(1318, 1, 2169.8208,1618.7504,999.9766, 39);//Paintball Ausgang in INT 1
 	CreateDynamicPickup(19197, 1, 1571.2114,-1336.6027,16.4844, 0);//Startower unten
 	CreateDynamicPickup(19197, 1, 1571.2114,-1336.6027,16.4844, 0);//Startower oben
 	// CreateDynamicPickup(19197, 1, 2870.8152,1906.2897,11.5510, 0);//Hochsicherheitstrakt außen
@@ -5960,6 +5958,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 296.4476,-37.9833,1001.5156, 53);//Ammu LV
 	CreateDynamicPickup(1239, 1, 312.1370,-165.9137,999.6010, 40);//Ammu LS Ballas
 	CreateDynamicPickup(1239, 1, 295.5200,-80.3668,1001.5156, 1);//Ammu LS
+    CreateDynamicPickup(1239, 1, 295.5200,-80.3668,1001.5156, 61);//Ammu SH
 	CreateDynamicPickup(1239, 1, 206.3740,-8.2494,1001.2109, 36);//Victim LS (Strand)
 	CreateDynamicPickup(1239, 1, 161.4726,-83.2517,1001.8047, 35);//ZIP LS (Bank)
 	CreateDynamicPickup(1239, 1, 207.7187,-100.5032,1005.2578, 37);//Binco (GS)
@@ -6099,7 +6098,8 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kleidungs Shop\n"COLOR_HEX_WHITE"Tippe /Kleidung", COLOR_WHITE, 161.4726,-83.2517,1001.8047, 11.0, .worldid = 35);//ZIP LS (Bank)
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Kleidungs Shop\n"COLOR_HEX_WHITE"Tippe /Kleidung", COLOR_WHITE, 207.7187,-100.5032,1005.2578, 11.0, .worldid = 37);//Binco LS /GS)
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CLUB Waffenshop\n"COLOR_HEX_WHITE"Tippe /Cwmenu", COLOR_WHITE, -2165.6643,646.1125,1052.3750, 10.0, .worldid = 8);//Clubammu
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waffen Laden\n"COLOR_HEX_WHITE"Tippe /Wmenu", COLOR_WHITE, 296.4476,-37.9833,1001.5156, 10.0, .worldid = 53);//LV Amu
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waffen Laden\n"COLOR_HEX_WHITE"Tippe /Wmenu", COLOR_WHITE, 295.5200,-80.3668,1001.5156, 10.0, .worldid = 61); // LS SH Ammu
+    CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waffen Laden\n"COLOR_HEX_WHITE"Tippe /Wmenu", COLOR_WHITE, 296.4476,-37.9833,1001.5156, 10.0, .worldid = 53);//LV Amu
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waffen Laden\n"COLOR_HEX_WHITE"Tippe /Wmenu", COLOR_WHITE, 312.1370,-165.9137,999.6010, 10.0, .worldid = 40);//LS Amu Ballas
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Waffen Laden\n"COLOR_HEX_WHITE"Tippe /Wmenu", COLOR_WHITE, 295.5200,-80.3668,1001.5156, 10.0, .worldid = 1);//LS Amu
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"CLUB Küche\n"COLOR_HEX_WHITE"Tippe /Cheilen", COLOR_WHITE, -2160.3027,638.3347,1057.5861, 10.0, .worldid = 8);//Clubheal
@@ -7245,7 +7245,7 @@ public OnPlayerDisconnect(playerid, reason)
         }*/
     }
 
-    CreateDisconnectNotice( sName , X , Y , Z , reason );
+    CreateDisconnectNotice(playerid, sName , X , Y , Z , reason );
 
     KillTimer(pAngelTimer[playerid]);
     KillTimer( Spieler[playerid][tDrink] );
@@ -10637,7 +10637,7 @@ public SetPlayerSpawn(playerid)
 			Spieler[playerid][pTot] = 0;
 			GivePlayerWeapon(playerid, 29, 150);
             GivePlayerWeapon(playerid, 24, 150);
-			SetPlayerVirtualWorld(playerid, 39);
+			SetPlayerVirtualWorld(playerid, VW_PAINTBALLBASEMENT);
 			SetPlayerInterior(playerid, 1);
 			return 1;
 		}
@@ -10660,7 +10660,7 @@ public SetPlayerSpawn(playerid)
 			new randSpawn = random(sizeof(lspdInterior_jailSpawnPoints));
 			SetPlayerFacingAngle(playerid, 90.0);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, lspdInterior_jailSpawnPoints[randSpawn][ 0], lspdInterior_jailSpawnPoints[randSpawn][1], lspdInterior_jailSpawnPoints[randSpawn][2] + 0.5, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
+			SetPlayerPosEx(playerid, lspdInterior_jailSpawnPoints[randSpawn][ 0], lspdInterior_jailSpawnPoints[randSpawn][1], lspdInterior_jailSpawnPoints[randSpawn][2], MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
 			SetPVarInt(playerid, "JAIL.TIMESTAMP", gettime());
 			SendClientMessage(playerid, COLOR_BLUE, "[INFO] Du kannst erst in 2 Minuten von einem Anwalt befreit werden.");
 		    return 1;
@@ -10670,7 +10670,7 @@ public SetPlayerSpawn(playerid)
 		{
 			SetPlayerFacingAngle(playerid, ALCATRAZ_JAIL_SPAWN_FACING);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, ALCATRAZ_JAIL_SPAWN_POINT + 0.5, MAPS_ALCATRAZ_INTERIOR, VW_MAIN);
+			SetPlayerPosEx(playerid, ALCATRAZ_JAIL_SPAWN_POINT, MAPS_ALCATRAZ_INTERIOR, VW_MAIN);
 			SendClientMessage(playerid, COLOR_RED, "Du wurdest aufgrund deiner schweren Verbrechen in das Alcatraz eingesperrt!");return 1;
 		}
 		// Admin Prison
@@ -11130,6 +11130,7 @@ public OnPlayerDeath(playerid, killerid, reason)
         }
         if( PlayerIsPaintballing[killerid] == 1 ) {
             bPaintball = true;
+            for (new i = 0; i <= GetMaxPlayers(); i++) if (PlayerIsPaintballing[i]) SendDeathMessageToPlayer(i, killerid, playerid, reason);
         }
     }
     if( HasPlayerChecks(playerid) ) {
@@ -14701,6 +14702,14 @@ CMD:configplayer(playerid, params[])
             String[140];
         format(String,sizeof(String),"%s %s hat die Daten von Spieler %s überarbeitet! ( [%s gesetzt auf: %d] )", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), entry, wert);
         AdminLog(String);
+
+        if (Spieler[pID][pExp] >= Spieler[pID][pLevel] * 4) {
+            Spieler[playerid][pLevel]++;
+            SetPlayerScore(playerid, Spieler[playerid][pLevel]);
+            Spieler[playerid][pExp] = 0;
+            GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
+        }
+
         return 1;
     }
     else if(strcmp(entry, "fraktionsrank", true) == 0)
@@ -16520,8 +16529,7 @@ stock CreatePlayerCar(playerid,Float:x,Float:y,Float:z,Float:rot,model,color1,co
 }
 
 stock SavePlayerCar(playerid,slot) {
-    new
-        query[600];
+    new query[600];
     format(query,sizeof(query),"UPDATE `playercar` SET \
         `owner` = '%s',\
         `model` = %d,\
@@ -29099,9 +29107,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             }
             else if(IsPlayerInRangeOfPoint(playerid, 4.0, Biz[i][ExitX], Biz[i][ExitY], Biz[i][ExitZ]) && GetPlayerVirtualWorld(playerid) == i)
             {
-                SetPlayerInterior(playerid, 0);
-                SetPlayerVirtualWorld(playerid, 0);
-                SetPlayerPos(playerid, Biz[i][EnterX], Biz[i][EnterY], Biz[i][EnterZ]);
+                SetPlayerPosEx(playerid, Biz[i][EnterX], Biz[i][EnterY], Biz[i][EnterZ], 0, 0);
                 return 1;
             }
         }
@@ -34206,6 +34212,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp");
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
@@ -37850,10 +37857,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         {
             if(response)
             {
-                new index;
-                if(GetPlayerInterior(playerid) == 4 ) index = GetBizIndexByID(1);
-                if(GetPlayerInterior(playerid) == 6 ) index = GetBizIndexByID(41);
-                if(GetPlayerInterior(playerid) == 1 ) index = GetBizIndexByID(54);
+                new index, virtualworld = GetPlayerVirtualWorld(playerid);
+                switch (virtualworld) {
+                    case 1: index = GetBizIndexByID(1);
+                    case 40: index = GetBizIndexByID(41);
+                    case 53: index = GetBizIndexByID(54);
+                    case 61: index = GetBizIndexByID(61);
+                    default: index = GetBizIndexByID(1);
+                }
                 if( index == 0 ) return 0;
                 {
                     if(Biz[index][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat keine Waren mehr.");
@@ -39373,7 +39384,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 13)
                 {
-                    ShowPlayerDialog(playerid, AMMUORTE, DIALOG_STYLE_LIST, "Waffenshops", "Haupt-Ammunation in Los Santos\nAmmunation in Downtown, Los Santos\nAmmunation in Las Venturas", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, AMMUORTE, DIALOG_STYLE_LIST, "Waffenshops", "Haupt-Ammunation in Los Santos\nAmmunation in Downtown, Los Santos\nAmmunation in Las Venturas\nAmmunation an der Stadthalle", "Auswählen", "Abbrechen");
                 }
                 if(listitem == 14)
                 {
@@ -40029,6 +40040,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     SetPlayerCheckpointEx(playerid, 2159.1836,943.2106,10.8203, 2.0, CP_NAVI83);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Ammunation in Las Venturas wurde auf der Karte Rot markiert.");
+                }
+                if (listitem == 3) {
+                    SetPlayerCheckpointEx(playerid, 1549.18, -1773.3, 13.52, 2.0, CP_NAVI83);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Ammunation an der Stadthalle wurde auf der Karte Rot markiert.");
                 }
             }
             if(!response)return 1;
@@ -49771,7 +49786,7 @@ stock DeathNotice_GetIndex() {
     return g_iDeathNotice;
 }
 
-stock CreateDisconnectNotice( playername[], Float:x,Float:y,Float:z,reason) {
+stock CreateDisconnectNotice(playerid, playername[], Float:x,Float:y,Float:z,reason) {
     // printf("CreateDisconnectNotice(%s,%.2f,%.2f,%.2f,%d,%d)", playername, x,y,z,interior , reason);
     new
         id,
@@ -49788,8 +49803,9 @@ stock CreateDisconnectNotice( playername[], Float:x,Float:y,Float:z,reason) {
     }
     id = DeathNotice_GetIndex();
     format(String,sizeof(String),"%s - %s",playername,sReason);
-    g_DeathNotice[id][DN_iPickup] = CreateDynamicPickup(1314,1,x,y,z+0.25);
-    g_DeathNotice[id][DN_t3dLabel] = CreateDynamic3DTextLabel(String,0xFFFFFFBB,x,y,z + 0.8,30.0, .testlos = 1);
+    new interior = GetPlayerInterior(playerid), virtualworld = GetPlayerVirtualWorld(playerid);
+    g_DeathNotice[id][DN_iPickup] = CreateDynamicPickup(1314, 1, x, y, z + 0.25, .worldid = virtualworld, .interiorid = interior);
+    g_DeathNotice[id][DN_t3dLabel] = CreateDynamic3DTextLabel(String, 0xFFFFFFBB, x, y, z + 0.8, 30.0, .testlos = 1, .worldid = virtualworld, .interiorid = interior);
     g_DeathNotice[id][DN_tTimer] = SetTimerEx("DestroyDisconnectNotice",30*1000,0,"d",id);
     strtolower(playername);
     g_DeathNotice[id][DN_hashOwner] = udb_hash( playername );
@@ -52565,10 +52581,12 @@ COMMAND:fahrzeugschein(playerid,params[]) {
 
 forward SetPlayerPosEx(playerid,Float:x,Float:y,Float:z, interior, virtualworld);
 public SetPlayerPosEx(playerid,Float:x,Float:y,Float:z, interior, virtualworld) {
-	TogglePlayerControllableEx(playerid,0);
+	TogglePlayerControllableEx(playerid, 0);
+    // Streamer_UpdateEx(playerid, x, y, z); // .compensatedtime = 1500
 	SetPlayerPos(playerid,x,y,z);
 	SetPlayerInterior(playerid, interior);
-	SetPlayerVirtualWorld(playerid, virtualworld);Streamer_UpdateEx(playerid, x, y, z, .compensatedtime = 1500);
+	SetPlayerVirtualWorld(playerid, virtualworld);
+    Streamer_Update(playerid);
 	SetTimerEx("TogglePlayerControllableEx", 1500, false, "ii", playerid, 1);
 	return 1;
 }
@@ -53475,14 +53493,12 @@ CMD:eventpreise(playerid) {
     return ShowPlayerDialog(playerid, DIALOG_EVENTREWARDS, DIALOG_STYLE_TABLIST_HEADERS, dialogCaption, dialogText, "Einlösen", "Abbrechen");
 }
 
-CMD:eventpunkte(playerid, params[]) return cmd_giveeventpoints(playerid, params);
-
-CMD:giveeventpoints(playerid, params[]) {
+CMD:eventpunkte(playerid, params[]) {
     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
     if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new playerName[MAX_PLAYER_NAME], pID, points;
     if (GetPVarString(playerid, "OFFEP.NAME", playerName, sizeof(playerName)) != 0) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du verteilst gerade noch Eventpunkte.");
-    if (sscanf(params, "ui", pID, points) || !points) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Giveeventpoints [Spieler ID/Name] [Punkte]");
+    if (sscanf(params, "ui", pID, points) || !points) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Eventpunkte [Spieler ID/Name] [Punkte]");
     if (pID == INVALID_PLAYER_ID) {
         if (sscanf(params, "s[24] i", playerName, points)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du hast keinen gültigen Spieler angegeben.");
         new query[256];
@@ -53494,7 +53510,7 @@ CMD:giveeventpoints(playerid, params[]) {
         return 1;
     }
 
-    Spieler[playerid][pEventPoints] += points;
+    Spieler[pID][pEventPoints] += points;
     SCMFormatted(playerid, COLOR_ORANGE, "[EVENT] {FFFFFF}Du hast %s %d Eventpunkte gegeben.", GetName(pID), points);
     SCMFormatted(pID, COLOR_ORANGE, "[EVENT] {FFFFFF}%s %s hat dir %d Eventpunkte gegeben.", GetPlayerAdminRang(playerid), GetName(playerid), points);
 
@@ -56106,7 +56122,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
     }
     else if( resultid == THREAD_CREATEPLAYERCAR ) {
         if( 0 <= extraid < MAX_PLAYERS ) {
-            PlayerCar[extraid][PlayerKey[extraid]][Id] = cache_insert_id ();
+            PlayerCar[extraid][PlayerKey[extraid]][Id] = cache_insert_id();
             SavePlayerCar(extraid,PlayerKey[extraid]);
         }
     }
@@ -56920,6 +56936,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             while( x < rows ) {
                 slot = cache_get_row_int(x, 33, connectionHandle);
                 if (slot == -1) slot = x;
+                else if (slot < x) slot = x;
 
                 PlayerCar[playerid][slot][Id] = cache_get_row_int(x,0,connectionHandle);
                 cache_get_row(x,1,PlayerCar[playerid][slot][CarOwner],connectionHandle,MAX_PLAYER_NAME);
@@ -66309,6 +66326,43 @@ COMMAND:ageld(playerid,params[]) {
     SendAdminMessage(COLOR_YELLOW, string);
     format(string,sizeof(string),"%s %s gab dir $%s.", GetPlayerAdminRang(playerid), GetName(playerid), AddDelimiters(cash));
     Spieler[pID][pCash] += cash;
+    SendClientMessage(pID,COLOR_GREEN,string);
+    return 1;
+}
+
+COMMAND:alevel(playerid,params[]) {
+    if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new pID, level, string[128];
+    if(sscanf(params, "ud", pID,level))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Alevel [SpielerID/Name] [Anzahl]");
+    if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if (level + Spieler[pID][pLevel] < 0 || level + Spieler[pID][pLevel] > 100) return SendClientMessage(playerid, COLOR_RED, "Der Spieler kann nicht unter 0 oder über 100 Level haben.");
+    format(string,sizeof(string),"%s %s gab %d Level an Spieler %s.", GetPlayerAdminRang(playerid), GetName(playerid), level, GetName(pID));
+    SendAdminMessage(COLOR_YELLOW, string);
+    format(string,sizeof(string),"%s %s gab dir %d Level.", GetPlayerAdminRang(playerid), GetName(playerid), level);
+    Spieler[pID][pLevel] += level;
+    SetPlayerScore(playerid, Spieler[pID][pLevel]);
+    SendClientMessage(pID,COLOR_GREEN,string);
+    return 1;
+}
+
+COMMAND:arp(playerid,params[]) {
+    if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new pID, respect, string[128];
+    if(sscanf(params, "ud", pID,respect))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Arp [SpielerID/Name] [Anzahl]");
+    if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if (respect + Spieler[pID][pExp] < 0) return SendClientMessage(playerid, COLOR_RED, "Der Spieler kann nicht unter 0 Respektpunkte haben.");
+    format(string,sizeof(string),"%s %s gab %d Respektpunkte an Spieler %s.", GetPlayerAdminRang(playerid), GetName(playerid), respect, GetName(pID));
+    SendAdminMessage(COLOR_YELLOW, string);
+    format(string,sizeof(string),"%s %s gab dir %d Respektpunkte.", GetPlayerAdminRang(playerid), GetName(playerid), respect);
+    Spieler[pID][pExp] += respect;
+
+    if (Spieler[pID][pExp] >= Spieler[pID][pLevel] * 4) {
+        Spieler[playerid][pLevel]++;
+        SetPlayerScore(playerid, Spieler[playerid][pLevel]);
+        Spieler[playerid][pExp] = 0;
+        GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
+    }
+
     SendClientMessage(pID,COLOR_GREEN,string);
     return 1;
 }

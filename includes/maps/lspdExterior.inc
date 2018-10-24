@@ -73,19 +73,19 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_INTERIOR_ENTER_COORDS)) { // Entrance
 			SetPlayerFacingAngle(playerid, LSPD_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, LSPD_INTERIOR_EXIT_COORDS + 0.5, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
+			SetPlayerPosEx(playerid, LSPD_INTERIOR_EXIT_COORDS, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
 			return 1;
 		} else if (IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_HELI_STAIRS_POINT)) { // Helicopter Stairway
             // -- Not needed to check if the user is a part of the executive
 			SetPlayerFacingAngle(playerid, LSPD_INTERIOR_HELI_STAIRS_POINT_FACING);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, LSPD_INTERIOR_HELI_STAIRS_POINT + 0.5, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
+			SetPlayerPosEx(playerid, LSPD_INTERIOR_HELI_STAIRS_POINT, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
 			return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_GARAGE_POINT)) { // Garage point
             // -- Not needed to check if the user is a part of the executive
             SetPlayerFacingAngle(playerid, LSPD_INTERIOR_GARAGE_POINT_FACING);
             SetCameraBehindPlayer(playerid);
-            SetPlayerPosEx(playerid, LSPD_INTERIOR_GARAGE_POINT + 0.5, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
+            SetPlayerPosEx(playerid, LSPD_INTERIOR_GARAGE_POINT, MAPS_LSPDINTERIOR_INTERIOR, VW_LSPDINTERIOR);
             return 1;
         }
 	}

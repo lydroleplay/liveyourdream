@@ -5,7 +5,7 @@ static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
 // SAMD spawn, duty and fskin points
-#define SAMD_INTERIOR_SPAWN_POINT               1462.2633, -981.9429, 675.6134 + 0.5
+#define SAMD_INTERIOR_SPAWN_POINT               1462.2633, -981.9429, 675.6134
 #define SAMD_INTERIOR_SPAWN_POINT_FACING        180.0
 #define SAMD_INTERIOR_DUTY_POINT                1466.7092, -983.1359, 675.6134
 #define SAMD_INTERIOR_FSKIN_POINT               1466.7092, -987.0971, 675.6134

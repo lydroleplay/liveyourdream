@@ -39,7 +39,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, SAMD_INTERIOR_ENTER_COORDS)) { // Entrance
 			SetPlayerFacingAngle(playerid, SAMD_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, SAMD_INTERIOR_EXIT_COORDS + 0.5, MAPS_SAMDINTERIOR_INTERIOR, VW_SAMDINTERIOR);
+			SetPlayerPosEx(playerid, SAMD_INTERIOR_EXIT_COORDS, MAPS_SAMDINTERIOR_INTERIOR, VW_SAMDINTERIOR);
 			return 1;
 		}
 	}

@@ -9,7 +9,7 @@ static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
 // Poo interior points
-#define POO_INTERIOR_SPAWN_POINT               1950.7202, -2027.1058, 823.4130 + 0.5
+#define POO_INTERIOR_SPAWN_POINT               1950.7202, -2027.1058, 823.4130
 #define POO_INTERIOR_SPAWN_POINT_FACING        180.0
 #define POO_INTERIOR_DUTY_POINT                1950.3738, -2032.5636, 823.4130
 #define POO_INTERIOR_FSKIN_POINT               1946.7748, -2032.5636, 823.4130
@@ -28,13 +28,13 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, POO_INTERIOR_EXIT_COORDS)) { // Exit
             SetPlayerFacingAngle(playerid, POO_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, POO_INTERIOR_ENTER_COORDS + 0.5, MAPS_POOEXTERIOR_INTERIOR, VW_MAIN);
+			SetPlayerPosEx(playerid, POO_INTERIOR_ENTER_COORDS, MAPS_POOEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, POO_INTERIOR_ROOF_POINT)) { // Roof Exit
             if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keine gültige Schlüsselkarte für das Oamt-Gebäude.");
             SetPlayerFacingAngle(playerid, POO_ROOF_POINT_FACING);
             SetCameraBehindPlayer(playerid);
-            SetPlayerPosEx(playerid, POO_ROOF_POINT + 0.5, MAPS_POOEXTERIOR_INTERIOR, VW_MAIN);
+            SetPlayerPosEx(playerid, POO_ROOF_POINT, MAPS_POOEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         }
     }

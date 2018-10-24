@@ -9,7 +9,7 @@ static Float:STREAMDISTANCE = 350.0;
 static Float:DRAWDISTANCE   = 350.0;
 
 // LSPD interior points
-#define LSPD_INTERIOR_SPAWN_POINT               1639.5917, -1387.0795, 1962.5164 + 0.5
+#define LSPD_INTERIOR_SPAWN_POINT               1639.5917, -1387.0795, 1962.5164
 #define LSPD_INTERIOR_SPAWN_POINT_FACING        270.0
 #define LSPD_INTERIOR_DUTY_POINT                1639.1198, -1381.8534, 1962.5164
 #define LSPD_INTERIOR_FSKIN_POINT               1641.7053, -1381.8534, 1962.5164
@@ -77,7 +77,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_INTERIOR_EXIT_COORDS)) { // Exit
             SetPlayerFacingAngle(playerid, LSPD_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
-            SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
+            SetPlayerPosEx(playerid, LSPD_INTERIOR_ENTER_COORDS, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, LSPD_INTERIOR_HELI_STAIRS_POINT)) { // Helicopter Stairway
             if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18))
@@ -85,12 +85,12 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             
             SetPlayerFacingAngle(playerid, LSPD_HELI_STAIRS_POINT_FACING);
             SetCameraBehindPlayer(playerid);
-            SetPlayerPosEx(playerid, LSPD_HELI_STAIRS_POINT + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
+            SetPlayerPosEx(playerid, LSPD_HELI_STAIRS_POINT, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 1.5, LSPD_INTERIOR_GARAGE_POINT)) { // Garage Door
             SetPlayerFacingAngle(playerid, LSPD_GARAGE_POINT_FACING);
             SetCameraBehindPlayer(playerid);
-            SetPlayerPosEx(playerid, LSPD_GARAGE_POINT + 0.5, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
+            SetPlayerPosEx(playerid, LSPD_GARAGE_POINT, MAPS_LSPDEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 1.5, LSPD_INTERIOR_DUTY_ROOM_DOOR_POINT)) { // Duty Room Door
             if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18))

@@ -42,7 +42,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			}
             SetPlayerFacingAngle(playerid, CITYHALL_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, CITYHALL_INTERIOR_ENTER_COORDS + 0.5, MAPS_CITYHALLEXTERIOR_INTERIOR, VW_MAIN);
+			SetPlayerPosEx(playerid, CITYHALL_INTERIOR_ENTER_COORDS, MAPS_CITYHALLEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
         } else if (IsPlayerInRangeOfPoint(playerid, 1.0, CITYHALL_INTERIOR_ELEVATOR_1_DOWN_L_COORDS) && GetPlayerVirtualWorld(playerid) == VW_CITYHALLINTERIOR) { // Elevator 1 left down
             SetPlayerFacingAngle(playerid, CITYHALL_INTERIOR_ELEVATOR_UP_FACING);

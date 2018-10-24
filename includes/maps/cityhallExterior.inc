@@ -107,7 +107,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, CITYHALL_INTERIOR_ENTER_COORDS)) { // Cityhall Entrance
 			SetPlayerFacingAngle(playerid, CITYHALL_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, CITYHALL_INTERIOR_EXIT_COORDS + 0.5, MAPS_CITYHALLINTERIOR_INTERIOR, VW_CITYHALLINTERIOR);
+			SetPlayerPosEx(playerid, CITYHALL_INTERIOR_EXIT_COORDS, MAPS_CITYHALLINTERIOR_INTERIOR, VW_CITYHALLINTERIOR);
 			return 1;
 		} else if (IsPlayerInRangeOfPoint(playerid, 2.0, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS)) { // Registration office Entrance
             SendClientMessage(playerid, COLOR_WHITE, "Sachbearbeiter sagt: Herzlich Willkommen beim Kraftfahrtbundesamt (Zulassungsstelle)!");
@@ -119,7 +119,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			SendClientMessage(playerid, COLOR_WHITE, "Sachbearbeiter sagt: Vielen Dank für Ihr Besuch! Wir wünschen Ihnen einen schönen Tag.");
 		    SetPlayerFacingAngle(playerid, REGISTRATIONOFFICE_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS + 0.5, MAPS_CITYHALLEXTERIOR_INTERIOR, VW_MAIN);
+			SetPlayerPosEx(playerid, REGISTRATIONOFFICE_INTERIOR_ENTER_COORDS, MAPS_CITYHALLEXTERIOR_INTERIOR, VW_MAIN);
             return 1;
 		}
 	}

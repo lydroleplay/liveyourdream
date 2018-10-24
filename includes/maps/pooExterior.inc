@@ -66,12 +66,12 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, POO_INTERIOR_ENTER_COORDS)) { // Entrance
 			SetPlayerFacingAngle(playerid, POO_INTERIOR_EXIT_FACING);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, POO_INTERIOR_EXIT_COORDS + 0.5, MAPS_POOINTERIOR_INTERIOR, VW_POOINTERIOR);
+			SetPlayerPosEx(playerid, POO_INTERIOR_EXIT_COORDS, MAPS_POOINTERIOR_INTERIOR, VW_POOINTERIOR);
 			return 1;
 		} else if (IsPlayerInRangeOfPoint(playerid, 2.0, POO_ROOF_POINT)) { // Roof Entrance
             SetPlayerFacingAngle(playerid, POO_INTERIOR_ROOF_POINT_FACING);
             SetCameraBehindPlayer(playerid);
-            SetPlayerPosEx(playerid, POO_INTERIOR_ROOF_POINT + 0.5, MAPS_POOINTERIOR_INTERIOR, VW_POOINTERIOR);
+            SetPlayerPosEx(playerid, POO_INTERIOR_ROOF_POINT, MAPS_POOINTERIOR_INTERIOR, VW_POOINTERIOR);
             return 1;
         }
 	}

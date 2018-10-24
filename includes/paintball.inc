@@ -167,7 +167,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
         }
 
         if (listitem == 0) {
-            SetPlayerInterior(playerid, 1);
+            SetPlayerInterior(playerid, MAPS_PAINTBALLBASEMENT_INTERIOR);
             SetPlayerVirtualWorld(playerid, VW_PAINTBALLBASEMENT);
             SetPlayerPos(playerid, PAINTBALLBASEMENT_SPAWN_POINT);
             PlayerIsPaintballing[playerid] = 1;
@@ -317,11 +317,12 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
         SetPlayerPaintballPos(pID);
         SetPlayerPaintballPos(playerid);
+
         new tdString[128];
         format(tdString, sizeof(tdString), "~g~~h~%s ~w~~h~0 : 0 ~r~~h~%s", GetName(playerid), GetName(pID));
-        paintballInfo[playerid][E_PB_INFO_TEXTDRAW] = CreatePlayerTextDraw(playerid, 605.0, 127.0, tdString);
+        paintballInfo[playerid][E_PB_INFO_TEXTDRAW] = CreatePlayerTextDraw(playerid, 608.0, 204.0, tdString);
         format(tdString, sizeof(tdString), "~g~~h~%s ~w~~h~0 : 0 ~r~~h~%s", GetName(pID), GetName(playerid));
-        paintballInfo[pID][E_PB_INFO_TEXTDRAW] = CreatePlayerTextDraw(pID, 605.0, 127.0, tdString);
+        paintballInfo[pID][E_PB_INFO_TEXTDRAW] = CreatePlayerTextDraw(pID, 608.0, 204.0, tdString);
 
         PlayerTextDrawAlignment(playerid, paintballInfo[playerid][E_PB_INFO_TEXTDRAW], 3);
         PlayerTextDrawAlignment(pID, paintballInfo[pID][E_PB_INFO_TEXTDRAW], 3);
