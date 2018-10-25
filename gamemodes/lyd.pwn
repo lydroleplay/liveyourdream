@@ -33657,7 +33657,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* FAHRZEUG MIETEN *: {FFFFFF}/Lock, /Mieten, /Entmieten, /Mietlock, /Findmietcar");
                 }
                 else if(listitem == 3 ) {
-                        SendClientMessage(playerid, COLOR_BLUE, "* HAUS - ALLGEMEIN *: {FFFFFF}/Hauskaufen, /Zuhause, /Spawnchange");
+                        SendClientMessage(playerid, COLOR_BLUE, "* HAUS - ALLGEMEIN *: {FFFFFF}/Hauskaufen, /Zuhause, /Spawnchange, /Hausupgrade");
                         SendClientMessage(playerid, COLOR_BLUE, "* HAUS - MIETER *: {FFFFFF}/Hausmieten, /Hausentmieten, /Haustuer");
                         SendClientMessage(playerid, COLOR_BLUE, "* HAUS - BESITZER*: {FFFFFF}/Hausmenu, /Hausverkaufen, /Hausverstaatlichen, /Hausmietung, Hausraus");
                         SendClientMessage(playerid, COLOR_BLUE, "* HAUS - BESITZER*: {FFFFFF}/Hausrausalle, /Mietpreis, /Hausmieter, /Offhausraus, /Hauskasse, /Hauskassestand");
@@ -34221,7 +34221,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(Spieler[playerid][pAdmin] >= 5)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Givegun, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
+                        SendClientMessage(playerid, COLOR_BLUE, "* ENTWICKLER *: {FFFFFF}/Givegun, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
                     }
                     if(Spieler[playerid][pAdmin] >= 6)
                     {
@@ -49652,7 +49652,7 @@ stock GetPlayerAdminRang(playerid) {
         case 2: { adminName = "Moderator"; }
         case 3: { adminName = "Moderator"; }
         case 4: { adminName = "Administrator"; }
-        case 5: { adminName = "Server Manager"; }
+        case 5: { adminName = "Entwickler"; }
         case 6: { adminName = "Projektleiter"; }
         case 7: { adminName = "Server Gott"; }
 
