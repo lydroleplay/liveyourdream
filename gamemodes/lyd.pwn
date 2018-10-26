@@ -21180,14 +21180,11 @@ CMD:autofasas(playerid)
 CMD:scheine(playerid, params[])
 {
     new pID, string[128];
-    if(sscanf(params, "u", pID))
+    if(sscanf(params, "u", pID) || pID == playerid)
     {
         Scheine(playerid, playerid);
         if (Spieler[playerid][pLevel] < 4) SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Scheine [SpielerID/Name] um jemandem die Scheine zu zeigen!");
         return 1;
-    }
-    if( Spieler[pID][pAdminDienst] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist gerade im Admindienst");
     }
     if(IsPlayerConnected(pID) && gPlayerLogged[pID] == 1)
     {
@@ -21195,21 +21192,26 @@ CMD:scheine(playerid, params[])
         GetPlayerPos(playerid, x,y,z);
         if(IsPlayerInRangeOfPoint(pID, 5.0, x,y,z))
         {
-            format(string, sizeof(string), "* %s zeigt dir seine Scheine.", GetName(playerid));
-            SendClientMessage(pID, COLOR_PURPLE, string);
-            format(string, sizeof(string), "Du hast %s deine Scheine gezeigt.", GetName(pID));
-            SendClientMessage(playerid, COLOR_PURPLE, string);
-            Scheine(pID, playerid);
+            format(string, sizeof(string), "%s hat dir angeboten seine/ihre Scheine anzuschauen.", GetName(playerid));
+            SendClientMessage(pID, COLOR_LIGHTBLUE, string);
+            format(string, sizeof(string), "Du hast %s angeboten deine Scheine anzuschauen.", GetName(pID));
+            SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
+            SendClientMessage(pID, COLOR_LIGHTBLUE, "Nutze '/Accept Scheine' um dir die Scheine anzuschauen.");
+            format(string, sizeof(string), "%s %i", GetName(playerid), Spieler[playerid][pLoginTimestamp]);
+            SetPVarString(pID, "ACCEPT.LICENSES", string);
+            return 1;
         }
+        else return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
     }
-    return 1;
+
+    return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
 }
 
 CMD:stats(playerid, params[])
 {
     if(gPlayerLogged[playerid] == 0) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt!");
     new pID;
-    if(sscanf(params, "u", pID))
+    if(sscanf(params, "u", pID) || pID == playerid)
     {
         Stats(playerid, playerid);
         if (Spieler[playerid][pLevel] < 4) SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Stats [SpielerID/Name] um jemandem die Stats zu zeigen!");
@@ -21239,11 +21241,8 @@ CMD:stats(playerid, params[])
             return 1;
         }
     }
-    else
-    {
-        SendClientMessage(playerid, COLOR_RED, "* Der Spieler ist nicht eingeloggt.");
-        return 1;
-    }
+
+    return SendClientMessage(playerid, COLOR_RED, "* Der Spieler ist nicht online.");
 }
 
 forward Delay_Wiederbeleben(playerid, giveid);
@@ -21477,7 +21476,7 @@ CMD:accept(playerid, params[])
     if(sscanf(params, "s[30]", entry))
     {
         SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Accept [Aktion]");
-        SendClientMessage(playerid, COLOR_ORANGE, "* Aktionen: Stats, Repair, Heilung, Fraktion, Spice, Drogen, Waffenteile, Wantedcodes");
+        SendClientMessage(playerid, COLOR_ORANGE, "* Aktionen: Stats, Repair, Heilung, Fraktion, Spice, Drogen, Waffenteile, Wantedcodes, Scheine");
         SendClientMessage(playerid, COLOR_ORANGE, "* Aktionen: Waffen, Angelstats, Eis, Antrag, Pizza, Hotdog, Taxi, Anwalt, Vertrag, Kekse");
         return 1;
     }
@@ -21769,13 +21768,31 @@ CMD:accept(playerid, params[])
             return 1;
         }
     }
+    else if (strcmp(entry, "scheine", true) == 0) {
+        new offerString[128], pID, sessionStamp;
+        GetPVarString(playerid, "ACCEPT.LICENSES", offerString, sizeof(offerString));
+        if (isnull(offerString)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Dir hat niemand Einsicht in seine Scheine angeboten.");
+        if (sscanf(offerString, "k<playername> i", pID, sessionStamp) || pID == INVALID_PLAYER_ID || Spieler[pID][pLoginTimestamp] != sessionStamp) {
+            DeletePVar(playerid, "ACCEPT.LICENSES");
+            return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Das Angebot ist nicht mehr gültig.");
+        }
+
+        if (!IsPlayerInRangeOfPlayer(playerid, pID, 8.0)) return SCMFormatted(playerid, COLOR_RED, "[INFO] {FFFFFF}%s ist nicht mehr in deiner Nähe.", GetName(pID));
+        
+        format(string, sizeof(string), "* Du siehst dir die Scheine von %s an.", GetName(pID));
+        SendClientMessage(playerid, COLOR_PURPLE, string);
+        format(string, sizeof(string), "* %s sieht sich deine Scheine an.", GetName(playerid));
+        SendClientMessage(pID, COLOR_PURPLE, string);
+        Scheine(playerid, pID);
+        DeletePVar(playerid, "ACCEPT.LICENSES");
+        return 1;
+    }
     else if(strcmp(entry, "waffen", true) == 0)
     {
         new offerString[64], pID, sessionStamp, gID, price;
         GetPVarString(playerid, "SELL.GUN.OFFER", offerString, sizeof(offerString));
         if (isnull(offerString)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Dir liegt kein Angebot für Waffen vor.");
-        if (sscanf(offerString, "k<playername> i i i", pID, sessionStamp, gID, price) || pID == INVALID_PLAYER_ID
-            || Spieler[pID][pLoginTimestamp] != sessionStamp) {
+        if (sscanf(offerString, "k<playername> i i i", pID, sessionStamp, gID, price) || pID == INVALID_PLAYER_ID || Spieler[pID][pLoginTimestamp] != sessionStamp) {
             DeletePVar(playerid, "SELL.GUN.OFFER");
             return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Das Angebot ist nicht mehr gültig.");
         }
