@@ -34221,7 +34221,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(Spieler[playerid][pAdmin] >= 5)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* ENTWICKLER *: {FFFFFF}/Givegun, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
+                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Givegun, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
                     }
                     if(Spieler[playerid][pAdmin] >= 6)
                     {
@@ -40657,7 +40657,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         if(IsPlayerConnected(i) && gPlayerLogged[i] == 1)
                         {
-                            if(Spieler[i][pAdmin] > 0 && Spieler[i][pAdmin] < 7)
+                            if(Spieler[i][pAdmin] > 0 && Spieler[i][pAdmin] < 8)
                             {
                                 format(string, sizeof(string), "%s %s (ID: %i) (Tel: %d)\n", GetPlayerAdminRang(i), GetName(i), i, Spieler[i][pHandyNr]);
                                 strcat(str2, string);
@@ -42199,7 +42199,7 @@ stock SaveAccount(playerid)
                 `Rank` = %d, \
                 `Skin` = %d,",
                     Spieler[playerid][pLevel],
-                    Spieler[playerid][pAdmin],
+                    Spieler[playerid][pAdmin] == 7 ? 5 : Spieler[playerid][pAdmin],
                     Spieler[playerid][pDonateRank],
                     Spieler[playerid][pHours],
                     Spieler[playerid][pSex],
@@ -49652,9 +49652,9 @@ stock GetPlayerAdminRang(playerid) {
         case 2: { adminName = "Moderator"; }
         case 3: { adminName = "Moderator"; }
         case 4: { adminName = "Administrator"; }
-        case 5: { adminName = "Entwickler"; }
+        case 5: { adminName = "Server Manager"; }
         case 6: { adminName = "Projektleiter"; }
-        case 7: { adminName = "Server Gott"; }
+        case 7: { adminName = "Entwickler"; }
 
         default: {}
     }
@@ -56513,6 +56513,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][ID] = cache_get_row_int(0,0,connectionHandle);
             Spieler[playerid][pLevel] = cache_get_row_int(0,1,connectionHandle);
             Spieler[playerid][pAdmin] = cache_get_row_int(0,2,connectionHandle);
+            if (Spieler[playerid][pAdmin] == 5) Spieler[playerid][pAdmin] = 7;
             Spieler[playerid][pDonateRank] = cache_get_row_int(0,3,connectionHandle);
             Spieler[playerid][pHours] = cache_get_row_int(0,4,connectionHandle);
             Spieler[playerid][pSex] = cache_get_row_int(0,5,connectionHandle);
@@ -56775,7 +56776,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
                 SendClientMessage(playerid, COLOR_RED, "SERVER: Eventuell wurde gegen dich eine Beschwerde gestellt. Mit /Jailtime siehst du wann die Strafe abläuft.");
                 // SetTimerEx("LoadPremiumWeaponData", 353 ,false,"d",playerid); <- Er kann keine Premium Waffen haben
             }
-            if(Spieler[playerid][pAdmin] > 0 && Spieler[playerid][pAdmin] < 7)
+            if(Spieler[playerid][pAdmin] > 0 && Spieler[playerid][pAdmin] < 8)
             {
                 new string[128];
                 format(string, sizeof(string), "%s %s hat den Server betreten.", GetPlayerAdminRang(playerid), GetName(playerid));
@@ -60372,7 +60373,7 @@ public NPC(var)
 COMMAND:allesspeichern(playerid,params[]) {
     #pragma unused params
     if(Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    SendClientMessage(playerid,COLOR_YELLOW,"Daten werden zum speichern gesendet ...");
+    SendClientMessage(playerid,COLOR_YELLOW,"Daten werden zum Speichern gesendet ...");
     SaveAll();
     mysql_pquery("SELECT NOW()",THREAD_SAVEALL,playerid,gSQL,MySQLThreadOwner);
     return 1;
