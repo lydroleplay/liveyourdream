@@ -53526,6 +53526,7 @@ CMD:eventpunkte(playerid, params[]) {
     Spieler[pID][pEventPoints] += points;
     SCMFormatted(playerid, COLOR_ORANGE, "[EVENT] {FFFFFF}Du hast %s %d Eventpunkte gegeben.", GetName(pID), points);
     SCMFormatted(pID, COLOR_ORANGE, "[EVENT] {FFFFFF}%s %s hat dir %d Eventpunkte gegeben.", GetPlayerAdminRang(playerid), GetName(playerid), points);
+    if (points > 0) SendClientMessage(pID, COLOR_ORANGE, "[EVENT] {FFFFFF}Benutze /Eventpreise um zu sehen, wofür du diese einlösen kannst.");
 
     new message[145];
     format(message, sizeof(message), "%s %s hat die Daten von Spieler %s überarbeitet! (Eventpunkte gegeben: %d)", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), points);
