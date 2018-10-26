@@ -50158,96 +50158,96 @@ COMMAND:safebox(playerid,params[]) {
     if(item == 1 ) {    // Drogen
         if(aktion == 1 ) { // rausnehmen
             if( menge > Spieler[playerid][pSafeDrogen] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Drogen entnehmen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeDrogen]);
+                format(String,sizeof(String),"Du kannst keine %s Gramm Drogen entnehmen (Lager: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeDrogen]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pDrugs] += menge;
             Spieler[playerid][pSafeDrogen] -= menge;
-            format(String,sizeof(String),"Du hast %d Stk Drogen aus deiner Safebox entnommen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeDrogen]);
+            format(String,sizeof(String),"Du hast %s Gramm Drogen aus deiner Safebox entnommen (Lager: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeDrogen]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
         else if(aktion == 2 ) { // reinlegen
             if( menge > Spieler[playerid][pDrugs] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Drogen einlagern ( Hand: %d Stk )",menge,Spieler[playerid][pDrugs]);
+                format(String,sizeof(String),"Du kannst keine %s Gramm Drogen einlagern (Hand: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pDrugs]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pDrugs] -= menge;
             Spieler[playerid][pSafeDrogen] += menge;
-            format(String,sizeof(String),"Du hast %d Stk Drogen in deiner Safebox gelagert ( Lager: %d Stk )",menge,Spieler[playerid][pSafeDrogen]);
+            format(String,sizeof(String),"Du hast %s Gramm Drogen in deiner Safebox gelagert (Lager: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeDrogen]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
     }
     else if(item == 2 ) { // Waffenteile
         if(aktion == 1 ) { // rausnehmen
             if( menge > Spieler[playerid][pSafeTeile] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Waffenteile entnehmen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeTeile]);
+                format(String,sizeof(String),"Du kannst keine %s Waffenteile entnehmen (Lager: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeTeile]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pWaffenteile] += menge;
             Spieler[playerid][pSafeTeile] -= menge;
-            format(String,sizeof(String),"Du hast %d Stk Waffenteile aus deiner Safebox entnommen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeTeile]);
+            format(String,sizeof(String),"Du hast %s Waffenteile aus deiner Safebox entnommen (Lager: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeTeile]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
         else if(aktion == 2 ) { // reinlegen
             if( menge > Spieler[playerid][pWaffenteile] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Waffenteile einlagern ( Hand: %d Stk )",menge,Spieler[playerid][pWaffenteile]);
+                format(String,sizeof(String),"Du kannst keine %s Waffenteile einlagern (Hand: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pWaffenteile]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pWaffenteile] -= menge;
             Spieler[playerid][pSafeTeile] += menge;
-            format(String,sizeof(String),"Du hast %d Stk Waffenteile in deiner Safebox gelagert ( Lager: %d Stk )",menge,Spieler[playerid][pSafeTeile]);
+            format(String,sizeof(String),"Du hast %s Waffenteile in deiner Safebox gelagert (Lager: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeTeile]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
     }
     else if(item == 3 ) { // WantedCodes
         if(aktion == 1 ) { // rausnehmen
             if( menge > Spieler[playerid][pSafeWantedCodes] ) {
-                format(String,sizeof(String),"Du kannst keine %d WantedCodes entnehmen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeWantedCodes]);
+                format(String,sizeof(String),"Du kannst keine %s Wantedcodes entnehmen (Lager: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeWantedCodes]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pWantedCodes] += menge;
             Spieler[playerid][pSafeWantedCodes] -= menge;
-            format(String,sizeof(String),"Du hast %d WantedCodes aus deiner Safebox entnommen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeWantedCodes]);
+            format(String,sizeof(String),"Du hast %s Wantedcodes aus deiner Safebox entnommen (Lager: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeWantedCodes]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
         else if(aktion == 2 ) { // reinlegen
             if( menge > Spieler[playerid][pWantedCodes] ) {
-                format(String,sizeof(String),"Du kannst keine %d WantedCodes einlagern ( Hand: %d Stk )",menge,Spieler[playerid][pWantedCodes]);
+                format(String,sizeof(String),"Du kannst keine %s Wantedcodes einlagern (Hand: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pWantedCodes]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pWantedCodes] -= menge;
             Spieler[playerid][pSafeWantedCodes] += menge;
-            format(String,sizeof(String),"Du hast %d WantedCodes in deiner Safebox gelagert ( Lager: %d Stk )",menge,Spieler[playerid][pSafeWantedCodes]);
+            format(String,sizeof(String),"Du hast %s Wantedcodes in deiner Safebox gelagert (Lager: %s Stück).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeWantedCodes]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
     }
     else if(item == 4 ) { // Spice
         if(aktion == 1 ) { // rausnehmen
             if( menge > Spieler[playerid][pSafeSpice] ) {
-                format(String,sizeof(String),"Du kannst keine %d Spice entnehmen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeSpice]);
+                format(String,sizeof(String),"Du kannst keine %s Gramm Spice entnehmen (Lager: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeSpice]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pSpice] += menge;
             Spieler[playerid][pSafeSpice] -= menge;
-            format(String,sizeof(String),"Du hast %d Spice aus deiner Safebox entnommen ( Lager: %d Stk )",menge,Spieler[playerid][pSafeSpice]);
+            format(String,sizeof(String),"Du hast %s Gramm Spice aus deiner Safebox entnommen (Lager: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeSpice]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
         else if(aktion == 2 ) { // reinlegen
             if( menge > Spieler[playerid][pSpice] ) {
-                format(String,sizeof(String),"Du kannst keine %d Spice einlagern ( Hand: %d Stk )",menge,Spieler[playerid][pSpice]);
+                format(String,sizeof(String),"Du kannst keine %s Gramm Spice einlagern (Hand: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSpice]));
                 SendClientMessage(playerid,COLOR_RED,String);
                 return 1;
             }
             Spieler[playerid][pSpice] -= menge;
             Spieler[playerid][pSafeSpice] += menge;
-            format(String,sizeof(String),"Du hast %d Spice in deiner Safebox gelagert ( Lager: %d Stk )",menge,Spieler[playerid][pSafeSpice]);
+            format(String,sizeof(String),"Du hast %s Gramm Spice in deiner Safebox gelagert (Lager: %s Gramm).", AddDelimiters(menge), AddDelimiters(Spieler[playerid][pSafeSpice]));
             SendClientMessage(playerid,COLOR_YELLOW,String);
         }
     }
