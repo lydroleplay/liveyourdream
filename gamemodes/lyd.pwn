@@ -405,6 +405,17 @@ enum {
     WEAPON_DEPOT_NONE
 }
 
+enum {
+    ADMIN_RANK_NONE,
+    ADMIN_RANK_SUP,
+    ADMIN_RANK_SUPMOD,
+    ADMIN_RANK_MOD,
+    ADMIN_RANK_ADMIN,
+    ADMIN_RANK_MANAGER,
+    ADMIN_RANK_CHIEF,
+    ADMIN_RANK_DEVELOPER
+}
+
 //Badwords für Badwordsystem
 new waffenlagerzu[25];
 new word[11][]= {
@@ -13934,7 +13945,7 @@ CMD:illegalejobs(playerid)
 
 CMD:mieten(playerid)
 {
-    if(Spieler[playerid][pLevel] > 3)return SendClientMessage(playerid, COLOR_RED, "Du bist nicht unter Level 4.");
+    if(Spieler[playerid][pLevel] > 3 && Spieler[playerid][pAdmin] < ADMIN_RANK_MANAGER) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht unter Level 4.");
     if(pCar[playerid] != INVALID_VEHICLE_ID)return SendClientMessage(playerid, COLOR_WHITE, "Du hast bereits ein Fahrzeug gemietet. Tippe /Entmieten.");
     if(!IsPlayerInRangeOfPoint(playerid, 2.0, BIKERENTAL_NOOBSPAWN_COORDS) && !IsPlayerInRangeOfPoint(playerid, 2.0, BIKERENTAL_DRIVINGSCHOOL_COORDS) && !IsPlayerInRangeOfPoint(playerid, 2.0, BIKERENTAL_CITYHALL_COORDS))
     {
@@ -20226,7 +20237,7 @@ stock RespawnJobCars(jobID) {
         case 2:     { for (new i = 0; i < sizeof(vehicle_busStation); i++) if (!IsVehicleOccupied(vehicle_busStation[i])) SetVehicleToRespawn(vehicle_busStation[i]); }
         case 3:     {
             new trailerid, bool:excludeVehicles[MAX_VEHICLES];
-            for (new i = 0; i < 9; i++) if (IsVehicleOccupied(vehicle_truckerBase[i]) && (trailerid = GetVehicleTrailer(vehicle_truckerBase[i]))) excludeVehicles[trailerid] = true;
+            for (new i = 0; i < sizeof(vehicle_truckerBase); i++) if (IsVehicleOccupied(vehicle_truckerBase[i]) && (trailerid = GetVehicleTrailer(vehicle_truckerBase[i]))) excludeVehicles[trailerid] = true;
             for (new i = 0; i < sizeof(vehicle_truckerBase); i++) if (!IsVehicleOccupied(vehicle_truckerBase[i]) && !excludeVehicles[vehicle_truckerBase[i]]) SetVehicleToRespawn(vehicle_truckerBase[i]);
         }
         case 4:     { for (new i = 0; i < sizeof(vehicle_airportLs); i++) if (!IsVehicleOccupied(vehicle_airportLs[i])) SetVehicleToRespawn(vehicle_airportLs[i]); }
@@ -40155,6 +40166,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 pCar[playerid] = CreateVehicle(rentBike[1][listitem], pX, pY, pZ, 353.9787, 1, 1, -1);
                 aiVehicles[pCar[playerid]] = VEH_CAR;
                 GivePlayerCash(playerid, -rentBike[0][listitem]);
+                Biz[47][bKasse] += rentBike[0][listitem];
                 PutPlayerInVehicle(playerid, pCar[playerid], 0);
                 SendClientMessage(playerid, COLOR_WHITE, "Zum Abschließen tippe /Lock.");
                 SendClientMessage(playerid, COLOR_WHITE, "Zum Abgeben des Fahrzeuges tippe /Entmieten.");
