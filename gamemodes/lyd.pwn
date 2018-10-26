@@ -40173,6 +40173,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 LockCar(pCar[playerid]);
                 GameTextForPlayer(playerid, "~w~Miet-Fahrzeug~n~~r~Abgeschlossen", 3000, 4);
                 gGas[pCar[playerid]] = GetMaxTank(pCar[playerid]);
+                gMaxGas[pCar[playerid]] = GetMaxTank(pCar[playerid]);
             }
             if(!response){return 1;}
         }
