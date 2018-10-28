@@ -6072,6 +6072,7 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][pfrakwarn] = 0;
     Spieler[playerid][pSuspendedSentence] = 0;
     format(Spieler[playerid][pSusSentenceReason], 128, "");
+    Spieler[playerid][pEventPoints] = 0;
     Spieler[playerid][pAdmin] = 0;
     Spieler[playerid][pDonateRank] = 0;
     Spieler[playerid][pHours] = 0;
@@ -7050,6 +7051,7 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pfrakwarn] = 0;
     Spieler[playerid][pSuspendedSentence] = 0;
     format(Spieler[playerid][pSusSentenceReason], 128, "");
+    Spieler[playerid][pEventPoints] = 0;
     Spieler[playerid][pAdmin] = 0;
     Spieler[playerid][pDonateRank] = 0;
     Spieler[playerid][pHours] = 0;
@@ -20579,8 +20581,7 @@ CMD:autofasas(playerid)
     return 1;
 }
 
-CMD:scheine(playerid, params[])
-{
+CMD:scheine(playerid, params[]) {
     new pID, string[128];
     if(sscanf(params, "u", pID) || pID == playerid)
     {
@@ -20609,8 +20610,7 @@ CMD:scheine(playerid, params[])
     return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
 }
 
-CMD:stats(playerid, params[])
-{
+CMD:stats(playerid, params[]) {
     if(gPlayerLogged[playerid] == 0) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt!");
     new pID;
     if(sscanf(params, "u", pID) || pID == playerid)
@@ -58551,48 +58551,37 @@ stock ShowPlayerHandyList(playerid) {
     return 1;
 }
 
-COMMAND:finanzen(playerid,params[]) {
-    new
-        String[128],
-        giveid;
-    format(String,sizeof(String),"U(%d)",playerid);
-    if(sscanf(params,String,giveid)) {
-        return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Finanzen [Spieler]");
+COMMAND:finanzen(playerid, params[]) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    new String[128], giveid;
+    format(String, sizeof(String), "U(%d)", playerid);
+    if (sscanf(params, String, giveid)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Finanzen [Spieler]");
+    if (playerid != giveid) {
+        if (giveid >= MAX_PLAYERS || !gPlayerLogged[giveid]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht online.");
+        if (Spieler[giveid][pAdminDienst]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist gerade im Admindienst.");
+        if (!IsPlayerInRangeOfPlayer(playerid, giveid, 5.0)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht in deiner Nähe.");
+        
+        SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du zeigst %s deine Finanzen.", GetName(giveid));
+        SCMFormatted(giveid, COLOR_YELLOW, "[INFO] {FFFFFF}%s zeigt dir seine Finanzen.", GetName(playerid));
     }
-    if( !IsPlayerConnected(giveid)) {
-        return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht Online.");
-    }
-    if( Spieler[giveid][pAdminDienst] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist gerade im Admindienst");
-    }
-    new Float:x, Float:y, Float:z;
-    GetPlayerPos(playerid, x,y,z);
-    if(!IsPlayerInRangeOfPoint(giveid, 5.0, x,y,z))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
-    if( playerid != giveid ) {
-        format(String,sizeof(String),"Du zeigst %s deine Finanzen.",GetName(giveid));
-        SendClientMessage(playerid,COLOR_WHITE,String);
-        format(String,sizeof(String),"%s zeigt dir seine Finanzen.",GetName(playerid));
-        SendClientMessage(giveid,COLOR_WHITE,String);
-    }
-    SendClientMessage(giveid,COLOR_GREEN,"======= {FFFFFF}[ FINANZEN ] {009D00}=======");
-    format(String,sizeof(String),"Finanzen von: {FFFFFF}%s",GetName(playerid));
-    SendClientMessage(giveid,COLOR_YELLOW,String);
-    format(String,sizeof(String),"Bargeld: {FFFFFF}$%s", AddDelimiters(GetPlayerMoney(playerid)));
-    SendClientMessage(giveid,COLOR_YELLOW,String);
-    format(String,sizeof(String),"Kontostand: {FFFFFF}$%s", AddDelimiters(Spieler[playerid][pBank]));
-    SendClientMessage(giveid,COLOR_YELLOW,String);
-    SendClientMessage(giveid,COLOR_GREEN,"=========================");
+
+    SendClientMessage(giveid, COLOR_GREEN, "======= {FFFFFF}[ FINANZEN ] {009D00}=======");
+    SCMFormatted(giveid, COLOR_YELLOW, "Finanzen von: {FFFFFF}%s", GetName(playerid));
+    SCMFormatted(giveid, COLOR_YELLOW, "Bargeld: {FFFFFF}$%s", AddDelimiters(GetPlayerMoney(playerid)));
+    SCMFormatted(giveid, COLOR_YELLOW, "Kontostand: {FFFFFF}$%s", AddDelimiters(Spieler[playerid][pBank]));
+    SendClientMessage(giveid, COLOR_GREEN, "=========================");
     return 1;
 }
 
 CMD:inventar(playerid, params[]) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
     new giveid = playerid;
     if (!isnull(params)) {
         if (sscanf(params, "u", giveid)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Inventar [Spieler ID/Name]");
         if (giveid != playerid) {
-            if (giveid >= MAX_PLAYERS || !gPlayerLogged[giveid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Der Spieler ist nicht online.");
-            if (Spieler[giveid][pAdminDienst]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Der Spieler ist gerade im Admindienst.");
-            if (!IsPlayerInRangeOfPlayer(playerid, giveid, 5.0)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Der Spieler ist nicht in deiner Nähe.");
+            if (giveid >= MAX_PLAYERS || !gPlayerLogged[giveid]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht online.");
+            if (Spieler[giveid][pAdminDienst]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist gerade im Admindienst.");
+            if (!IsPlayerInRangeOfPlayer(playerid, giveid, 5.0)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht in deiner Nähe.");
 
             SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du zeigst %s dein Inventar.", GetName(giveid));
             SCMFormatted(giveid, COLOR_YELLOW, "[INFO] {FFFFFF}%s zeigt dir sein Inventar.", GetName(playerid));
