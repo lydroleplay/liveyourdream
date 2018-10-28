@@ -6081,6 +6081,8 @@ public OnPlayerConnect(playerid)
     format(Spieler[playerid][pMarriageName],32,"Niemand");
     Spieler[playerid][ID] = 0;
     Spieler[playerid][pfrakwarn] = 0;
+    Spieler[playerid][pArmourInfo] = 0.0;
+    Spieler[playerid][pHealthInfo] = 0.0;
     Spieler[playerid][pSuspendedSentence] = 0;
     format(Spieler[playerid][pSusSentenceReason], 128, "");
     Spieler[playerid][pEventPoints] = 0;
@@ -7060,6 +7062,8 @@ public OnPlayerDisconnect(playerid, reason)
     format(Spieler[playerid][pMarriageName],32,"Niemand");
     Spieler[playerid][ID] = 0;
     Spieler[playerid][pfrakwarn] = 0;
+    Spieler[playerid][pArmourInfo] = 0.0;
+    Spieler[playerid][pHealthInfo] = 0.0;
     Spieler[playerid][pSuspendedSentence] = 0;
     format(Spieler[playerid][pSusSentenceReason], 128, "");
     Spieler[playerid][pEventPoints] = 0;
@@ -17749,9 +17753,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 6))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Grove Street Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, 331.0788,1128.5469,1083.8828))//Ballas
@@ -17760,9 +17761,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 7))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ballas Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, YAKUZA_INTERIOR_SPAWN_POINT))//Yakuza
@@ -17771,9 +17769,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 10))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Yakuza Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GivePlayerWeapon(playerid, 8, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0,2807.4153,-1165.1274,1025.5703))//Vagos
@@ -17782,9 +17777,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 13))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Vagos Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0,508.3369,-84.9195,998.9609))//Aztecas
@@ -17793,9 +17785,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 11))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Aztecas Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, LCN_INTERIOR_SPAWN_POINT))//LCN
@@ -17804,9 +17793,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 12))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LCN Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GivePlayerWeapon(playerid, 2, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, WHEELMANBASE_SPAWN_POINT))//Wheelman
@@ -17814,9 +17800,6 @@ CMD:gangwaffen(playerid)
         //if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
         if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 17)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Wheelman Mitglied.");
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GiveGangWeapons(playerid);
         GivePlayerWeapon(playerid, 5, 1);
     }
@@ -17826,9 +17809,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 21))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Triaden Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 800, 1);
-        GivePlayerCash(playerid, -800);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0,-2170.3818,641.4621,1052.3817))//Outlawzs
     {
@@ -17836,9 +17816,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 20))return SendClientMessage(playerid, COLOR_RED, "Du bist kein OutlawZ Mitglied.");
         GiveGangWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GivePlayerWeapon(playerid, 5, 1);
     }
     return 1;
@@ -17848,6 +17825,9 @@ stock GiveGangWeapons(playerid)
 {
     GivePlayerWeapon(playerid, 24, 100);
     GivePlayerWeapon(playerid, 29, 150);
+    SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgerüstet (Desert Eagle, MP5).");
+    GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
+    GivePlayerCash(playerid, -800);
     return 1;
 }
 
@@ -17914,9 +17894,6 @@ CMD:ninowaffen(playerid)
         if(Spieler[playerid][pGunLic] == 0) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
         if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 15)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Nine Demons Mitglied.");
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgerüstet. (Desert Eagle, MP5)");
-        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
-        GivePlayerCash(playerid, -800);
         GiveGangWeapons(playerid);
         GivePlayerWeapon(playerid, 5, 1);
     }
@@ -51835,6 +51812,7 @@ stock Store_PlayerWeapons(playerid) {
     }
     return 1;
 }
+
 stock ReStore_PlayerWeapons(playerid) {
     new tempweapon, tempammo;
     SetPlayerArmour(playerid, Spieler[playerid][pArmourInfo]);
