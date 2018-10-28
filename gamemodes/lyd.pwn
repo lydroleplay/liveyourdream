@@ -417,7 +417,6 @@ enum {
 }
 
 //Badwords für Badwordsystem
-new waffenlagerzu[25];
 new word[11][]= {
 	{"Hurensohn"},
 	{"Bastard"},
@@ -1428,7 +1427,8 @@ enum e_WaffenLager {
     Float:WL_fX,
     Float:WL_fY,
     Float:WL_fZ,
-    WL_iWaffenTeile
+    WL_iWaffenTeile,
+    bool:WL_bClosed
 }
 
 enum e_WaffenLagerConfig {
@@ -5502,6 +5502,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1254, 1, 506.0543,-81.1208,998.9609, 0);//Aztecas Waffenlager
 	CreateDynamicPickup(1254, 1, 2809.7944,-1171.9598,1025.5703, 0);//Vagos Waffenlager
 	CreateDynamicPickup(1254, 1, -2165.1348,644.2082,1052.3750, 0);//Outlawz Waffenlager
+    CreateDynamicPickup(1254, 1, 938.8259, 1737.8749, 8.8516, 0);//Wheelman Waffenlager
 
 	//Fahrtticket
 	CreateDynamicPickup(1274, 1, 374.6658,-2121.6416,7.8820, 0);//Fallturm
@@ -5632,11 +5633,12 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Gangshop\n"COLOR_HEX_WHITE"Tippe /Gangitem", COLOR_WHITE, -2159.0173,640.3590,1052.3817, 15.0);//outlawzs
 
 	//Gangwaffenlager 3D Text
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Ballas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 331.9387,1119.7072,1083.8903, 15.0);//Waffenlager
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Aztecas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 506.0543,-81.1208,998.9609, 15.0);//Waffenlager
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2809.7944,-1171.9598,1025.5703, 15.0);//Waffenlager
-	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -2165.1348,644.2082,1052.3750, 15.0);//Waffenlager
-
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Ballas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 331.9387,1119.7072,1083.8903, 15.0, .testlos = 1);//Waffenlager
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Aztecas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 506.0543,-81.1208,998.9609, 15.0, .testlos = 1);//Waffenlager
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2809.7944,-1171.9598,1025.5703, 15.0, .testlos = 1);//Waffenlager
+	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -2165.1348,644.2082,1052.3750, 15.0, .testlos = 1);//Waffenlager
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Nine Demons - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 197.3765,-231.2337,1.7786, 15.0, .testlos = 1);//Waffenlager
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Wheelman - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 938.8259,1737.8749,8.8516, 15.0, .testlos = 1);//Waffenlager
 
     //Job 3D Text
     CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Bauarbeiter\n"COLOR_HEX_WHITE"Tippe /Steineladen", COLOR_WHITE, 635.8752,862.5970,-42.6892, 10.0, .worldid = 0);
@@ -8220,57 +8222,30 @@ CMD:gebeskill(playerid,params[])
     }
     return 1;
 }
-CMD:waffenlagerstatus(playerid,params[])
-{
-    if(Spieler[playerid][pFraktion]==6||Spieler[playerid][pFraktion]==7||Spieler[playerid][pFraktion]==10||
-    Spieler[playerid][pFraktion]==11||Spieler[playerid][pFraktion]==12||Spieler[playerid][pFraktion]==13||Spieler[playerid][pFraktion]==20||Spieler[playerid][pFraktion]==21)
-    {
-        if(Spieler[playerid][pRank]>=5)
-        {
-            new status[5];
-            sscanf(params,"s[5]",status);
-            if(strcmp(status,"auf",true)==0)
-            {
-                if(waffenlagerzu[Spieler[playerid][pFraktion]]==0)
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Das Waffenlager ist bereits geöffnet.");
-                }
-                else
-                {
-                    waffenlagerzu[Spieler[playerid][pFraktion]]=0;
-                    SendClientMessage(playerid,COLOR_GREEN,"Du hast das Waffenlager geöffnet.");
-                }
-            }
-            else if(strcmp(status,"zu",true)==0)
-            {
-                if(waffenlagerzu[Spieler[playerid][pFraktion]]==1)
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Das Waffenlager ist bereits geschlossen.");
-                }
-                else
-                {
-                    waffenlagerzu[Spieler[playerid][pFraktion]]=1;
-                    SendClientMessage(playerid,COLOR_ORANGE,"Du hast das Waffenlager geschlossen.");
-                }
-            }
-            else
-            {
-                if(waffenlagerzu[Spieler[playerid][pFraktion]]==0)
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Das Waffenlager ist geöffnet, gib '/Waffenlagerstatus zu' ein um es zu schließen");
-                }
-                else
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Das Waffenlager ist geschlossen, gib '/Waffenlagerstatus auf' ein um es zu öffnen");
-                }
-            }
-        }
-        else
-        {
-            SendClientMessage(playerid,COLOR_RED,"Du musst Leader/Co-Leader sein um auf diesen Befehl zugreifen zu können.");
-        }
+CMD:waffenlagerstatus(playerid, params[]) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    new index = GetWaffenLagerIndex(Spieler[playerid][pFraktion]);
+    if (index == -1) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Deine Fraktion hat kein Waffenlager.");
+    if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst Leader/Co-Leader sein um auf diesen Befehl zugreifen zu können.");
+    if (isnull(params)) {
+        SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Das Waffenlager ist %s.", g_WaffenLager[index][WL_bClosed] ? "geschlossen" : "geöffnet");
+        return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Waffenlagerstatus [AUF/ZU]");
     }
-    return 1;
+
+    new status[5];
+    if (sscanf(params, "s[5]", status)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Waffenlagerstatus [AUF/ZU]");
+    if (!strcmp(status, "auf", true)) {
+        if (!g_WaffenLager[index][WL_bClosed]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Waffenlager ist bereits geöffnet.");
+        g_WaffenLager[index][WL_bClosed] = false;
+        return SendClientMessage(playerid, COLOR_GREEN, "[INFO] {FFFFFF}Du hast das Waffenlager geöffnet.");
+    }
+    else if (!strcmp(status, "zu", true)) {
+        if (g_WaffenLager[index][WL_bClosed]) return SendClientMessage(playerid,COLOR_RED,"[INFO] {FFFFFF}Das Waffenlager ist bereits geschlossen.");
+        g_WaffenLager[index][WL_bClosed] = true;
+        return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast das Waffenlager geschlossen.");
+    }
+    
+    return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Waffenlagerstatus [AUF/ZU]");
 }
 
 CMD:gangfightwette(playerid,params[])
@@ -17828,15 +17803,13 @@ CMD:gangwaffen(playerid)
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, WHEELMANBASE_SPAWN_POINT))//Wheelman
     {
         //if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
-        if(GetPlayerMoney(playerid) < 1300)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $1.300.");
-        if(!(Spieler[playerid][pFraktion] == 17))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Wheelman Mitglied.");
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5, AK-47 und Schutzweste)");
-        GameTextForPlayer(playerid, "~r~-$1300", 2000, 1);
-        GivePlayerCash(playerid, -1300);
-        GivePlayerWeapon(playerid, 24, 100);
-        GivePlayerWeapon(playerid, WEAPON_MP5, 150);
-        GivePlayerWeapon(playerid, 30, 150);
-        SetPlayerArmour(playerid, 100);
+        if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
+        if(!(Spieler[playerid][pFraktion] == 17)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Wheelman Mitglied.");
+        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5)");
+        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
+        GivePlayerCash(playerid, -800);
+        GiveGangWeapons(playerid);
+        GivePlayerWeapon(playerid, 5, 1);
     }
     else if (GetPlayerVirtualWorld(playerid) == VW_TRIADSINTERIOR && IsPlayerInRangeOfPoint(playerid, 2.0, TRIADS_INTERIOR_SPAWN_POINT))//Triaden
     {
@@ -17921,7 +17894,6 @@ stock GiveHitmanWeapons(playerid)
     return 1;
 }
 
-
 CMD:ninowaffen(playerid)
 {
     if(HasWeaponBlock(playerid)) {
@@ -17930,23 +17902,15 @@ CMD:ninowaffen(playerid)
     }
     if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONSBASE_SPAWN_POINT)) //Biker
     {
-        if(Spieler[playerid][pGunLic] == 0)return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
-        if(GetPlayerMoney(playerid) < 2300)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $2300.");
-        if(!(Spieler[playerid][pFraktion] == 15))return SendClientMessage(playerid, COLOR_RED, "Du bist kein NineDemons Mitglied.");
-        GiveBikerWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgerüstet. (Desert Eagle, Baseballschläger, MP5, Schutzweste)");
-        GameTextForPlayer(playerid, "~r~-$2300", 2000, 1);
-        GivePlayerCash(playerid, -2300);
+        if(Spieler[playerid][pGunLic] == 0) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
+        if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
+        if(!(Spieler[playerid][pFraktion] == 15)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Nine Demons Mitglied.");
+        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgerüstet. (Desert Eagle, MP5)");
+        GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
+        GivePlayerCash(playerid, -800);
+        GiveGangWeapons(playerid);
+        GivePlayerWeapon(playerid, 5, 1);
     }
-    return 1;
-}
-
-stock GiveBikerWeapons(playerid)
-{
-    GivePlayerWeapon(playerid, 5, 1);
-    GivePlayerWeapon(playerid, 24, 250);
-    GivePlayerWeapon(playerid, WEAPON_MP5, 150);
-    SetPlayerArmour(playerid, 100);
     return 1;
 }
 
@@ -31889,7 +31853,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 index = GetWaffenLagerIndex( Spieler[playerid][pFraktion] );
                 Spieler[playerid][pWaffenteile] -= menge;
                 g_WaffenLager[index][WL_iWaffenTeile] += menge;
-                format(String,sizeof(String),"Spieler %s hat %d Waffenteile in das Waffenlager gelegt.",GetName(playerid),menge);
+                format(String,sizeof(String),"Spieler %s hat %s Waffenteile in das Waffenlager gelegt.", GetName(playerid), AddDelimiters(menge));
                 SendFraktionMessage( Spieler[playerid][pFraktion], COLOR_YELLOW, String);
                 ShowWaffenLager(playerid, 0);
             }
@@ -45817,8 +45781,7 @@ LoadWaffenLager() {
 }
 
 SaveWaffenLager() {
-    new
-        query[128];
+    new query[128];
     for(new i ; i < g_iWaffenLager ; i++) {
         format(query,sizeof(query),"UPDATE `waffenlager` SET `waffenteile` = %d WHERE `fraktion` = %d",g_WaffenLager[i][WL_iWaffenTeile],g_WaffenLager[i][WL_iFraktion]);
         mysql_oquery(query,THREAD_WAFFENLAGERSAVE,i,gSQL);
@@ -57605,26 +57568,13 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
     else if(resultid == THREAD_DELFRAKBLACKLIST ) {
     }
     else if(resultid == THREAD_LOADWAFFENLAGER ) {
-        new
-            rows = cache_get_row_count(connectionHandle),
-            i;
+        new rows = cache_get_row_count(connectionHandle), i;
         while( i < rows ) {
-
             g_WaffenLager[i][WL_iFraktion] = cache_get_field_content_int( i,"fraktion",connectionHandle);
             g_WaffenLager[i][WL_fX] = cache_get_field_content_float(i,"x",connectionHandle);
             g_WaffenLager[i][WL_fY] = cache_get_field_content_float(i,"y",connectionHandle);
             g_WaffenLager[i][WL_fZ] =  cache_get_field_content_float( i,"z",connectionHandle);
             g_WaffenLager[i][WL_iWaffenTeile] = cache_get_field_content_int(i,"waffenteile",connectionHandle);
-            /*
-            if(sscanf(resultline,"p<|>dfffd",fraktion,x,y,z,waffenteile)) {
-                printf("ERROR @ THREAD_LOADWAFFENLAGER");
-            }
-            g_WaffenLager[i][WL_iFraktion] = fraktion;
-            g_WaffenLager[i][WL_fX] = x;
-            g_WaffenLager[i][WL_fY] = y;
-            g_WaffenLager[i][WL_fZ] = z;
-            g_WaffenLager[i][WL_iWaffenTeile] = waffenteile;
-            */
             i++;
         }
         g_iWaffenLager = i;
@@ -60616,7 +60566,7 @@ IsPlayerAtWaffenlager(playerid) {
     for (new i; i < g_iWaffenLager; i++) {
         if (!IsPlayerInRangeOfPoint(playerid, 3.0, g_WaffenLager[i][WL_fX], g_WaffenLager[i][WL_fY], g_WaffenLager[i][WL_fZ])) continue;
         if (Spieler[playerid][pFraktion] != g_WaffenLager[i][WL_iFraktion]) return WEAPON_DEPOT_OTHER;
-        if (!waffenlagerzu[Spieler[playerid][pFraktion]]) return WEAPON_DEPOT_OWN;
+        if (!g_WaffenLager[i][WL_bClosed]) return WEAPON_DEPOT_OWN;
         return WEAPON_DEPOT_CLOSED;
     }
 
@@ -66350,9 +66300,8 @@ stock GetJobFirmaIndexByID(firmenid) {
 }
 
 stock SaveFirma() {
-    new
-        query[128];
-    for(new i ; i < g_iWaffenLager ; i++) {
+    new query[128];
+    for(new i ; i < sizeof(g_Firma) ; i++) {
         format(query,sizeof(query),"UPDATE `firma` SET \
             `kasse` = %d,\
             `gehalt` = %d,\
