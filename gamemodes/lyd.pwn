@@ -52593,6 +52593,7 @@ public cancelDrink(playerid) {
     SetPlayerSpecialAction(playerid,SPECIAL_ACTION_NONE);
     return 1;
 }
+
 COMMAND:wcodes(playerid,params[]) {
     if(Spieler[playerid][pJob] != 21 ) {
         SendClientMessage(playerid, COLOR_RED, "Du bist kein Wantedhacker.");
@@ -52604,9 +52605,7 @@ COMMAND:wcodes(playerid,params[]) {
     if( gettime() < Spieler[playerid][punixWantedCodes] ) {
         return SendClientMessage(playerid,COLOR_RED,"Du musst noch warten bis du erneut Wantedcodes erhältst.");
     }
-    new
-        String[128],
-        codes;
+    new String[128], codes;
     codes = 4 + random(6);
     Spieler[playerid][punixWantedCodes] = gettime() + 20*60;
     Spieler[playerid][pWantedCodes] += codes;
@@ -52614,12 +52613,10 @@ COMMAND:wcodes(playerid,params[]) {
     SendClientMessage(playerid,COLOR_GREEN,String);
     return 1;
 }
+
 COMMAND:wantedhacken(playerid,params[])
 {
-    new
-        modelid,
-        vehicleid;
-    vehicleid = GetPlayerVehicleID(playerid);
+    new modelid, vehicleid = GetPlayerVehicleID(playerid);
     if(Spieler[playerid][pJob] != 21 )
     {
         SendClientMessage(playerid, COLOR_RED, "Du bist kein Wantedhacker");
@@ -52647,6 +52644,7 @@ COMMAND:wantedhacken(playerid,params[])
     }
     return 1;
 }
+
 forward Pulse_WantedHacker(playerid,giveid,wantedcodes);
 public Pulse_WantedHacker(playerid,giveid,wantedcodes) {
     if(Spieler[playerid][pJob] != 21 ) {
