@@ -2097,6 +2097,9 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_FSAFEBOX_TAKE 1382
 #define     DIALOG_FSAFEBOX_NOITEMS 1383
 
+#define     DIALOG_AWAFFENLAGER_MENU 1384
+#define     DIALOG_AWAFFENLAGER_CHANGE 1385
+
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
 enum {
@@ -28934,6 +28937,35 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         if( inputtext[i] == '%' ) inputtext[i] = ' ';
     }
     if(Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if (dialogid == DIALOG_AWAFFENLAGER_MENU) {
+        if (!response) return 1;
+        if (listitem < 0 || listitem > g_iWaffenLager) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] Keine gültige Auswahl.");
+
+        SetPVarInt(playerid, "AWAFFENLAGER.INDEX", listitem);
+        new dialogCaption[64], dialogText[256];
+        format(dialogCaption, sizeof(dialogCaption), "{FFFF00}Waffenlager - %s", GetFactionName(g_WaffenLager[listitem][WL_iFraktion]));
+        format(dialogText, sizeof(dialogText), "{FF0099}Im Lager: {FFFFFF}%s Waffenteile\nGebe an, wieviele Waffenteile das Lager haben soll:", AddDelimiters(g_WaffenLager[listitem][WL_iWaffenTeile]));
+        return ShowPlayerDialog(playerid, DIALOG_AWAFFENLAGER_CHANGE, DIALOG_STYLE_INPUT, dialogCaption, dialogText, "Ändern", "Zurück");
+    }
+    if (dialogid == DIALOG_AWAFFENLAGER_CHANGE) {
+        if (!response) return cmd_awaffenlager(playerid);
+        new amount, index = GetPVarInt(playerid, "AWAFFENLAGER.INDEX");
+        if (sscanf(inputtext, "d", amount) || amount < 0) {
+            new dialogCaption[64], dialogText[256];
+            format(dialogCaption, sizeof(dialogCaption), "{FFFF00}Waffenlager - %s", GetFactionName(g_WaffenLager[index][WL_iFraktion]));
+            format(dialogText, sizeof(dialogText), "{FF0099}Im Lager: {FFFFFF}%s Waffenteile\nGebe an, wieviele Waffenteile das Lager haben soll:", AddDelimiters(g_WaffenLager[index][WL_iWaffenTeile]));
+            SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst einen gültigen Wert angeben.");
+            return ShowPlayerDialog(playerid, DIALOG_AWAFFENLAGER_CHANGE, DIALOG_STYLE_INPUT, dialogCaption, dialogText, "Ändern", "Zurück");
+        }
+
+        new message[145];
+        g_WaffenLager[index][WL_iWaffenTeile] = amount;
+        format(message, sizeof(message), "%s %s hat die Waffenteile im Waffenlager der Fraktion %s auf %s Stück gesetzt.", GetPlayerAdminRang(playerid), 
+            GetName(playerid), GetFactionName(g_WaffenLager[index][WL_iFraktion]), AddDelimiters(amount));
+
+        SendAdminMessage(COLOR_YELLOW, message);
+        return cmd_awaffenlager(playerid);
+    }
     if (dialogid == DIALOG_SAFEBOX_MENU) {
         if (!response) return 1;
         if (listitem < 0 || listitem > sizeof(g_SafeboxItems)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
@@ -33620,12 +33652,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
-                        SendClientMessage(playerid, COLOR_ORANGE, "* Administrator *: {FFFFFF}/Sban, /Confighouse, /Configbiz, /Rauswerfenhotel, /Configtanke, /Makeleader, /Setzoneowner");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* Administrator *: {FFFFFF}/Gebefirma, /Delfirma, /Gebeclub, /Delclub, /Bfreischalten (2. Biz-Schlüssel), /SFreischalten (6. Schlüssel)");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Sban, /Confighouse, /Configbiz, /Rauswerfenhotel, /Configtanke, /Makeleader, /Setzoneowner");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Gebefirma, /Delfirma, /Gebeclub, /Delclub, /Bfreischalten (2. Biz-Schlüssel), /SFreischalten (6. Schlüssel)");
                     }
                     if(Spieler[playerid][pAdmin] >= 5)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Givegun, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
+                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Givegun, /Awaffenlager, /Fsbreset, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
                     }
                     if(Spieler[playerid][pAdmin] >= 6)
                     {
@@ -46769,6 +46801,13 @@ stock GetZoneColorOfFaction(Faction,trans = 0xFFFFFF90)
     return color;
 }
 
+stock GetFactionName(factionid) {
+    new factionName[32];
+    if (factionid < 0 || factionid > sizeof(factionNames)) return factionName;
+    format(factionName, sizeof(factionName), factionNames[factionid]);
+    return factionName;
+}
+
 stock GetFactionNameOfFaction(Faction){
     new FactionName[64];
     if(Faction == 6) format(FactionName, sizeof(FactionName), "Grove Street");
@@ -56211,7 +56250,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pLobe] = cache_get_row_int(0,99,connectionHandle);
             Spieler[playerid][pBMOD] = cache_get_row_int(0,100,connectionHandle);
             Spieler[playerid][pKreditwert] = cache_get_row_int(0,101,connectionHandle);
-            Spieler[playerid][pKreditGezahlt] = cache_get_row_int(0,1020,connectionHandle);
+            Spieler[playerid][pKreditGezahlt] = cache_get_row_int(0,102,connectionHandle);
             Spieler[playerid][pMP3Player] = cache_get_row_int(0,103,connectionHandle);
             Spieler[playerid][pPremiumCarSlot] = cache_get_row_int(0,104,connectionHandle);
             Spieler[playerid][pSpawnX] = cache_get_row_float(0,105,connectionHandle);
@@ -65913,6 +65952,40 @@ COMMAND:arp(playerid,params[]) {
     }
 
     SendClientMessage(pID,COLOR_GREEN,string);
+    return 1;
+}
+
+CMD:awaffenlager(playerid) {
+    if (Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new dialogText[256];
+    dialogText = "Fraktion\tWaffenteile\n";
+    for (new i = 0; i < g_iWaffenLager; i++) format(dialogText, sizeof(dialogText), "%s%s\t%s Stück\n", dialogText, GetFactionName(g_WaffenLager[i][WL_iFraktion]), AddDelimiters(g_WaffenLager[i][WL_iWaffenTeile]));
+    return ShowPlayerDialog(playerid, DIALOG_AWAFFENLAGER_MENU, DIALOG_STYLE_TABLIST_HEADERS, "{FFFF00}Waffenlager - Übersicht", dialogText, "Ändern", "Schließen");
+}
+
+CMD:fsbreset(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new fraktion;
+    if (sscanf(params, "d", fraktion) || fraktion < 0 || fraktion > sizeof(factionNames)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Fsbreset [Fraktions-ID]");
+    
+    new frak_index = -1;
+    for (new i = 0; i < sizeof(g_FraktionsSafeBoxLocation); i++) {
+        if (fraktion == g_FraktionsSafeBoxLocation[i][FSBL_iFraktion]) {
+            frak_index = i;
+            break;
+        }
+    }
+
+    if (frak_index == -1) return SCMFormatted(playerid, COLOR_RED, "[INFO] {FFFFFF}Die Fraktion %s besitzt keine Safebox.", GetFactionName(fraktion));
+
+    g_FraktionsSafeBox[fraktion][FSB_iDrogen] = 0;
+    g_FraktionsSafeBox[fraktion][FSB_iWaffenteile] = 0;
+    g_FraktionsSafeBox[fraktion][FSB_iWantedcodes] = 0;
+    g_FraktionsSafeBox[fraktion][FSB_iSpice] = 0;
+
+    new message[145];
+    format(message, sizeof(message), "%s %s hat die Safebox der Fraktion %s resettet.", GetPlayerAdminRang(playerid), GetName(playerid), GetFactionName(fraktion));
+    SendAdminMessage(COLOR_YELLOW, message);
     return 1;
 }
 
