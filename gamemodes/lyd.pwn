@@ -4800,7 +4800,7 @@ OnGameModeInit2() {
     g_waiNoDM[0] = CreateDynamicRectangle( 1602.0 , -1864.0 , 1419.0 , -1581.0, .interiorid = -1 );
     g_waiNoDM[1] = CreateDynamicRectangle( 788.0 , -1388.0 , 849.0 , -1331.0, .interiorid = -1 );
     g_iAlcatraz = CreateDynamicRectangle(2794.0, 2000.0, 2929.0, 1763.0, .interiorid = 0, .worldid = 0);
-    g_iWantedHackerZone = CreateDynamicRectangle( 1405.9171 , -1752.7811 , 1649.2175 , -1563.5104 , .interiorid = 0 ,.worldid = 0);
+    g_iWantedHackerZone = CreateDynamicRectangle(940.0, -1640.0, 978.0, -1611.0, .interiorid = 0 ,.worldid = 0);
     g_iAlhambra = CreateDynamicCube(470.0,-27.0,998.0,510.0,5.0,1010.0,.interiorid = 17);
 
     EnableStuntBonusForAll(0);
@@ -5822,10 +5822,9 @@ OnGameModeInit2() {
     FlashTimer = SetTimer("FlasherFunc",223,1);
     return 1;
 }
+
 forward SaveAll();
-public SaveAll()
-{
-    // mysql_oquery("START TRANSACTION", THREAD_STARTTRANSACTION ,INVALID_PLAYER_ID,gSQL);
+public SaveAll() {
     HouseSave();
     HotelSave();
     StaticBizSave();
@@ -5839,26 +5838,13 @@ public SaveAll()
     SaveGangZones();
     SaveWerbebanner();
     SaveFaction();
-    for(new i = 0 ; i < MAX_PLAYERS ; i++)
-    {
-        if(IsPlayerConnected(i))
-        {
-            if(gPlayerLogged[i])
-            {
-                SaveAccount(i);
-            }
-        }
-    }
-    //mysql_oquery("COMMIT",  THREAD_COMMIT , tick ,gSQL);
+    for (new i = 0; i <= GetPlayerPoolSize(); i++) if (IsPlayerConnected(i) && gPlayerLogged[i]) SaveAccount(i);
     return 1;
 }
 
-
-public OnGameModeExit()
-{
+public OnGameModeExit() {
     Riesenrad_Exit();
     ExtFire_Close();
-    //Debug::DebugClose();
     SaveWerbebanner();
     Spikes::SpikesClose();
 
@@ -5874,17 +5860,7 @@ public OnGameModeExit()
     SaveGangZones();
     ClearOnlinePlayers();
 
-    for(new i = 0 ; i < MAX_PLAYERS ; i++)
-    {
-        if(IsPlayerConnected(i))
-        {
-            if(gPlayerLogged[i])
-            {
-                OnPlayerCarUpdate(i);
-                SaveAccount(i);
-            }
-        }
-    }
+    for (new i = 0; i <= GetPlayerPoolSize(); i++) if (IsPlayerConnected(i) && gPlayerLogged[i]) SaveAccount(i) && OnPlayerCarUpdate(i);
     for(new i=0;i<iAngel;i++)
     {
         DestroyDynamic3DTextLabel(Angel[i][aText]);
@@ -29644,14 +29620,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 else
                 {
-                    SendClientMessage(playerid,COLOR_RED,"Du hast nicht genug WantedCodes");
+                    SendClientMessage(playerid,COLOR_RED,"Du hast nicht genügend Wantedcodes.");
                     ShowPlayerDialog(playerid,DIALOG_WANTEDCODES3,DIALOG_STYLE_INPUT,"Wanted Anzahl","Gib die Anzahl der Wanteds ein die entfernt werden soll","Hacken","Zurück");
                 }
             }
             else
             {
                 ShowPlayerDialog(playerid,DIALOG_WANTEDCODES3,DIALOG_STYLE_INPUT,"Wanted Anzahl","Gib die Anzahl der Wanteds ein die entfernt werden soll","Hacken","Zurück");
-                SendClientMessage(playerid,COLOR_RED,"Ungültige Wantedanzahl");
+                SendClientMessage(playerid,COLOR_RED,"Ungültige Wantedanzahl.");
             }
         }
         else
@@ -29661,38 +29637,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     }
     else if(dialogid==DIALOG_WANTEDCODES2)
     {
-        if(response)
-        {
-            wantedcodename[playerid]=MAX_PLAYERS;
-            if(strlen(inputtext)>=0)
-            {
-                for(new i;i<MAX_PLAYERS;i++)
-                {
-                    if(IsPlayerConnected(i))
-                    {
-                        if(strcmp(GetName(i),inputtext,true)==0)
-                        {
-                            wantedcodename[playerid]=i;
-                            ShowPlayerDialog(playerid,DIALOG_WANTEDCODES3,DIALOG_STYLE_INPUT,"Wanted Anzahl","Gib die Anzahl der Wanteds ein die entfernt werden soll","Hacken","Zurück");
-                            break;
-                        }
-                    }
-                    if(i==MAX_PLAYERS-1)
-                    {
-                        ShowPlayerDialog(playerid,DIALOG_WANTEDCODES2,DIALOG_STYLE_INPUT,"Spielername","Gib den Spielernamen an dessen Wanteds du löschen möchtest","Weiter","Zurück");
-                        SendClientMessage(playerid,COLOR_RED,"Ungültiger Spielername");
-                    }
-                }
-            }
-            else
-            {
-                SendClientMessage(playerid,COLOR_RED,"Du musst einen Spielernamen eingeben");
-            }
+        if (!response) return ShowPlayerDialog(playerid,DIALOG_WANTEDCODES,DIALOG_STYLE_LIST,"Wantedhacking","Wanteds löschen\nGesuchten-Liste anzeigen\nAlle Cops anzeigen","Auswählen","Abbrechen");
+        wantedcodename[playerid] = MAX_PLAYERS;
+        new pID;
+        if (sscanf(inputtext, "u", pID) || !gPlayerLogged[pID]) {
+            ShowPlayerDialog(playerid,DIALOG_WANTEDCODES2,DIALOG_STYLE_INPUT,"Spielername","Gib den Spielernamen oder die ID an, dessen Wanteds du löschen möchtest:","Weiter","Zurück");
+            return SendClientMessage(playerid,COLOR_RED, "Ungültiger Spielername bzw. Spieler ID.");
         }
-        else
-        {
-            ShowPlayerDialog(playerid,DIALOG_WANTEDCODES,DIALOG_STYLE_LIST,"Wantedhacking","Wanteds löschen\nGesuchten-Liste anzeigen\nAlle Cops anzeigen","Auswählen","Abbrechen");
-        }
+
+        wantedcodename[playerid] = pID;
+        return ShowPlayerDialog(playerid,DIALOG_WANTEDCODES3,DIALOG_STYLE_INPUT,"Wanted Anzahl","Gib die Anzahl der Wanteds ein die entfernt werden soll:","Hacken","Zurück");
     }
     else if(dialogid==DIALOG_WANTEDCODES)
     {
@@ -29700,11 +29654,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         {
             if(listitem==0)
             {
-                ShowPlayerDialog(playerid,DIALOG_WANTEDCODES2,DIALOG_STYLE_INPUT,"Spielername","Gib den Spielernamen an dessen Wanteds du löschen möchtest","Weiter","Zurück");
+                ShowPlayerDialog(playerid,DIALOG_WANTEDCODES2,DIALOG_STYLE_INPUT,"Spielername","Gib den Spielernamen oder die ID an, dessen Wanteds du löschen möchtest","Weiter","Zurück");
             }
             else if(listitem==1)
             {
-                for(new i = 0; i < MAX_PLAYERS; i++)
+                SendClientMessage(playerid, COLOR_YELLOW, "====== {FFFFFF}[ Gesuchten-Liste ] {FFFF00}======");
+                for (new i = 0; i <= GetPlayerPoolSize(); i++)
                 {
                     if(IsPlayerConnected(i))
                     {
@@ -29712,7 +29667,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         {
                             new giveplayer[MAX_PLAYER_NAME], string[128];
                             GetPlayerName(i, giveplayer, sizeof(giveplayer));
-                            format(string, sizeof(string), "%s[ID:%d]: %d", giveplayer,i,Spieler[i][pWanteds]);
+                            format(string, sizeof(string), "%s [ID: %d]: %d Wanted(s)", giveplayer,i,Spieler[i][pWanteds]);
                             SendClientMessage(playerid, COLOR_YELLOW, string);
                         }
                     }
@@ -33425,7 +33380,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         new string3[256];
                         new string4[768];
                         format(string1, sizeof(string1), "Als Wantedhacker musst du dich in den Polizeicomputer reinhacken. Damit das funktioniert, benötigst du Hackercodes. \n");
-                        format(string2, sizeof(string2), "Mit deinen Hackercodes musst du in einem Van sitzen und in der Nähe des Los Santos Police Department sein. \nAchte drauf, dass dich kein Polizist beim Hacken erwischt!\n");
+                        format(string2, sizeof(string2), "Mit deinen Hackercodes musst du in einem Van sitzen und hinter dem Los Santos Police Department sein. \nAchte drauf, dass dich kein Polizist beim Hacken erwischt!\n");
                         format(string3, sizeof(string3), "\nBefehle:\n{0077FF}/Wcodes => Damit generierst du die Wantedcodes\n/Wantedhacken => Damit hackst du dich in den Polizeicomputer hinein.\n/Jc => Der W-Hacker Jobchat \n");
                         format(string4, sizeof(string4), "\n\n{00AA00}Dein Gehalt erhältst du vom Kunden!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
                         format(string4, sizeof(string4), "%s%s%s%s", string1, string2, string3, string4);
@@ -52595,44 +52550,26 @@ COMMAND:wcodes(playerid,params[]) {
 COMMAND:wantedhacken(playerid,params[])
 {
     new modelid, vehicleid = GetPlayerVehicleID(playerid);
-    if(Spieler[playerid][pJob] != 21 )
-    {
-        SendClientMessage(playerid, COLOR_RED, "Du bist kein Wantedhacker");
-        return 1;
-    }
-    else if(!IsPlayerInDynamicArea(playerid,g_iWantedHackerZone))
-    {
-        SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht in der Nähe des Polizei Präsidiums.");
-    }
+    if (Spieler[playerid][pJob] != 21) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Wantedhacker.");
+    if (!IsPlayerInDynamicArea(playerid,g_iWantedHackerZone)) return SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht hinter dem Polizei Präsidium.");
     modelid = GetVehicleModel(vehicleid);
-    if( (modelid != 413) &&  (modelid != 459) &&  (modelid != 482) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Van.");
-    }
-    else if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER )
-    {
-        SendClientMessage(playerid,COLOR_RED,"Du musst der Fahrer des Wagens sein");
-    }
-    else if(Spieler[playerid][pWantedCodes]<=0)
-    {
-        SendClientMessage(playerid,COLOR_RED,"Du hast keine Wantedcodes auf der Hand.");
-    }
-    else
-    {
-        ShowPlayerDialog(playerid,DIALOG_WANTEDCODES,DIALOG_STYLE_LIST,"Wantedhacking","Wanteds löschen\nGesuchten-Liste anzeigen\nAlle Cops anzeigen","Auswählen","Abbrechen");
-    }
-    return 1;
+    if ((modelid != 413) && (modelid != 459) && (modelid != 482)) return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Van.");
+    if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SendClientMessage(playerid,COLOR_RED,"Du musst der Fahrer des Wagens sein.");
+    if(Spieler[playerid][pWantedCodes]<=0) return SendClientMessage(playerid,COLOR_RED,"Du hast keine Wantedcodes auf der Hand.");
+ 
+    return ShowPlayerDialog(playerid,DIALOG_WANTEDCODES,DIALOG_STYLE_LIST,"Wantedhacking","Wanteds löschen\nGesuchten-Liste anzeigen\nAlle Cops anzeigen","Auswählen","Abbrechen");
 }
 
 forward Pulse_WantedHacker(playerid,giveid,wantedcodes);
 public Pulse_WantedHacker(playerid,giveid,wantedcodes) {
     if(Spieler[playerid][pJob] != 21 ) {
         KillTimer(Spieler[playerid][tWantedCodes]);
-        SendClientMessage(playerid, COLOR_LIGHTRED2, "Du bist kein WantedHacker mehr! Vorgang gescheitert");
+        SendClientMessage(playerid, COLOR_LIGHTRED2, "Du bist kein Wantedhacker mehr! Vorgang gescheitert.");
         return 1;
     }
     if( !IsPlayerInDynamicArea(playerid,g_iWantedHackerZone)) {
         KillTimer(Spieler[playerid][tWantedCodes]);
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast dich zu weit vom Polizei Präsidium entfernt! Vorgang gescheitert");
+        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast dich zu weit vom Polizei Präsidium entfernt! Vorgang gescheitert.");
     }
     new
         vehicleid,
@@ -52640,16 +52577,16 @@ public Pulse_WantedHacker(playerid,giveid,wantedcodes) {
     vehicleid = GetPlayerVehicleID(playerid);
     if(!vehicleid) {
         KillTimer(Spieler[playerid][tWantedCodes]);
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du darfst dein Fahrzeug nicht verlassen! Vorgang gescheitert");
+        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du darfst dein Fahrzeug nicht verlassen! Vorgang gescheitert.");
     }
     modelid = GetVehicleModel(vehicleid);
     if( (modelid != 413) &&  (modelid != 459) &&  (modelid != 482) ) {
         KillTimer(Spieler[playerid][tWantedCodes]);
-        return SendClientMessage(playerid,COLOR_RED,"Du befindest dich mehr in einem Pony! Vorgang gescheitert");
+        return SendClientMessage(playerid,COLOR_RED,"Du befindest dich mehr in einem Pony! Vorgang gescheitert.");
     }
     if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) {
         KillTimer(Spieler[playerid][tWantedCodes]);
-        return SendClientMessage(playerid,COLOR_RED,"Du sitzt nicht als Fahrer im Pony! Vorgang gescheitert");
+        return SendClientMessage(playerid,COLOR_RED,"Du sitzt nicht als Fahrer im Pony! Vorgang gescheitert.");
     }
     if( gettime() > Spieler[playerid][punixWantedCodesDone] ) {
         new
@@ -52659,7 +52596,7 @@ public Pulse_WantedHacker(playerid,giveid,wantedcodes) {
         if( Spieler[giveid][pWanteds] == 0 ) {
             format(String,sizeof(String),"Der Spieler %s besitzt keine Wanteds. Du konntest daher keine Wanteds löschen!",GetName(giveid));
             SendClientMessage(playerid,COLOR_LIGHTRED2,String);
-            format(String,sizeof(String),"Du erhältst %d WantedCodes zurück",wantedcodes);
+            format(String,sizeof(String),"Du erhältst %d Wantedcodes zurück.",wantedcodes);
             SendClientMessage(playerid,COLOR_GREEN,String);
             Spieler[playerid][pWantedCodes] += wantedcodes;
             return 1;
@@ -52668,16 +52605,16 @@ public Pulse_WantedHacker(playerid,giveid,wantedcodes) {
             new
                 ueberschuss;
             ueberschuss = wantedcodes - Spieler[giveid][pWanteds];
-            format(String,sizeof(String),"Du hast versucht Spieler %s %d Wanteds zu reinigen,er hat aber nur %d Wanteds.",GetName(giveid),wantedcodes,Spieler[giveid][pWanteds]);
+            format(String,sizeof(String),"Du hast versucht Spieler %s %d Wanteds zu reinigen, er hat aber nur %d Wanteds.",GetName(giveid),wantedcodes,Spieler[giveid][pWanteds]);
             SendClientMessage(playerid,COLOR_LIGHTRED2,String);
-            format(String,sizeof(String),"Daher erhältst du %d WantedCodes zurück",ueberschuss );
+            format(String,sizeof(String),"Daher erhältst du %d Wantedcodes zurück.",ueberschuss );
             SendClientMessage(playerid,COLOR_GREEN,String);
             Spieler[playerid][pWantedCodes] += ueberschuss;
             wantedcodes = ( wantedcodes - ueberschuss );
         }
-        format(String,sizeof(String),"WantedHacker %s hat für dich %d Wanted/s gereinigt!",GetName(playerid),wantedcodes);
+        format(String,sizeof(String),"WantedHacker %s hat für dich %d Wanted(s) gereinigt!",GetName(playerid),wantedcodes);
         SendClientMessage(giveid,COLOR_LIGHTRED2,String);
-        format(String,sizeof(String),"Du hast erfolgreich %d Wanted/s für %s gereinigt. ( WantedCodes: %d )",wantedcodes,GetName(giveid),Spieler[playerid][pWantedCodes]);
+        format(String,sizeof(String),"Du hast erfolgreich %d Wanted(s) für %s gereinigt (WantedCodes: %d).",wantedcodes,GetName(giveid),Spieler[playerid][pWantedCodes]);
         SendClientMessage(playerid,COLOR_GREEN,String);
         Spieler[giveid][pWanteds] -= wantedcodes;
     }
@@ -53561,7 +53498,7 @@ COMMAND:beamteon(playerid,params[]) {
         }
     }
     if(!bBeamteOnline) {
-        SendClientMessage(playerid,COLOR_LIGHTRED2,"Es sind keine Beamten Online!");
+        SendClientMessage(playerid,COLOR_LIGHTRED2,"Es sind keine Beamten online!");
     }
     else {
         SendClientMessage(playerid,COLOR_GREY,String);
