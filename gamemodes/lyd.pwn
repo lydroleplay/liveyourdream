@@ -11299,7 +11299,7 @@ public OnPlayerText(playerid, text[])
         }*/
 
         if (PlayerIsPaintballing[playerid]) {
-            format(String, sizeof(String), "%s: %s", sName, text);
+            format(String, sizeof(String), "[PAINTBALL] {FFFFFF}%s sagt: %s", sName, text);
             SendPaintballMessage(COLOR_YELLOW, String);
             return 0;
         }
