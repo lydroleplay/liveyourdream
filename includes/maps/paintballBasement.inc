@@ -37,6 +37,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             format(message, sizeof(message), "%s hat die Paintball-Halle verlassen.", GetName(playerid));
             SendPaintballMessage(COLOR_ORANGE, message);
             PlayerIsPaintballing[playerid] = 0;
+            for (new i = 0; i < 5; i++) SendDeathMessageToPlayer(playerid, 1001, 1001, 200);
             return 1;
         }
     }
