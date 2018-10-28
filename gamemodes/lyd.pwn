@@ -2091,6 +2091,12 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_SAFEBOX_TAKE 1377
 #define     DIALOG_SAFEBOX_NOITEMS 1378
 
+#define     DIALOG_FSAFEBOX_MENU 1379
+#define     DIALOG_FSAFEBOX_ACTION 1380
+#define     DIALOG_FSAFEBOX_STORE 1381
+#define     DIALOG_FSAFEBOX_TAKE 1382
+#define     DIALOG_FSAFEBOX_NOITEMS 1383
+
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
 enum {
@@ -3001,6 +3007,7 @@ new iTanke;
 enum e_FraktionSafeBox {
     FSB_iDrogen,
     FSB_iWaffenteile,
+    FSB_iWantedcodes,
     FSB_iSpice
 }
 
@@ -5471,6 +5478,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1279, 1, 505.9030,-79.8864,998.9609, 0);//Fsavebox Aztecas
 	CreateDynamicPickup(1279, 1, -2170.3828,635.3927,1052.3750, 0);//Fsavebox Outlawz
 	CreateDynamicPickup(1279, 1, 2811.7188,-1165.9420,1025.5703, 0);//Fsavebox Vagos
+    CreateDynamicPickup(1279, 1, 938.9147,1729.0337,8.8516, 0);//fsafebox Wheelman
 
 	//Duty und Spawn Points
 	CreateDynamicPickup(1240, 1, 331.0788,1128.5469,1083.8828, 0);//Ballas Herz
@@ -5664,6 +5672,7 @@ OnGameModeInit2() {
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Aztecas\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 505.9030,-79.8864,998.9609, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Vagos\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 2811.7188,-1165.9420,1025.5703, 8.0);
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der OutlawZ\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, -2170.3828,635.3927,1052.3750, 8.0);
+    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Safebox der Wheelman\n"COLOR_HEX_WHITE"Tippe /FSafebox", COLOR_WHITE, 938.9147,1729.0337,8.8516, 8.0);
 
 	//3D Infotext
 	//CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"SERVER - EXPERTE\nFreischalten mit:"COLOR_HEX_WHITE"/Experte", COLOR_WHITE, 814.4642,-1345.7327,13.5320, 15.0);
@@ -29006,6 +29015,40 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
         return SafeboxInteraction(playerid, SAFEBOX_ACTION_TAKE, GetPVarInt(playerid, "SAFEBOX.ITEM"), amount, true);
     }
+    if (dialogid == DIALOG_FSAFEBOX_MENU) {
+        if (!response) return 1;
+        if (listitem < 0 || listitem > sizeof(g_SafeboxItems)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
+        SetPVarInt(playerid, "FSAFEBOX.ITEM", listitem);
+        return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_ACTION, listitem);
+    }
+    if (dialogid == DIALOG_FSAFEBOX_ACTION) {
+        if (!response) return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_MENU);
+        if (listitem < 0 || listitem > 1) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
+        return ShowFSafeboxDialog(playerid, listitem ? DIALOG_FSAFEBOX_TAKE : DIALOG_FSAFEBOX_STORE, GetPVarInt(playerid, "FSAFEBOX.ITEM"));
+    }
+    if (dialogid == DIALOG_FSAFEBOX_NOITEMS) {
+        return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_ACTION, GetPVarInt(playerid, "FSAFEBOX.ITEM"));
+    }
+    if (dialogid == DIALOG_FSAFEBOX_STORE) {
+        if (!response) return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_ACTION, GetPVarInt(playerid, "FSAFEBOX.ITEM"));
+        new amount;
+        if (sscanf(inputtext, "i", amount) || amount < 0) {
+            SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du hast keine gültige Menge angegeben.");
+            return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_STORE, GetPVarInt(playerid, "FSAFEBOX.ITEM"));
+        }
+
+        return FSafeboxInteraction(playerid, SAFEBOX_ACTION_STORE, GetPVarInt(playerid, "FSAFEBOX.ITEM"), amount, true);
+    }
+    if (dialogid == DIALOG_FSAFEBOX_TAKE) {
+        if (!response) return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_ACTION, GetPVarInt(playerid, "FSAFEBOX.ITEM"));
+        new amount;
+        if (sscanf(inputtext, "i", amount) || amount < 0) {
+            SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du hast keine gültige Menge angegeben.");
+            return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_TAKE, GetPVarInt(playerid, "FSAFEBOX.ITEM"));
+        }
+
+        return FSafeboxInteraction(playerid, SAFEBOX_ACTION_TAKE, GetPVarInt(playerid, "FSAFEBOX.ITEM"), amount, true);
+    }
     if (dialogid == DIALOG_EVENT_ITEM_MENU) {
         if (!response || listitem < 0) return 1;
         new message[145];
@@ -33579,6 +33622,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     else if(Spieler[playerid][pFraktion] == 17)
                     {
                         SendClientMessage(playerid, COLOR_BLUE, "* WHEELMAN *: {FFFFFF}/Flock, /Wrz, /Wmbefreien, /Wpreis, /Knastbefreien, /Atorhacken, /Kasse, /Kassenstand, /Mitglieder");
+                        SendClientMessage(playerid, COLOR_BLUE, "* WHEELMAN *: {FFFFFF}/Gangwaffen, /Gangheilen, /Waffenlager, /Fsafebox");
                     }
                     else if(Spieler[playerid][pFraktion] == 18)
                     {
@@ -49550,12 +49594,6 @@ COMMAND:safebox(playerid,params[]) {
     return 1;
 }
 
-// CMD:safeboxmenu(playerid) {
-//     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
-//     if (IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du darfst dafür nicht im Fahrzeug sein.");
-//     return ShowSafeboxDialog(playerid, DIALOG_SAFEBOX_MENU);
-// }
-
 stock SafeboxInteraction(playerid, action, itemid, amount, bool:dialog) {
     if (action == SAFEBOX_ACTION_TAKE) {
         switch (itemid) {
@@ -51375,9 +51413,10 @@ stock SaveFraktionsSafeBox() {
     new
         query[200];
     for(new i = 0; i < sizeof(g_FraktionsSafeBox) ; i++) {
-        format(query,sizeof(query),"UPDATE `frakbox` SET `drogen` = %d,`waffenteile` = %d,`spice` = %d WHERE `fraktionsid` = %d",
+        format(query,sizeof(query),"UPDATE `frakbox` SET `drogen` = %d, `waffenteile` = %d, `wantedcodes` = %d, `spice` = %d WHERE `fraktionsid` = %d",
             g_FraktionsSafeBox[i][FSB_iDrogen],
             g_FraktionsSafeBox[i][FSB_iWaffenteile],
+            g_FraktionsSafeBox[i][FSB_iWantedcodes],
             g_FraktionsSafeBox[i][FSB_iSpice],
             i
         );
@@ -51394,6 +51433,7 @@ enum e_FraktionsSafeBoxLocation {
 
 new g_FraktionsSafeBoxLocation[][e_FraktionsSafeBoxLocation] = {
     {15, NINEDEMONSBASE_SAFEBOX_POINT},
+    {17, 938.9147,1729.0337,8.8516},
     {6, GSF_INTERIOR_SAFEBOX_POINT},
     {7,333.7054,1121.7754,1083.8903},
     {10, YAKUZA_INTERIOR_SAFEBOX_POINT},
@@ -51404,188 +51444,301 @@ new g_FraktionsSafeBoxLocation[][e_FraktionsSafeBoxLocation] = {
     {13,2811.7188,-1165.9420,1025.5703}
 };
 
-COMMAND:fsafeboxinfo(playerid,params[]) {
-    new fraktion, frak_index = -1;
-
-    for( new i = 0 ; i < sizeof(g_FraktionsSafeBoxLocation) ; i++) {
-        if( Spieler[playerid][pFraktion] == g_FraktionsSafeBoxLocation[i][FSBL_iFraktion] ) {
-            frak_index = i;
+stock FSafeboxInteraction(playerid, action, itemid, amount, bool:dialog) {
+    new message[145], fraktion = Spieler[playerid][pFraktion];
+    if (action == SAFEBOX_ACTION_TAKE) {
+        if (Spieler[playerid][pRank] < 5) {
+            if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_ACTION);
+            return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Dein Rank reicht dafür nicht aus.");
         }
-    }
-
-    if( frak_index == -1 ) {
-        return SendClientMessage(playerid,COLOR_RED,"Deine Fraktion besitzt keine SafeBox.");
-    }
-
-    if (Spieler[playerid][pFraktion] == 21 && GetPlayerVirtualWorld(playerid) != VW_TRIADSINTERIOR)
-        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei der SafeBox deiner Fraktion.");
-
-    if( !IsPlayerInRangeOfPoint(playerid,5.0,g_FraktionsSafeBoxLocation[frak_index][FSBL_fX],g_FraktionsSafeBoxLocation[frak_index][FSBL_fY],g_FraktionsSafeBoxLocation[frak_index][FSBL_fZ]) ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du bist nicht bei der SafeBox deiner Fraktion.");
-    }
-
-    fraktion = Spieler[playerid][pFraktion];
-    SendClientMessage(playerid, COLOR_GREEN, "=== {FFFFFF}[ FRAKTIONS-SAFEBOX ] {009D00}===");
-    new message[145];
-    format(message, sizeof(message), "Drogen: {FFFFFF}%s Gramm", AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iDrogen]));
-    SendClientMessage(playerid, COLOR_YELLOW, message);
-    format(message, sizeof(message), "Waffenteile: {FFFFFF}%s Stück", AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]));
-    SendClientMessage(playerid, COLOR_YELLOW, message);
-    format(message, sizeof(message), "Spice: {FFFFFF}%s Gramm", AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iSpice]));
-    SendClientMessage(playerid, COLOR_YELLOW, message);
-    return SendClientMessage(playerid, COLOR_GREEN, "===========================");
-}
-
-COMMAND:fsafebox(playerid,params[]) {
-    new fraktion, frak_index = -1;
-
-    for( new i = 0 ; i < sizeof(g_FraktionsSafeBoxLocation) ; i++) {
-        if( Spieler[playerid][pFraktion] == g_FraktionsSafeBoxLocation[i][FSBL_iFraktion] ) {
-            frak_index = i;
-        }
-    }
-
-    if( frak_index == -1 ) {
-        return SendClientMessage(playerid,COLOR_RED,"Deine Fraktion besitzt keine SafeBox.");
-    }
-
-    if( !IsPlayerInRangeOfPoint(playerid,5.0,g_FraktionsSafeBoxLocation[frak_index][FSBL_fX],g_FraktionsSafeBoxLocation[frak_index][FSBL_fY],g_FraktionsSafeBoxLocation[frak_index][FSBL_fZ]) ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du bist nicht bei der SafeBox deiner Fraktion.");
-    }
-
-    fraktion = Spieler[playerid][pFraktion];
-    new
-        menge,
-        item,
-        sItem[32],
-        aktion,
-        sAktion[32];
-
-    if(sscanf(params,"s[32]s[32]d",sItem,sAktion,menge)) {
-        return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Fsafebox [Drogen/Waffenteile/Spice] [rausnehmen/reinlegen] [Anzahl]");
-    }
-    if(menge <= 0 ) {
-        return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Fsafebox [Drogen/Waffenteile/Spice] [rausnehmen/reinlegen] [Anzahl]");
-    }
-    if(!strcmp(sItem,"drogen",true)) {
-        item = 1;
-    }
-    else if(!strcmp(sItem,"waffenteile",true)) {
-        item = 2;
-    }
-    else if(!strcmp(sItem,"spice",true)) {
-        item = 3;
-    }
-    if(!item) {
-        return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Fsafebox [Drogen/Waffenteile/Spice] [rausnehmen/reinlegen] [Anzahl]");
-    }
-    if(!strcmp(sAktion,"rausnehmen",true)) {
-        aktion = 1;
-    }
-    else if(!strcmp(sAktion,"reinlegen",true)) {
-        aktion = 2;
-    }
-    if(!aktion) {
-        return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Fsafebox [Drogen/Waffenteile/Spice] [rausnehmen/reinlegen] [Anzahl]");
-    }
-
-    new String[128];
-    fraktion = Spieler[playerid][pFraktion];
-    if(item == 1 ) {    // Drogen
-        if(aktion == 1 ) { // rausnehmen
-            if( Spieler[playerid][pRank] >= 5 ) {
-                if( menge > g_FraktionsSafeBox[fraktion][FSB_iDrogen] ) {
-                    format(String,sizeof(String),"Du kannst keine %d Stk Drogen entnehmen ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iDrogen]);
-                    SendClientMessage(playerid,COLOR_RED,String);
+        switch (itemid) {
+            case SAFEBOX_DRUGS: {
+                if (amount > g_FraktionsSafeBox[fraktion][FSB_iDrogen]) {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viele Drogen sind nicht gelagert.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_TAKE, itemid);
                     return 1;
                 }
-                Spieler[playerid][pDrugs] += menge;
-                g_FraktionsSafeBox[fraktion][FSB_iDrogen] -= menge;
-                format(String,sizeof(String),"Du hast %d Stk Drogen aus deiner Frak-Safebox entnommen ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iDrogen]);
-                SendClientMessage(playerid,COLOR_YELLOW,String);
+
+                g_FraktionsSafeBox[fraktion][FSB_iDrogen] -= amount;
+                Spieler[playerid][pDrugs] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Gramm Drogen {FFFFFF}aus der FSafebox entnommen.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
             }
-            else {
-            SendClientMessage(playerid,COLOR_RED,"Dein Fraktionsrank reicht nicht aus, um Drogen aus der Box zu nehmen.");
-            }
-        }
-        else if(aktion == 2 ) { // reinlegen
-            if( menge > Spieler[playerid][pDrugs] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Drogen einlagern ( Hand: %d Stk )",menge,Spieler[playerid][pDrugs]);
-                SendClientMessage(playerid,COLOR_RED,String);
-                return 1;
-            }
-            Spieler[playerid][pDrugs] -= menge;
-            g_FraktionsSafeBox[fraktion][FSB_iDrogen] += menge;
-            format(String,sizeof(String),"Du hast %d Stk Drogen in die Frak-Safebox gelagert ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iDrogen]);
-            SendClientMessage(playerid,COLOR_YELLOW,String);
-        }
-    }
-    else if(item == 2 ) { // Waffenteile
-        if(aktion == 1 ) { // rausnehmen
-            if( Spieler[playerid][pRank] >= 5 ) {
-            if( menge > g_FraktionsSafeBox[fraktion][FSB_iWaffenteile] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Waffenteile entnehmen ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]);
-                SendClientMessage(playerid,COLOR_RED,String);
-                return 1;
-            }
-            Spieler[playerid][pWaffenteile] += menge;
-            g_FraktionsSafeBox[fraktion][FSB_iWaffenteile] -= menge;
-            format(String,sizeof(String),"Du hast %d Stk Waffenteile aus deiner Frak-Safebox entnommen ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]);
-            SendClientMessage(playerid,COLOR_YELLOW,String);
-            }
-            else {
-            SendClientMessage(playerid,COLOR_RED,"Dein Fraktionsrank reicht nicht aus, um Waffenteile aus der Box zu nehmen.");
-            }
-        }
-        else if(aktion == 2 ) { // reinlegen
-            if( menge > Spieler[playerid][pWaffenteile] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Waffenteile einlagern ( Hand: %d Stk )",menge,Spieler[playerid][pWaffenteile]);
-                SendClientMessage(playerid,COLOR_RED,String);
-                return 1;
-            }
-            Spieler[playerid][pWaffenteile] -= menge;
-            g_FraktionsSafeBox[fraktion][FSB_iWaffenteile] += menge;
-            format(String,sizeof(String),"Du hast %d Stk Waffenteile in die Frak-Safebox gelagert ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]);
-            SendClientMessage(playerid,COLOR_YELLOW,String);
-        }
-    }
-    else if(item == 3 ) { // Spice
-        if(aktion == 1 ) { // rausnehmen
-            if( Spieler[playerid][pRank] >= 5 ) {
-                if( menge > g_FraktionsSafeBox[fraktion][FSB_iSpice] ) {
-                    format(String,sizeof(String),"Du kannst keine %d Stk Spice entnehmen ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iSpice]);
-                    SendClientMessage(playerid,COLOR_RED,String);
+            case SAFEBOX_MATS: {
+                if (amount > g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]) {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viele Waffenteile sind nicht gelagert.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_TAKE, itemid);
                     return 1;
                 }
-                Spieler[playerid][pSpice] += menge;
-                g_FraktionsSafeBox[fraktion][FSB_iSpice] -= menge;
-                format(String,sizeof(String),"Du hast %d Stk Spice aus deiner Frak-Safebox entnommen ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iSpice]);
-                SendClientMessage(playerid,COLOR_YELLOW,String);
+
+                g_FraktionsSafeBox[fraktion][FSB_iWaffenteile] -= amount;
+                Spieler[playerid][pWaffenteile] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Waffenteile {FFFFFF}aus der FSafebox entnommen.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
             }
-            else {
-                SendClientMessage(playerid,COLOR_RED,"Dein Fraktionsrank reicht nicht aus, um Spice aus der Box zu nehmen.");
+            case SAFEBOX_WCODES: {
+                if (amount > g_FraktionsSafeBox[fraktion][FSB_iWantedcodes]) { 
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viele Wantedcodes sind nicht gelagert.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_TAKE, itemid);
+                    return 1;
+                }
+
+                g_FraktionsSafeBox[fraktion][FSB_iWantedcodes] -= amount;
+                Spieler[playerid][pWantedCodes] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Wantedcodes {FFFFFF}aus der FSafebox entnommen.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
+            }
+            case SAFEBOX_SPICE: {
+                if (amount > g_FraktionsSafeBox[fraktion][FSB_iSpice]) {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viel Spice ist nicht gelagert.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_TAKE, itemid);
+                    return 1;
+                }
+
+                g_FraktionsSafeBox[fraktion][FSB_iSpice] -= amount;
+                Spieler[playerid][pSpice] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Gramm Spice {FFFFFF}aus der FSafebox entnommen.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
             }
         }
-        else if(aktion == 2 ) { // reinlegen
-            if( menge > Spieler[playerid][pSpice] ) {
-                format(String,sizeof(String),"Du kannst keine %d Stk Spice einlagern ( Hand: %d Stk )",menge,Spieler[playerid][pSpice]);
-                SendClientMessage(playerid,COLOR_RED,String);
-                return 1;
-            }
-            Spieler[playerid][pSpice] -= menge;
-            g_FraktionsSafeBox[fraktion][FSB_iSpice] += menge;
-            format(String,sizeof(String),"Du hast %d Stk Spice in die Frak-Safebox gelagert ( Frak-Lager: %d Stk )",menge,g_FraktionsSafeBox[fraktion][FSB_iSpice]);
-            SendClientMessage(playerid,COLOR_YELLOW,String);
-        }
+
+        if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_MENU);
+        return 1;
     }
+    else if (action == SAFEBOX_ACTION_STORE) {
+        switch (itemid) {
+            case SAFEBOX_DRUGS: {
+                if (amount > Spieler[playerid][pDrugs]) {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viele Drogen hast du nicht dabei.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_STORE, itemid);
+                    return 1;
+                }
+
+                Spieler[playerid][pDrugs] -= amount;
+                g_FraktionsSafeBox[fraktion][FSB_iDrogen] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Gramm Drogen {FFFFFF}in die FSafebox eingelagert.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
+            }
+            case SAFEBOX_MATS: {
+                if (amount > Spieler[playerid][pWaffenteile]) {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viele Waffenteile hast du nicht dabei.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_STORE, itemid);
+                    return 1;
+                }
+
+                Spieler[playerid][pWaffenteile] -= amount;
+                g_FraktionsSafeBox[fraktion][FSB_iWaffenteile] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Waffenteile {FFFFFF}in die FSafebox eingelagert.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
+            }
+            case SAFEBOX_WCODES: {
+                if (amount > Spieler[playerid][pWantedCodes]) {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viele Wantedcodes hast du nicht dabei.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_STORE, itemid);
+                    return 1;
+                }
+
+                Spieler[playerid][pWantedCodes] -= amount;
+                g_FraktionsSafeBox[fraktion][FSB_iWantedcodes] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Wantedcodes {FFFFFF}in die FSafebox eingelagert.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
+            }
+            case SAFEBOX_SPICE: {
+                if (amount > Spieler[playerid][pSpice]) {
+                    SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}So viel Spice hast du nicht dabei.");
+                    if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_STORE, itemid);
+                    return 1;
+                }
+
+                Spieler[playerid][pSpice] -= amount;
+                g_FraktionsSafeBox[fraktion][FSB_iSpice] += amount;
+                format(message, sizeof(message), "[INFO] {FFFFFF}%s hat {FF9900}%s Gramm Spice {FFFFFF}in die FSafebox eingelagert.", GetName(playerid), AddDelimiters(amount));
+                SendFraktionMessage(fraktion, COLOR_YELLOW, message);
+            }
+        }
+
+        if (dialog) ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_MENU);
+        return 1;
+    }
+
     return 1;
 }
 
+stock ShowFSafeboxDialog(playerid, dialogid, extraid = 0) {
+    new dialogText[256], dialogCaption[64];
+    if (Spieler[playerid][pFraktion] == 21 && GetPlayerVirtualWorld(playerid) != VW_TRIADSINTERIOR)
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei der Safebox deiner Fraktion.");
+
+    new frak_index = -1;
+    for (new i = 0; i < sizeof(g_FraktionsSafeBoxLocation); i++) {
+        if (Spieler[playerid][pFraktion] == g_FraktionsSafeBoxLocation[i][FSBL_iFraktion]) {
+            frak_index = i;
+            break;
+        }
+    }
+
+    if (frak_index == -1) return SendClientMessage(playerid, COLOR_RED, "Deine Fraktion besitzt keine Safebox.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0, g_FraktionsSafeBoxLocation[frak_index][FSBL_fX], g_FraktionsSafeBoxLocation[frak_index][FSBL_fY], g_FraktionsSafeBoxLocation[frak_index][FSBL_fZ]))
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei der Safebox deiner Fraktion.");
+
+    new fraktion = Spieler[playerid][pFraktion];
+
+    switch (dialogid) {
+        case DIALOG_FSAFEBOX_MENU: {
+            dialogText = "Material\tMenge\n";
+            format(dialogText, sizeof(dialogText), "%s{FFFFFF}Drogen\t%s Gramm\nWaffenteile\t%s Stück\nWantedcodes\t%s Stück\nSpice\t%s Gramm", 
+                dialogText, AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iDrogen]), AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]), 
+                AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iWantedcodes]), AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iSpice]));
+
+            return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_MENU, DIALOG_STYLE_TABLIST_HEADERS, "{EFCE6D}FSafebox - Übersicht", dialogText, "Auswählen", "Schließen");
+        }
+        case DIALOG_FSAFEBOX_ACTION: {
+            format(dialogCaption, sizeof(dialogCaption), "{EFCE6D}FSafebox - %s", g_SafeboxItems[extraid]);
+            switch (extraid) {
+                case SAFEBOX_DRUGS: {
+                    format(dialogText, sizeof(dialogText), "Einlagern (Inventar: %s Gramm)", AddDelimiters(Spieler[playerid][pDrugs]));
+                    if (Spieler[playerid][pRank] >= 5) format(dialogText, sizeof(dialogText), "%s\nEntnehmen (Lager: %s Gramm)", dialogText, AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iDrogen]));
+                }
+                case SAFEBOX_MATS: {
+                    format(dialogText, sizeof(dialogText), "Einlagern (Inventar: %s Stück)", AddDelimiters(Spieler[playerid][pWaffenteile]));
+                    if (Spieler[playerid][pRank] >= 5) format(dialogText, sizeof(dialogText), "%s\nEntnehmen (Lager: %s Stück)", dialogText, AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]));
+                }
+                case SAFEBOX_WCODES: {
+                    format(dialogText, sizeof(dialogText), "Einlagern (Inventar: %s Stück)", AddDelimiters(Spieler[playerid][pWantedCodes]));
+                    if (Spieler[playerid][pRank] >= 5) format(dialogText, sizeof(dialogText), "%s\nEntnehmen (Lager: %s Stück)", dialogText, AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iWantedcodes]));
+                }
+                case SAFEBOX_SPICE: {
+                    format(dialogText, sizeof(dialogText), "Einlagern (Inventar: %s Gramm)", AddDelimiters(Spieler[playerid][pSpice]));
+                    if (Spieler[playerid][pRank] >= 5) format(dialogText, sizeof(dialogText), "%s\nEntnehmen (Lager: %s Gramm)", dialogText, AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iSpice]));
+                }
+            }
+
+            return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_ACTION, DIALOG_STYLE_LIST, dialogCaption, dialogText, "Weiter", "Zurück");
+        }
+        case DIALOG_FSAFEBOX_TAKE: {
+            if (Spieler[playerid][pRank] < 5) {
+                SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Dein Rank reicht dafür nicht aus.");
+                return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_ACTION, extraid);
+            }
+            format(dialogCaption, sizeof(dialogCaption), "{EFCE6D}FSafebox - %s - Entnehmen", g_SafeboxItems[extraid]);
+            switch (extraid) {
+                case SAFEBOX_DRUGS: {
+                    if (g_FraktionsSafeBox[fraktion][FSB_iDrogen] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Es sind keine Drogen in der FSafebox gelagert.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Drogen: {FFFFFF}%s Gramm in der FSafebox\nGebe an, wieviele Gramm Drogen du entnehmen möchtest:", 
+                        AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iDrogen]));
+                }
+                case SAFEBOX_MATS: {
+                    if (g_FraktionsSafeBox[fraktion][FSB_iWaffenteile] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Es sind keine Waffenteile in der FSafebox gelagert.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Waffenteile: {FFFFFF}%s Stück in der FSafebox\nGebe an, wieviele Waffenteile du entnehmen möchtest:", 
+                        AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iWaffenteile]));
+                }
+                case SAFEBOX_WCODES: {
+                    if (g_FraktionsSafeBox[fraktion][FSB_iWantedcodes] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Es sind keine Wantedcodes in der FSafebox gelagert.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Wantedcodes: {FFFFFF}%s Stück in der FSafebox\nGebe an, wieviele Wantedcodes du entnehmen möchtest:", 
+                        AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iWantedcodes]));
+                }
+                case SAFEBOX_SPICE: {
+                    if (g_FraktionsSafeBox[fraktion][FSB_iSpice] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Es ist kein Spice in der FSafebox gelagert.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Spice: {FFFFFF}%s Gramm in der FSafebox\nGebe an, wieviele Gramm Spice du entnehmen möchtest:", 
+                        AddDelimiters(g_FraktionsSafeBox[fraktion][FSB_iSpice]));
+                }
+            }
+
+            return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_TAKE, DIALOG_STYLE_INPUT, dialogCaption, dialogText, "Entnehmen", "Zurück");
+        }
+        case DIALOG_FSAFEBOX_STORE: {
+            format(dialogCaption, sizeof(dialogCaption), "{EFCE6D}FSafebox - %s - Einlagern", g_SafeboxItems[extraid]);
+            switch (extraid) {
+                case SAFEBOX_DRUGS: {
+                    if (Spieler[playerid][pDrugs] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Du hast keine Drogen zum Einlagern.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Drogen: {FFFFFF}%s Gramm im Inventar\nGebe an, wieviele Gramm Drogen du einlagern möchtest:", AddDelimiters(Spieler[playerid][pDrugs]));
+                }
+                case SAFEBOX_MATS: {
+                    if (Spieler[playerid][pWaffenteile] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Du hast keine Waffenteile zum Einlagern.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Waffenteile: {FFFFFF}%s Stück im Inventar\nGebe an, wieviele Waffenteile du einlagern möchtest:", AddDelimiters(Spieler[playerid][pWaffenteile]));
+                }
+                case SAFEBOX_WCODES: {
+                    if (Spieler[playerid][pWantedCodes] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Du hast keine Wantedcodes zum Einlagern.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Wantedcodes: {FFFFFF}%s Stück im Inventar\nGebe an, wieviele Wantedcodes du einlagern möchtest:", AddDelimiters(Spieler[playerid][pWantedCodes]));
+                }
+                case SAFEBOX_SPICE: {
+                    if (Spieler[playerid][pSpice] <= 0) return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_NOITEMS, DIALOG_STYLE_MSGBOX, dialogCaption, 
+                        "{FFFFFF}Du hast kein Spice zum Einlagern.", "Zurück", "");
+
+                    format(dialogText, sizeof(dialogText), "{BADA55}Spice: {FFFFFF}%s Gramm im Inventar\nGebe an, wieviele Gramm Spice du einlagern möchtest:", AddDelimiters(Spieler[playerid][pSpice]));
+                }
+            }
+
+            return ShowPlayerDialog(playerid, DIALOG_FSAFEBOX_STORE, DIALOG_STYLE_INPUT, dialogCaption, dialogText, "Einlagern", "Zurück");
+        }
+    }
+
+    return 1;
+}
+
+COMMAND:fsafebox(playerid,params[]) {
+    if (Spieler[playerid][pFraktion] == 21 && GetPlayerVirtualWorld(playerid) != VW_TRIADSINTERIOR)
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei der Safebox deiner Fraktion.");
+
+    new frak_index = -1;
+    for (new i = 0; i < sizeof(g_FraktionsSafeBoxLocation); i++) {
+        if (Spieler[playerid][pFraktion] == g_FraktionsSafeBoxLocation[i][FSBL_iFraktion]) {
+            frak_index = i;
+            break;
+        }
+    }
+
+    if (frak_index == -1) return SendClientMessage(playerid, COLOR_RED, "Deine Fraktion besitzt keine Safebox.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0, g_FraktionsSafeBoxLocation[frak_index][FSBL_fX], g_FraktionsSafeBoxLocation[frak_index][FSBL_fY], g_FraktionsSafeBoxLocation[frak_index][FSBL_fZ]))
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht bei der Safebox deiner Fraktion.");
+
+    if (IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du darfst dafür nicht im Fahrzeug sein.");
+    if (isnull(params)) return ShowFSafeboxDialog(playerid, DIALOG_FSAFEBOX_MENU);
+
+    new menge, item, sItem[32], aktion, sAktion[32];
+    if (sscanf(params, "s[32]s[32]d", sItem, sAktion, menge) || menge < 0) {
+        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /FSafebox [Drogen/Waffenteile/Wantedcodes/Spice] [rausnehmen/reinlegen] [Anzahl]");
+        return SendClientMessage(playerid, COLOR_BLUE, "* Du kannst auch nur /FSafebox für das FSafebox-Menü benutzen.");
+    }
+
+    if (!strcmp(sItem, "drogen", true)) item = 1;
+    else if (!strcmp(sItem, "waffenteile", true)) item = 2;
+    else if (!strcmp(sItem, "wantedcodes", true)) item = 3;
+    else if (!strcmp(sItem, "spice", true)) item = 4;
+
+    if (!item) {
+        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /FSafebox [Drogen/Waffenteile/Wantedcodes/Spice] [rausnehmen/reinlegen] [Anzahl]");
+        return SendClientMessage(playerid, COLOR_BLUE, "* Du kannst auch nur /FSafebox für das FSafebox-Menü benutzen.");
+    }
+
+    if (!strcmp(sAktion, "rausnehmen", true)) aktion = 1;
+    else if (!strcmp(sAktion, "reinlegen", true)) aktion = 2;
+
+    if (!aktion) {
+        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /FSafebox [Drogen/Waffenteile/Wantedcodes/Spice] [rausnehmen/reinlegen] [Anzahl]");
+        return SendClientMessage(playerid, COLOR_BLUE, "* Du kannst auch nur /FSafebox für das FSafebox-Menü benutzen.");
+    }
+
+    FSafeboxInteraction(playerid, aktion - 1, item - 1, menge, false);
+    return 1;
+}
 
 COMMAND:sex(playerid,params[]){
-    new
-        giveid,
-        price;
+    new giveid, price;
     if(Spieler[playerid][pJob] != 20 ) {
         return SendClientMessage(playerid, COLOR_RED, "Du bist keine Prostituierte.");
     }
@@ -57106,19 +57259,13 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
         }
     }
     else if( resultid == THREAD_LOADFRAKTIONSSAFEBOX ) {
-        new
-            rows,
-            row,
-            i,
-            id,
-            spice,
-            drugs,
-            waffenteile;
+        new rows, row, i, id, spice, drugs, wcodes, waffenteile;
         rows = cache_get_row_count(connectionHandle);
         while( row < rows ) {
             id = cache_get_field_content_int(row,"fraktionsid",connectionHandle);
             drugs = cache_get_field_content_int(row, "drogen",connectionHandle);
             waffenteile = cache_get_field_content_int(row, "waffenteile",connectionHandle);
+            wcodes = cache_get_field_content_int(row, "wantedcodes",connectionHandle);
             spice = cache_get_field_content_int(row, "spice",connectionHandle);
             row++;
             /*
@@ -57131,6 +57278,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             }
             g_FraktionsSafeBox[id][FSB_iDrogen] = drugs;
             g_FraktionsSafeBox[id][FSB_iWaffenteile] = waffenteile;
+            g_FraktionsSafeBox[id][FSB_iWantedcodes] = wcodes;
             g_FraktionsSafeBox[id][FSB_iSpice] = spice;
             i++;
         }
