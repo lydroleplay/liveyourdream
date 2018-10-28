@@ -5499,8 +5499,8 @@ OnGameModeInit2() {
 
 	//Waffenlager Gang
 	CreateDynamicPickup(1254, 1, 331.9387,1119.7072,1083.8903, 0);//Ballas Waffenlager
-	CreateDynamicPickup(1254, 1,  506.0543,-81.1208,998.9609, 0);//Aztecas Waffenlager
-	CreateDynamicPickup(1254, 1,  2809.7944,-1171.9598,1025.5703, 0);//Vagos Waffenlager
+	CreateDynamicPickup(1254, 1, 506.0543,-81.1208,998.9609, 0);//Aztecas Waffenlager
+	CreateDynamicPickup(1254, 1, 2809.7944,-1171.9598,1025.5703, 0);//Vagos Waffenlager
 	CreateDynamicPickup(1254, 1, -2165.1348,644.2082,1052.3750, 0);//Outlawz Waffenlager
 
 	//Fahrtticket
@@ -31866,17 +31866,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     menge;
                 if(sscanf(inputtext,"d",menge)) {
                     SendClientMessage(playerid,COLOR_RED,"Ungültige Mengenangabe.");
-                    ShowWaffenLager(playerid,0);
+                    ShowWaffenLager(playerid, 1);
                     return 1;
                 }
                 if( menge < 1 ) {
                     SendClientMessage(playerid,COLOR_RED,"Ungültige Mengenangabe.");
-                    ShowWaffenLager(playerid,0);
+                    ShowWaffenLager(playerid, 1);
                     return 1;
                 }
                 if( Spieler[playerid][pWaffenteile] < menge ) {
                     SendClientMessage(playerid,COLOR_RED,"Du besitzt diese Menge an Waffenteilen nicht.");
-                    ShowWaffenLager(playerid,0);
+                    ShowWaffenLager(playerid, 1);
                     return 1;
                 }
                 if( Spieler[playerid][pFraktion] == 0 ) {
@@ -31891,10 +31891,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 g_WaffenLager[index][WL_iWaffenTeile] += menge;
                 format(String,sizeof(String),"Spieler %s hat %d Waffenteile in das Waffenlager gelegt.",GetName(playerid),menge);
                 SendFraktionMessage( Spieler[playerid][pFraktion], COLOR_YELLOW, String);
-                ShowWaffenLager(playerid,0);
+                ShowWaffenLager(playerid, 0);
             }
             else {
-                ShowWaffenLager(playerid,0);
+                ShowWaffenLager(playerid, 0);
             }
         }
         case DIALOG_WAFFENLAGER_BAUEN: {
@@ -31909,7 +31909,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 price = g_WaffenLagerConfig[listitem][WLC_iPrice];
                 if( g_WaffenLager[index][WL_iWaffenTeile] < price  ) {
                     SendClientMessage(playerid,COLOR_RED,"Im Waffenlager befinden sich nicht genug Waffenteile.");
-                    ShowWaffenLager(playerid,0);
+                    ShowWaffenLager(playerid, 2);
                     return 1;
                 }
                 waffenid = g_WaffenLagerConfig[listitem][WLC_iWaffe];
@@ -31925,10 +31925,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 g_WaffenLager[index][WL_iWaffenTeile] -= price;
                 SendFraktionMessage(  Spieler[playerid][pFraktion] ,COLOR_YELLOW,String);
-                ShowWaffenLager(playerid,0);
+                ShowWaffenLager(playerid, 2);
             }
             else {
-                ShowWaffenLager(playerid,0);
+                ShowWaffenLager(playerid, 0);
             }
         }
         case DIALOG_WAFFENLAGER_INFO: {
@@ -60623,7 +60623,7 @@ IsPlayerAtWaffenlager(playerid) {
     return WEAPON_DEPOT_NONE;
 }
 
-COMMAND:waffenlager(playerid,params[]) {
+COMMAND:waffenlager(playerid, params[]) {
     if (!Spieler[playerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
     if (HasWeaponBlock(playerid)) {
         SendClientMessage(playerid, COLOR_RED, "Du kannst diesen Befehl nicht ausführen!");
@@ -60640,56 +60640,35 @@ COMMAND:waffenlager(playerid,params[]) {
     return 1;
 }
 
-stock GetWaffenLagerIndex( fraktion ) {
-    for(new i ; i < g_iWaffenLager ; i++) {
-        if( g_WaffenLager[i][WL_iFraktion] == fraktion ) {
-            return i;
-        }
-    }
+stock GetWaffenLagerIndex(fraktion) {
+    for (new i; i < g_iWaffenLager; i++) if (g_WaffenLager[i][WL_iFraktion] == fraktion ) return i;
     return -1;
 }
 
-stock ShowWaffenLager(playerid, menuid ) {
-    if( menuid == 0 ) {
-        ShowPlayerDialog(playerid,DIALOG_WAFFENLAGER,DIALOG_STYLE_LIST, COLOR_HEX_LIGHTBLUE "Waffenlager","Einlagern\nWaffe bauen\nLagerinformation","Weiter","Abbruch");
-    }
-    else if( menuid == 1 ) {
-        ShowPlayerDialog(playerid,DIALOG_WAFFENLAGER_LAGERN,DIALOG_STYLE_INPUT,COLOR_HEX_LIGHTBLUE "Waffenlager - Einlagern","{FFFFFF}Gib an,wieviele Waffenteile du im\nWaffenlager einlagern möchtest.","Einlagern","Zurück");
-    }
-    else if( menuid == 2 ) {
-        // DIALOG_WAFFENLAGER_BAUEN
-        new
-            index,
-            waffe[24],
-            String[600];
-        index = GetWaffenLagerIndex( Spieler[playerid][pFraktion] );
-        for(new i ; i < sizeof(g_WaffenLagerConfig) ; i++) {
-            if( g_WaffenLagerConfig[i][WLC_iPrice] > g_WaffenLager[index][WL_iWaffenTeile] ) {
-                strcat( String , "{FF0000}", sizeof(String) );
+stock ShowWaffenLager(playerid, menuid) {
+    switch (menuid) {
+        case 0: return ShowPlayerDialog(playerid, DIALOG_WAFFENLAGER, DIALOG_STYLE_LIST, COLOR_HEX_LIGHTBLUE "Waffenlager", 
+            "Einlagern\nWaffe bauen\nLagerinformation", "Weiter", "Schließen");
+        case 1: return ShowPlayerDialog(playerid, DIALOG_WAFFENLAGER_LAGERN, DIALOG_STYLE_INPUT, COLOR_HEX_LIGHTBLUE "Waffenlager - Einlagern", 
+            "{FFFFFF}Gib an, wieviele Waffenteile du im\nWaffenlager einlagern möchtest.", "Einlagern", "Zurück");
+        case 2: {
+            new waffe[24], dialogText[600];
+            dialogText = "Waffe\tMunition\tWaffenteile\n";
+            for (new i = 0; i < sizeof(g_WaffenLagerConfig); i++) {
+                if (g_WaffenLagerConfig[i][WLC_iWaffe] == -1) waffe = "Schutzweste/HP";
+                else GetWeaponNameEx(g_WaffenLagerConfig[i][WLC_iWaffe], waffe, sizeof(waffe));
+                format(dialogText, sizeof(dialogText), "%s%s\t%d\t%d\n", dialogText, waffe, g_WaffenLagerConfig[i][WLC_iMuni], g_WaffenLagerConfig[i][WLC_iPrice]);
             }
-            else {
-                strcat( String , "{00FF00}", sizeof(String) );
-            }
-            if( g_WaffenLagerConfig[i][WLC_iWaffe] == -1 ) {
-                format(String,sizeof(String),"%sSchutzweste / HP , Wert: %d , Waffenteile: %d\n",String,g_WaffenLagerConfig[i][WLC_iMuni],g_WaffenLagerConfig[i][WLC_iPrice]);
-            }
-            else {
-                GetWeaponNameEx( g_WaffenLagerConfig[i][WLC_iWaffe] , waffe , sizeof(waffe) );
-                format(String,sizeof(String),"%s%s, Schuss: %d , Waffenteile: %d\n",String,waffe,g_WaffenLagerConfig[i][WLC_iMuni],g_WaffenLagerConfig[i][WLC_iPrice]);
-            }
+            return ShowPlayerDialog(playerid, DIALOG_WAFFENLAGER_BAUEN, DIALOG_STYLE_TABLIST_HEADERS, COLOR_HEX_LIGHTBLUE "Waffenlager - Bauen", dialogText, "Bauen", "Zurück");
         }
-        ShowPlayerDialog(playerid,DIALOG_WAFFENLAGER_BAUEN,DIALOG_STYLE_LIST, COLOR_HEX_LIGHTBLUE "Waffenlager - Bauen", String ,"Bauen","Zurück");
+        case 3: {
+            new index = GetWaffenLagerIndex(Spieler[playerid][pFraktion]), fraktion[50], String[128];
+            ReturnPlayerFraktion(playerid, fraktion); 
+            format(String, sizeof(String), "{FFFFFF}Waffenlager: %s\nWaffenteile: %s Stück", fraktion, AddDelimiters(g_WaffenLager[index][WL_iWaffenTeile]));
+            return ShowPlayerDialog(playerid, DIALOG_WAFFENLAGER_INFO, DIALOG_STYLE_MSGBOX, COLOR_HEX_LIGHTBLUE "Waffenlager - Lagerinformation", String , "Zurück", "");
+        }
     }
-    else if( menuid == 3 ) {
-        new
-            index,
-            fraktion[50],
-            String[128];
-        ReturnPlayerFraktion( playerid, fraktion );
-        index = GetWaffenLagerIndex( Spieler[playerid][pFraktion] );
-        format(String,sizeof(String),"{FFFFFF}Waffenlager: %s\nWaffenteile: %d Stk", fraktion , g_WaffenLager[index][WL_iWaffenTeile] );
-        ShowPlayerDialog(playerid,DIALOG_WAFFENLAGER_INFO,DIALOG_STYLE_MSGBOX, COLOR_HEX_LIGHTBLUE "Waffenlager - Lagerinformation", String ,"Zurück","");
-    }
+
     return 1;
 }
 
