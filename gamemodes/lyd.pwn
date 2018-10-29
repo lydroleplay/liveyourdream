@@ -19264,7 +19264,7 @@ CMD:kasse(playerid, params[])
 {
     new entry, string[128], eingabe[32];
     if(sscanf(params, "s[32]i", eingabe, entry))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Kasse [Anlegen/Nehmen]");
-    if(entry < 1 || entry > 10000000)return SendClientMessage(playerid, COLOR_RED, "Der Betrag sollte zwischen $1 und $10.000.000 liegen.");
+    if(entry < 1 || entry > 100000000)return SendClientMessage(playerid, COLOR_RED, "Der Betrag sollte zwischen $1 und $100.000.000 liegen.");
     if(strcmp(eingabe, "anlegen", true) == 0)
     {
         if(GetPlayerMoney(playerid) < entry)return SendClientMessage(playerid, COLOR_RED, "Soviel Geld hast du nicht!");
