@@ -13069,7 +13069,7 @@ CMD:selldrogen(playerid, params[])
         return SendClientMessage(playerid,COLOR_RED,"Der Betrag kann nicht negativ sein!");
     }
     if(preis/menge < 240||preis/menge > 400) {
-        return SendClientMessage(playerid,COLOR_RED,"Der aktuelle Stückpreis bei Drogen liegt im Rahmen von 80$ bis 120$!");
+        return SendClientMessage(playerid,COLOR_RED,"Der aktuelle Stückpreis bei Drogen liegt im Rahmen von 240$ bis 400$!");
     }
     // Goldkiller: WTF ist das ???? :
     // if(menge < 999999999999999 )return SendClientMessage(playerid, COLOR_RED, "Ungültige Anzahl");
