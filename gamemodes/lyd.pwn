@@ -4415,6 +4415,7 @@ new alcatrazGateHackTimestamp = 0;
 
 // Systems
 #include <paintball>
+//#include <halloween>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
@@ -11527,7 +11528,7 @@ CMD:finden(playerid, params[])
 
 CMD:drivein(playerid)
 {
-    if(IsPlayerInRangeOfPoint(playerid, 2.0, SUBWAY_DRIVEIN_COORDS)) // Burgershot North
+    if(IsPlayerInRangeOfPoint(playerid, 5.0, SUBWAY_DRIVEIN_COORDS)) // Burgershot North
     {
         if(GetPlayerMoney(playerid) < 50)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
         SetPlayerHealth(playerid, 100);

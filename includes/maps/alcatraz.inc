@@ -105,7 +105,7 @@ hook OnGameModeInit() {
 
     // Objects
     object_alcatraz[0] = CreateDynamicObject(2961, 2869.3137, 1853.4460, 11.9336, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //fire_break
-    object_alcatraz[1] = CreateDynamicObject(19340, 2859.4611, 1893.7888, 6.8010, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //cslab01
+    object_alcatraz[1] = CreateDynamicObject(19340, 2859.4611, 1893.7888, 6.8010, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //cslab01
     object_alcatraz[2] = CreateDynamicObject(19446, 2879.7856, 1858.5615, 14.3226, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall086
     SetDynamicObjectMaterial(object_alcatraz[2], 0, 4833, "airprtrunway_las", "greyground256", 0xFFFFFFFF);
     object_alcatraz[3] = CreateDynamicObject(987, 2815.0717, 1807.0278, 10.5452, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //elecfence_BAR
@@ -612,8 +612,8 @@ hook OnGameModeInit() {
     object_alcatraz[407] = CreateDynamicObject(7657, 2876.6022, 1934.2126, 12.2278, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Garage gate
     object_alcatraz[408] = CreateDynamicObject(980, 2884.3974, 1979.0788, 13.2719, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); // Maingate
 
-    object_alcatraz[409] = CreateDynamicObject(19537, 2855.0788, 1869.7650, 10.5410, 0.0000, 0.0000, 90.00000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); // Solid ground
-    object_alcatraz[410] = CreateDynamicObject(8355, 2877.3393, 1911.1409, 10.5309, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); // Solid ground
+    object_alcatraz[409] = CreateDynamicObject(19368, 2876.8391, 1978.6291, 21.0545, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall016
+    object_alcatraz[410] = CreateDynamicObject(19368, 2900.6591, 1978.7092, 21.0545, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_ALCATRAZ_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall016
 
     object_alcatraz_entranceGate = object_alcatraz[408];
     object_alcatraz_garageGate = object_alcatraz[407];

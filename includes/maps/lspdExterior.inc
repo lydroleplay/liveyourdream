@@ -29,7 +29,7 @@ static Float:DRAWDISTANCE   = 350.0;
 #define LSPD_GARAGE_POINT_FACING                270.0000
 
 // Map variables
-new object_lspdExterior[303];
+new object_lspdExterior[304];
 new pickup_lspdExterior[5];
 new text3D_lspdExterior[2];
 new actor_lspdExterior[2];
@@ -136,9 +136,9 @@ hook OnGameModeInit() {
     vehicle_lspdExterior[19] = AddStaticVehicleEx(560, 1061.7751, -1630.3138, 5.5949, 89.3181, 0, 0, -1); //Sultan
     vehicle_lspdExterior[20] = AddStaticVehicleEx(426, 1061.3447, -1634.5394, 5.6747, 90.2958, 0, 0, -1); //Premier
     vehicle_lspdExterior[21] = AddStaticVehicleEx(445, 1061.4068, -1638.5823, 5.8058, 89.7346, 0, 0, -1); //Admiral
-    vehicle_lspdExterior[22] = AddStaticVehicleEx(497, 958.3012, -1604.9287, 27.1474, 0.1081, 1, 0, -1); //Police Maverick
-    vehicle_lspdExterior[23] = AddStaticVehicleEx(497, 970.6135, -1605.6573, 27.1574, 359.7147, 1, 0, -1); //Police Maverick
-    vehicle_lspdExterior[24] = AddStaticVehicleEx(427, 1037.7852, -1671.9428, 6.0644, 0.2669, 0, 1, -1); //Enforcer
+    vehicle_lspdExterior[22] = AddStaticVehicleEx(497, 958.5396, -1605.7563, 27.1831, 0.8668,  1, 0, -1); //Police Maverick
+    vehicle_lspdExterior[23] = AddStaticVehicleEx(497, 970.6708, -1605.7433, 27.1984, 359.0651, 1, 0, -1); //Police Maverick
+    vehicle_lspdExterior[24] = AddStaticVehicleEx(427, 1037.7852, -1671.9428, 6.0644, 0.2669,  0, 1, -1); //Enforcer
     vehicle_lspdExterior[25] = AddStaticVehicleEx(427, 1033.7615, -1672.3277, 6.0636, 359.8333, 0, 1, -1); //Enforcer
     vehicle_lspdExterior[26] = AddStaticVehicleEx(430, 961.4000, -2050.2000, 0.0000, 0.0000, 0, 1, -1); // LSPD boat
 
@@ -707,5 +707,7 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(object_lspdExterior[301], 1, 19297, "matlights", "invisible", 0x00000000);
     object_lspdExterior[302] = CreateDynamicObject(19912, 1002.3541, -1597.9836, 9.7009, 0.0000, 0.0000, 60.0000, VW_MAIN, MAPS_LSPDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Gate
 
+    object_lspdExterior[303] = CreateDynamicObject(19377, 955.4387, -1604.9707, 25.9137, 0.0000, 90.0000, 90.0000, VW_MAIN, MAPS_LSPDEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall025
+    SetDynamicObjectMaterial(object_lspdExterior[303], 0, 16093, "a51_ext", "ws_whitewall2_top", 0xFFFFFFFF);
     object_lspdExterior_gate = object_lspdExterior[302];
 }
