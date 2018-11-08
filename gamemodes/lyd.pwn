@@ -13168,7 +13168,7 @@ public GMXModeTimer()
         }
     }
 
-    SendRconCommand("/rcon exit");
+    SendRconCommand("exit");
     return 1;
 }
 
@@ -26340,7 +26340,7 @@ public OnRconCommand(cmd[])
 
         SaveAll();
         SetTimer("GMXModeTimer", 5000, 1);
-        return 0;
+        return 1;
     }
 
     return 1;
