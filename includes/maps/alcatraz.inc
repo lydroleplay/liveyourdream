@@ -31,7 +31,7 @@ new object_alcatraz_entranceGate;
 new object_alcatraz_garageGate;
 // using vehicle_lspdExterior for the alcatraz vehicles
 
-CMD:alcatrazgate(playerid, params[]) {
+CMD:agate(playerid, params[]) {
     if (!IsPlayerExecutive(playerid))
         return SendClientMessage(playerid, COLOR_RED, "Du bist kein Staatsbeamter.");
 
