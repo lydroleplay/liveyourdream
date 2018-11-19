@@ -20056,6 +20056,24 @@ CMD:ofreistellen(playerid, params[]) {
         }
     }
 
+    new fraktion = GetVehicleFraktion(vehicleid);
+    if (fraktion && g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt]) {
+        g_FraktionAbschleppen[vehicleid][FA_fX] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_fY] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_fZ] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_fFace] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] = false;
+
+        SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Du hast das Fraktionsfahrzeug wieder freigestellt.");
+        SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Das Fahrzeug spawnt nun wie gewohnt.");
+        new message[145];
+        format(message, sizeof(message), "Ordnungsbeamter %s hat euer Fahrzeug wieder freigestellt.", GetName(playerid));
+        SendFraktionMessage(fraktion, COLOR_GREEN, message);
+        Spieler[playerid][pPayCheck] -= 700;
+        return 1;
+    }
+    else if (fraktion) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Fahrzeug ist nicht abgeschleppt.");
+    
     new besitzer = GetCarOwner(vehicleid);
     if (besitzer == INVALID_PLAYER_ID) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Das Fahrzeug gehört keinem Spieler.");
 
@@ -69922,8 +69940,7 @@ stock Hausmoebel_Uncompress(var,&house,&slot) {
 CMD:fparken(playerid)
 {
     if(!(Spieler[playerid][pFraktion] == 5))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
-    new
-        vehicleid = GetPlayerVehicleID(playerid);
+    new vehicleid = GetPlayerVehicleID(playerid);
     if (GetVehicleModel( vehicleid ) == 525)
     {
         if(IsTrailerAttachedToVehicle(vehicleid))
