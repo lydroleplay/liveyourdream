@@ -13552,119 +13552,46 @@ COMMAND:aktaccount(playerid,params[])
     }
     return 1;
 }
-COMMAND:frakwarn(playerid,params[])
-{
-    new spielerid,wanzahl;
-    if(sscanf(params,"ui",spielerid,wanzahl))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /frakwarn [Spielername] [Anzahl]");
-    if(IsPlayerConnected(spielerid))
-    {
-        if(wanzahl!=0)
-        {
-            if(Spieler[playerid][pRank] >= 5)
-            {
-                if(Spieler[playerid][pFraktion]==Spieler[spielerid][pFraktion])
-                {
-                    if(Spieler[spielerid][pRank]!=6)
-                    {
-                        new string[200];
-                        format(string,200,"Du hast dem Spieler %s erfolgreich %i Verwarnungen erteilt.",GetName(spielerid),wanzahl);
-                        Spieler[spielerid][pfrakwarn]+=wanzahl;
-                        SendClientMessage(playerid,COLOR_YELLOW,string);
-                        format(string,200,"Du hast von %s %i Verwarnungen bekommen, du hast nun %i Verwarnungen.",GetName(playerid),wanzahl,Spieler[spielerid][pfrakwarn]);
-                        SendClientMessage(spielerid,COLOR_RED,string);
-                        if(Spieler[spielerid][pfrakwarn]>=3)
-                        {
-                            SendClientMessage(spielerid,COLOR_RED,"Du wurdest wegen zu vielen Verwarnungen aus der Fraktion gekickt.");
-                            Spieler[spielerid][pFraktion] = 0;
-                            if(Spieler[spielerid][pSex] == 1){ SetPlayerSkinEx(spielerid, 2);}
-                            else if(Spieler[spielerid][pSex] == 2){ SetPlayerSkinEx(spielerid, 11);}
-                            Spieler[spielerid][pFrakLohn] = 0;
-                            Spieler[spielerid][pRank] = 0;
-                            SaveAccount(spielerid);
-                        }
-                    }
-                    else
-                    {
-                        SendClientMessage(playerid,COLOR_RED,"Du kannst den Leader nicht verwarnen.");
-                    }
-                }
-                else
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Du bist nicht in der selben Fraktion wie der Spieler.");
-                }
-            }
-            else
-            {
-                SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Co/Leader-Rank.");
-            }
-        }
-        else
-        {
-            SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erteilen.");
-        }
+
+CMD:frakwarn(playerid, params[]) {
+    new spielerid, wanzahl;
+    if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    if (sscanf(params, "ui", spielerid, wanzahl)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/frakwarn [Spielername] [Anzahl]");
+    if (!IsPlayerConnected(spielerid)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if (Spieler[playerid][pFraktion] != Spieler[spielerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Fraktion.");
+    if (Spieler[spielerid][pRank] > 5) return SendClientMessage(playerid, COLOR_RED, "Du kannst den Leader nicht verwarnen.");
+    if (wanzahl < 1) return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erteilen.");
+
+    Spieler[spielerid][pfrakwarn] += wanzahl;
+    SCMFormatted(playerid, COLOR_YELLOW, "Du hast dem Spieler %s erfolgreich %i Verwarnungen erteilt.", GetName(spielerid), wanzahl);
+    SCMFormatted(spielerid, COLOR_RED, "Du hast von %s %i Verwarnungen bekommen, du hast nun %i Verwarnungen.", GetName(playerid), wanzahl, Spieler[spielerid][pfrakwarn]);
+    if (Spieler[spielerid][pfrakwarn] >= 3) {
+        Spieler[spielerid][pFraktion] = 0;
+        Spieler[spielerid][pFrakLohn] = 0;
+        Spieler[spielerid][pRank] = 0;
+        Spieler[spielerid][pfrakwarn] = 0;
+        RemovePlayerFromPlantArrayData(spielerid);
+        SetPlayerSkinEx(spielerid, Spieler[spielerid][pSex] == 1 ? 2 : 11);
+        SendClientMessage(spielerid, COLOR_RED, "Du wurdest wegen zu vielen Verwarnungen aus der Fraktion gekickt.");
+        SaveAccount(spielerid);
     }
-    else
-    {
-        SendClientMessage(playerid,COLOR_RED,"Angegebener Spieler ist nicht online.");
-    }
+
     return 1;
 }
-COMMAND:delfrakwarn(playerid,params[])
-{
-    new spielerid,wanzahl;
-    if(sscanf(params,"ui",spielerid,wanzahl))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /delfrakwarn [Spielername] [Anzahl]");
-    if(IsPlayerConnected(spielerid))
-    {
-        if(wanzahl!=0)
-        {
-            if(Spieler[playerid][pRank] >= 5)
-            {
-                if(Spieler[playerid][pFraktion]==Spieler[spielerid][pFraktion])
-                {
-                    if(Spieler[spielerid][pRank]!=6)
-                    {
-                        if(Spieler[spielerid][pfrakwarn]>0)
-                        {
-                            if(wanzahl>Spieler[spielerid][pfrakwarn])
-                            {
-                                wanzahl=Spieler[spielerid][pfrakwarn];
-                            }
-                            new string[200];
-                            format(string,200,"Du hast dem Spieler %s erfolgreich %i Verwarnungen entzogen.",GetName(spielerid),wanzahl);
-                            Spieler[spielerid][pfrakwarn]-=wanzahl;
-                            if(Spieler[spielerid][pfrakwarn]<0)
-                            {
-                                Spieler[spielerid][pfrakwarn]=0;
-                            }
-                            SendClientMessage(playerid,COLOR_YELLOW,string);
-                            format(string,200,"Du hast von %s %i Verwarnungen entzogen bekommen, du hast nun %i Verwarnungen.",GetName(playerid),wanzahl,Spieler[spielerid][pfrakwarn]);
-                            SendClientMessage(spielerid,COLOR_RED,string);
-                        }
-                    }
-                    else
-                    {
-                        SendClientMessage(playerid,COLOR_RED,"Du kannst den Leader nicht verwarnen.");
-                    }
-                }
-                else
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Du bist nicht in der selben Fraktion wie der Spieler.");
-                }
-            }
-            else
-            {
-                SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Co/Leader-Rank.");
-            }
-        }
-        else
-        {
-            SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erteilen.");
-        }
-    }
-    else
-    {
-        SendClientMessage(playerid,COLOR_RED,"Angegebener Spieler ist nicht online.");
-    }
+
+CMD:delfrakwarn(playerid, params[]) {
+    new spielerid, wanzahl;
+    if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    if (sscanf(params, "ui", spielerid, wanzahl)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/delfrakwarn [Spielername] [Anzahl]");
+    if (!IsPlayerConnected(spielerid)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if (Spieler[playerid][pFraktion] != Spieler[spielerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Fraktion.");
+    if (Spieler[spielerid][pRank] > 5) return SendClientMessage(playerid, COLOR_RED, "Du kannst den Leader nicht verwarnen.");
+    if (wanzahl < 1) return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erlassen.");
+
+    Spieler[spielerid][pfrakwarn] -= wanzahl;
+    if (Spieler[spielerid][pfrakwarn] < 0) Spieler[spielerid][pfrakwarn] = 0;
+    SCMFormatted(playerid, COLOR_YELLOW, "Du hast dem Spieler %s erfolgreich %i Verwarnungen entzogen.", GetName(spielerid), wanzahl);
+    SCMFormatted(spielerid, COLOR_RED, "Du hast von %s %i Verwarnungen entzogen bekommen, du hast nun %i Verwarnungen.", GetName(playerid), wanzahl, Spieler[spielerid][pfrakwarn]);
     return 1;
 }
 
