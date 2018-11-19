@@ -33021,7 +33021,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem == 1 ) {
                     SendClientMessage(playerid, COLOR_BLUE, "* STATISTIKEN *: {FFFFFF}/Stats, /Skill, /Scheine, /Pass, /Vertrag, /Serverinfo, /Delmarker, /Angelstats, /Finanzen, /sInfo(FPS und Ping anzeigen)");
                     SendClientMessage(playerid, COLOR_BLUE, "* HILFE-BEFEHLE *:{FFFFFF}/Sup(Support-Ticket), /Admin(Notruf-Admin), /Anrufen 110 (POLIZEI-NOTRUF), /Anrufen 112 (RETTUNGSDIENST), /Service");
-                    SendClientMessage(playerid, COLOR_BLUE, "* ORIENTIERUNG *:{FFFFFF}/Navi (wichtige Orte finden), /Suche (Spielersuche), /Spielerinfo (Letzter Login von einem Spieler erfahren)");
+                    SendClientMessage(playerid, COLOR_BLUE, "* ORIENTIERUNG *:{FFFFFF}/Navi (wichtige Orte finden), /Findatm, /Suche (Spielersuche), /Spielerinfo (Letzter Login von einem Spieler erfahren)");
                     SendClientMessage(playerid, COLOR_BLUE, "* KONSUMIEREN *: {FFFFFF}/Nimmdrogen, /Isskeks, /Rauchzig, /Zigweg");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Geben, /Liste, /Inventar, /Koffer, /Kofferauf, /Firmen, /Kampfstyle, /Pickwaffe, /Sellkekse");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Jailtime, /Tottime, /Mutetime, /Animlist, /Staatskasse, /Killauftrag, /Leader, /Gutscheincode");
@@ -38791,6 +38791,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nShisha-Bar\nSan News Agency", "Auswählen", "Abbrechen");
                 }
+                if (listitem == 20) return cmd_suchatm(playerid);
             }
         }
         case BEHORDEN:
@@ -43629,7 +43630,7 @@ CMD:event(playerid, params[])
 CMD:navi(playerid)
 {
     if( gPlayerLogged[playerid] == 0 ) return SendClientMessage(playerid,COLOR_RED,"Du bist nicht eingeloggt");
-    ShowPlayerDialog(playerid, DIALOG_NAVI, DIALOG_STYLE_LIST, "Navigation", "Ämter und Behörden\nPolizei u. Notdienste\nFahrschule\nFahrzeugverkauf\nCarSharing-Stationen\nHotel\nBanken\nVersicherungen\n24/7 Shops\nTankstellen\nKleidungsgeschäfte\nRestaurant\nCasinos\nWaffenverkauf\nVerkaufshäuser\nTuning-Garagen\nArbeitsstellen\nGang/Mafien Base\nIllegale Orte\nWeitere Orte", "Markieren", "Abbrechen");
+    ShowPlayerDialog(playerid, DIALOG_NAVI, DIALOG_STYLE_LIST, "Navigation", "Ämter und Behörden\nPolizei u. Notdienste\nFahrschule\nFahrzeugverkauf\nCarSharing-Stationen\nHotel\nBanken\nVersicherungen\n24/7 Shops\nTankstellen\nKleidungsgeschäfte\nRestaurant\nCasinos\nWaffenverkauf\nVerkaufshäuser\nTuning-Garagen\nArbeitsstellen\nGang/Mafien Base\nIllegale Orte\nWeitere Orte\nNächster ATM", "Markieren", "Abbrechen");
     return 1;
 }
 
