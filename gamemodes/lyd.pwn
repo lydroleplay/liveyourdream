@@ -9945,7 +9945,7 @@ public OnPlayerSpawn(playerid)
     UnfreezePlayer(playerid);
     if (!Spieler[playerid][pTot]) SetPlayerInterior(playerid, 0);
     //SetPlayerColor(playerid, COLOR_WHITE & 0xFFFFFF00 );
-    SetPlayerColor(playerid, COLOR_WHITE);
+    if (!Spieler[playerid][pAdminDienst]) SetPlayerColor(playerid, COLOR_WHITE);
     SetCameraBehindPlayer(playerid);
     ResetPlayerWeapons(playerid);
     SetPlayerArmour(playerid, 0);
