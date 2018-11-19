@@ -16713,22 +16713,22 @@ CMD:makeleader(playerid, params[])
         SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
         format(string, sizeof(string), "Du bist nun Leader von \"%s\". Bitte gebe gut Acht auf deinen Leaderposten.", fname);
         SendClientMessage(pID, COLOR_LIGHTBLUE, string);
-        if(frakid == 1){ if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 283); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 150); } }
-        else if(frakid == 2){if (Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 288); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 150); } }
+        if(frakid == 1){ if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 283); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 309); } }
+        else if(frakid == 2){if (Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 288); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 309); } }
         else if(frakid == 3){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 70); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 211); } }
         else if(frakid == 4){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 57); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 55); } }
         else if(frakid == 5){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 71); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 192); } }
         else if(frakid == 6){if(Spieler[pID][pSex] == 1){SetPlayerSkinEx(pID, 271); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 65); } }
         else if(frakid == 7){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 102);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 195);} }
         else if(frakid == 8){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 240);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 194);} }
-        else if(frakid == 9){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 295);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 150);} }
+        else if(frakid == 9){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 295);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 309);} }
         else if(frakid == 10){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 122);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 169);} }
         else if(frakid == 11){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 114);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 114);} }
         else if(frakid == 12){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 120);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 120);} }
         else if(frakid == 13){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 108);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 108);} }
         else if(frakid == 14){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 229);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 229);} }
         else if(frakid == 15){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 248);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 248);} }
-        else if(frakid == 16){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 282);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 150);} }
+        else if(frakid == 16){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 282);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 309);} }
         else if(frakid == 17){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 217);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 89);} }
         else if(frakid == 18){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 287);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 287);} }
         else if(frakid == 19){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 220);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 220);} }
@@ -49426,8 +49426,8 @@ enum e_FraktionsSkins {
 new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	// X    Y       Z     Frak  { Skin 1-7 }
 	{LSPD_INTERIOR_FSKIN_POINT,	    1, { 300 , 301 , 281 , 283 , 267 , 265 , 266 , 265 , 306 , 285 , 284 , 303 , 304 , 192 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{SAMD_INTERIOR_FSKIN_POINT,	3, { 70 , 274, 275, 276, 277, 278, 279, 308 , 59 , 60 , 29 , 72 , 188 , 229 , 93 , 233 , 226} },
-	{POO_INTERIOR_FSKIN_POINT,	    5, { 71 , 44 , 305 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{SAMD_INTERIOR_FSKIN_POINT,	3, { 70 , 274, 275, 276, 277, 278, 279, 308, 59, 60, 29, 72, 188, 229, 93, 233, 226} },
+	{POO_INTERIOR_FSKIN_POINT,	    5, { 71, 150, 303, 59 , 60 , 72 , 188 , 93 , 233 , 226 } },
 	{FBI_INTERIOR_FSKIN_POINT,	2, { 286 , 285 , 309 , 166, 165,59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{-2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
 	{HITMANBASE_FSKIN_POINT,	14, { 2 , 29 , 229 ,  171 , 23 , 19 , 35 , 22 , 11, 8 } },
