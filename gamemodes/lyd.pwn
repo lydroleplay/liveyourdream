@@ -9945,7 +9945,7 @@ public OnPlayerSpawn(playerid)
     UnfreezePlayer(playerid);
     if (!Spieler[playerid][pTot]) SetPlayerInterior(playerid, 0);
     //SetPlayerColor(playerid, COLOR_WHITE & 0xFFFFFF00 );
-    if (!Spieler[playerid][pAdminDienst]) SetPlayerColor(playerid, COLOR_WHITE);
+    if (!Spieler[playerid][pAdminDienst] && !Spieler[playerid][pBenutzerfarbe]) SetPlayerColor(playerid, COLOR_WHITE);
     SetCameraBehindPlayer(playerid);
     ResetPlayerWeapons(playerid);
     SetPlayerArmour(playerid, 0);
@@ -10931,9 +10931,8 @@ public Anti_OnVehicleDeath(playerid) {
     return 1;
 }
 
-public OnVehicleDeath(vehicleid, killerid)
-{
-    if( Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 3 ) {
+public OnVehicleDeath(vehicleid, killerid) {
+    if( Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
         new String[128];
         format(String, sizeof(String), "[KICK]: Spieler %s wurde von Server-System gekickt, Grund: %s", GetName(killerid), ("Vehicle-Spam"));
         SendAdminMessage(COLOR_RED, String);
