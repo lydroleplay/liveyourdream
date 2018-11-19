@@ -42742,7 +42742,7 @@ public PayDay()
     }
     return 1;
 }
-stock Scheine(playerid, targetid,modus = 0)
+stock Scheine(playerid, targetid, modus = 0)
 {
     if(IsPlayerConnected(targetid))
     {
@@ -59097,27 +59097,15 @@ stock GivePlayerStrafpunkte(playerid,schein,anzahl) {
     return 1;
 }
 
-COMMAND:checkscheine(playerid, params[])
-{
-    if(Spieler[playerid][pAdmin] < 1)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    new pID, string[128];
-    if(sscanf(params, "u", pID))
-    {
-        Scheine(playerid, playerid);
-        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Checkscheine [SpielerID/Name]");
-        return 1;
+CMD:checkscheine(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 1) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new pID;
+    if (sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Checkscheine [SpielerID/Name]");
+    if (IsPlayerConnected(pID) && gPlayerLogged[pID] == 1) {
+        SCMFormatted(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Du siehst dir die Scheine von %s an.", GetName(pID));
+        Scheine(playerid, pID, 1);
     }
-    if(IsPlayerConnected(pID) && gPlayerLogged[pID] == 1)
-    {
-        new Float:x, Float:y, Float:z;
-        GetPlayerPos(playerid, x,y,z);
-        if(IsPlayerInRangeOfPoint(pID, 5.0, x,y,z))
-        {
-            format(string, sizeof(string), ".", GetName(playerid));
-            SendClientMessage(pID, COLOR_PURPLE, string);
-            Scheine(playerid, pID,1);
-        }
-    }
+
     return 1;
 }
 
