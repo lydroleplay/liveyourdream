@@ -2834,7 +2834,6 @@ enum {
 }
 
 new PlayerCar[MAX_PLAYERS][MaxVeh][cInfo];
-new adventmin[MAX_PLAYERS];
 
 new const g_Gutschein[][] = {
     {""},
@@ -4021,7 +4020,9 @@ enum SpielerDaten {
     Float:pHealthInfo,
     pSuspendedSentence,
     pSusSentenceReason[128],
-    pEventPoints
+    pEventPoints,
+    pAdventDay,
+    pAdventMin
 }
 
 enum e_FahrPruefung {
@@ -4412,6 +4413,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\gsfExterior>
 #include <maps\gsfInterior>
 #include <maps\parcour>
+#include <maps\christmasCalendar>
 
 // Systems
 #include <paintball>
@@ -4558,7 +4560,16 @@ public MinuteTimer() {
         SetTimer("LottoTimer", 1000 * 60 * 5, false);
     }
     
-    for (new playerid; playerid < MAX_PLAYERS; playerid++) if (IsPlayerConnected(playerid) && gPlayerLogged[playerid] && !IsAFK[playerid]) adventmin[playerid]++;
+    new wday, wmonth, wyear;
+    getdate(wyear, wmonth, wday);
+
+    for (new playerid; playerid <= GetPlayerPoolSize(); playerid++) {
+        if (IsPlayerConnected(playerid) && gPlayerLogged[playerid] && !IsAFK[playerid] && Spieler[playerid][pJailed] != 3 && Spieler[playerid][pPrisonRun] <= 0) {
+            if (++Spieler[playerid][pAdventMin] == 90 && wday != Spieler[playerid][pAdventDay]) {
+                SendClientMessage(playerid, COLOR_LIME, "Du kannst jetzt ein Adventstürchen beim Adventskalender öffnen (/Findekalender).");
+            }
+        }
+    }
     return 1;
 }
 
@@ -6053,7 +6064,7 @@ public OnPlayerConnect(playerid)
         PlayerHaveCar[playerid][i] = 0;
     }
     damagesperre[playerid]=0;
-    adventmin[playerid]=0;
+    Spieler[playerid][pAdventMin]=0;
     Spieler[playerid][pLevel] = 1;
     Spieler[playerid][pHeiratsantragID] = INVALID_PLAYER_ID;
     Spieler[playerid][pMarriage] = INVALID_MARRIAGE;
@@ -6065,6 +6076,7 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][pSuspendedSentence] = 0;
     format(Spieler[playerid][pSusSentenceReason], 128, "");
     Spieler[playerid][pEventPoints] = 0;
+    Spieler[playerid][pAdventDay] = 0;
     Spieler[playerid][pAdmin] = 0;
     Spieler[playerid][pDonateRank] = 0;
     Spieler[playerid][pHours] = 0;
@@ -7034,7 +7046,7 @@ public OnPlayerDisconnect(playerid, reason)
     }
 
     damagesperre[playerid]=0;
-    adventmin[playerid]=0;
+    Spieler[playerid][pAdventMin]=0;
     Spieler[playerid][pLevel] = 1;
     Spieler[playerid][pHeiratsantragID] = INVALID_PLAYER_ID;
     Spieler[playerid][pMarriage] = INVALID_MARRIAGE;
@@ -7046,6 +7058,7 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pSuspendedSentence] = 0;
     format(Spieler[playerid][pSusSentenceReason], 128, "");
     Spieler[playerid][pEventPoints] = 0;
+    Spieler[playerid][pAdventDay] = 0;
     Spieler[playerid][pAdmin] = 0;
     Spieler[playerid][pDonateRank] = 0;
     Spieler[playerid][pHours] = 0;
@@ -7792,71 +7805,112 @@ public gwarentimer()
     }
 }
 
-CMD:adventskweralender(playerid)
-{
-    new wjahr,wmonat,wday;
-    getdate(wjahr,wmonat,wday);
-    if(wmonat==12)
-    {
-        if(wday>=1&&wday<=24)
-        {
-            if(IsPlayerInRangeOfPoint(playerid,30,1226.4282,-1655.1801,13.5663))
-            {
-                if(adventmin[playerid]>=40)
-                {
-                    if(Spieler[playerid][pBoeller] == 0)
-                    {
-                        adventmin[playerid]=0;
-                        new adventname[40],wgeschenk=random(100);
-                        if(wgeschenk<15)
-                        {
-                            Spieler[playerid][pLevel]++;
-                            SetPlayerScore(playerid,GetPlayerScore(playerid)+1);
-                            adventname="+1 Level-UP";
-                        }
-                        else if(wgeschenk<30)
-                        {
-                            GivePlayerCash(playerid,200000);
-                            adventname="200.000$";
-                        }
-                        else if(wgeschenk<65)
-                        {
-                            Spieler[playerid][pExp]+=5;
-                            GivePlayerCash(playerid,50000);
-                            adventname="+5 Respektpunkte und +50.000$";
-                        }
-                        else if(wgeschenk<100)
-                        {
-                            Spieler[playerid][pExp]+=3;
-                            GivePlayerCash(playerid,100000);
-                            adventname="+3 Respektpunkte und +100.000$";
-                        }
-                        new string[200];
-                        format(string,200,"Dein Adventsgeschenk: %s. Wir wünschen dir eine frohe Weihnachtszeit!",adventname);
-                        SendClientMessage(playerid,COLOR_GREEN,string);
-                        Spieler[playerid][pBoeller] = 1;
-                    }
-                    else
-                    {
-                        SendClientMessage(playerid,COLOR_RED,"Du hast heute bereits ein Adventstürchen geöffnet!");
-                    }
-                }
-                else
-                {
-                    new winfo[71];
-                    format(winfo,71,"Du bist aktuell %i/40 Minuten durchgehend online.",adventmin[playerid]);
-                    SendClientMessage(playerid,COLOR_RED,winfo);
-                    SendClientMessage(playerid,COLOR_RED,"Du musst 40 Minuten durchgehend online sein, um das heutige Weihnachtsgeschenk zu erhalten!");
-                }
-            }
-            else
-            {
-                SendClientMessage(playerid,COLOR_RED,"Du befindest dich nicht am Adventskalender! Mit /Findekalender wird der Adventskalender auf der Karte markiert!");
-            }
+CMD:adventmin(playerid) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du kannst erst ab Level 3 deine Adventminuten einsehen.");
+    new wjahr, wmonat, wday;
+    getdate(wjahr, wmonat, wday);
+    if (Spieler[playerid][pAdventDay] == wday) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du hast heute bereits ein Türchen geöffnet.");
+    new adventmin = 90 - Spieler[playerid][pAdventMin];
+    if (adventmin < 1) return SendClientMessage(playerid, COLOR_LIGHTRED, "[INFO] {FFFFFF}Du kannst jetzt ein Adventstürchen öffnen (/Findekalender)");
+    return SCMFormatted(playerid, COLOR_LIGHTRED, "[INFO] {FFFFFF}Du musst noch %i/90 Minuten warten, bis du ein Türchen öffnen kannst.", adventmin);
+}
+
+CMD:adventskalender(playerid) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Adventskalender ist erst ab Level 3 zugänglich.");
+    new wjahr, wmonat, wday;
+    getdate(wjahr, wmonat, wday);
+    if (wmonat != 12 || wday > 24) return 1;
+    if (!IsPlayerInRangeOfPoint(playerid, 5, CHRISTMASCALENDAR_COORDS))
+        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Adventskalender! Mit /Findekalender wird der Adventskalender auf der Karte markiert!");
+    
+    if (Spieler[playerid][pAdventDay] == wday) return SendClientMessage(playerid, COLOR_RED, "Du hast heute bereits ein Adventstürchen geöffnet.");
+    if (Spieler[playerid][pAdventMin] < 90) return SendClientMessage(playerid, COLOR_RED, "Du kannst noch kein Adventstürchen öffnen. Benutze: /Adventmin.");
+
+    Spieler[playerid][pAdventDay] = wday;
+    Spieler[playerid][pAdventMin] = 0;
+    new message[245];
+
+    switch (random(100)) {
+        case 0..24: {
+            SetPlayerScore(playerid, ++Spieler[playerid][pLevel]);
+            GivePlayerCash(playerid, 75000);
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast ein Level-Up und $75.000 hinter dem Türchen gefunden!");
+            
+            format(message, sizeof(message), "%s hat ein Level-Up und $75.000 im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 25..49: {
+            GivePlayerCash(playerid, 150000);
+            Spieler[playerid][pExp] += 3;
+            if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
+                Spieler[playerid][pLevel]++;
+                SetPlayerScore(playerid, Spieler[playerid][pLevel]);
+                Spieler[playerid][pExp] = 0;
+                GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
+            }            
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+3 Respektpunkte und $150.000 {FFFFFF}hinter dem Türchen gefunden!");
+
+            format(message, sizeof(message), "%s hat +3 Respektpunkte und $150.000 im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 50..59: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}ein Wunschfahrzeug {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+
+            format(message, sizeof(message), "%s hat ein Wunschfahrzeug im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 60..69: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen Skill-Up deiner Wahl {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+
+            format(message, sizeof(message), "%s hat einen Skill-Up im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 70..76: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen freien Namechange {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Projektleiter.");
+
+            format(message, sizeof(message), "%s hat einen freien Namechange im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 77..85: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Neon-Premium {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+
+            format(message, sizeof(message), "%s hat Neon-Premium im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 86..94: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}eine Forum Ranggrafik (Geschenkejäger) {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Projektleiter.");
+
+            format(message, sizeof(message), "%s hat eine Forum Ranggrafik im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 95..97: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Bronze Premium (1 Monat) {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+
+            format(message, sizeof(message), "%s hat Bronze Premium im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 98..99: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+250 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+
+            format(message, sizeof(message), "%s hat 250 LyD-Coins im Adventskalender gefunden.", GetName(playerid));
         }
     }
+
+    SendUCPAktenEintrag(playerid, "Server-System", GetName(playerid), message);
+    format(message, sizeof(message), "[Adventinfo] {FFFFFF}%s", message);
+    SendAdminMessage(COLOR_GREEN, message);
     return 1;
 }
+
 CMD:gangfightinfo(playerid)
 {
     new string[400], bool:gangfightRunning = false;
@@ -13167,7 +13221,7 @@ public GMXModeTimer()
         }
     }
 
-    SendRconCommand("/rcon exit");
+    SendRconCommand("exit");
     return 1;
 }
 
@@ -14113,6 +14167,21 @@ CMD:configplayer(playerid, params[])
     
     if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler nicht online.");
 
+    if (Spieler[playerid][pAdmin] > 5) {
+        if (!strcmp(entry, "adventmin", true)) {
+            if (wert < 0) return SendClientMessage(playerid, COLOR_RED, "Gebe einen positiven Wert an.");
+            Spieler[pID][pAdventMin] = wert;
+            SCMFormatted(pID, COLOR_LIGHTBLUE, "Deine Adventminuten wurden von %s %s auf %d gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), wert);
+            return 1;
+        }
+        else if (!strcmp(entry, "adventday", true)) {
+            if (wert < 1 || wert > 24) return SendClientMessage(playerid, COLOR_RED, "Gebe einen Wert von 1-24 an.");
+            Spieler[pID][pAdventDay] = wert;
+            SCMFormatted(pID, COLOR_LIGHTBLUE, "Dein Adventstag wurde von %s %s auf %d gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), wert);
+            return 1;
+        }
+    }
+
     if(strcmp(entry, "eventpunkte", true) == 0)
     {
         Spieler[pID][pEventPoints] = wert;
@@ -14165,10 +14234,10 @@ CMD:configplayer(playerid, params[])
         AdminLog(string);
 
         if (Spieler[pID][pExp] >= Spieler[pID][pLevel] * 4) {
-            Spieler[playerid][pLevel]++;
-            SetPlayerScore(playerid, Spieler[playerid][pLevel]);
-            Spieler[playerid][pExp] = 0;
-            GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
+            Spieler[pID][pLevel]++;
+            SetPlayerScore(pID, Spieler[pID][pLevel]);
+            Spieler[pID][pExp] = 0;
+            GameTextForPlayer(pID, "~y~Level UP", 4000, 3);
         }
 
         return 1;
@@ -14789,12 +14858,12 @@ public Servername()
 {
     if(serverhost == 1)
     {
-        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay [MAP-UPDATE]");
+        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay [ADVENTSKALENDER]");
         serverhost = 2;
     }
     else if(serverhost == 2)
     {
-        SendRconCommand("hostname Live your Dream ~ Roleplay [ENTBANN-EVENT]");
+        SendRconCommand("hostname Live your Dream ~ Roleplay [WEIHNACHTSEVENT]");
         serverhost = 1;
     }
 }
@@ -26339,7 +26408,7 @@ public OnRconCommand(cmd[])
 
         SaveAll();
         SetTimer("GMXModeTimer", 5000, 1);
-        return 0;
+        return 1;
     }
 
     return 1;
@@ -41903,7 +41972,9 @@ stock SaveAccount(playerid)
                 `Deakaccadmin` = '%s', \
                 `BwStrafe` = %d, \
                 `BwStrafeGrund` = '%s', \
-                `Eventpoints` = %d",
+                `Eventpoints` = %d, \
+                `AdventDay` = %d, \
+                `AdventMin` = %d",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -41927,7 +41998,9 @@ stock SaveAccount(playerid)
                     pdeaccadmin[playerid],
                     Spieler[playerid][pSuspendedSentence],
                     Spieler[playerid][pSusSentenceReason],
-                    Spieler[playerid][pEventPoints]);
+                    Spieler[playerid][pEventPoints],
+                    Spieler[playerid][pAdventDay],
+                    Spieler[playerid][pAdventMin]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -42098,7 +42171,9 @@ new const PlayerColumns[][] = {
     {"frakwarn"},
     {"BwStrafe"},
     {"BwStrafeGrund"},
-    {"Eventpoints"}
+    {"Eventpoints"},
+    {"AdventDay"},
+    {"AdventMin"}
 };
 
 new
@@ -43695,9 +43770,9 @@ CMD:werkstattplatz(playerid)
     return 1;
 }
 
-CMD:zuweifindekalender(playerid)
+CMD:findekalender(playerid)
 {
-    SetPlayerCheckpointEx(playerid, 1479.2257,-1609.4260,14.0806, 7.0, CP_SHOWJOB1);
+    SetPlayerCheckpointEx(playerid, CHRISTMASCALENDAR_COORDS, 3.0, CP_SHOWJOB1);
     SendClientMessage(playerid, COLOR_GREEN, "Der Adventskalender wurde dir auf der Karte markiert!");
     return 1;
 }
@@ -56290,6 +56365,8 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pSuspendedSentence] = cache_get_row_int(0,139,connectionHandle);
             cache_get_row(0, 140, Spieler[playerid][pSusSentenceReason], connectionHandle);
             Spieler[playerid][pEventPoints] = cache_get_row_int(0,141,connectionHandle);
+            Spieler[playerid][pAdventDay] = cache_get_row_int(0,142,connectionHandle);
+            Spieler[playerid][pAdventMin] = cache_get_row_int(0,143,connectionHandle);
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
@@ -56356,6 +56433,13 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
 
             if (Spieler[playerid][pSuspendedSentence] > 0)
                 SCMFormatted(playerid, COLOR_YELLOW, "SERVER: Du hast noch eine Bewährungsstrafe für %i Spielstunden (/Bwstrafe).", Spieler[playerid][pSuspendedSentence]);
+
+            new wyear, wmonth, wday;
+            getdate(wyear, wmonth, wday);
+            if (wmonth == 12 && wday < 25) {
+                SendClientMessage(playerid, COLOR_LIGHTRED, "Adventszeit auf LyD! Du kannst jeden Tag ein Adventstürchen öffnen.");
+                SendClientMessage(playerid, COLOR_LIGHTRED, "Mit /Adventmin kannst du sehen, wie lange du noch warten musst.");
+            }
 
             AddPlayerToPlantArrayData(playerid);
             /*
@@ -57986,7 +58070,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
         }
     }
     else if( resultid == THREAD_WEBSQL_AKTE ) {
-        if( IsPlayerConnected(extraid) ) {
+        if( IsPlayerConnected(extraid) && Spieler[extraid][pAdmin] > 0) {
             SendClientMessage(extraid,COLOR_YELLOW,"Eintrag in der Spielerakte angelegt");
         }
     }
@@ -65252,7 +65336,7 @@ public GangZone_Pulse() {
                 g_GangZone[i][GZ_iAttackerScore] = 0;
                 g_GangZone[i][GZ_iAttacker] = 0;
                 g_GangZone[i][GZ_iGangWarEnd] = 0;
-                g_GangZone[i][GZ_iTimeout] = gettime() + 2*146*146;
+                g_GangZone[i][GZ_iTimeout] = gettime() + 2*84*84;
                 g_GangZone[i][GZ_iStatus] = 0;
                 g_GangZone[i][GZ_iFlaggeEnd] = 0;
                 g_GangZone[i][GZ_iFlaggePlayer] = INVALID_PLAYER_ID;
@@ -65598,7 +65682,7 @@ COMMAND:gangfightstop(playerid,params[]) {
     g_GangZone[index][GZ_iGangWarEnd] = 0;
     g_GangZone[index][GZ_iOwner] = winner;
     g_GangZone[index][GZ_iAttacker] = 0;
-    g_GangZone[index][GZ_iTimeout] = gettime() + 2*146*146;
+    g_GangZone[index][GZ_iTimeout] = gettime() + 2*84*84;
     g_GangZone[index][GZ_iCounter] = 0;
     g_GangZone[index][GZ_iFlaggePlayer] = INVALID_PLAYER_ID;
     g_GangZone[index][GZ_iFlagge] = -1;
