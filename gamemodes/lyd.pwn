@@ -6885,7 +6885,7 @@ public OnPlayerDisconnect(playerid, reason)
     }
     Spieler[playerid][pKopfgeldID] = INVALID_PLAYER_ID;
     Spieler[playerid][pKopfgeld] = 0;
-    DestroyVehicle(Spieler[playerid][pVehicleVerleih]);
+    DestroyVehicleEx(Spieler[playerid][pVehicleVerleih]);
     Spieler[playerid][pVehicleVerleih] = INVALID_VEHICLE_ID;
     Spieler[playerid][tickVehicleVerleih] = 0;
 
@@ -6948,13 +6948,13 @@ public OnPlayerDisconnect(playerid, reason)
     if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
     {
         FahrschuleAbbruch(playerid);
-        //DestroyVehicle(pFahrschulCar[playerid]); FahrschuleAbbruch
+        //DestroyVehicleEx(pFahrschulCar[playerid]); FahrschuleAbbruch
         //aiVehicles[pFahrschulCar[playerid]] = VEH_INVALID; FahrschuleAbbruch
     }
     pFahrschulCar[playerid] = INVALID_VEHICLE_ID;
     if(pCar[playerid] != INVALID_VEHICLE_ID)
     {
-        DestroyVehicle(pCar[playerid]);
+        DestroyVehicleEx(pCar[playerid]);
         aiVehicles[pCar[playerid]] = VEH_INVALID;
     }
     pCar[playerid] = INVALID_VEHICLE_ID;
@@ -10794,8 +10794,7 @@ public NotrufDialog(playerid) {
     return 1;
 }
 
-public OnVehicleSpawn(vehicleid)
-{
+public OnVehicleSpawn(vehicleid) {
     //printf("OnVehicleSpawn(%d)",vehicleid);
     vehicleRefueling[vehicleid] = 0;
     if( g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID ) {
@@ -10809,8 +10808,8 @@ public OnVehicleSpawn(vehicleid)
         g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
     }
 
-    DestroyBlinker(vehicleid,0);
-    DestroyBlinker(vehicleid,1);
+    DestroyBlinker(vehicleid, 0);
+    DestroyBlinker(vehicleid, 1);
     //Gears_OnVehicleSpawn(vehicleid);
 
     if( _:g_t3dPolizeiKontrolle[vehicleid] != INVALID_3DTEXT_ID ) {
@@ -10899,7 +10898,7 @@ public OnVehicleSpawn(vehicleid)
             slot = GetCarOwnerSlot(owner,vehicleid);
             if( slot != 555 ) {
                 if( PlayerCar[owner][slot][CarState] == e_Vehicle_Status_Destroyed) {
-                    DestroyVehicle(vehicleid);
+                    DestroyVehicleEx(vehicleid);
                     printf("Vehicle zerstört! Status Destroyed");
                 }
                 else {
@@ -10909,7 +10908,7 @@ public OnVehicleSpawn(vehicleid)
                 }
             }
         }
-    }
+    }   
     if( g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] == true ) {
         SetVehiclePos(vehicleid,
             g_FraktionAbschleppen[vehicleid][FA_fX],
@@ -10956,16 +10955,16 @@ public OnVehicleDeath(vehicleid, killerid) {
         sireneobj[vehicleid][i] = INVALID_OBJECT_ID;
     }
 
-    if( g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID ) {
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
-        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
-        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
-        g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
-        g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
-    }
+    // if( g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID ) {
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
+    g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
+    g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
+    g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
+    g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
+    // }
 
     vSirene[vehicleid] = INVALID_OBJECT_ID;
     vNeon[vehicleid] = INVALID_OBJECT_ID;
@@ -10997,7 +10996,7 @@ public OnVehicleDeath(vehicleid, killerid) {
                             DestroyDynamicObject(PlayerCar[playerid][x][SpecialTuned8]);
                             DestroyDynamicObject(PlayerCar[playerid][x][SpecialTuned9]);
 
-                            DestroyVehicle( PlayerCar[playerid][x][CarId] );
+                            DestroyVehicleEx( PlayerCar[playerid][x][CarId] );
                             aiVehicles[ PlayerCar[playerid][x][CarId] ] = VEH_INVALID;
                             PlayerHaveCar[playerid][x] = 0;
 
@@ -11013,7 +11012,7 @@ public OnVehicleDeath(vehicleid, killerid) {
                                 PlayerCar[playerid][x][CarState] = e_Vehicle_Status_Destroyed;
                                 PlayerCar[playerid][x][CarTank] = gGas[PlayerCar[playerid][x][CarId]];
                                 PlayerCar[playerid][x][CarDistance] = g_VehicleDistance[ PlayerCar[playerid][x][CarId] ];
-                                DestroyVehicle(vehicleid);
+                                DestroyVehicleEx(vehicleid);
                                 SavePlayerCar(playerid,x);
                             }
                             PlayerCar[playerid][x][CarId] = INVALID_VEHICLE_ID;
@@ -13419,7 +13418,7 @@ CMD:mieten(playerid)
 {
     if(pCar[playerid] == INVALID_VEHICLE_ID)return SendClientMessage(playerid, COLOR_WHITE, "Du hast kein Fahrzeug gemietet.");
     SendClientMessage(playerid, COLOR_GREEN, "Du hast dein Mietfahrzeug wieder abgegeben.");
-    DestroyVehicle(pCar[playerid]);
+    DestroyVehicleEx(pCar[playerid]);
     aiVehicles[ pCar[playerid] ] = VEH_INVALID;
     pCar[playerid] = INVALID_VEHICLE_ID;
     return 1;
@@ -13430,13 +13429,13 @@ CMD:entmieten(playerid)
     if(Spieler[playerid][pVehicleVerleih] == INVALID_VEHICLE_ID && pCar[playerid] == INVALID_VEHICLE_ID) return SendClientMessage(playerid, COLOR_WHITE, "Du hast kein Fahrzeug gemietet.");
     SendClientMessage(playerid, COLOR_GREEN, "Du hast dein Mietfahrzeug wieder abgegeben.");
     if (pCar[playerid] != INVALID_VEHICLE_ID) {
-        DestroyVehicle(pCar[playerid] );
+        DestroyVehicleEx(pCar[playerid] );
         aiVehicles[pCar[playerid] ] = VEH_INVALID;
         pCar[playerid] = INVALID_VEHICLE_ID;
     }
 
     if (Spieler[playerid][pVehicleVerleih] != INVALID_VEHICLE_ID) {
-        DestroyVehicle(Spieler[playerid][pVehicleVerleih]);
+        DestroyVehicleEx(Spieler[playerid][pVehicleVerleih]);
         aiVehicles[Spieler[playerid][pVehicleVerleih]] = VEH_INVALID;
         Spieler[playerid][pVehicleVerleih] = INVALID_VEHICLE_ID;
     }
@@ -20898,7 +20897,7 @@ CMD:accept(playerid, params[])
                                 DestroyDynamicObject(OAmtSirene[PlayerCar[pID][PlayerKey[pID]][CarId]]);
                             }
 
-                            DestroyVehicle(PlayerCar[pID][PlayerKey[pID]][CarId]);
+                            DestroyVehicleEx(PlayerCar[pID][PlayerKey[pID]][CarId]);
                             g_Parkschein[PlayerCar[pID][PlayerKey[pID]][CarId]] = 0;
                             //DestroyPeilsender(pID, PlayerKey[pID] );
                             aiVehicles[ PlayerCar[pID][PlayerKey[pID]][CarId] ] = VEH_INVALID;
@@ -24688,7 +24687,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24705,7 +24704,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24722,7 +24721,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24739,7 +24738,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24756,7 +24755,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24773,7 +24772,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24790,7 +24789,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24807,7 +24806,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24824,7 +24823,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24841,7 +24840,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24858,7 +24857,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24875,7 +24874,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24892,7 +24891,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24909,7 +24908,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24926,7 +24925,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24943,7 +24942,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24960,7 +24959,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24977,7 +24976,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24994,7 +24993,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25011,7 +25010,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25028,7 +25027,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25041,7 +25040,7 @@ public OnPlayerEnterCheckpoint(playerid)
             SendClientMessage(playerid, COLOR_GREEN, "Falls du Berufe wie Trucker oder Pilot ausführen möchtest, musst du die entsprechenden Scheine");
             SendClientMessage(playerid, COLOR_GREEN, "bei einem Fahrlehrer machen. Ob ein Fahrlehrer online ist, kannst du unter /Liste sehen.");
             SendClientMessage(playerid, COLOR_GREEN, "Viel Spaß wünscht dir das Live your Dream - Roleplay Team!");
-            DestroyVehicle(pFahrschulCar[playerid]);
+            DestroyVehicleEx(pFahrschulCar[playerid]);
             aiVehicles[ pFahrschulCar[playerid] ] = VEH_INVALID;
             pFahrschulCar[playerid] = INVALID_VEHICLE_ID;
             DisablePlayerCheckpointEx(playerid);
@@ -26217,14 +26216,12 @@ public OnPlayerLeaveCheckpoint(playerid)
 
 public OnPlayerEnterRaceCheckpoint(playerid)
 {
-    new
-        cp;
+    new cp;
     EventCP[playerid]++;
     cp = EventCP[playerid];
     DisablePlayerRaceCheckpoint(playerid);
-    if( cp == g_EventMarker[EV_iCheckpoints] ) {
-        new
-            String[128];
+    if (cp == g_EventMarker[EV_iCheckpoints] ) {
+        new String[128];
         format(String,sizeof(String),"%s hat das Event gewonnen, er war der ERSTE am Ziel!",GetName(playerid));
         SendClientMessageToAll(COLOR_GREEN,String);
 
@@ -28660,47 +28657,33 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		//SetCameraBehindPlayer(playerid); bugfix test eingeklammert Auftrag 2706
 	}
-	new
-	    _gettime = gettime();
-	if( _gettime > Spieler[playerid][unixBlinkerCooldown]) {
-		if(vehicleid) {
-			if( PRESSED(KEY_ANALOG_LEFT) || PRESSED(KEY_ANALOG_RIGHT ) ) {
-			    if( GetPlayerState(playerid) == PLAYER_STATE_DRIVER ) {
-					new
-					    modelid;
-				    modelid = GetVehicleModel(vehicleid);
-				    if(IsACar(modelid)) {
-				        if( GetVehicleIndicator(vehicleid) == 3 ) { // Warnblinker an,blinken geht also nicht wirklich
-				            return 1;
-						}
-				        new
-				            String[128],
-				            Float:x,
-				            Float:y,
-				            Float:z;
-						GetPlayerPos(playerid,x,y,z);
-				        if( PRESSED(KEY_ANALOG_LEFT) ) {
-				            // links
-				            format(String,sizeof(String),"%s blinkt nach links",GetName(playerid));
-			                DestroyBlinker(vehicleid,1);
-							SetVehicleIndicator(vehicleid,1,0);
-				        }
-				        else {
-				            // rechts
-				            format(String,sizeof(String),"%s blinkt nach rechts",GetName(playerid));
-			                DestroyBlinker(vehicleid,0);
-							SetVehicleIndicator(vehicleid,0,1);
-				        }
-						SendRoundMessage(x,y,z, COLOR_BLINKER, String , 30.0 );
-				        Spieler[playerid][unixBlinkerCooldown] = _gettime + 2;
-				    }
-			    }
-			}
-		}
-	}
+
+    if (!PRESSED(KEY_ANALOG_LEFT) && !PRESSED(KEY_ANALOG_RIGHT)) return 1;
+    if (!vehicleid || GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return 1;
+	new _gettime = gettime();
+	if (_gettime <= Spieler[playerid][unixBlinkerCooldown]) return 1;
+
+	new modelid = GetVehicleModel(vehicleid);
+    if (!IsACar(modelid)) return 1;
+
+    if (GetVehicleIndicator(vehicleid) == 3) return 1;
+    new String[128], Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+    if (PRESSED(KEY_ANALOG_LEFT)) {
+        format(String, sizeof(String), "%s blinkt nach links", GetName(playerid));
+        DestroyBlinker(vehicleid, 1);
+		SetVehicleIndicator(vehicleid, 1, 0);
+    }
+    else {
+        format(String, sizeof(String), "%s blinkt nach rechts", GetName(playerid));
+        DestroyBlinker(vehicleid, 0);
+		SetVehicleIndicator(vehicleid, 0, 1);
+    }
+
+	SendRoundMessage(x, y, z, COLOR_BLINKER, String, 30.0);
+    Spieler[playerid][unixBlinkerCooldown] = _gettime + 2;
 	return 1;
 }
-
 
 forward UnFreeze(playerid);
 public UnFreeze(playerid)
@@ -28873,6 +28856,21 @@ ShowSellGunDialog(playerid, dialogid) {
         return ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE_INPUT, "{BDBDBD}Waffenverkauf - Preis", dialogText, "Anbieten", "Abbrechen");
     }
 
+    return 1;
+}
+
+stock DestroyVehicleEx(vehicleid) {
+    DestroyBlinker(vehicleid, 0);
+    DestroyBlinker(vehicleid, 1);
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
+    g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
+    g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
+    g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
+    g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
+    DestroyVehicle(vehicleid);
     return 1;
 }
 
@@ -29263,7 +29261,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
         DestroyBlinker(CarId,0);
         DestroyBlinker(CarId,1);
-        DestroyVehicle(PlayerCar[playerid][PlayerKey[playerid]][CarId]);
+        DestroyVehicleEx(PlayerCar[playerid][PlayerKey[playerid]][CarId]);
         //DestroyPeilsender(playerid, PlayerKey[playerid] );
         aiVehicles[ PlayerCar[playerid][PlayerKey[playerid]][CarId] ] = VEH_INVALID;
         new string[80];
@@ -45034,7 +45032,7 @@ public OnPlayerCarUpdate(playerid)
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon1]);
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon2]);
 
-            DestroyVehicle(PlayerCar[playerid][x][CarId]);
+            DestroyVehicleEx(PlayerCar[playerid][x][CarId]);
             //DestroyPeilsender(playerid,x);
             aiVehicles[ PlayerCar[playerid][x][CarId] ] = VEH_INVALID;
 
@@ -48367,10 +48365,7 @@ COMMAND:rtwsirene(playerid,params[]) {
 }
 
 COMMAND:neonweis(playerid,params[]) {
-
-    new
-        vehicleid,
-        modelid;
+    new vehicleid, modelid;
     vehicleid = GetPlayerVehicleID(playerid);
     if(!vehicleid) {
         return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
@@ -54577,7 +54572,7 @@ public Pulse_Fahrschule(playerid) {
 stock FahrschuleAbbruch(playerid) {
     DisablePlayerCheckpoint(playerid);
     RemovePlayerFromVehicle(playerid);
-    DestroyVehicle( pFahrschulCar[playerid] );
+    DestroyVehicleEx( pFahrschulCar[playerid] );
     if( pFahrschulCar[playerid] != INVALID_VEHICLE_ID ) {
         aiVehicles[ pFahrschulCar[playerid] ] = VEH_INVALID;
     }
@@ -60874,7 +60869,7 @@ public FahrzeugVerleih_Pulse() {
                     format(String,sizeof(String),"Die Leihzeit ist abgelaufen ( Fahrzeug: %s )",CarName[modelid - 400]);
                     SendClientMessage(i,COLOR_RED,String);
                     Spieler[i][tickVehicleVerleih] = 0;
-                    DestroyVehicle(Spieler[i][pVehicleVerleih]);
+                    DestroyVehicleEx(Spieler[i][pVehicleVerleih]);
                     Spieler[i][pVehicleVerleih] = INVALID_VEHICLE_ID;
                 }
             }
@@ -66630,10 +66625,10 @@ COMMAND:ic(playerid,params[]) {
 COMMAND:warnblinker(playerid,params[]) {
     new vehicleid;
     vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in einem Fahrzeug aktivieren");
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur als Fahrer aktivieren");
+    if(!vehicleid) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in einem Fahrzeug aktivieren.");
+    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur als Fahrer aktivieren.");
     new modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in Autos aktivieren");
+    if(!IsACar(modelid)) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in Autos aktivieren.");
     if( GetVehicleIndicator(vehicleid) == 3 ) {
         DestroyBlinker(vehicleid,0);
         DestroyBlinker(vehicleid,1);
@@ -68257,7 +68252,7 @@ COMMAND:delveh(playerid,params[]) {
     format(String, sizeof(String), "%s %s hat ein Fahrzeug entfernt (CarID: %d)", GetPlayerAdminRang(playerid), GetName(playerid), vehicleid);
     SendAdminMessage(COLOR_YELLOW, String);
 
-    DestroyVehicle(vehicleid);
+    DestroyVehicleEx(vehicleid);
     DestroyDynamicObject(vSirene[vehicleid]);
     aiVehicles[ vehicleid ] = VEH_INVALID;
     return 1;
@@ -69393,7 +69388,7 @@ COMMAND:delallvehs(playerid,params[]) {
         c = 0;
     for(new i = 0 ; i < MAX_VEHICLES ; i++) {
         if( aiVehicles[i] == VEH_CAR ) {
-            DestroyVehicle(i);
+            DestroyVehicleEx(i);
             aiVehicles[i] = VEH_INVALID;
             c++;
         }
