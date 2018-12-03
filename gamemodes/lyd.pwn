@@ -28948,18 +28948,20 @@ ShowSellGunDialog(playerid, dialogid) {
 }
 
 stock DestroyVehicleEx(vehicleid) {
+    if (vehicleid == INVALID_VEHICLE_ID) return 1;
     DestroyBlinker(vehicleid, 0);
     DestroyBlinker(vehicleid, 1);
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
-    g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
-    g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
-    g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
-    g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
-    DestroyVehicle(vehicleid);
-    return 1;
+    if (g_aiVehicleSirene[CarId][0] != INVALID_OBJECT_ID) {
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
+        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
+        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
+        g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
+        g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
+    }
+    return DestroyVehicle(vehicleid);
 }
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
@@ -45125,7 +45127,6 @@ public OnPlayerCarUpdate(playerid)
             SavePlayerCar(playerid,x);
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon1]);
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon2]);
-
             DestroyVehicleEx(PlayerCar[playerid][x][CarId]);
             //DestroyPeilsender(playerid,x);
             aiVehicles[ PlayerCar[playerid][x][CarId] ] = VEH_INVALID;
