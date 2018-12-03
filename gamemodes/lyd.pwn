@@ -7420,6 +7420,25 @@ CMD:createobject(playerid, params[]) {
 	return 1;
 }
 
+
+CMD:vehcolor(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 6) return 1;
+    new color1, color2, vehicleid;
+    vehicleid = GetPlayerVehicleID(playerid);
+    if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst in einem Fahrzeug sitzen.");
+    if (sscanf(params, "ii", color1, color2)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Vehcolor [Color 1] [Color 2]");
+    
+    ChangeVehicleColor(vehicleid, color1, color2);
+    new owner = GetCarOwner(vehicleid);
+    new slot = GetCarOwnerSlot(owner, vehicleid);
+    if (slot != 555) {
+        PlayerCar[owner][slot][CarC1] = color1;
+        PlayerCar[owner][slot][CarC2] = color2;
+    }
+
+    return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Farben des Fahrzeugs geändert.");
+}
+
 CMD:vw(playerid) {
 	if (Spieler[playerid][pAdmin] < 2) return 1;
 
@@ -56710,7 +56729,10 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
 
         new pID;
         sscanf(oldName, "k<playername>", pID);
-        if (pID != INVALID_PLAYER_ID) SetPlayerName(pID, newName);
+        if (pID != INVALID_PLAYER_ID) {
+            SetPlayerName(pID, newName);
+            for (new i = 0; i < MaxVehicles(pID); i++) if (PlayerHaveCar[pID][i]) PlayerCar[pID][i][CarOwner] = newName;
+        }
 
         DeletePVar(extraid, "NAMECHANGE.OLDNAME");
         DeletePVar(extraid, "NAMECHANGE.NEWNAME");
@@ -56744,18 +56766,18 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             mysql_tquery(gSQL, string);
             format(string,sizeof(string), "UPDATE `frakblacklist` SET `name` = '%s' WHERE `name` = '%s'", newName, oldName);
             mysql_tquery(gSQL, string);
+            format(string,sizeof(string),"UPDATE `akte` SET `spieler` = '%s' WHERE `spieler` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `beschwerde` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `beschwerdeantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `ticket` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `ticketantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
             format(string,sizeof(string), "UPDATE `bizes` SET `Besitzer` = '%s' WHERE `Besitzer` = '%s'", newName, oldName);
             mysql_pquery(string, THREAD_NAMECHANGE, extraid, gSQL, MySQLThreadOwner);
-            // format(string,sizeof(string),"UPDATE `akte` SET `spieler` = '%s' WHERE `spieler` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `beschwerde` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `beschwerdeantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `ticket` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `ticketantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
         }
         else {
             DeletePVar(extraid, "NAMECHANGE.OLDNAME");
