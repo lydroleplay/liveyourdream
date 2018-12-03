@@ -983,7 +983,8 @@ enum e_FraktionAbschleppen {
     Float:FA_fY,
     Float:FA_fZ,
     Float:FA_fFace,
-    bool:FA_bAbgeschleppt
+    bool:FA_bAbgeschleppt,
+    FA_fraktion
 }
 
 new g_FraktionAbschleppen[MAX_VEHICLES][e_FraktionAbschleppen];
@@ -2099,6 +2100,7 @@ stock bool:IsTUVNeeded(distance) {
 
 #define     DIALOG_AWAFFENLAGER_MENU 1384
 #define     DIALOG_AWAFFENLAGER_CHANGE 1385
+#define     DIALOG_FINDMPARK 1386
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -20071,6 +20073,7 @@ CMD:ofreistellen(playerid, params[]) {
         g_FraktionAbschleppen[vehicleid][FA_fZ] = 0.0;
         g_FraktionAbschleppen[vehicleid][FA_fFace] = 0.0;
         g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] = false;
+        g_FraktionAbschleppen[vehicleid][FA_fraktion] = 0;
 
         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Du hast das Fraktionsfahrzeug wieder freigestellt.");
         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Das Fahrzeug spawnt nun wie gewohnt.");
@@ -20244,6 +20247,20 @@ CMD:cc(playerid, params[])
     format(string, sizeof(string), "* Clubmitglied %s sagt: %s *", GetName(playerid), text);
     SendClubMessage(COLOR_CLUB,string);
     return 1;
+}
+
+CMD:findmpark(playerid) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pFraktion] < 1) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist in keiner Fraktion.");
+
+    new dialogText[256];
+    for (new i = 0; i < sizeof(g_FraktionAbschleppen); i++) {
+        if (g_FraktionAbschleppen[i][FA_bAbgeschleppt] && g_FraktionAbschleppen[i][FA_fraktion] == Spieler[playerid][pFraktion])
+            format(dialogText, sizeof(dialogText), "%s%s\n", dialogText, CarName[GetVehicleModel(i) - 400]);
+    }
+
+    if (isnull(dialogText)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Es sind keine Fraktionsmotorräder abgeschleppt.");
+    return ShowPlayerDialog(playerid, DIALOG_FINDMPARK, DIALOG_STYLE_LIST, "{FF9900}Abgeschleppte Motorräder", dialogText, "Orten", "Schließen");
 }
 
 CMD:fc(playerid, params[])
@@ -23682,8 +23699,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
             return 1;
         }
         // Fraktionscar ?
-        new
-            fraktion = GetVehicleFraktion(vehicleid);
+        new fraktion = GetVehicleFraktion(vehicleid);
         if( fraktion ) {
             if( g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] == true ) {
                 if( fraktion == Spieler[playerid][pFraktion]) {
@@ -28968,9 +28984,26 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         if( inputtext[i] == '%' ) inputtext[i] = ' ';
     }
     if(Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if (dialogid == DIALOG_FINDMPARK) {
+        if (!response || Spieler[playerid][pFraktion] == 0) return 1;
+        if (listitem < 0) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
+        new count = 0;
+        for (new i = 0; i < sizeof(g_FraktionAbschleppen); i++) {
+            if (g_FraktionAbschleppen[i][FA_bAbgeschleppt] && g_FraktionAbschleppen[i][FA_fraktion] == Spieler[playerid][pFraktion]) {
+                if (count == listitem) {
+                    SetPlayerCheckpointEx(playerid, g_FraktionAbschleppen[i][FA_fX], g_FraktionAbschleppen[i][FA_fY], g_FraktionAbschleppen[i][FA_fZ], 2.0, CP_NAVI4);
+                    return SCMFormatted(playerid, COLOR_SAMP, "GPS: Das Motorrad (%s) wurde auf der Karte markiert.", CarName[GetVehicleModel(i) - 400]);
+                }
+                
+                count++;
+            }
+        }
+
+        return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Motorrad ist nicht mehr abgeschleppt.");
+    }
     if (dialogid == DIALOG_AWAFFENLAGER_MENU) {
         if (!response) return 1;
-        if (listitem < 0 || listitem > g_iWaffenLager) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] Keine gültige Auswahl.");
+        if (listitem < 0 || listitem > g_iWaffenLager) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
 
         SetPVarInt(playerid, "AWAFFENLAGER.INDEX", listitem);
         new dialogCaption[64], dialogText[256];
@@ -41464,6 +41497,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         g_FraktionAbschleppen[vID][FA_fZ] = 0.0;
                         g_FraktionAbschleppen[vID][FA_fFace] = 0.0;
                         g_FraktionAbschleppen[vID][FA_bAbgeschleppt] = false;
+                        g_FraktionAbschleppen[vID][FA_fraktion] = 0;
 
                         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Du hast dein Fahrzeug erfolgreich freigekauft!");
                         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Das Fraktionsfahrzeug spawnt wieder wie gewohnt.");
@@ -69952,154 +69986,77 @@ stock Hausmoebel_Uncompress(var,&house,&slot) {
 }
 // - - - - - - - - - - - - - - - - - - - - -
 
-CMD:fparken(playerid)
-{
-    if(!(Spieler[playerid][pFraktion] == 5))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
+CMD:fparken(playerid) {
+    if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
     new vehicleid = GetPlayerVehicleID(playerid);
-    if (GetVehicleModel( vehicleid ) == 525)
-    {
-        if(IsTrailerAttachedToVehicle(vehicleid))
-        {
-            for(new i = 0 ; i < MAX_PLAYERS ; i++)
-            {
-                new trailerid = GetVehicleTrailer(vehicleid);
-                new fraktion = GetVehicleFraktion(trailerid);
-                new modelid = GetVehicleModel(trailerid);
-                if( fraktion ) {
-                    new Float:vX, Float:vY, Float:vZ,Float:vAngle;
-                    GetVehiclePos(trailerid, vX, vY, vZ);
-                    GetVehicleZAngle(trailerid,vAngle);
-                    g_FraktionAbschleppen[trailerid][FA_fX] = vX;
-                    g_FraktionAbschleppen[trailerid][FA_fY] = vY;
-                    g_FraktionAbschleppen[trailerid][FA_fZ] = vZ;
-                    g_FraktionAbschleppen[trailerid][FA_fFace] = vAngle;
-                    g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] = true;
-                    new str[128];
-                    format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400],GetName(playerid));
-                    SendFraktionMessage(fraktion, COLOR_RED, str);
-                    Spieler[playerid][pPayCheck] += 700;
-                    GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
-                    new
-                        frakname[50];
-                    ReturnFraktionByID( fraktion , frakname );
-                    format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!",GetName(playerid),frakname);
-                    SendFraktionMessage(5, COLOR_RED, str);
+    if (GetVehicleModel(vehicleid) != 525) return SendClientMessage(playerid, COLOR_RED, "Du bist in keinem Ordnungsamt-Fahrzeug.");
+    if (!IsTrailerAttachedToVehicle(vehicleid)) return SendClientMessage(playerid, COLOR_RED, "Du hast kein Fahrzeug am Haken.");
 
-                    format(str,sizeof(str),"[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]",GetName(playerid),frakname,fraktion);
-                    OamtLog(str);
-                    return 1;
-                }
-                else {
-                    SendClientMessage(playerid, COLOR_RED, "Der Wagen ist kein Fraktionsfahrzeug.");
-                    return 1;
-                }
-            }
-        }
-        else
-        {
-            SendClientMessage(playerid, COLOR_RED, "Du hast kein Fahrzeug am Haken.");
-            return 1;
-        }
-    }
-    else
-    {
-        SendClientMessage(playerid, COLOR_RED, "Du bist in keinem Ordnungsamt-Fahrzeug.");
-        return 1;
-    }
-    return 1;
-}
-CMD:fmparkkralle(playerid)
-{
-    if(Spieler[playerid][pFraktion] != 5)
-    {
-        SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
-    }
-    else
-    {
-        for(new v;v<MAX_VEHICLES;v++)
-        {
-            if(IsABike(GetVehicleModel(v)))
-            {
-                new Float:vx,Float:vy,Float:vz;
-                GetVehiclePos(v,vx,vy,vz);
-                if(IsPlayerInRangeOfPoint(playerid,4,vx,vy,vz))
-                {
-                    for(new i = 0 ; i < MAX_PLAYERS ; i++)
-                    {
-                        new trailerid = v;
-                        new fraktion = GetVehicleFraktion(trailerid);
-                        new modelid = GetVehicleModel(trailerid);
-                        if(fraktion)
-                        {
-                            if(g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] == true)return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug ist bereits abgeschleppt!");
-                            new Float:vX, Float:vY, Float:vZ,Float:vAngle;
-                            GetVehiclePos(trailerid, vX, vY, vZ);
-                            GetVehicleZAngle(trailerid,vAngle);
-                            g_FraktionAbschleppen[trailerid][FA_fX] = vX;
-                            g_FraktionAbschleppen[trailerid][FA_fY] = vY;
-                            g_FraktionAbschleppen[trailerid][FA_fZ] = vZ;
-                            g_FraktionAbschleppen[trailerid][FA_fFace] = vAngle;
-                            g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] = true;
-                            new str[128];
-                            format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400],GetName(playerid));
-                            SendFraktionMessage(fraktion, COLOR_RED, str);
-                            Spieler[playerid][pPayCheck] += 700;
-                            GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
-                            new frakname[50];
-                            ReturnFraktionByID( fraktion , frakname );
-                            format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!",GetName(playerid),frakname);
-                            SendFraktionMessage(5, COLOR_RED, str);
-                            format(str,sizeof(str),"[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]",GetName(playerid),frakname,fraktion);
-                            OamtLog(str);
-                            break;
-                        }
-                        else
-                        {
-                            SendClientMessage(playerid, COLOR_RED, "Das Motorrad ist kein Fraktionsfahrzeug.");
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return 1;
-}
-/*
-COMMAND:respawnveh(playerid,params[]) {
-    new
-        vehicleid = GetPlayerVehicleID(playerid);
-    SetVehicleToRespawn(vehicleid);
+    new trailerid = GetVehicleTrailer(vehicleid);
+    new fraktion = GetVehicleFraktion(trailerid);
+    new modelid = GetVehicleModel(trailerid);
+    if (!fraktion) return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug gehört keiner Fraktion.");
+
+    new Float:vX, Float:vY, Float:vZ, Float:vAngle;
+    GetVehiclePos(trailerid, vX, vY, vZ);
+    GetVehicleZAngle(trailerid, vAngle);
+    g_FraktionAbschleppen[trailerid][FA_fX] = vX;
+    g_FraktionAbschleppen[trailerid][FA_fY] = vY;
+    g_FraktionAbschleppen[trailerid][FA_fZ] = vZ;
+    g_FraktionAbschleppen[trailerid][FA_fFace] = vAngle;
+    g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] = true;
+    new str[128];
+    format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400], GetName(playerid));
+    SendFraktionMessage(fraktion, COLOR_RED, str);
+    Spieler[playerid][pPayCheck] += 700;
+    GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
+    new frakname[50];
+    ReturnFraktionByID( fraktion , frakname );
+    format(str, sizeof(str), "Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!", GetName(playerid), frakname);
+    SendFraktionMessage(5, COLOR_RED, str);
+    format(str, sizeof(str), "[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]", GetName(playerid), frakname, fraktion);
+    OamtLog(str);
     return 1;
 }
 
-COMMAND:distanceveh(playerid,params[]) {
-    new
-        String[128],
-        vehicleid = GetPlayerVehicleID(playerid);
-    if(vehicleid) {
-        format(String,sizeof(String),"Vehicle Distance %dm",g_VehicleDistance[vehicleid]);
-        SendClientMessage(playerid,COLOR_BLUE,String);
-    }
+CMD:fmparkkralle(playerid) {
+    if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
+    new vehicleid = GetPlayerVehicleID(playerid);
+    if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst dafür auf dem Motorrad sitzen.");
+    new modelid = GetVehicleModel(vehicleid);
+    if (!IsABike(modelid)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Fahrzeug ist kein Motorrad.");
+    new fraktion = GetVehicleFraktion(vehicleid);
+    if (!fraktion) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Motorrad ist kein Fraktionsfahrzeug.");
+    if (g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] == true) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Motorrad ist bereits abgeschleppt!");
+    
+    new Float:vX, Float:vY, Float:vZ, Float:vAngle;
+    GetVehiclePos(vehicleid, vX, vY, vZ);
+    GetVehicleZAngle(vehicleid, vAngle);
+    g_FraktionAbschleppen[vehicleid][FA_fX] = vX;
+    g_FraktionAbschleppen[vehicleid][FA_fY] = vY;
+    g_FraktionAbschleppen[vehicleid][FA_fZ] = vZ;
+    g_FraktionAbschleppen[vehicleid][FA_fFace] = vAngle;
+    g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] = true;
+    g_FraktionAbschleppen[vehicleid][FA_fraktion] = fraktion;
+    new str[128];
+    format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt! (/Findmpark)", CarName[modelid-400], GetName(playerid));
+    SendFraktionMessage(fraktion, COLOR_RED, str);
+    Spieler[playerid][pPayCheck] += 700;
+    GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
+    new frakname[50];
+    ReturnFraktionByID(fraktion , frakname);
+    format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!", GetName(playerid), frakname);
+    SendFraktionMessage(5, COLOR_RED, str);
+    format(str,sizeof(str),"[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]", GetName(playerid), frakname, fraktion);
+    OamtLog(str);
     return 1;
 }
-*/
+
 forward SetVehicleZAngleEx(vehicleid,Float:angle);
 public SetVehicleZAngleEx(vehicleid,Float:angle) {
     SetVehicleZAngle(vehicleid, angle);
     return 1;
 }
-
-
-// - - - - - - - - - -
-// IsPlayerTaxiCustomer(driverid,playerid) {
-//     for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-//         if( Spieler[driverid][pTaxiKunden][i] == playerid) {
-//             return 1;
-//         }
-//     }
-//     return 0;
-// }
 
 RemovePlayerFromTaxi(driverid, playerid) {
     for (new i; i < MAX_TAXI_KUNDEN; i++) {
