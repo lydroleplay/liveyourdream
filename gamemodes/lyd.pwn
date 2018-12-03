@@ -983,7 +983,8 @@ enum e_FraktionAbschleppen {
     Float:FA_fY,
     Float:FA_fZ,
     Float:FA_fFace,
-    bool:FA_bAbgeschleppt
+    bool:FA_bAbgeschleppt,
+    FA_fraktion
 }
 
 new g_FraktionAbschleppen[MAX_VEHICLES][e_FraktionAbschleppen];
@@ -2099,6 +2100,7 @@ stock bool:IsTUVNeeded(distance) {
 
 #define     DIALOG_AWAFFENLAGER_MENU 1384
 #define     DIALOG_AWAFFENLAGER_CHANGE 1385
+#define     DIALOG_FINDMPARK 1386
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -7420,6 +7422,27 @@ CMD:createobject(playerid, params[]) {
 	return 1;
 }
 
+
+CMD:vehcolor(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 6) return 1;
+    new color1, color2, vehicleid;
+    vehicleid = GetPlayerVehicleID(playerid);
+    if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst in einem Fahrzeug sitzen.");
+    if (sscanf(params, "ii", color1, color2)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Vehcolor [Color 1] [Color 2]");
+    
+    ChangeVehicleColor(vehicleid, color1, color2);
+    new owner = GetCarOwner(vehicleid);
+    if (owner != INVALID_PLAYER_ID) {
+        new slot = GetCarOwnerSlot(owner, vehicleid);
+        if (slot != 555) {
+            PlayerCar[owner][slot][CarC1] = color1;
+            PlayerCar[owner][slot][CarC2] = color2;
+        }
+    }
+
+    return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Farben des Fahrzeugs geändert.");
+}
+
 CMD:vw(playerid) {
 	if (Spieler[playerid][pAdmin] < 2) return 1;
 
@@ -7831,18 +7854,39 @@ CMD:adventskalender(playerid) {
 
     Spieler[playerid][pAdventDay] = wday;
     Spieler[playerid][pAdventMin] = 0;
+    GivePlayerGift(playerid);
+    return 1;
+}
+
+stock GivePlayerGift(playerid, rValue = -1) {
+    if (rValue == -1) rValue = random(1000);
     new message[245];
 
-    switch (random(100)) {
-        case 0..24: {
+    switch (rValue) {
+        case 0..169: {
             SetPlayerScore(playerid, ++Spieler[playerid][pLevel]);
+            GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
             GivePlayerCash(playerid, 75000);
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast ein Level-Up und $75.000 hinter dem Türchen gefunden!");
             
-            format(message, sizeof(message), "%s hat ein Level-Up und $75.000 im Adventskalender gefunden.", GetName(playerid));
+            format(message, sizeof(message), "%s hat ein Level-Up und $75.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 25..49: {
+        case 170..339: {
+            GivePlayerCash(playerid, 100000);
+            Spieler[playerid][pExp] += 5;
+            if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
+                Spieler[playerid][pLevel]++;
+                SetPlayerScore(playerid, Spieler[playerid][pLevel]);
+                Spieler[playerid][pExp] = 0;
+                GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
+            }
+
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+5 Respektpunkte und $100.000 {FFFFFF}hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat +5 Respektpunkte und $100.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 340..509: {
             GivePlayerCash(playerid, 150000);
             Spieler[playerid][pExp] += 3;
             if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
@@ -7850,65 +7894,124 @@ CMD:adventskalender(playerid) {
                 SetPlayerScore(playerid, Spieler[playerid][pLevel]);
                 Spieler[playerid][pExp] = 0;
                 GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
-            }            
+            }
+
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+3 Respektpunkte und $150.000 {FFFFFF}hinter dem Türchen gefunden!");
-
-            format(message, sizeof(message), "%s hat +3 Respektpunkte und $150.000 im Adventskalender gefunden.", GetName(playerid));
+            format(message, sizeof(message), "%s hat +3 Respektpunkte und $150.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 50..59: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}ein Wunschfahrzeug {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
-
-            format(message, sizeof(message), "%s hat ein Wunschfahrzeug im Adventskalender gefunden.", GetName(playerid));
+        case 510..579: {
+            GivePlayerCash(playerid, 300000);
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}$300.000 {FFFFFF}hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat $300.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 60..69: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen Skill-Up deiner Wahl {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
-
-            format(message, sizeof(message), "%s hat einen Skill-Up im Adventskalender gefunden.", GetName(playerid));
+        case 580..629: {
+            GivePlayerCash(playerid, 500000);
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}$500.000 hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat $500.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 70..76: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen freien Namechange {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Projektleiter.");
-
-            format(message, sizeof(message), "%s hat einen freien Namechange im Adventskalender gefunden.", GetName(playerid));
+        case 630..659: {
+            GivePlayerCash(playerid, 750000);
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}$750.000 hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat $750.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 77..85: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Neon-Premium {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
-
-            format(message, sizeof(message), "%s hat Neon-Premium im Adventskalender gefunden.", GetName(playerid));
-        }
-
-        case 86..94: {
+        case 660..754: {
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}eine Forum Ranggrafik (Geschenkejäger) {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Projektleiter.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
 
             format(message, sizeof(message), "%s hat eine Forum Ranggrafik im Adventskalender gefunden.", GetName(playerid));
         }
 
-        case 95..97: {
+        case 755..824: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen freien Namechange {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat einen freien Namechange im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 825..864: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen Skill-Up deiner Wahl {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat einen Skill-Up im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 865..904: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Neon-Premium {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat Neon-Premium im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 905..934: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}ein Wunschfahrzeug {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat ein Wunschfahrzeug im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 935..949: {
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Bronze Premium (1 Monat) {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
 
             format(message, sizeof(message), "%s hat Bronze Premium im Adventskalender gefunden.", GetName(playerid));
         }
 
-        case 98..99: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+250 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+        case 950..969: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}75 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 75 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
 
-            format(message, sizeof(message), "%s hat 250 LyD-Coins im Adventskalender gefunden.", GetName(playerid));
+            format(message, sizeof(message), "%s hat 75 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 970..984: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}100 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 100 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
+
+            format(message, sizeof(message), "%s hat 100 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 985..994: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}150 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 150 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
+
+            format(message, sizeof(message), "%s hat 150 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 995..999: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}210 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 210 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
+
+            format(message, sizeof(message), "%s hat 210 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
     }
 
     SendUCPAktenEintrag(playerid, "Server-System", GetName(playerid), message);
     format(message, sizeof(message), "[Adventinfo] {FFFFFF}%s", message);
     SendAdminMessage(COLOR_GREEN, message);
+    return 1;
+}
+
+CMD:akalender(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 6) return 1;
+    new value;
+    if (sscanf(params, "i", value) || value < 0 || value > 999) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/akalender [WERT]");
+    GivePlayerGift(playerid, value);
     return 1;
 }
 
@@ -10985,12 +11088,17 @@ public Anti_OnVehicleDeath(playerid) {
 }
 
 public OnVehicleDeath(vehicleid, killerid) {
-    if( Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
+    if (Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
         new String[128];
-        format(String, sizeof(String), "[KICK]: Spieler %s wurde von Server-System gekickt, Grund: %s", GetName(killerid), ("Vehicle-Spam"));
+        format(String, sizeof(String), "[Anti-Cheat] Spieler %s Verdacht auf Vehicle-Spam: %d Fahrzeug(e)", GetName(killerid), g_aiDestroyedVehicles{killerid});
         SendAdminMessage(COLOR_RED, String);
-        Kick(killerid);
-        return 0;
+        if (g_aiDestroyedVehicles{killerid} > 10) {
+            format(String, sizeof(String), "[KICK] Spieler %s wurde gekickt, Grund: Vehicle-Spam", GetName(killerid));
+            SendAdminMessage(COLOR_RED, String);
+            g_aiDestroyedVehicles{killerid} = 0;
+            Kick(killerid);
+            return 0;
+        }
     }
     g_aiDestroyedVehicles{killerid}++;
     SetTimerEx("Anti_OnVehicleDeath",5003,false,"d",killerid);
@@ -13605,6 +13713,18 @@ COMMAND:aktaccount(playerid,params[])
     return 1;
 }
 
+stock RemovePlayerFromFaction(playerid) {
+    Spieler[playerid][pFraktion] = 0;
+    Spieler[playerid][pFrakLohn] = 0;
+    Spieler[playerid][pRank] = 0;
+    Spieler[playerid][pfrakwarn] = 0;
+    RemovePlayerFromPlantArrayData(playerid);
+    SetPlayerSkinEx(playerid, Spieler[playerid][pSex] == 1 ? 2 : 11);
+    SaveAccount(playerid);
+
+    return 1;
+}
+
 CMD:frakwarn(playerid, params[]) {
     new spielerid, wanzahl;
     if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
@@ -13618,14 +13738,8 @@ CMD:frakwarn(playerid, params[]) {
     SCMFormatted(playerid, COLOR_YELLOW, "Du hast dem Spieler %s erfolgreich %i Verwarnungen erteilt.", GetName(spielerid), wanzahl);
     SCMFormatted(spielerid, COLOR_RED, "Du hast von %s %i Verwarnungen bekommen, du hast nun %i Verwarnungen.", GetName(playerid), wanzahl, Spieler[spielerid][pfrakwarn]);
     if (Spieler[spielerid][pfrakwarn] >= 3) {
-        Spieler[spielerid][pFraktion] = 0;
-        Spieler[spielerid][pFrakLohn] = 0;
-        Spieler[spielerid][pRank] = 0;
-        Spieler[spielerid][pfrakwarn] = 0;
-        RemovePlayerFromPlantArrayData(spielerid);
-        SetPlayerSkinEx(spielerid, Spieler[spielerid][pSex] == 1 ? 2 : 11);
+        RemovePlayerFromFaction(spielerid);
         SendClientMessage(spielerid, COLOR_RED, "Du wurdest wegen zu vielen Verwarnungen aus der Fraktion gekickt.");
-        SaveAccount(spielerid);
     }
 
     return 1;
@@ -14990,14 +15104,7 @@ CMD:feuern(playerid, params[])
     SendClientMessage(pID, COLOR_YELLOW, string);
     format(string, sizeof(string), "Du hast %s aus der Fraktion gefeuert.", GetName(pID));
     SendClientMessage(playerid, COLOR_YELLOW, string);
-    Spieler[pID][pFraktion] = 0;
-    if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 2);}
-    else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 11);}
-    Spieler[pID][pFrakLohn] = 0;
-    Spieler[pID][pRank] = 0;
-    Spieler[pID][pfrakwarn]=0;
-    RemovePlayerFromPlantArrayData(pID);
-    SaveAccount(pID);
+    RemovePlayerFromFaction(pID);
     printf("%s feuert %s aus Fraktion %d", GetName(playerid), GetName(pID), Spieler[playerid][pFraktion]);
     return 1;
 }
@@ -16664,17 +16771,11 @@ CMD:afkick(playerid, params[])
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Afkick [SpielerID/Name]");
     if(!IsPlayerConnected(playerid))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if(Spieler[pID][pFraktion] == 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist bereits Zivilist.");
-    Spieler[pID][pFraktion] = 0;
-    Spieler[pID][pRank] = 0;
-    Spieler[pID][pFrakLohn] = 0;
-    if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 2);}
-    else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 11);}
+    RemovePlayerFromFaction(pID);
     format(string, sizeof(string), "* Du wurdest von %s %s zum Zivilist gemacht.", GetPlayerAdminRang(playerid), GetName(playerid));
     SendClientMessage(pID, COLOR_DARKRED, string);
     format(string, sizeof(string), "* Du hast %s zum Zivilist gemacht.", GetName(pID));
     SendClientMessage(playerid, COLOR_DARKRED, string);
-    RemovePlayerFromPlantArrayData(pID);
-    SaveAccount(pID);
     return 1;
 }
 
@@ -20057,6 +20158,7 @@ CMD:ofreistellen(playerid, params[]) {
         g_FraktionAbschleppen[vehicleid][FA_fZ] = 0.0;
         g_FraktionAbschleppen[vehicleid][FA_fFace] = 0.0;
         g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] = false;
+        g_FraktionAbschleppen[vehicleid][FA_fraktion] = 0;
 
         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Du hast das Fraktionsfahrzeug wieder freigestellt.");
         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Das Fahrzeug spawnt nun wie gewohnt.");
@@ -20230,6 +20332,20 @@ CMD:cc(playerid, params[])
     format(string, sizeof(string), "* Clubmitglied %s sagt: %s *", GetName(playerid), text);
     SendClubMessage(COLOR_CLUB,string);
     return 1;
+}
+
+CMD:findmpark(playerid) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pFraktion] < 1) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du bist in keiner Fraktion.");
+
+    new dialogText[256];
+    for (new i = 0; i < sizeof(g_FraktionAbschleppen); i++) {
+        if (g_FraktionAbschleppen[i][FA_bAbgeschleppt] && g_FraktionAbschleppen[i][FA_fraktion] == Spieler[playerid][pFraktion])
+            format(dialogText, sizeof(dialogText), "%s%s\n", dialogText, CarName[GetVehicleModel(i) - 400]);
+    }
+
+    if (isnull(dialogText)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Es sind keine Fraktionsmotorräder abgeschleppt.");
+    return ShowPlayerDialog(playerid, DIALOG_FINDMPARK, DIALOG_STYLE_LIST, "{FF9900}Abgeschleppte Motorräder", dialogText, "Orten", "Schließen");
 }
 
 CMD:fc(playerid, params[])
@@ -21430,6 +21546,9 @@ CMD:accept(playerid, params[])
             else if(frakid == 20){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 48); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 48);}}
             else if(frakid == 21){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 111); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 111);}}
             FrakInviteID[playerid] = 999;
+            Spieler[playerid][pFrakLohn] = 0;
+            Spieler[playerid][pRank] = 0;
+            Spieler[playerid][pfrakwarn] = 0;
             SpawnPlayerEx(playerid);
             if (frakid == 15) AddPlayerToPlantArrayData(playerid);
             SaveAccount(playerid);
@@ -23665,8 +23784,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
             return 1;
         }
         // Fraktionscar ?
-        new
-            fraktion = GetVehicleFraktion(vehicleid);
+        new fraktion = GetVehicleFraktion(vehicleid);
         if( fraktion ) {
             if( g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] == true ) {
                 if( fraktion == Spieler[playerid][pFraktion]) {
@@ -28929,18 +29047,20 @@ ShowSellGunDialog(playerid, dialogid) {
 }
 
 stock DestroyVehicleEx(vehicleid) {
+    if (vehicleid == INVALID_VEHICLE_ID) return 1;
     DestroyBlinker(vehicleid, 0);
     DestroyBlinker(vehicleid, 1);
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
-    g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
-    g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
-    g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
-    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
-    g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
-    DestroyVehicle(vehicleid);
-    return 1;
+    if (g_aiVehicleSirene[CarId][0] != INVALID_OBJECT_ID) {
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
+        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
+        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
+        g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
+        g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
+    }
+    return DestroyVehicle(vehicleid);
 }
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
@@ -28949,9 +29069,26 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         if( inputtext[i] == '%' ) inputtext[i] = ' ';
     }
     if(Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if (dialogid == DIALOG_FINDMPARK) {
+        if (!response || Spieler[playerid][pFraktion] == 0) return 1;
+        if (listitem < 0) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
+        new count = 0;
+        for (new i = 0; i < sizeof(g_FraktionAbschleppen); i++) {
+            if (g_FraktionAbschleppen[i][FA_bAbgeschleppt] && g_FraktionAbschleppen[i][FA_fraktion] == Spieler[playerid][pFraktion]) {
+                if (count == listitem) {
+                    SetPlayerCheckpointEx(playerid, g_FraktionAbschleppen[i][FA_fX], g_FraktionAbschleppen[i][FA_fY], g_FraktionAbschleppen[i][FA_fZ], 2.0, CP_NAVI4);
+                    return SCMFormatted(playerid, COLOR_SAMP, "GPS: Das Motorrad (%s) wurde auf der Karte markiert.", CarName[GetVehicleModel(i) - 400]);
+                }
+                
+                count++;
+            }
+        }
+
+        return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Motorrad ist nicht mehr abgeschleppt.");
+    }
     if (dialogid == DIALOG_AWAFFENLAGER_MENU) {
         if (!response) return 1;
-        if (listitem < 0 || listitem > g_iWaffenLager) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] Keine gültige Auswahl.");
+        if (listitem < 0 || listitem > g_iWaffenLager) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
 
         SetPVarInt(playerid, "AWAFFENLAGER.INDEX", listitem);
         new dialogCaption[64], dialogText[256];
@@ -33656,7 +33793,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Check, /Gotoliste, /Gotopos, /Gotohaus, /Veh, /Delveh, /Delallvehs, /Spec, /Specoff, /Changeweather");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem /Atafelentmieten");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem, /Atafelentmieten, /Checkskill");
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
@@ -41445,6 +41582,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         g_FraktionAbschleppen[vID][FA_fZ] = 0.0;
                         g_FraktionAbschleppen[vID][FA_fFace] = 0.0;
                         g_FraktionAbschleppen[vID][FA_bAbgeschleppt] = false;
+                        g_FraktionAbschleppen[vID][FA_fraktion] = 0;
 
                         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Du hast dein Fahrzeug erfolgreich freigekauft!");
                         SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Das Fraktionsfahrzeug spawnt wieder wie gewohnt.");
@@ -45106,7 +45244,6 @@ public OnPlayerCarUpdate(playerid)
             SavePlayerCar(playerid,x);
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon1]);
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon2]);
-
             DestroyVehicleEx(PlayerCar[playerid][x][CarId]);
             //DestroyPeilsender(playerid,x);
             aiVehicles[ PlayerCar[playerid][x][CarId] ] = VEH_INVALID;
@@ -53693,6 +53830,31 @@ stock GetPlayerDetectivLevel(playerid) {
     return val;
 }
 
+CMD:checkskill(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    new pID;
+    if (sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/checkskill [Spieler ID/Name]");
+    if (!gPlayerLogged[pID]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht online.");
+
+    new String[128];
+    SendClientMessage(playerid, COLOR_GREEN, "============= {FFFFFF}[ SKILLS ] {009D00}=============");
+    format(String, sizeof(String), "Spieler: %s (%d)", GetName(pID), pID);
+    SendClientMessage(playerid, COLOR_WHITE, String);
+    format(String, sizeof(String), "Detektiv-Skill: {FFFFFF}%d/%d (%d Sekunden)", GetPlayerDetectivLevel(pID), sizeof(g_DetektivSkill), GetPlayerDetectivSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Huren-Skill: {FFFFFF}%d/%d (%d HP)", GetPlayerHureLevel(pID), sizeof(g_HureSkill), GetPlayerHureSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Anwalt-Skill: {FFFFFF}%d/%d (Bis %d Knastzeit)", GetPlayerLawyerLevel(pID), sizeof(g_LawyerSkills), GetPlayerLawyerSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Gangfight-Skill: {FFFFFF}%d/%d (Kills: %d)", GetPlayerGangFightSkillLevel(pID), sizeof(g_GangFightSkills), Spieler[pID][pKillsGangFight]);
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Drogen-Skill: {FFFFFF}%d/%d (Bis zu %d Päckchen)", GetPlayerDrogenSkillLevel(pID), sizeof(g_DrogenSkills), GetPlayerDrogenSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Waffenteile-Skill: {FFFFFF}%d/%d (Bis zu %d Päckchen)", GetPlayerWaffenteileSkillLevel(pID), sizeof(g_WaffenteileSkills), GetPlayerWaffenteileSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    return 1;
+}
+
 COMMAND:skill(playerid, params[]) {
     new giveid = playerid;
     if (!isnull(params) && sscanf(params, "u", giveid)) return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /Skill [Spieler/ID]");
@@ -56710,7 +56872,10 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
 
         new pID;
         sscanf(oldName, "k<playername>", pID);
-        if (pID != INVALID_PLAYER_ID) SetPlayerName(pID, newName);
+        if (pID != INVALID_PLAYER_ID) {
+            SetPlayerName(pID, newName);
+            for (new i = 0; i < MaxVehicles(pID); i++) if (PlayerHaveCar[pID][i]) PlayerCar[pID][i][CarOwner] = newName;
+        }
 
         DeletePVar(extraid, "NAMECHANGE.OLDNAME");
         DeletePVar(extraid, "NAMECHANGE.NEWNAME");
@@ -56744,18 +56909,18 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             mysql_tquery(gSQL, string);
             format(string,sizeof(string), "UPDATE `frakblacklist` SET `name` = '%s' WHERE `name` = '%s'", newName, oldName);
             mysql_tquery(gSQL, string);
+            format(string,sizeof(string),"UPDATE `akte` SET `spieler` = '%s' WHERE `spieler` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `beschwerde` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `beschwerdeantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `ticket` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
+            format(string,sizeof(string),"UPDATE `ticketantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
+            mysql_tquery(gWebSQL,string);
             format(string,sizeof(string), "UPDATE `bizes` SET `Besitzer` = '%s' WHERE `Besitzer` = '%s'", newName, oldName);
             mysql_pquery(string, THREAD_NAMECHANGE, extraid, gSQL, MySQLThreadOwner);
-            // format(string,sizeof(string),"UPDATE `akte` SET `spieler` = '%s' WHERE `spieler` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `beschwerde` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `beschwerdeantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `ticket` SET `player` = '%s' WHERE `player` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
-            // format(string,sizeof(string),"UPDATE `ticketantwort` SET `author` = '%s' WHERE `author` = '%s'", newName, oldName);
-            // mysql_tquery(gWebSQL,string);
         }
         else {
             DeletePVar(extraid, "NAMECHANGE.OLDNAME");
@@ -69931,154 +70096,77 @@ stock Hausmoebel_Uncompress(var,&house,&slot) {
 }
 // - - - - - - - - - - - - - - - - - - - - -
 
-CMD:fparken(playerid)
-{
-    if(!(Spieler[playerid][pFraktion] == 5))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
+CMD:fparken(playerid) {
+    if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
     new vehicleid = GetPlayerVehicleID(playerid);
-    if (GetVehicleModel( vehicleid ) == 525)
-    {
-        if(IsTrailerAttachedToVehicle(vehicleid))
-        {
-            for(new i = 0 ; i < MAX_PLAYERS ; i++)
-            {
-                new trailerid = GetVehicleTrailer(vehicleid);
-                new fraktion = GetVehicleFraktion(trailerid);
-                new modelid = GetVehicleModel(trailerid);
-                if( fraktion ) {
-                    new Float:vX, Float:vY, Float:vZ,Float:vAngle;
-                    GetVehiclePos(trailerid, vX, vY, vZ);
-                    GetVehicleZAngle(trailerid,vAngle);
-                    g_FraktionAbschleppen[trailerid][FA_fX] = vX;
-                    g_FraktionAbschleppen[trailerid][FA_fY] = vY;
-                    g_FraktionAbschleppen[trailerid][FA_fZ] = vZ;
-                    g_FraktionAbschleppen[trailerid][FA_fFace] = vAngle;
-                    g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] = true;
-                    new str[128];
-                    format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400],GetName(playerid));
-                    SendFraktionMessage(fraktion, COLOR_RED, str);
-                    Spieler[playerid][pPayCheck] += 700;
-                    GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
-                    new
-                        frakname[50];
-                    ReturnFraktionByID( fraktion , frakname );
-                    format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!",GetName(playerid),frakname);
-                    SendFraktionMessage(5, COLOR_RED, str);
+    if (GetVehicleModel(vehicleid) != 525) return SendClientMessage(playerid, COLOR_RED, "Du bist in keinem Ordnungsamt-Fahrzeug.");
+    if (!IsTrailerAttachedToVehicle(vehicleid)) return SendClientMessage(playerid, COLOR_RED, "Du hast kein Fahrzeug am Haken.");
 
-                    format(str,sizeof(str),"[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]",GetName(playerid),frakname,fraktion);
-                    OamtLog(str);
-                    return 1;
-                }
-                else {
-                    SendClientMessage(playerid, COLOR_RED, "Der Wagen ist kein Fraktionsfahrzeug.");
-                    return 1;
-                }
-            }
-        }
-        else
-        {
-            SendClientMessage(playerid, COLOR_RED, "Du hast kein Fahrzeug am Haken.");
-            return 1;
-        }
-    }
-    else
-    {
-        SendClientMessage(playerid, COLOR_RED, "Du bist in keinem Ordnungsamt-Fahrzeug.");
-        return 1;
-    }
-    return 1;
-}
-CMD:fmparkkralle(playerid)
-{
-    if(Spieler[playerid][pFraktion] != 5)
-    {
-        SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
-    }
-    else
-    {
-        for(new v;v<MAX_VEHICLES;v++)
-        {
-            if(IsABike(GetVehicleModel(v)))
-            {
-                new Float:vx,Float:vy,Float:vz;
-                GetVehiclePos(v,vx,vy,vz);
-                if(IsPlayerInRangeOfPoint(playerid,4,vx,vy,vz))
-                {
-                    for(new i = 0 ; i < MAX_PLAYERS ; i++)
-                    {
-                        new trailerid = v;
-                        new fraktion = GetVehicleFraktion(trailerid);
-                        new modelid = GetVehicleModel(trailerid);
-                        if(fraktion)
-                        {
-                            if(g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] == true)return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug ist bereits abgeschleppt!");
-                            new Float:vX, Float:vY, Float:vZ,Float:vAngle;
-                            GetVehiclePos(trailerid, vX, vY, vZ);
-                            GetVehicleZAngle(trailerid,vAngle);
-                            g_FraktionAbschleppen[trailerid][FA_fX] = vX;
-                            g_FraktionAbschleppen[trailerid][FA_fY] = vY;
-                            g_FraktionAbschleppen[trailerid][FA_fZ] = vZ;
-                            g_FraktionAbschleppen[trailerid][FA_fFace] = vAngle;
-                            g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] = true;
-                            new str[128];
-                            format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400],GetName(playerid));
-                            SendFraktionMessage(fraktion, COLOR_RED, str);
-                            Spieler[playerid][pPayCheck] += 700;
-                            GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
-                            new frakname[50];
-                            ReturnFraktionByID( fraktion , frakname );
-                            format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!",GetName(playerid),frakname);
-                            SendFraktionMessage(5, COLOR_RED, str);
-                            format(str,sizeof(str),"[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]",GetName(playerid),frakname,fraktion);
-                            OamtLog(str);
-                            break;
-                        }
-                        else
-                        {
-                            SendClientMessage(playerid, COLOR_RED, "Das Motorrad ist kein Fraktionsfahrzeug.");
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return 1;
-}
-/*
-COMMAND:respawnveh(playerid,params[]) {
-    new
-        vehicleid = GetPlayerVehicleID(playerid);
-    SetVehicleToRespawn(vehicleid);
+    new trailerid = GetVehicleTrailer(vehicleid);
+    new fraktion = GetVehicleFraktion(trailerid);
+    new modelid = GetVehicleModel(trailerid);
+    if (!fraktion) return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug gehört keiner Fraktion.");
+
+    new Float:vX, Float:vY, Float:vZ, Float:vAngle;
+    GetVehiclePos(trailerid, vX, vY, vZ);
+    GetVehicleZAngle(trailerid, vAngle);
+    g_FraktionAbschleppen[trailerid][FA_fX] = vX;
+    g_FraktionAbschleppen[trailerid][FA_fY] = vY;
+    g_FraktionAbschleppen[trailerid][FA_fZ] = vZ;
+    g_FraktionAbschleppen[trailerid][FA_fFace] = vAngle;
+    g_FraktionAbschleppen[trailerid][FA_bAbgeschleppt] = true;
+    new str[128];
+    format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt!", CarName[modelid-400], GetName(playerid));
+    SendFraktionMessage(fraktion, COLOR_RED, str);
+    Spieler[playerid][pPayCheck] += 700;
+    GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
+    new frakname[50];
+    ReturnFraktionByID( fraktion , frakname );
+    format(str, sizeof(str), "Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!", GetName(playerid), frakname);
+    SendFraktionMessage(5, COLOR_RED, str);
+    format(str, sizeof(str), "[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]", GetName(playerid), frakname, fraktion);
+    OamtLog(str);
     return 1;
 }
 
-COMMAND:distanceveh(playerid,params[]) {
-    new
-        String[128],
-        vehicleid = GetPlayerVehicleID(playerid);
-    if(vehicleid) {
-        format(String,sizeof(String),"Vehicle Distance %dm",g_VehicleDistance[vehicleid]);
-        SendClientMessage(playerid,COLOR_BLUE,String);
-    }
+CMD:fmparkkralle(playerid) {
+    if (Spieler[playerid][pFraktion] != 5) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
+    new vehicleid = GetPlayerVehicleID(playerid);
+    if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst dafür auf dem Motorrad sitzen.");
+    new modelid = GetVehicleModel(vehicleid);
+    if (!IsABike(modelid)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Fahrzeug ist kein Motorrad.");
+    new fraktion = GetVehicleFraktion(vehicleid);
+    if (!fraktion) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Motorrad ist kein Fraktionsfahrzeug.");
+    if (g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] == true) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Motorrad ist bereits abgeschleppt!");
+    
+    new Float:vX, Float:vY, Float:vZ, Float:vAngle;
+    GetVehiclePos(vehicleid, vX, vY, vZ);
+    GetVehicleZAngle(vehicleid, vAngle);
+    g_FraktionAbschleppen[vehicleid][FA_fX] = vX;
+    g_FraktionAbschleppen[vehicleid][FA_fY] = vY;
+    g_FraktionAbschleppen[vehicleid][FA_fZ] = vZ;
+    g_FraktionAbschleppen[vehicleid][FA_fFace] = vAngle;
+    g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] = true;
+    g_FraktionAbschleppen[vehicleid][FA_fraktion] = fraktion;
+    new str[128];
+    format(str, sizeof(str), "[OAMT] Euer %s wurde aufgrund einer Ordnungswidrigkeit durch Ordnungsbeamten %s abgeschleppt! (/Findmpark)", CarName[modelid-400], GetName(playerid));
+    SendFraktionMessage(fraktion, COLOR_RED, str);
+    Spieler[playerid][pPayCheck] += 700;
+    GameTextForPlayer(playerid, "~g~+$700", 2000, 1);
+    new frakname[50];
+    ReturnFraktionByID(fraktion , frakname);
+    format(str,sizeof(str),"Ordnungsbeamter %s hat das Fahrzeug von der Fraktion %s abgeschleppt!", GetName(playerid), frakname);
+    SendFraktionMessage(5, COLOR_RED, str);
+    format(str,sizeof(str),"[OAMT] Ordnungsbeamter: %s , Fahrzeughalter: %s [%d]", GetName(playerid), frakname, fraktion);
+    OamtLog(str);
     return 1;
 }
-*/
+
 forward SetVehicleZAngleEx(vehicleid,Float:angle);
 public SetVehicleZAngleEx(vehicleid,Float:angle) {
     SetVehicleZAngle(vehicleid, angle);
     return 1;
 }
-
-
-// - - - - - - - - - -
-// IsPlayerTaxiCustomer(driverid,playerid) {
-//     for(new i ; i < MAX_TAXI_KUNDEN ; i++) {
-//         if( Spieler[driverid][pTaxiKunden][i] == playerid) {
-//             return 1;
-//         }
-//     }
-//     return 0;
-// }
 
 RemovePlayerFromTaxi(driverid, playerid) {
     for (new i; i < MAX_TAXI_KUNDEN; i++) {
