@@ -19012,8 +19012,8 @@ CMD:serverinfo(playerid)
     SendClientMessage(playerid, COLOR_BLUE, "* TEAMSPEAK IP *: {FFFFFF}Teamspeak.LyD-Roleplay.de");
     SendClientMessage(playerid, COLOR_BLUE, "* FORUM ADRESSE *: {FFFFFF}www.LyD-Roleplay.de");
     SendClientMessage(playerid, COLOR_BLUE, "* USER PANEL *: {FFFFFF}www.UCP.LyD-Roleplay.de");
-    SendClientMessage(playerid, COLOR_BLUE, "* PROJEKTLEITER *: {FFFFFF}Puma");
-    SendClientMessage(playerid, COLOR_BLUE, "* SCRIPTER *: {FFFFFF}Puma");
+    SendClientMessage(playerid, COLOR_BLUE, "* PROJEKTLEITER *: {FFFFFF}Benny42O");
+    SendClientMessage(playerid, COLOR_BLUE, "* Entwickler *: {FFFFFF}Benny42O, Peek, Icii2q, Kabby");
     return 1;
 }
 
@@ -33787,7 +33787,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Ac, /Freeze, /Unfreeze, /Guncheck, /Checkscheine, /Supauto /Respawncar");
                         SendClientMessage(playerid, COLOR_BLUE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars /Rfrakcars /Jobs /Fraktionen");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld");
                     }
                     if(Spieler[playerid][pAdmin] >= 3)
                     {
@@ -38064,7 +38064,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 new b = IsPlayerAtBiz(playerid);
                 if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
                 new entry = strval(inputtext);
-                if(entry < 1 || entry > 50000000)
+                if(entry < 1 || entry > 1000000000)
                 {
                     SendClientMessage(playerid, COLOR_RED, "Der Kaufpreis muss zwischen $1 und $50.000.000 liegen.");
                     new dStr[128];
@@ -66080,6 +66080,22 @@ stock CheckPlayerFirma(playerid) {
         printf("Tanke für %s gefunden",GetName(playerid));
     }
     */
+    return 1;
+}
+
+CMD:ngeld(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 1) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new pID, money;
+    if (sscanf(params, "ui", pID, money)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Ngeld [Spieler ID/Name] [$1 - $30.000]");
+    if (!gPlayerLogged[pID]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht eingeloggt.");
+    if (Spieler[playerid][pLevel] > 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist über Level 3.");
+    if (money < 1 || money > 30000) return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Der Geldbetrag muss zwischen $1 und $30.000 liegen.");
+
+    GivePlayerCash(pID, money);
+    SCMFormatted(pID, COLOR_ORANGE, "%s %s hat dir einen Startbonus in Höhe von $%s gegeben.", GetPlayerAdminRang(playerid), GetName(playerid), AddDelimiters(money));
+    new message[145];
+    format(message, sizeof(message), "%s hat %s einen Startbonus in Höhe von $%s gegeben.", GetName(playerid), GetName(pID), AddDelimiters(money));
+    SendAdminMessage(COLOR_ORANGE, message);
     return 1;
 }
 
