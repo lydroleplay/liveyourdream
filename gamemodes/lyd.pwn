@@ -64486,11 +64486,11 @@ COMMAND:schutzgeld(playerid,params[])
     }
     if( Spieler[playerid][pRank] < 5 )
     {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion kann NUR Co. -/ oder Leader ausführen");
+        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion kann NUR Co. -/ oder Leader ausführen.");
     }
     if( GetErpresserCount(frak) >= MAX_GANG_ERPRESSUNGEN )
     {
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang bzw. Mafia hat das Erpresser-Limit erreicht");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Gang bzw. Mafia hat das Erpresser-Limit erreicht.");
     }
     new
         besitzerid,
@@ -64500,22 +64500,22 @@ COMMAND:schutzgeld(playerid,params[])
         // Tanke erpressen
         if( !strcmp(Tanke[t][tBesitzer],"Niemand"))
         {
-            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke hat keinen Besitzer");
+            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke hat keinen Besitzer.");
         }
         if( Tanke[t][tErpresserFraktion] != 0 && Tanke[t][tErpresserFraktion] != frak )
         {
-            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke wird bereits von einer Gang bzw. Mafia erpresst");
+            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke wird bereits von einer Gang bzw. Mafia erpresst.");
         }
         if( Tanke[t][tErpresserState] == 0 && Tanke[t][tErpresserFraktion] == frak )
         {
-            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke hat noch eine offene Schutzgeldforderung");
+            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke hat noch eine offene Schutzgeldforderung.");
         }
         Tanke[t][tErpresserState] = 0;
         Tanke[t][tErpresserForderung] = schutzgeld;
         sscanf( Tanke[t][tBesitzer], "u",besitzerid);
         if( Tanke[t][tErpresserFraktion] == 0 )
         {
-            format(String,sizeof(String),"Die Gang bzw. Mafia erpresst ab sofort die Tanke %s auf $%s",Tanke[t][tName], AddDelimiters(schutzgeld));
+            format(String,sizeof(String),"Die Gang bzw. Mafia erpresst ab sofort die Tanke %s auf $%s.",Tanke[t][tName], AddDelimiters(schutzgeld));
         }
         else
         {
@@ -64529,15 +64529,15 @@ COMMAND:schutzgeld(playerid,params[])
         // Biz erpressen
         if( !strcmp(Biz[b][bBesitzer],"Niemand"))
         {
-            return SendClientMessage(playerid, COLOR_RED, "Dieses Geschäft hat keinen Besitzer");
+            return SendClientMessage(playerid, COLOR_RED, "Dieses Geschäft hat keinen Besitzer.");
         }
         if( Biz[b][bErpresserFraktion] != 0 && Biz[b][bErpresserFraktion] != frak)
         {
-            return SendClientMessage(playerid, COLOR_RED, "Dieses Geschäft wird bereits von einer Gang bzw. Mafia erpresst");
+            return SendClientMessage(playerid, COLOR_RED, "Dieses Geschäft wird bereits von einer Gang bzw. Mafia erpresst.");
         }
         if( Biz[b][bErpresserForderung] == 0  && Biz[b][bErpresserFraktion] == frak )
         {
-            return SendClientMessage(playerid, COLOR_RED, "Dieses Geschäft hat noch eine offene Schutzgeldforderung");
+            return SendClientMessage(playerid, COLOR_RED, "Dieses Geschäft hat noch eine offene Schutzgeldforderung.");
         }
         Biz[b][bErpresserForderung] = schutzgeld;
         Biz[b][bErpresserState] = 0;
@@ -64612,7 +64612,7 @@ COMMAND:schutzgeldpolizei(playerid)
             Biz[b][bErpresserState] = 0;
             Biz[b][bErpresserFraktion] = 0;
             UpdateBizText(b);
-            SendClientMessage(playerid,COLOR_YELLOW,"Du hast erfolgreich dem Schutzgeld des Biz ein Ende gesetzt");
+            SendClientMessage(playerid,COLOR_YELLOW,"Du hast erfolgreich dem Schutzgeld des Biz ein Ende gesetzt.");
         }
     }
     return 1;
@@ -64635,15 +64635,15 @@ COMMAND:schutzgeldbezahlen(playerid,params[]) {
             return SendClientMessage(playerid, COLOR_RED, "Diese Tanke gehört nicht dir.");
         }
         if( Tanke[t][tErpresserState] == 1 ) {
-            return SendClientMessage(playerid, COLOR_RED, "Du hast bereits die Schutzgeldforderung gezahlt");
+            return SendClientMessage(playerid, COLOR_RED, "Du hast bereits die Schutzgeldforderung gezahlt.");
         }
         if( Tanke[t][tErpresserForderung] > Spieler[playerid][pCash] ) {
-            return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld, um die geforderte Summe zu zahlen");
+            return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld, um die geforderte Summe zu zahlen.");
         }
         ReturnFraktionByID( frak , frakname );
         betrag = Tanke[t][tErpresserForderung];
         Spieler[playerid][pCash] -= betrag;
-        format(String,sizeof(String),"Du hast die Erpresserforderung der Fraktion %s in Höhe von $%s gezahlt",frakname, AddDelimiters(betrag) );
+        format(String,sizeof(String),"Du hast die Erpresserforderung der Fraktion %s in Höhe von $%s gezahlt.",frakname, AddDelimiters(betrag) );
         SendClientMessage(playerid,COLOR_ORANGE,String);
         format(String,sizeof(String),"Die Tankstelle %s, Inhaber: %s hat das geforderte Schutzgeld in Höhe von $%s bezahlt!",Tanke[t][tName],GetName(playerid), AddDelimiters(betrag) );
         SendFraktionMessage( frak , COLOR_YELLOW, String);
@@ -64655,15 +64655,15 @@ COMMAND:schutzgeldbezahlen(playerid,params[]) {
             return SendClientMessage(playerid, COLOR_RED, "Dieses Geschäft gehört nicht dir.");
         }
         if( Biz[b][bErpresserState] == 1 ) {
-            return SendClientMessage(playerid, COLOR_RED, "Du hast bereits die Schutzgeldforderung gezahlt");
+            return SendClientMessage(playerid, COLOR_RED, "Du hast bereits die Schutzgeldforderung gezahlt.");
         }
         if( Biz[b][bErpresserForderung] > Spieler[playerid][pCash] ) {
-            return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld, um die geforderte Summe zu zahlen");
+            return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld, um die geforderte Summe zu zahlen.");
         }
         ReturnFraktionByID( frak , frakname );
         betrag = Biz[b][bErpresserForderung];
         Spieler[playerid][pCash] -= betrag;
-        format(String,sizeof(String),"Du hast die Erpresserforderung der Fraktion %s in Höhe von $%s gezahlt",frakname, AddDelimiters(betrag) );
+        format(String,sizeof(String),"Du hast die Erpresserforderung der Fraktion %s in Höhe von $%s gezahlt.",frakname, AddDelimiters(betrag) );
         SendClientMessage(playerid,COLOR_ORANGE,String);
         format(String,sizeof(String),"Das Geschäft %s, Inhaber: %s, hat das geforderte Schutzgeld in Höhe von $%s bezahlt!",Biz[b][bName],GetName(playerid), AddDelimiters(betrag) );
         SendFraktionMessage( frak , COLOR_YELLOW, String);
@@ -64693,7 +64693,7 @@ COMMAND:schutzgeldabbrechen(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keinem Geschäft oder Tankstelle.");
     }
     if( Spieler[playerid][pRank] < 5 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion kann NUR Co. -/ oder Leader ausführen");
+        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion kann NUR Co. -/ oder Leader ausführen.");
     }
     new
         besitzerid,
@@ -64701,25 +64701,25 @@ COMMAND:schutzgeldabbrechen(playerid,params[]) {
     if( t != 999 ) {
         // Tank erpressen abbrechen
         if( Tanke[t][tErpresserFraktion] != frak ) {
-            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke wird nicht von dein Gang bzw. Mafia erpresst");
+            return SendClientMessage(playerid, COLOR_RED, "Diese Tanke wird nicht von dein Gang bzw. Mafia erpresst.");
         }
         Tanke[t][tErpresserFraktion] = 0;
         Tanke[t][tErpresserForderung] = 0;
         Tanke[t][tErpresserState] = 0;
         sscanf( Tanke[t][tBesitzer], "u",besitzerid);
-        format(String,sizeof(String),"Die Gang bzw. Mafia erpresst ab sofort nicht mehr die Tankestelle %s",Tanke[t][tName]);
+        format(String,sizeof(String),"Die Gang bzw. Mafia erpresst ab sofort nicht mehr die Tankestelle %s.",Tanke[t][tName]);
         UpdateTankeText(t);
     }
     else {
         // Biz erpressen abbrechen
         if( Biz[b][bErpresserFraktion] != frak ) {
-            return SendClientMessage(playerid, COLOR_RED, "Dieses Biz wird nicht von deiner Gang bzw. Mafia erpresst");
+            return SendClientMessage(playerid, COLOR_RED, "Dieses Biz wird nicht von deiner Gang bzw. Mafia erpresst.");
         }
         Biz[b][bErpresserFraktion] = 0;
         Biz[b][bErpresserForderung] = 0;
         Biz[b][bErpresserState] = 0;
         sscanf( Biz[b][bBesitzer], "u",besitzerid);
-        format(String,sizeof(String),"Die Gang bzw. Mafia erpresst ab sofort nicht mehr das Geschäft %s",Biz[b][bName]);
+        format(String,sizeof(String),"Die Gang bzw. Mafia erpresst ab sofort nicht mehr das Geschäft %s.",Biz[b][bName]);
         UpdateBizText(b);
     }
     SendFraktionMessage(frak, COLOR_ORANGE, String);
@@ -64820,7 +64820,7 @@ COMMAND:offlinearrest(playerid,params[]) {
         }
     }
     if(!bTreffer) {
-        format(String,sizeof(String),"Der Spieler %s ist nicht Offline-Geflüchtet, du bist zu weit entfernt oder es ist mehr als 30 Sekunden her",sName);
+        format(String,sizeof(String),"Der Spieler %s ist nicht Offline-Geflüchtet, du bist zu weit entfernt oder es ist mehr als 30 Sekunden her.",sName);
         SendClientMessage(playerid,COLOR_ORANGE,String);
     }
     else {
@@ -64852,7 +64852,7 @@ COMMAND:vamt(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Vamt [ID/SPIELERNAME]");
     }
     if( !IsPlayerConnected(giveid) ) {
-        SendClientMessage(playerid,COLOR_RED,"Ungültiger Spieler");
+        SendClientMessage(playerid,COLOR_RED,"Ungültiger Spieler.");
         return 1;
     }
     Scheine(playerid,giveid,1);
