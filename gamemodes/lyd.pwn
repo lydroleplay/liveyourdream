@@ -7430,10 +7430,12 @@ CMD:vehcolor(playerid, params[]) {
     
     ChangeVehicleColor(vehicleid, color1, color2);
     new owner = GetCarOwner(vehicleid);
-    new slot = GetCarOwnerSlot(owner, vehicleid);
-    if (slot != 555) {
-        PlayerCar[owner][slot][CarC1] = color1;
-        PlayerCar[owner][slot][CarC2] = color2;
+    if (owner != INVALID_PLAYER_ID) {
+        new slot = GetCarOwnerSlot(owner, vehicleid);
+        if (slot != 555) {
+            PlayerCar[owner][slot][CarC1] = color1;
+            PlayerCar[owner][slot][CarC2] = color2;
+        }
     }
 
     return SendClientMessage(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Farben des Fahrzeugs geändert.");
@@ -13624,6 +13626,18 @@ COMMAND:aktaccount(playerid,params[])
     return 1;
 }
 
+stock RemovePlayerFromFaction(playerid) {
+    Spieler[playerid][pFraktion] = 0;
+    Spieler[playerid][pFrakLohn] = 0;
+    Spieler[playerid][pRank] = 0;
+    Spieler[playerid][pfrakwarn] = 0;
+    RemovePlayerFromPlantArrayData(playerid);
+    SetPlayerSkinEx(playerid, Spieler[playerid][pSex] == 1 ? 2 : 11);
+    SaveAccount(playerid);
+
+    return 1;
+}
+
 CMD:frakwarn(playerid, params[]) {
     new spielerid, wanzahl;
     if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
@@ -13637,14 +13651,8 @@ CMD:frakwarn(playerid, params[]) {
     SCMFormatted(playerid, COLOR_YELLOW, "Du hast dem Spieler %s erfolgreich %i Verwarnungen erteilt.", GetName(spielerid), wanzahl);
     SCMFormatted(spielerid, COLOR_RED, "Du hast von %s %i Verwarnungen bekommen, du hast nun %i Verwarnungen.", GetName(playerid), wanzahl, Spieler[spielerid][pfrakwarn]);
     if (Spieler[spielerid][pfrakwarn] >= 3) {
-        Spieler[spielerid][pFraktion] = 0;
-        Spieler[spielerid][pFrakLohn] = 0;
-        Spieler[spielerid][pRank] = 0;
-        Spieler[spielerid][pfrakwarn] = 0;
-        RemovePlayerFromPlantArrayData(spielerid);
-        SetPlayerSkinEx(spielerid, Spieler[spielerid][pSex] == 1 ? 2 : 11);
+        RemovePlayerFromFaction(spielerid);
         SendClientMessage(spielerid, COLOR_RED, "Du wurdest wegen zu vielen Verwarnungen aus der Fraktion gekickt.");
-        SaveAccount(spielerid);
     }
 
     return 1;
@@ -15009,14 +15017,7 @@ CMD:feuern(playerid, params[])
     SendClientMessage(pID, COLOR_YELLOW, string);
     format(string, sizeof(string), "Du hast %s aus der Fraktion gefeuert.", GetName(pID));
     SendClientMessage(playerid, COLOR_YELLOW, string);
-    Spieler[pID][pFraktion] = 0;
-    if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 2);}
-    else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 11);}
-    Spieler[pID][pFrakLohn] = 0;
-    Spieler[pID][pRank] = 0;
-    Spieler[pID][pfrakwarn]=0;
-    RemovePlayerFromPlantArrayData(pID);
-    SaveAccount(pID);
+    RemovePlayerFromFaction(pID);
     printf("%s feuert %s aus Fraktion %d", GetName(playerid), GetName(pID), Spieler[playerid][pFraktion]);
     return 1;
 }
@@ -16683,17 +16684,11 @@ CMD:afkick(playerid, params[])
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Afkick [SpielerID/Name]");
     if(!IsPlayerConnected(playerid))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if(Spieler[pID][pFraktion] == 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist bereits Zivilist.");
-    Spieler[pID][pFraktion] = 0;
-    Spieler[pID][pRank] = 0;
-    Spieler[pID][pFrakLohn] = 0;
-    if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 2);}
-    else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 11);}
+    RemovePlayerFromFaction(pID);
     format(string, sizeof(string), "* Du wurdest von %s %s zum Zivilist gemacht.", GetPlayerAdminRang(playerid), GetName(playerid));
     SendClientMessage(pID, COLOR_DARKRED, string);
     format(string, sizeof(string), "* Du hast %s zum Zivilist gemacht.", GetName(pID));
     SendClientMessage(playerid, COLOR_DARKRED, string);
-    RemovePlayerFromPlantArrayData(pID);
-    SaveAccount(pID);
     return 1;
 }
 
@@ -21449,6 +21444,9 @@ CMD:accept(playerid, params[])
             else if(frakid == 20){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 48); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 48);}}
             else if(frakid == 21){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 111); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 111);}}
             FrakInviteID[playerid] = 999;
+            Spieler[playerid][pFrakLohn] = 0;
+            Spieler[playerid][pRank] = 0;
+            Spieler[playerid][pfrakwarn] = 0;
             SpawnPlayerEx(playerid);
             if (frakid == 15) AddPlayerToPlantArrayData(playerid);
             SaveAccount(playerid);
