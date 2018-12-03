@@ -15,24 +15,24 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 713, 1496.8672, -1707.8203, 13.4063, 0.25);
     RemoveBuildingForPlayer(playerid, 1216, 1721.6719, -1721.2891, 13.2266, 0.25);
     RemoveBuildingForPlayer(playerid, 1216, 1722.6094, -1721.2891, 13.2266, 0.25);
-    RemoveBuildingForPlayer(playerid, 3407, 322.6875, -131.1328, 0.5703, 0.25);
-    RemoveBuildingForPlayer(playerid, 773, 300.2656, -113.6250, 1.3516, 0.25);
-    RemoveBuildingForPlayer(playerid, 780, 321.0703, -109.4922, 0.6250, 0.25);
+    // RemoveBuildingForPlayer(playerid, 3407, 322.6875, -131.1328, 0.5703, 0.25);
+    // RemoveBuildingForPlayer(playerid, 773, 300.2656, -113.6250, 1.3516, 0.25);
+    // RemoveBuildingForPlayer(playerid, 780, 321.0703, -109.4922, 0.6250, 0.25);
     
     //Telefonzellen in SF und LV
-    RemoveBuildingForPlayer(playerid, 3323, 270.2969, -49.3438, 3.4297, 0.25);
-    RemoveBuildingForPlayer(playerid, 13493, 224.4922, -68.2578, 5.3750, 0.25);
-    RemoveBuildingForPlayer(playerid, 1294, 262.4375, -63.4141, 5.0313, 0.25);
-    RemoveBuildingForPlayer(playerid, 780, 274.0313, -56.2266, 0.5547, 0.25);
-    RemoveBuildingForPlayer(playerid, 1460, 262.8281, -61.6172, 1.3359, 0.25);
-    RemoveBuildingForPlayer(playerid, 1460, 267.4609, -61.6172, 1.3359, 0.25);
-    RemoveBuildingForPlayer(playerid, 3407, 270.7344, -61.7813, 0.5703, 0.25);
-    RemoveBuildingForPlayer(playerid, 1460, 282.9063, -61.6172, 1.3359, 0.25);
-    RemoveBuildingForPlayer(playerid, 1460, 282.8594, -59.1563, 1.3359, 0.25);
-    RemoveBuildingForPlayer(playerid, 1460, 282.8594, -54.5234, 1.3359, 0.25);
-    RemoveBuildingForPlayer(playerid, 673, 270.2734, -39.2500, 0.1719, 0.25);
-    RemoveBuildingForPlayer(playerid, 769, 279.8359, -39.5391, -0.1406, 0.25);
-    RemoveBuildingForPlayer(playerid, 768, 278.0625, -18.9688, 0.9297, 0.25);
+    // RemoveBuildingForPlayer(playerid, 3323, 270.2969, -49.3438, 3.4297, 0.25);
+    // RemoveBuildingForPlayer(playerid, 13493, 224.4922, -68.2578, 5.3750, 0.25);
+    // RemoveBuildingForPlayer(playerid, 1294, 262.4375, -63.4141, 5.0313, 0.25);
+    // RemoveBuildingForPlayer(playerid, 780, 274.0313, -56.2266, 0.5547, 0.25);
+    // RemoveBuildingForPlayer(playerid, 1460, 262.8281, -61.6172, 1.3359, 0.25);
+    // RemoveBuildingForPlayer(playerid, 1460, 267.4609, -61.6172, 1.3359, 0.25);
+    // RemoveBuildingForPlayer(playerid, 3407, 270.7344, -61.7813, 0.5703, 0.25);
+    // RemoveBuildingForPlayer(playerid, 1460, 282.9063, -61.6172, 1.3359, 0.25);
+    // RemoveBuildingForPlayer(playerid, 1460, 282.8594, -59.1563, 1.3359, 0.25);
+    // RemoveBuildingForPlayer(playerid, 1460, 282.8594, -54.5234, 1.3359, 0.25);
+    // RemoveBuildingForPlayer(playerid, 673, 270.2734, -39.2500, 0.1719, 0.25);
+    // RemoveBuildingForPlayer(playerid, 769, 279.8359, -39.5391, -0.1406, 0.25);
+    // RemoveBuildingForPlayer(playerid, 768, 278.0625, -18.9688, 0.9297, 0.25);
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {

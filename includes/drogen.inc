@@ -329,7 +329,7 @@ COMMAND:pflanzen(playerid, params[]) {
         FreezePlayer(playerid);
         SetTimerEx("TogglePlayerControllableEx", 2 * 1000, false, "dd", playerid, true);
         g_FraktionsSafeBox[15][FSB_iSpice] += randomAmount;
-        format(message, sizeof(message), "%s hat %d Gramm Spice abgebaut. Fraktions-Safebox: %d Gramm Spice", GetName(playerid), randomAmount, g_FraktionsSafeBox[15][FSB_iSpice]);
+        format(message, sizeof(message), "%s hat %d Gramm Spice abgebaut. FSafebox: %s Gramm Spice.", GetName(playerid), randomAmount, AddDelimiters(g_FraktionsSafeBox[15][FSB_iSpice]));
         SendClientMessage(playerid, COLOR_YELLOW, "Die Spicepflanze wird von dir geerntet.");
         return SendFraktionMessage(15, COLOR_LIME, message);
     }

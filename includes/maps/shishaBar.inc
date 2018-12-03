@@ -22,6 +22,8 @@ static Float:DRAWDISTANCE   = 90.0;
 #define SHISHABAR_SLOTS_POINT       1831.1813, -1274.4621, 120.2656
 #define SHISHABAR_PIPES_POINT       1833.2487, -1285.7264, 120.2656
 
+#define SOUND_SHISHA "http://lyd-roleplay.de/musik/shisha.mp3"
+
 // Map variables
 new object_shishaBar[434];
 new pickup_shishaBar[8];
@@ -56,10 +58,13 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             SetPlayerPos(playerid, SHISHABAR_EXIT_COORDS);
             SetPlayerFacingAngle(playerid, SHISHABAR_ENTER_FACING);
 			SetCameraBehindPlayer(playerid);
+            PlayAudioStreamForPlayer(playerid, SOUND_SHISHA);
 		} else if (IsPlayerInRangeOfPoint(playerid, 2.0, SHISHABAR_EXIT_COORDS) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Lounge Exit
 			SetPlayerPos(playerid, SHISHABAR_ENTER_COORDS);
             SetPlayerFacingAngle(playerid, SHISHABAR_ENTER_FACING);
 			SetCameraBehindPlayer(playerid);
+            StopAudioStreamForPlayer(playerid);
+            SetPVarInt(playerid, "MP3.PLAYER", 0);
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, SHISHABAR_VIP_ENTER)) { // VIP Enter
 			if (Spieler[playerid][pCash] < 25000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei, um den VIP-Bereich zu betreten.");
 			GivePlayerCash(playerid, -25000);

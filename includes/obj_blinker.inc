@@ -1,35 +1,31 @@
 /*
-	System kierunkowskazÃ³w by xqz
+	System kierunkowskazów by xqz
 	24.06.2013r. 13:17 :)
 */
-
-
-
-
 
 #include a_samp
 
 new Indicators_xqz[MAX_VEHICLES][6];
-
+new Indicators_timer[MAX_VEHICLES];
 
 stock Blinker_Init() {
-	for(new i = 0 ; i < sizeof(Indicators_xqz) ; i++) {
-	    for(new j ; j < 6 ; j++) {
-	    	Indicators_xqz[i][j] = INVALID_OBJECT_ID;
-	    }
+	for (new i = 0; i < sizeof(Indicators_xqz); i++) {
+		Indicators_timer[i] = INVALID_TIMER_ID;
+		for (new j; j < 6; j++) Indicators_xqz[i][j] = INVALID_OBJECT_ID;
 	}
 	return 1;
 }
 
-stock SetVehicleIndicator(vehicleid, leftindicator=0, rightindicator=0)
-{
-	if(!leftindicator & !rightindicator) return false;
+stock SetVehicleIndicator(vehicleid, leftindicator = 0, rightindicator = 0) {
+	if (!leftindicator && !rightindicator) return false;
 	new Float:_vX[2], Float:_vY[2], Float:_vZ[2];
-	if( rightindicator && leftindicator ) {
-	    // warnblinker
-	    // links
-	    if(IsTrailerAttachedToVehicle(vehicleid))
-	    {
+	if (Indicators_timer[vehicleid] != INVALID_TIMER_ID) {
+		DestroyBlinker(vehicleid, 0);
+		DestroyBlinker(vehicleid, 1);
+	}
+
+	if (rightindicator && leftindicator) {
+	    if (IsTrailerAttachedToVehicle(vehicleid)) {
 	        new omg = GetVehicleModel(GetVehicleTrailer(vehicleid));
             GetVehicleModelInfo(omg, VEHICLE_MODEL_INFO_SIZE, _vX[0], _vY[0], _vZ[0]);
  			Indicators_xqz[vehicleid][4] = CreateObject(19294, 0, 0, 0,0,0,0);
@@ -44,15 +40,12 @@ stock SetVehicleIndicator(vehicleid, leftindicator=0, rightindicator=0)
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][0], vehicleid,  _vX[0]/2.25, _vY[0]/2.25, 0.1 ,0,0,0);
  		Indicators_xqz[vehicleid][1] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][1], vehicleid,  _vX[0]/2.25, -_vY[0]/2.25, 0.1 ,0,0,0);
-		// SetTimerEx("DestroyBlinker",5000,false,"dd",vehicleid,1);
 		// rechts
 	    GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, _vX[0], _vY[0], _vZ[0]);
  		Indicators_xqz[vehicleid][2] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][2], vehicleid,  -_vX[0]/2.25, _vY[0]/2.25, 0.1 ,0,0,0);
  		Indicators_xqz[vehicleid][3] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][3], vehicleid,  -_vX[0]/2.25, -_vY[0]/2.25, 0.1 ,0,0,0);
-		// SetTimerEx("DestroyBlinker",5000,false,"dd",vehicleid,0);
-
 	}
 	else if(rightindicator)
 	{
@@ -69,7 +62,7 @@ stock SetVehicleIndicator(vehicleid, leftindicator=0, rightindicator=0)
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][0], vehicleid,  _vX[0]/2.25, _vY[0]/2.25, 0.1 ,0,0,0);
  		Indicators_xqz[vehicleid][1] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][1], vehicleid,  _vX[0]/2.25, -_vY[0]/2.25, 0.1 ,0,0,0);
-		SetTimerEx("DestroyBlinker",2000,false,"dd",vehicleid,1);
+		Indicators_timer[vehicleid] = SetTimerEx("DestroyBlinker",2000,false,"dd",vehicleid,1);
 	}
 	else if(leftindicator)
 	{
@@ -86,8 +79,10 @@ stock SetVehicleIndicator(vehicleid, leftindicator=0, rightindicator=0)
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][2], vehicleid,  -_vX[0]/2.25, _vY[0]/2.25, 0.1 ,0,0,0);
  		Indicators_xqz[vehicleid][3] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][3], vehicleid,  -_vX[0]/2.25, -_vY[0]/2.25, 0.1 ,0,0,0);
-		SetTimerEx("DestroyBlinker",2000,false,"dd",vehicleid,0);
+		Indicators_timer[vehicleid] = SetTimerEx("DestroyBlinker",2000,false,"dd",vehicleid,0);
 	}
+
+	Streamer_ProcessActiveItems();
 	return 1;
 }
 
@@ -127,8 +122,11 @@ stock GetVehicleIndicator(vehicleid) {
 	}
     return 0;
 }
+
 forward DestroyBlinker(vehicleid,modus);
 public DestroyBlinker(vehicleid,modus) {
+	if (Indicators_timer[vehicleid] != INVALID_TIMER_ID) KillTimer(Indicators_timer[vehicleid]);
+	Indicators_timer[vehicleid] = INVALID_TIMER_ID;
 	if(modus == 0 ) {
 		if(Indicators_xqz[vehicleid][2]) {
 			DestroyObject(Indicators_xqz[vehicleid][2]);
@@ -151,8 +149,8 @@ public DestroyBlinker(vehicleid,modus) {
 	}
 	return 1;
 }
-stock Blinker_OnVehicleDeath(vehicleid,killerid)
-{
+
+stock Blinker_OnVehicleDeath(vehicleid,killerid) {
 	#pragma unused killerid
 	DestroyBlinker(vehicleid,0);
 	DestroyBlinker(vehicleid,1);

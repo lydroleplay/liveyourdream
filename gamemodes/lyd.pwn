@@ -4417,6 +4417,7 @@ new alcatrazGateHackTimestamp = 0;
 
 // Systems
 #include <paintball>
+//#include <halloween>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
@@ -6896,7 +6897,7 @@ public OnPlayerDisconnect(playerid, reason)
     }
     Spieler[playerid][pKopfgeldID] = INVALID_PLAYER_ID;
     Spieler[playerid][pKopfgeld] = 0;
-    DestroyVehicle(Spieler[playerid][pVehicleVerleih]);
+    DestroyVehicleEx(Spieler[playerid][pVehicleVerleih]);
     Spieler[playerid][pVehicleVerleih] = INVALID_VEHICLE_ID;
     Spieler[playerid][tickVehicleVerleih] = 0;
 
@@ -6959,13 +6960,13 @@ public OnPlayerDisconnect(playerid, reason)
     if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
     {
         FahrschuleAbbruch(playerid);
-        //DestroyVehicle(pFahrschulCar[playerid]); FahrschuleAbbruch
+        //DestroyVehicleEx(pFahrschulCar[playerid]); FahrschuleAbbruch
         //aiVehicles[pFahrschulCar[playerid]] = VEH_INVALID; FahrschuleAbbruch
     }
     pFahrschulCar[playerid] = INVALID_VEHICLE_ID;
     if(pCar[playerid] != INVALID_VEHICLE_ID)
     {
-        DestroyVehicle(pCar[playerid]);
+        DestroyVehicleEx(pCar[playerid]);
         aiVehicles[pCar[playerid]] = VEH_INVALID;
     }
     pCar[playerid] = INVALID_VEHICLE_ID;
@@ -9998,7 +9999,7 @@ public OnPlayerSpawn(playerid)
     UnfreezePlayer(playerid);
     if (!Spieler[playerid][pTot]) SetPlayerInterior(playerid, 0);
     //SetPlayerColor(playerid, COLOR_WHITE & 0xFFFFFF00 );
-    SetPlayerColor(playerid, COLOR_WHITE);
+    if (!Spieler[playerid][pAdminDienst] && !Spieler[playerid][pBenutzerfarbe]) SetPlayerColor(playerid, COLOR_WHITE);
     SetCameraBehindPlayer(playerid);
     ResetPlayerWeapons(playerid);
     SetPlayerArmour(playerid, 0);
@@ -10847,8 +10848,7 @@ public NotrufDialog(playerid) {
     return 1;
 }
 
-public OnVehicleSpawn(vehicleid)
-{
+public OnVehicleSpawn(vehicleid) {
     //printf("OnVehicleSpawn(%d)",vehicleid);
     vehicleRefueling[vehicleid] = 0;
     if( g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID ) {
@@ -10862,8 +10862,8 @@ public OnVehicleSpawn(vehicleid)
         g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
     }
 
-    DestroyBlinker(vehicleid,0);
-    DestroyBlinker(vehicleid,1);
+    DestroyBlinker(vehicleid, 0);
+    DestroyBlinker(vehicleid, 1);
     //Gears_OnVehicleSpawn(vehicleid);
 
     if( _:g_t3dPolizeiKontrolle[vehicleid] != INVALID_3DTEXT_ID ) {
@@ -10952,7 +10952,7 @@ public OnVehicleSpawn(vehicleid)
             slot = GetCarOwnerSlot(owner,vehicleid);
             if( slot != 555 ) {
                 if( PlayerCar[owner][slot][CarState] == e_Vehicle_Status_Destroyed) {
-                    DestroyVehicle(vehicleid);
+                    DestroyVehicleEx(vehicleid);
                     printf("Vehicle zerstört! Status Destroyed");
                 }
                 else {
@@ -10962,7 +10962,7 @@ public OnVehicleSpawn(vehicleid)
                 }
             }
         }
-    }
+    }   
     if( g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] == true ) {
         SetVehiclePos(vehicleid,
             g_FraktionAbschleppen[vehicleid][FA_fX],
@@ -10984,9 +10984,8 @@ public Anti_OnVehicleDeath(playerid) {
     return 1;
 }
 
-public OnVehicleDeath(vehicleid, killerid)
-{
-    if( Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 3 ) {
+public OnVehicleDeath(vehicleid, killerid) {
+    if( Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
         new String[128];
         format(String, sizeof(String), "[KICK]: Spieler %s wurde von Server-System gekickt, Grund: %s", GetName(killerid), ("Vehicle-Spam"));
         SendAdminMessage(COLOR_RED, String);
@@ -11010,16 +11009,16 @@ public OnVehicleDeath(vehicleid, killerid)
         sireneobj[vehicleid][i] = INVALID_OBJECT_ID;
     }
 
-    if( g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID ) {
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
-        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
-        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
-        g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
-        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
-        g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
-    }
+    // if( g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID ) {
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
+    g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
+    g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
+    g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
+    g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
+    // }
 
     vSirene[vehicleid] = INVALID_OBJECT_ID;
     vNeon[vehicleid] = INVALID_OBJECT_ID;
@@ -11051,7 +11050,7 @@ public OnVehicleDeath(vehicleid, killerid)
                             DestroyDynamicObject(PlayerCar[playerid][x][SpecialTuned8]);
                             DestroyDynamicObject(PlayerCar[playerid][x][SpecialTuned9]);
 
-                            DestroyVehicle( PlayerCar[playerid][x][CarId] );
+                            DestroyVehicleEx( PlayerCar[playerid][x][CarId] );
                             aiVehicles[ PlayerCar[playerid][x][CarId] ] = VEH_INVALID;
                             PlayerHaveCar[playerid][x] = 0;
 
@@ -11067,7 +11066,7 @@ public OnVehicleDeath(vehicleid, killerid)
                                 PlayerCar[playerid][x][CarState] = e_Vehicle_Status_Destroyed;
                                 PlayerCar[playerid][x][CarTank] = gGas[PlayerCar[playerid][x][CarId]];
                                 PlayerCar[playerid][x][CarDistance] = g_VehicleDistance[ PlayerCar[playerid][x][CarId] ];
-                                DestroyVehicle(vehicleid);
+                                DestroyVehicleEx(vehicleid);
                                 SavePlayerCar(playerid,x);
                             }
                             PlayerCar[playerid][x][CarId] = INVALID_VEHICLE_ID;
@@ -11581,7 +11580,7 @@ CMD:finden(playerid, params[])
 
 CMD:drivein(playerid)
 {
-    if(IsPlayerInRangeOfPoint(playerid, 2.0, SUBWAY_DRIVEIN_COORDS)) // Burgershot North
+    if(IsPlayerInRangeOfPoint(playerid, 5.0, SUBWAY_DRIVEIN_COORDS)) // Burgershot North
     {
         if(GetPlayerMoney(playerid) < 50)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
         SetPlayerHealth(playerid, 100);
@@ -13122,7 +13121,7 @@ CMD:selldrogen(playerid, params[])
         return SendClientMessage(playerid,COLOR_RED,"Der Betrag kann nicht negativ sein!");
     }
     if(preis/menge < 240||preis/menge > 400) {
-        return SendClientMessage(playerid,COLOR_RED,"Der aktuelle Stückpreis bei Drogen liegt im Rahmen von 80$ bis 120$!");
+        return SendClientMessage(playerid,COLOR_RED,"Der aktuelle Stückpreis bei Drogen liegt im Rahmen von 240$ bis 400$!");
     }
     // Goldkiller: WTF ist das ???? :
     // if(menge < 999999999999999 )return SendClientMessage(playerid, COLOR_RED, "Ungültige Anzahl");
@@ -13473,7 +13472,7 @@ CMD:mieten(playerid)
 {
     if(pCar[playerid] == INVALID_VEHICLE_ID)return SendClientMessage(playerid, COLOR_WHITE, "Du hast kein Fahrzeug gemietet.");
     SendClientMessage(playerid, COLOR_GREEN, "Du hast dein Mietfahrzeug wieder abgegeben.");
-    DestroyVehicle(pCar[playerid]);
+    DestroyVehicleEx(pCar[playerid]);
     aiVehicles[ pCar[playerid] ] = VEH_INVALID;
     pCar[playerid] = INVALID_VEHICLE_ID;
     return 1;
@@ -13484,13 +13483,13 @@ CMD:entmieten(playerid)
     if(Spieler[playerid][pVehicleVerleih] == INVALID_VEHICLE_ID && pCar[playerid] == INVALID_VEHICLE_ID) return SendClientMessage(playerid, COLOR_WHITE, "Du hast kein Fahrzeug gemietet.");
     SendClientMessage(playerid, COLOR_GREEN, "Du hast dein Mietfahrzeug wieder abgegeben.");
     if (pCar[playerid] != INVALID_VEHICLE_ID) {
-        DestroyVehicle(pCar[playerid] );
+        DestroyVehicleEx(pCar[playerid] );
         aiVehicles[pCar[playerid] ] = VEH_INVALID;
         pCar[playerid] = INVALID_VEHICLE_ID;
     }
 
     if (Spieler[playerid][pVehicleVerleih] != INVALID_VEHICLE_ID) {
-        DestroyVehicle(Spieler[playerid][pVehicleVerleih]);
+        DestroyVehicleEx(Spieler[playerid][pVehicleVerleih]);
         aiVehicles[Spieler[playerid][pVehicleVerleih]] = VEH_INVALID;
         Spieler[playerid][pVehicleVerleih] = INVALID_VEHICLE_ID;
     }
@@ -13605,119 +13604,46 @@ COMMAND:aktaccount(playerid,params[])
     }
     return 1;
 }
-COMMAND:frakwarn(playerid,params[])
-{
-    new spielerid,wanzahl;
-    if(sscanf(params,"ui",spielerid,wanzahl))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /frakwarn [Spielername] [Anzahl]");
-    if(IsPlayerConnected(spielerid))
-    {
-        if(wanzahl!=0)
-        {
-            if(Spieler[playerid][pRank] >= 5)
-            {
-                if(Spieler[playerid][pFraktion]==Spieler[spielerid][pFraktion])
-                {
-                    if(Spieler[spielerid][pRank]!=6)
-                    {
-                        new string[200];
-                        format(string,200,"Du hast dem Spieler %s erfolgreich %i Verwarnungen erteilt.",GetName(spielerid),wanzahl);
-                        Spieler[spielerid][pfrakwarn]+=wanzahl;
-                        SendClientMessage(playerid,COLOR_YELLOW,string);
-                        format(string,200,"Du hast von %s %i Verwarnungen bekommen, du hast nun %i Verwarnungen.",GetName(playerid),wanzahl,Spieler[spielerid][pfrakwarn]);
-                        SendClientMessage(spielerid,COLOR_RED,string);
-                        if(Spieler[spielerid][pfrakwarn]>=3)
-                        {
-                            SendClientMessage(spielerid,COLOR_RED,"Du wurdest wegen zu vielen Verwarnungen aus der Fraktion gekickt.");
-                            Spieler[spielerid][pFraktion] = 0;
-                            if(Spieler[spielerid][pSex] == 1){ SetPlayerSkinEx(spielerid, 2);}
-                            else if(Spieler[spielerid][pSex] == 2){ SetPlayerSkinEx(spielerid, 11);}
-                            Spieler[spielerid][pFrakLohn] = 0;
-                            Spieler[spielerid][pRank] = 0;
-                            SaveAccount(spielerid);
-                        }
-                    }
-                    else
-                    {
-                        SendClientMessage(playerid,COLOR_RED,"Du kannst den Leader nicht verwarnen.");
-                    }
-                }
-                else
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Du bist nicht in der selben Fraktion wie der Spieler.");
-                }
-            }
-            else
-            {
-                SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Co/Leader-Rank.");
-            }
-        }
-        else
-        {
-            SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erteilen.");
-        }
+
+CMD:frakwarn(playerid, params[]) {
+    new spielerid, wanzahl;
+    if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    if (sscanf(params, "ui", spielerid, wanzahl)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/frakwarn [Spielername] [Anzahl]");
+    if (!IsPlayerConnected(spielerid)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if (Spieler[playerid][pFraktion] != Spieler[spielerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Fraktion.");
+    if (Spieler[spielerid][pRank] > 5) return SendClientMessage(playerid, COLOR_RED, "Du kannst den Leader nicht verwarnen.");
+    if (wanzahl < 1) return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erteilen.");
+
+    Spieler[spielerid][pfrakwarn] += wanzahl;
+    SCMFormatted(playerid, COLOR_YELLOW, "Du hast dem Spieler %s erfolgreich %i Verwarnungen erteilt.", GetName(spielerid), wanzahl);
+    SCMFormatted(spielerid, COLOR_RED, "Du hast von %s %i Verwarnungen bekommen, du hast nun %i Verwarnungen.", GetName(playerid), wanzahl, Spieler[spielerid][pfrakwarn]);
+    if (Spieler[spielerid][pfrakwarn] >= 3) {
+        Spieler[spielerid][pFraktion] = 0;
+        Spieler[spielerid][pFrakLohn] = 0;
+        Spieler[spielerid][pRank] = 0;
+        Spieler[spielerid][pfrakwarn] = 0;
+        RemovePlayerFromPlantArrayData(spielerid);
+        SetPlayerSkinEx(spielerid, Spieler[spielerid][pSex] == 1 ? 2 : 11);
+        SendClientMessage(spielerid, COLOR_RED, "Du wurdest wegen zu vielen Verwarnungen aus der Fraktion gekickt.");
+        SaveAccount(spielerid);
     }
-    else
-    {
-        SendClientMessage(playerid,COLOR_RED,"Angegebener Spieler ist nicht online.");
-    }
+
     return 1;
 }
-COMMAND:delfrakwarn(playerid,params[])
-{
-    new spielerid,wanzahl;
-    if(sscanf(params,"ui",spielerid,wanzahl))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /delfrakwarn [Spielername] [Anzahl]");
-    if(IsPlayerConnected(spielerid))
-    {
-        if(wanzahl!=0)
-        {
-            if(Spieler[playerid][pRank] >= 5)
-            {
-                if(Spieler[playerid][pFraktion]==Spieler[spielerid][pFraktion])
-                {
-                    if(Spieler[spielerid][pRank]!=6)
-                    {
-                        if(Spieler[spielerid][pfrakwarn]>0)
-                        {
-                            if(wanzahl>Spieler[spielerid][pfrakwarn])
-                            {
-                                wanzahl=Spieler[spielerid][pfrakwarn];
-                            }
-                            new string[200];
-                            format(string,200,"Du hast dem Spieler %s erfolgreich %i Verwarnungen entzogen.",GetName(spielerid),wanzahl);
-                            Spieler[spielerid][pfrakwarn]-=wanzahl;
-                            if(Spieler[spielerid][pfrakwarn]<0)
-                            {
-                                Spieler[spielerid][pfrakwarn]=0;
-                            }
-                            SendClientMessage(playerid,COLOR_YELLOW,string);
-                            format(string,200,"Du hast von %s %i Verwarnungen entzogen bekommen, du hast nun %i Verwarnungen.",GetName(playerid),wanzahl,Spieler[spielerid][pfrakwarn]);
-                            SendClientMessage(spielerid,COLOR_RED,string);
-                        }
-                    }
-                    else
-                    {
-                        SendClientMessage(playerid,COLOR_RED,"Du kannst den Leader nicht verwarnen.");
-                    }
-                }
-                else
-                {
-                    SendClientMessage(playerid,COLOR_RED,"Du bist nicht in der selben Fraktion wie der Spieler.");
-                }
-            }
-            else
-            {
-                SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Co/Leader-Rank.");
-            }
-        }
-        else
-        {
-            SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erteilen.");
-        }
-    }
-    else
-    {
-        SendClientMessage(playerid,COLOR_RED,"Angegebener Spieler ist nicht online.");
-    }
+
+CMD:delfrakwarn(playerid, params[]) {
+    new spielerid, wanzahl;
+    if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    if (sscanf(params, "ui", spielerid, wanzahl)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/delfrakwarn [Spielername] [Anzahl]");
+    if (!IsPlayerConnected(spielerid)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    if (Spieler[playerid][pFraktion] != Spieler[spielerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Fraktion.");
+    if (Spieler[spielerid][pRank] > 5) return SendClientMessage(playerid, COLOR_RED, "Du kannst den Leader nicht verwarnen.");
+    if (wanzahl < 1) return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens eine Verwarnung erlassen.");
+
+    Spieler[spielerid][pfrakwarn] -= wanzahl;
+    if (Spieler[spielerid][pfrakwarn] < 0) Spieler[spielerid][pfrakwarn] = 0;
+    SCMFormatted(playerid, COLOR_YELLOW, "Du hast dem Spieler %s erfolgreich %i Verwarnungen entzogen.", GetName(spielerid), wanzahl);
+    SCMFormatted(spielerid, COLOR_RED, "Du hast von %s %i Verwarnungen entzogen bekommen, du hast nun %i Verwarnungen.", GetName(playerid), wanzahl, Spieler[spielerid][pfrakwarn]);
     return 1;
 }
 
@@ -16781,22 +16707,22 @@ CMD:makeleader(playerid, params[])
         SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
         format(string, sizeof(string), "Du bist nun Leader von \"%s\". Bitte gebe gut Acht auf deinen Leaderposten.", fname);
         SendClientMessage(pID, COLOR_LIGHTBLUE, string);
-        if(frakid == 1){ if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 283); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 150); } }
-        else if(frakid == 2){if (Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 288); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 150); } }
+        if(frakid == 1){ if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 283); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 309); } }
+        else if(frakid == 2){if (Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 288); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 309); } }
         else if(frakid == 3){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 70); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 211); } }
         else if(frakid == 4){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 57); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 55); } }
         else if(frakid == 5){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 71); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 192); } }
         else if(frakid == 6){if(Spieler[pID][pSex] == 1){SetPlayerSkinEx(pID, 271); } else if(Spieler[pID][pSex] == 2){ SetPlayerSkinEx(pID, 65); } }
         else if(frakid == 7){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 102);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 195);} }
         else if(frakid == 8){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 240);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 194);} }
-        else if(frakid == 9){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 295);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 150);} }
+        else if(frakid == 9){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 295);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 309);} }
         else if(frakid == 10){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 122);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 169);} }
         else if(frakid == 11){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 114);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 114);} }
         else if(frakid == 12){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 120);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 120);} }
         else if(frakid == 13){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 108);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 108);} }
         else if(frakid == 14){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 229);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 229);} }
         else if(frakid == 15){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 248);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 248);} }
-        else if(frakid == 16){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 282);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 150);} }
+        else if(frakid == 16){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 282);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 309);} }
         else if(frakid == 17){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 217);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 89);} }
         else if(frakid == 18){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 287);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 287);} }
         else if(frakid == 19){if(Spieler[pID][pSex] == 1){ SetPlayerSkinEx(pID, 220);}else if(Spieler[pID][pSex] == 2){SetPlayerSkinEx(pID, 220);} }
@@ -19333,7 +19259,7 @@ CMD:kasse(playerid, params[])
 {
     new entry, string[128], eingabe[32];
     if(sscanf(params, "s[32]i", eingabe, entry))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Kasse [Anlegen/Nehmen]");
-    if(entry < 1 || entry > 10000000)return SendClientMessage(playerid, COLOR_RED, "Der Betrag sollte zwischen $1 und $10.000.000 liegen.");
+    if(entry < 1 || entry > 100000000)return SendClientMessage(playerid, COLOR_RED, "Der Betrag sollte zwischen $1 und $100.000.000 liegen.");
     if(strcmp(eingabe, "anlegen", true) == 0)
     {
         if(GetPlayerMoney(playerid) < entry)return SendClientMessage(playerid, COLOR_RED, "Soviel Geld hast du nicht!");
@@ -20124,6 +20050,24 @@ CMD:ofreistellen(playerid, params[]) {
         }
     }
 
+    new fraktion = GetVehicleFraktion(vehicleid);
+    if (fraktion && g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt]) {
+        g_FraktionAbschleppen[vehicleid][FA_fX] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_fY] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_fZ] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_fFace] = 0.0;
+        g_FraktionAbschleppen[vehicleid][FA_bAbgeschleppt] = false;
+
+        SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Du hast das Fraktionsfahrzeug wieder freigestellt.");
+        SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Das Fahrzeug spawnt nun wie gewohnt.");
+        new message[145];
+        format(message, sizeof(message), "Ordnungsbeamter %s hat euer Fahrzeug wieder freigestellt.", GetName(playerid));
+        SendFraktionMessage(fraktion, COLOR_GREEN, message);
+        Spieler[playerid][pPayCheck] -= 700;
+        return 1;
+    }
+    else if (fraktion) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Fahrzeug ist nicht abgeschleppt.");
+    
     new besitzer = GetCarOwner(vehicleid);
     if (besitzer == INVALID_PLAYER_ID) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Das Fahrzeug gehört keinem Spieler.");
 
@@ -21022,7 +20966,7 @@ CMD:accept(playerid, params[])
                                 DestroyDynamicObject(OAmtSirene[PlayerCar[pID][PlayerKey[pID]][CarId]]);
                             }
 
-                            DestroyVehicle(PlayerCar[pID][PlayerKey[pID]][CarId]);
+                            DestroyVehicleEx(PlayerCar[pID][PlayerKey[pID]][CarId]);
                             g_Parkschein[PlayerCar[pID][PlayerKey[pID]][CarId]] = 0;
                             //DestroyPeilsender(pID, PlayerKey[pID] );
                             aiVehicles[ PlayerCar[pID][PlayerKey[pID]][CarId] ] = VEH_INVALID;
@@ -24812,7 +24756,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24829,7 +24773,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24846,7 +24790,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24863,7 +24807,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24880,7 +24824,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24897,7 +24841,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24914,7 +24858,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24931,7 +24875,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24948,7 +24892,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24965,7 +24909,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24982,7 +24926,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -24999,7 +24943,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25016,7 +24960,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25033,7 +24977,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25050,7 +24994,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25067,7 +25011,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25084,7 +25028,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25101,7 +25045,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25118,7 +25062,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25135,7 +25079,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25152,7 +25096,7 @@ public OnPlayerEnterCheckpoint(playerid)
             DisablePlayerCheckpointEx(playerid);
             if(pFahrschulCar[playerid] != INVALID_VEHICLE_ID)
             {
-                DestroyVehicle(mvID);
+                DestroyVehicleEx(mvID);
                 aiVehicles[ mvID ] = VEH_INVALID;
             }
         }
@@ -25165,7 +25109,7 @@ public OnPlayerEnterCheckpoint(playerid)
             SendClientMessage(playerid, COLOR_GREEN, "Falls du Berufe wie Trucker oder Pilot ausführen möchtest, musst du die entsprechenden Scheine");
             SendClientMessage(playerid, COLOR_GREEN, "bei einem Fahrlehrer machen. Ob ein Fahrlehrer online ist, kannst du unter /Liste sehen.");
             SendClientMessage(playerid, COLOR_GREEN, "Viel Spaß wünscht dir das Live your Dream - Roleplay Team!");
-            DestroyVehicle(pFahrschulCar[playerid]);
+            DestroyVehicleEx(pFahrschulCar[playerid]);
             aiVehicles[ pFahrschulCar[playerid] ] = VEH_INVALID;
             pFahrschulCar[playerid] = INVALID_VEHICLE_ID;
             DisablePlayerCheckpointEx(playerid);
@@ -26341,14 +26285,12 @@ public OnPlayerLeaveCheckpoint(playerid)
 
 public OnPlayerEnterRaceCheckpoint(playerid)
 {
-    new
-        cp;
+    new cp;
     EventCP[playerid]++;
     cp = EventCP[playerid];
     DisablePlayerRaceCheckpoint(playerid);
-    if( cp == g_EventMarker[EV_iCheckpoints] ) {
-        new
-            String[128];
+    if (cp == g_EventMarker[EV_iCheckpoints] ) {
+        new String[128];
         format(String,sizeof(String),"%s hat das Event gewonnen, er war der ERSTE am Ziel!",GetName(playerid));
         SendClientMessageToAll(COLOR_GREEN,String);
 
@@ -28784,47 +28726,33 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		//SetCameraBehindPlayer(playerid); bugfix test eingeklammert Auftrag 2706
 	}
-	new
-	    _gettime = gettime();
-	if( _gettime > Spieler[playerid][unixBlinkerCooldown]) {
-		if(vehicleid) {
-			if( PRESSED(KEY_ANALOG_LEFT) || PRESSED(KEY_ANALOG_RIGHT ) ) {
-			    if( GetPlayerState(playerid) == PLAYER_STATE_DRIVER ) {
-					new
-					    modelid;
-				    modelid = GetVehicleModel(vehicleid);
-				    if(IsACar(modelid)) {
-				        if( GetVehicleIndicator(vehicleid) == 3 ) { // Warnblinker an,blinken geht also nicht wirklich
-				            return 1;
-						}
-				        new
-				            String[128],
-				            Float:x,
-				            Float:y,
-				            Float:z;
-						GetPlayerPos(playerid,x,y,z);
-				        if( PRESSED(KEY_ANALOG_LEFT) ) {
-				            // links
-				            format(String,sizeof(String),"%s blinkt nach links",GetName(playerid));
-			                DestroyBlinker(vehicleid,1);
-							SetVehicleIndicator(vehicleid,1,0);
-				        }
-				        else {
-				            // rechts
-				            format(String,sizeof(String),"%s blinkt nach rechts",GetName(playerid));
-			                DestroyBlinker(vehicleid,0);
-							SetVehicleIndicator(vehicleid,0,1);
-				        }
-						SendRoundMessage(x,y,z, COLOR_BLINKER, String , 30.0 );
-				        Spieler[playerid][unixBlinkerCooldown] = _gettime + 2;
-				    }
-			    }
-			}
-		}
-	}
+
+    if (!PRESSED(KEY_ANALOG_LEFT) && !PRESSED(KEY_ANALOG_RIGHT)) return 1;
+    if (!vehicleid || GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return 1;
+	new _gettime = gettime();
+	if (_gettime <= Spieler[playerid][unixBlinkerCooldown]) return 1;
+
+	new modelid = GetVehicleModel(vehicleid);
+    if (!IsACar(modelid)) return 1;
+
+    if (GetVehicleIndicator(vehicleid) == 3) return 1;
+    new String[128], Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+    if (PRESSED(KEY_ANALOG_LEFT)) {
+        format(String, sizeof(String), "%s blinkt nach links", GetName(playerid));
+        DestroyBlinker(vehicleid, 1);
+		SetVehicleIndicator(vehicleid, 1, 0);
+    }
+    else {
+        format(String, sizeof(String), "%s blinkt nach rechts", GetName(playerid));
+        DestroyBlinker(vehicleid, 0);
+		SetVehicleIndicator(vehicleid, 0, 1);
+    }
+
+	SendRoundMessage(x, y, z, COLOR_BLINKER, String, 30.0);
+    Spieler[playerid][unixBlinkerCooldown] = _gettime + 2;
 	return 1;
 }
-
 
 forward UnFreeze(playerid);
 public UnFreeze(playerid)
@@ -28997,6 +28925,21 @@ ShowSellGunDialog(playerid, dialogid) {
         return ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE_INPUT, "{BDBDBD}Waffenverkauf - Preis", dialogText, "Anbieten", "Abbrechen");
     }
 
+    return 1;
+}
+
+stock DestroyVehicleEx(vehicleid) {
+    DestroyBlinker(vehicleid, 0);
+    DestroyBlinker(vehicleid, 1);
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
+    g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
+    g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][2]);
+    g_aiVehicleSirene[vehicleid][2] = INVALID_OBJECT_ID;
+    DestroyDynamicObject(g_aiVehicleSirene[vehicleid][3]);
+    g_aiVehicleSirene[vehicleid][3] = INVALID_OBJECT_ID;
+    DestroyVehicle(vehicleid);
     return 1;
 }
 
@@ -29387,7 +29330,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
         DestroyBlinker(CarId,0);
         DestroyBlinker(CarId,1);
-        DestroyVehicle(PlayerCar[playerid][PlayerKey[playerid]][CarId]);
+        DestroyVehicleEx(PlayerCar[playerid][PlayerKey[playerid]][CarId]);
         //DestroyPeilsender(playerid, PlayerKey[playerid] );
         aiVehicles[ PlayerCar[playerid][PlayerKey[playerid]][CarId] ] = VEH_INVALID;
         new string[80];
@@ -33145,7 +33088,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem == 1 ) {
                     SendClientMessage(playerid, COLOR_BLUE, "* STATISTIKEN *: {FFFFFF}/Stats, /Skill, /Scheine, /Pass, /Vertrag, /Serverinfo, /Delmarker, /Angelstats, /Finanzen, /sInfo(FPS und Ping anzeigen)");
                     SendClientMessage(playerid, COLOR_BLUE, "* HILFE-BEFEHLE *:{FFFFFF}/Sup(Support-Ticket), /Admin(Notruf-Admin), /Anrufen 110 (POLIZEI-NOTRUF), /Anrufen 112 (RETTUNGSDIENST), /Service");
-                    SendClientMessage(playerid, COLOR_BLUE, "* ORIENTIERUNG *:{FFFFFF}/Navi (wichtige Orte finden), /Suche (Spielersuche), /Spielerinfo (Letzter Login von einem Spieler erfahren)");
+                    SendClientMessage(playerid, COLOR_BLUE, "* ORIENTIERUNG *:{FFFFFF}/Navi (wichtige Orte finden), /Findatm, /Suche (Spielersuche), /Spielerinfo (Letzter Login von einem Spieler erfahren)");
                     SendClientMessage(playerid, COLOR_BLUE, "* KONSUMIEREN *: {FFFFFF}/Nimmdrogen, /Isskeks, /Rauchzig, /Zigweg");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Geben, /Liste, /Inventar, /Koffer, /Kofferauf, /Firmen, /Kampfstyle, /Pickwaffe, /Sellkekse");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Jailtime, /Tottime, /Mutetime, /Animlist, /Staatskasse, /Killauftrag, /Leader, /Gutscheincode");
@@ -38915,6 +38858,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nShisha-Bar\nSan News Agency", "Auswählen", "Abbrechen");
                 }
+                if (listitem == 20) return cmd_suchatm(playerid);
             }
         }
         case BEHORDEN:
@@ -42872,7 +42816,7 @@ public PayDay()
     }
     return 1;
 }
-stock Scheine(playerid, targetid,modus = 0)
+stock Scheine(playerid, targetid, modus = 0)
 {
     if(IsPlayerConnected(targetid))
     {
@@ -43759,7 +43703,7 @@ CMD:event(playerid, params[])
 CMD:navi(playerid)
 {
     if( gPlayerLogged[playerid] == 0 ) return SendClientMessage(playerid,COLOR_RED,"Du bist nicht eingeloggt");
-    ShowPlayerDialog(playerid, DIALOG_NAVI, DIALOG_STYLE_LIST, "Navigation", "Ämter und Behörden\nPolizei u. Notdienste\nFahrschule\nFahrzeugverkauf\nCarSharing-Stationen\nHotel\nBanken\nVersicherungen\n24/7 Shops\nTankstellen\nKleidungsgeschäfte\nRestaurant\nCasinos\nWaffenverkauf\nVerkaufshäuser\nTuning-Garagen\nArbeitsstellen\nGang/Mafien Base\nIllegale Orte\nWeitere Orte", "Markieren", "Abbrechen");
+    ShowPlayerDialog(playerid, DIALOG_NAVI, DIALOG_STYLE_LIST, "Navigation", "Ämter und Behörden\nPolizei u. Notdienste\nFahrschule\nFahrzeugverkauf\nCarSharing-Stationen\nHotel\nBanken\nVersicherungen\n24/7 Shops\nTankstellen\nKleidungsgeschäfte\nRestaurant\nCasinos\nWaffenverkauf\nVerkaufshäuser\nTuning-Garagen\nArbeitsstellen\nGang/Mafien Base\nIllegale Orte\nWeitere Orte\nNächster ATM", "Markieren", "Abbrechen");
     return 1;
 }
 
@@ -45163,7 +45107,7 @@ public OnPlayerCarUpdate(playerid)
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon1]);
             DestroyDynamicObject(PlayerCar[playerid][x][ObjectIDNeon2]);
 
-            DestroyVehicle(PlayerCar[playerid][x][CarId]);
+            DestroyVehicleEx(PlayerCar[playerid][x][CarId]);
             //DestroyPeilsender(playerid,x);
             aiVehicles[ PlayerCar[playerid][x][CarId] ] = VEH_INVALID;
 
@@ -48496,10 +48440,7 @@ COMMAND:rtwsirene(playerid,params[]) {
 }
 
 COMMAND:neonweis(playerid,params[]) {
-
-    new
-        vehicleid,
-        modelid;
+    new vehicleid, modelid;
     vehicleid = GetPlayerVehicleID(playerid);
     if(!vehicleid) {
         return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
@@ -49482,8 +49423,8 @@ enum e_FraktionsSkins {
 new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	// X    Y       Z     Frak  { Skin 1-7 }
 	{LSPD_INTERIOR_FSKIN_POINT,	    1, { 300 , 301 , 281 , 283 , 267 , 265 , 266 , 265 , 306 , 285 , 284 , 303 , 304 , 192 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{SAMD_INTERIOR_FSKIN_POINT,	3, { 70 , 274, 275, 276, 277, 278, 279, 308 , 59 , 60 , 29 , 72 , 188 , 229 , 93 , 233 , 226} },
-	{POO_INTERIOR_FSKIN_POINT,	    5, { 71 , 44 , 305 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
+	{SAMD_INTERIOR_FSKIN_POINT,	3, { 70 , 274, 275, 276, 277, 278, 279, 308, 59, 60, 29, 72, 188, 229, 93, 233, 226} },
+	{POO_INTERIOR_FSKIN_POINT,	    5, { 71, 150, 303, 59 , 60 , 72 , 188 , 93 , 233 , 226 } },
 	{FBI_INTERIOR_FSKIN_POINT,	2, { 286 , 285 , 309 , 166, 165,59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{-2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
 	{HITMANBASE_FSKIN_POINT,	14, { 2 , 29 , 229 ,  171 , 23 , 19 , 35 , 22 , 11, 8 } },
@@ -54706,7 +54647,7 @@ public Pulse_Fahrschule(playerid) {
 stock FahrschuleAbbruch(playerid) {
     DisablePlayerCheckpoint(playerid);
     RemovePlayerFromVehicle(playerid);
-    DestroyVehicle( pFahrschulCar[playerid] );
+    DestroyVehicleEx( pFahrschulCar[playerid] );
     if( pFahrschulCar[playerid] != INVALID_VEHICLE_ID ) {
         aiVehicles[ pFahrschulCar[playerid] ] = VEH_INVALID;
     }
@@ -59236,27 +59177,15 @@ stock GivePlayerStrafpunkte(playerid,schein,anzahl) {
     return 1;
 }
 
-COMMAND:checkscheine(playerid, params[])
-{
-    if(Spieler[playerid][pAdmin] < 1)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    new pID, string[128];
-    if(sscanf(params, "u", pID))
-    {
-        Scheine(playerid, playerid);
-        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Checkscheine [SpielerID/Name]");
-        return 1;
+CMD:checkscheine(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 1) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new pID;
+    if (sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Checkscheine [SpielerID/Name]");
+    if (IsPlayerConnected(pID) && gPlayerLogged[pID] == 1) {
+        SCMFormatted(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Du siehst dir die Scheine von %s an.", GetName(pID));
+        Scheine(playerid, pID, 1);
     }
-    if(IsPlayerConnected(pID) && gPlayerLogged[pID] == 1)
-    {
-        new Float:x, Float:y, Float:z;
-        GetPlayerPos(playerid, x,y,z);
-        if(IsPlayerInRangeOfPoint(pID, 5.0, x,y,z))
-        {
-            format(string, sizeof(string), ".", GetName(playerid));
-            SendClientMessage(pID, COLOR_PURPLE, string);
-            Scheine(playerid, pID,1);
-        }
-    }
+
     return 1;
 }
 
@@ -61024,7 +60953,7 @@ public FahrzeugVerleih_Pulse() {
                     format(String,sizeof(String),"Die Leihzeit ist abgelaufen ( Fahrzeug: %s )",CarName[modelid - 400]);
                     SendClientMessage(i,COLOR_RED,String);
                     Spieler[i][tickVehicleVerleih] = 0;
-                    DestroyVehicle(Spieler[i][pVehicleVerleih]);
+                    DestroyVehicleEx(Spieler[i][pVehicleVerleih]);
                     Spieler[i][pVehicleVerleih] = INVALID_VEHICLE_ID;
                 }
             }
@@ -66780,10 +66709,10 @@ COMMAND:ic(playerid,params[]) {
 COMMAND:warnblinker(playerid,params[]) {
     new vehicleid;
     vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in einem Fahrzeug aktivieren");
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur als Fahrer aktivieren");
+    if(!vehicleid) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in einem Fahrzeug aktivieren.");
+    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur als Fahrer aktivieren.");
     new modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in Autos aktivieren");
+    if(!IsACar(modelid)) return SendClientMessage(playerid,COLOR_RED,"Du kannst den Warnblinker nur in Autos aktivieren.");
     if( GetVehicleIndicator(vehicleid) == 3 ) {
         DestroyBlinker(vehicleid,0);
         DestroyBlinker(vehicleid,1);
@@ -68407,7 +68336,7 @@ COMMAND:delveh(playerid,params[]) {
     format(String, sizeof(String), "%s %s hat ein Fahrzeug entfernt (CarID: %d)", GetPlayerAdminRang(playerid), GetName(playerid), vehicleid);
     SendAdminMessage(COLOR_YELLOW, String);
 
-    DestroyVehicle(vehicleid);
+    DestroyVehicleEx(vehicleid);
     DestroyDynamicObject(vSirene[vehicleid]);
     aiVehicles[ vehicleid ] = VEH_INVALID;
     return 1;
@@ -69543,7 +69472,7 @@ COMMAND:delallvehs(playerid,params[]) {
         c = 0;
     for(new i = 0 ; i < MAX_VEHICLES ; i++) {
         if( aiVehicles[i] == VEH_CAR ) {
-            DestroyVehicle(i);
+            DestroyVehicleEx(i);
             aiVehicles[i] = VEH_INVALID;
             c++;
         }
@@ -70005,8 +69934,7 @@ stock Hausmoebel_Uncompress(var,&house,&slot) {
 CMD:fparken(playerid)
 {
     if(!(Spieler[playerid][pFraktion] == 5))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ordnungsbeamter.");
-    new
-        vehicleid = GetPlayerVehicleID(playerid);
+    new vehicleid = GetPlayerVehicleID(playerid);
     if (GetVehicleModel( vehicleid ) == 525)
     {
         if(IsTrailerAttachedToVehicle(vehicleid))
