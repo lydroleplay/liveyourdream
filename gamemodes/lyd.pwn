@@ -7854,18 +7854,39 @@ CMD:adventskalender(playerid) {
 
     Spieler[playerid][pAdventDay] = wday;
     Spieler[playerid][pAdventMin] = 0;
+    GivePlayerGift(playerid);
+    return 1;
+}
+
+stock GivePlayerGift(playerid, rValue = -1) {
+    if (rValue == -1) rValue = random(1000);
     new message[245];
 
-    switch (random(100)) {
-        case 0..24: {
+    switch (rValue) {
+        case 0..169: {
             SetPlayerScore(playerid, ++Spieler[playerid][pLevel]);
+            GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
             GivePlayerCash(playerid, 75000);
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast ein Level-Up und $75.000 hinter dem Türchen gefunden!");
             
-            format(message, sizeof(message), "%s hat ein Level-Up und $75.000 im Adventskalender gefunden.", GetName(playerid));
+            format(message, sizeof(message), "%s hat ein Level-Up und $75.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 25..49: {
+        case 170..339: {
+            GivePlayerCash(playerid, 100000);
+            Spieler[playerid][pExp] += 5;
+            if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
+                Spieler[playerid][pLevel]++;
+                SetPlayerScore(playerid, Spieler[playerid][pLevel]);
+                Spieler[playerid][pExp] = 0;
+                GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
+            }
+
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+5 Respektpunkte und $100.000 {FFFFFF}hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat +5 Respektpunkte und $100.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 340..509: {
             GivePlayerCash(playerid, 150000);
             Spieler[playerid][pExp] += 3;
             if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
@@ -7873,65 +7894,124 @@ CMD:adventskalender(playerid) {
                 SetPlayerScore(playerid, Spieler[playerid][pLevel]);
                 Spieler[playerid][pExp] = 0;
                 GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
-            }            
+            }
+
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+3 Respektpunkte und $150.000 {FFFFFF}hinter dem Türchen gefunden!");
-
-            format(message, sizeof(message), "%s hat +3 Respektpunkte und $150.000 im Adventskalender gefunden.", GetName(playerid));
+            format(message, sizeof(message), "%s hat +3 Respektpunkte und $150.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 50..59: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}ein Wunschfahrzeug {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
-
-            format(message, sizeof(message), "%s hat ein Wunschfahrzeug im Adventskalender gefunden.", GetName(playerid));
+        case 510..579: {
+            GivePlayerCash(playerid, 300000);
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}$300.000 {FFFFFF}hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat $300.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 60..69: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen Skill-Up deiner Wahl {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
-
-            format(message, sizeof(message), "%s hat einen Skill-Up im Adventskalender gefunden.", GetName(playerid));
+        case 580..629: {
+            GivePlayerCash(playerid, 500000);
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}$500.000 hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat $500.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 70..76: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen freien Namechange {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Projektleiter.");
-
-            format(message, sizeof(message), "%s hat einen freien Namechange im Adventskalender gefunden.", GetName(playerid));
+        case 630..659: {
+            GivePlayerCash(playerid, 750000);
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}$750.000 hinter dem Türchen gefunden!");
+            format(message, sizeof(message), "%s hat $750.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
 
-        case 77..85: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Neon-Premium {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
-
-            format(message, sizeof(message), "%s hat Neon-Premium im Adventskalender gefunden.", GetName(playerid));
-        }
-
-        case 86..94: {
+        case 660..754: {
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}eine Forum Ranggrafik (Geschenkejäger) {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Projektleiter.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
 
             format(message, sizeof(message), "%s hat eine Forum Ranggrafik im Adventskalender gefunden.", GetName(playerid));
         }
 
-        case 95..97: {
+        case 755..824: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen freien Namechange {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat einen freien Namechange im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 825..864: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}einen Skill-Up deiner Wahl {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat einen Skill-Up im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 865..904: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Neon-Premium {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat Neon-Premium im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 905..934: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}ein Wunschfahrzeug {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
+
+            format(message, sizeof(message), "%s hat ein Wunschfahrzeug im Adventskalender gefunden.", GetName(playerid));
+        }
+
+        case 935..949: {
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}Bronze Premium (1 Monat) {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür im Forum-Thread: {FF9900}LyD | Adventstürchen (Antrag für die Belohnungen)");
 
             format(message, sizeof(message), "%s hat Bronze Premium im Adventskalender gefunden.", GetName(playerid));
         }
 
-        case 98..99: {
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+250 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
-            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Melde dich dafür bei einem Moderator.");
+        case 950..969: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}75 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 75 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
 
-            format(message, sizeof(message), "%s hat 250 LyD-Coins im Adventskalender gefunden.", GetName(playerid));
+            format(message, sizeof(message), "%s hat 75 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 970..984: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}100 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 100 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
+
+            format(message, sizeof(message), "%s hat 100 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 985..994: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}150 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 150 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
+
+            format(message, sizeof(message), "%s hat 150 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
+        }
+
+        case 995..999: {
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}210 LyD-Coins {FFFFFF}hinter dem Türchen gefunden.");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Die LyD-Coins wurden dir automatisch gutgeschrieben.");
+            new Query[120];
+            format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + 210 WHERE `Name` = '%s'", GetName(playerid));
+            mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
+
+            format(message, sizeof(message), "%s hat 210 LyD-Coins im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
         }
     }
 
     SendUCPAktenEintrag(playerid, "Server-System", GetName(playerid), message);
     format(message, sizeof(message), "[Adventinfo] {FFFFFF}%s", message);
     SendAdminMessage(COLOR_GREEN, message);
+    return 1;
+}
+
+CMD:akalender(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 6) return 1;
+    new value;
+    if (sscanf(params, "i", value) || value < 0 || value > 999) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/akalender [WERT]");
+    GivePlayerGift(playerid, value);
     return 1;
 }
 
@@ -11008,12 +11088,17 @@ public Anti_OnVehicleDeath(playerid) {
 }
 
 public OnVehicleDeath(vehicleid, killerid) {
-    if( Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
+    if (Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
         new String[128];
-        format(String, sizeof(String), "[KICK]: Spieler %s wurde von Server-System gekickt, Grund: %s", GetName(killerid), ("Vehicle-Spam"));
+        format(String, sizeof(String), "[Anti-Cheat] Spieler %s Verdacht auf Vehicle-Spam: %d Fahrzeug(e)", GetName(killerid), g_aiDestroyedVehicles{killerid});
         SendAdminMessage(COLOR_RED, String);
-        Kick(killerid);
-        return 0;
+        if (g_aiDestroyedVehicles{killerid} > 10) {
+            format(String, sizeof(String), "[KICK] Spieler %s wurde gekickt, Grund: Vehicle-Spam", GetName(killerid));
+            SendAdminMessage(COLOR_RED, String);
+            g_aiDestroyedVehicles{killerid} = 0;
+            Kick(killerid);
+            return 0;
+        }
     }
     g_aiDestroyedVehicles{killerid}++;
     SetTimerEx("Anti_OnVehicleDeath",5003,false,"d",killerid);
@@ -33708,7 +33793,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Check, /Gotoliste, /Gotopos, /Gotohaus, /Veh, /Delveh, /Delallvehs, /Spec, /Specoff, /Changeweather");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem /Atafelentmieten");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem, /Atafelentmieten, /Checkskill");
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
@@ -53743,6 +53828,31 @@ stock GetPlayerDetectivLevel(playerid) {
         }
     }
     return val;
+}
+
+CMD:checkskill(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    new pID;
+    if (sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/checkskill [Spieler ID/Name]");
+    if (!gPlayerLogged[pID]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht online.");
+
+    new String[128];
+    SendClientMessage(playerid, COLOR_GREEN, "============= {FFFFFF}[ SKILLS ] {009D00}=============");
+    format(String, sizeof(String), "Spieler: %s (%d)", GetName(pID), pID);
+    SendClientMessage(playerid, COLOR_WHITE, String);
+    format(String, sizeof(String), "Detektiv-Skill: {FFFFFF}%d/%d (%d Sekunden)", GetPlayerDetectivLevel(pID), sizeof(g_DetektivSkill), GetPlayerDetectivSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Huren-Skill: {FFFFFF}%d/%d (%d HP)", GetPlayerHureLevel(pID), sizeof(g_HureSkill), GetPlayerHureSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Anwalt-Skill: {FFFFFF}%d/%d (Bis %d Knastzeit)", GetPlayerLawyerLevel(pID), sizeof(g_LawyerSkills), GetPlayerLawyerSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Gangfight-Skill: {FFFFFF}%d/%d (Kills: %d)", GetPlayerGangFightSkillLevel(pID), sizeof(g_GangFightSkills), Spieler[pID][pKillsGangFight]);
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Drogen-Skill: {FFFFFF}%d/%d (Bis zu %d Päckchen)", GetPlayerDrogenSkillLevel(pID), sizeof(g_DrogenSkills), GetPlayerDrogenSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    format(String, sizeof(String), "Waffenteile-Skill: {FFFFFF}%d/%d (Bis zu %d Päckchen)", GetPlayerWaffenteileSkillLevel(pID), sizeof(g_WaffenteileSkills), GetPlayerWaffenteileSkillValue(pID));
+    SendClientMessage(playerid, COLOR_YELLOW, String);
+    return 1;
 }
 
 COMMAND:skill(playerid, params[]) {
