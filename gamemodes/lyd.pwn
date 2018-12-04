@@ -50322,7 +50322,8 @@ public OnPlayerLeaveDynamicArea(playerid, areaid) {
     }
     return 1;
 }
-/*COMMAND:weihnachtsmuetze(playerid,params[]){
+
+COMMAND:weihnachtsmuetze(playerid,params[]){
 
     if( IsPlayerAttachedObjectSlotUsed(playerid,1) ) {
         RemovePlayerAttachedObject(playerid,1);
@@ -50334,6 +50335,8 @@ public OnPlayerLeaveDynamicArea(playerid, areaid) {
     }
     return 1;
 }
+
+/*
 
 COMMAND:hexenhut(playerid,params[]){
 
