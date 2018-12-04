@@ -12350,7 +12350,7 @@ CMD:hausmieten(playerid)
     if(Haus[h][hMieten] == 0)return SendClientMessage(playerid, COLOR_RED, "Das Haus lässt Mieten nicht zu.");
     if(GetPlayerMoney(playerid) < Haus[h][hMietPreis])return SendClientMessage(playerid, COLOR_RED, "Soviel Geld hast du nicht.");
     if( Haus[h][hMieterAnzahl] >= Haus[h][hMieterMax])return SendClientMessage(playerid, COLOR_RED, "Die maximale Anzahl an Mietern für dieses Haus ist erreicht!");
-    Spieler[playerid][pHouseMieteKey] = GetHouseIDByIndex(h);
+    Spieler[playerid][pHouseMieteKey] = Haus[h][hID];
     GivePlayerCash(playerid, -Haus[h][hMietPreis]);
     Haus[h][hKasse]+=Haus[h][hMietPreis];
     Haus[h][hMieterAnzahl]++;
@@ -38815,11 +38815,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 Haus[h][hMieterMax] = 10;
                 Haus[h][hMieterAnzahl] = 0;
                 Haus[h][hMieten] = 0;
-                for(new i = 0 ; i < MAX_PLAYERS ; i++)
+                for(new i = 0 ; i <= GetPlayerPoolSize() ; i++)
                 {
                     if(IsPlayerConnected(i))
                     {
-                        if(Spieler[i][pHouseMieteKey] == h)
+                        if(Spieler[i][pHouseMieteKey] == Haus[h][hID])
                         {
                             Spieler[i][pSpawnChange] = 0;
                             Spieler[i][pHouseMieteKey] = 999;
@@ -38835,6 +38835,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 UpdateHouseText(h);
                 if( IsPlayerConnected(owner)) {
+                    Spieler[owner][pPlayerHouse] = 999;
                     CheckPlayerHouse(owner);
                 }
             }
@@ -57197,7 +57198,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             if(strcmp(Haus[iHaus][hBesitzer], "Niemand", true) == 0)
             {
                 format(hStr, sizeof(hStr), "{FFFFFF}[ {62E36D}%s {FFFFFF}]\n{62E36D}Hausnummer: {FFFFFF}%d\n{62E36D}Dieses Haus ist zu verkaufen\n{62E36D}Preis: {FFFFFF}$%s\n\n{E0E5E7}Zum Kaufen tippe /Hauskaufen ein", Haus[iHaus][hName], Haus[iHaus][hID], AddDelimiters(Haus[iHaus][hPreis]));
-                Haus[iHaus][hPickup] = CreateDynamicPickup(1273, 0, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
+                Haus[iHaus][hPickup] = CreateDynamicPickup(1273, 1, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
                 Haus[iHaus][hText]   = CreateDynamic3DTextLabel(hStr, COLOR_PROP, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 8,.worldid = 0);
                 CreateHouseSellObject(iHaus);
             }
@@ -57207,13 +57208,13 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
                 if(Haus[iHaus][hMieten] == 0)
                 {
                     format(hStr, sizeof(hStr), "{FFFFFF}[ {FF4137}%s {FFFFFF}]\n{FF4137}Hausnummer: {FFFFFF}%d\n{FF4137}Besitzer: {FFFFFF}%s", Haus[iHaus][hName], Haus[iHaus][hID], Haus[iHaus][hBesitzer]);
-                    Haus[iHaus][hPickup] = CreateDynamicPickup(19522, 0, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
+                    Haus[iHaus][hPickup] = CreateDynamicPickup(19522, 1, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
                     Haus[iHaus][hText]   = CreateDynamic3DTextLabel(hStr, COLOR_PROP, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 8,.worldid = 0);
                 }
                 else if(Haus[iHaus][hMieten] == 1)
                 {
                     format(hStr, sizeof(hStr), "{FFFFFF}[ {FFCB2B}%s {FFFFFF}]\n{FFCB2B}Hausnummer: {FFFFFF}%d\n{FFCB2B}Dieses Haus ist zu vermieten\nBesitzer: {FFFFFF}%s\n{FFCB2B}Miet-Preis: {FFFFFF}$%s\n{FFCB2B}Mieter: {FFFFFF}(%d/%d)\n\n{E0E5E7}Zum Mieten tippe /Hausmieten ein", Haus[iHaus][hName], Haus[iHaus][hID], Haus[iHaus][hBesitzer], AddDelimiters(Haus[iHaus][hMietPreis]), Haus[iHaus][hMieterAnzahl], Haus[iHaus][hMieterMax]);
-                    Haus[iHaus][hPickup] = CreateDynamicPickup(19523, 0, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
+                    Haus[iHaus][hPickup] = CreateDynamicPickup(19523, 1, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
                     Haus[iHaus][hText]   = CreateDynamic3DTextLabel(hStr, COLOR_PROP, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 8,.worldid = 0);
                 }
             }
@@ -57290,7 +57291,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             if(strcmp(Haus[iHaus][hBesitzer], "Niemand", true) == 0)
             {
                 format(hStr, sizeof(hStr), "{FFFFFF}[ {62E36D}%s {FFFFFF}]\n{62E36D}Hausnummer: {FFFFFF}%d\n{62E36D}Dieses Haus ist zu verkaufen\n{62E36D}Preis: {FFFFFF}$%s\n\n{E0E5E7}Zum Kaufen tippe /Hauskaufen ein", Haus[iHaus][hName], Haus[iHaus][hID], AddDelimiters(Haus[iHaus][hPreis]));
-                Haus[iHaus][hPickup] = CreateDynamicPickup(1273, 0, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
+                Haus[iHaus][hPickup] = CreateDynamicPickup(1273, 1, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
                 Haus[iHaus][hText]   = CreateDynamic3DTextLabel(hStr, COLOR_PROP, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 8, .worldid = 0);
                 CreateHouseSellObject(iHaus);
             }
@@ -57300,13 +57301,13 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
                 if(Haus[iHaus][hMieten] == 0)
                 {
                     format(hStr, sizeof(hStr), "{FFFFFF}[ {FF4137}%s {FFFFFF}]\n{FF4137}Hausnummer: {FFFFFF}%d\n{FF4137}Besitzer: {FFFFFF}%s", Haus[iHaus][hName], Haus[iHaus][hID], Haus[iHaus][hBesitzer]);
-                    Haus[iHaus][hPickup] = CreateDynamicPickup(19522, 0, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
+                    Haus[iHaus][hPickup] = CreateDynamicPickup(19522, 1, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
                     Haus[iHaus][hText]   = CreateDynamic3DTextLabel(hStr, COLOR_PROP, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 8, .worldid = 0);
                 }
                 else if(Haus[iHaus][hMieten] == 1)
                 {
                     format(hStr, sizeof(hStr), "{FFFFFF}[ {FFCB2B}%s {FFFFFF}]\n{FFCB2B}Hausnummer: {FFFFFF}%d\n{FFCB2B}Dieses Haus ist zu vermieten\nBesitzer: {FFFFFF}%s\n{FFCB2B}Miet-Preis: {FFFFFF}$%s\n{FFCB2B}Mieter: {FFFFFF}(%d/%d)\n\n{E0E5E7}Zum Mieten tippe /Hausmieten ein", Haus[iHaus][hName], Haus[iHaus][hID], Haus[iHaus][hBesitzer], AddDelimiters(Haus[iHaus][hMietPreis]), Haus[iHaus][hMieterAnzahl], Haus[iHaus][hMieterMax]);
-                    Haus[iHaus][hPickup] = CreateDynamicPickup(19523, 0, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
+                    Haus[iHaus][hPickup] = CreateDynamicPickup(19523, 1, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 0);
                     Haus[iHaus][hText]   = CreateDynamic3DTextLabel(hStr, COLOR_PROP, Haus[iHaus][EnterX], Haus[iHaus][EnterY], Haus[iHaus][EnterZ], 8, .worldid = 0);
                 }
             }
@@ -63778,12 +63779,12 @@ COMMAND:hausankaufen(playerid,params[]) {
     // Alle alten Leute mit Schlüssel rauswerfen
     for(new i ; i < MAX_PLAYERS ; i++) {
         if( i != playerid ) {
-            if( Spieler[i][pHouseMieteKey] == pHouse ) {
+            if( Spieler[i][pHouseMieteKey] == Haus[pHouse][hID] ) {
                 Spieler[i][pHouseMieteKey] = 999;
             }
         }
     }
-    format(string,sizeof(string),"UPDATE `accounts` SET `HouseMieteKey` = 999 WHERE `HouseMieteKey` = %d",pHouse);
+    format(string,sizeof(string),"UPDATE `accounts` SET `HouseMieteKey` = 999 WHERE `HouseMieteKey` = %d", Haus[pHouse][hID]);
     mysql_oquery( string ,  THREAD_DUMMY , INVALID_PLAYER_ID ,gSQL);
     return 1;
 }
