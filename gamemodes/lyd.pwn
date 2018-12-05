@@ -16128,6 +16128,19 @@ stock SavePlayerCar(playerid,slot) {
     return 1;
 }
 
+CMD:givecoins(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 6) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    new pID, amount;
+    if (sscanf(params, "ui", pID, amount)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Givecoins [Spieler ID/Name] [Coins]");
+    if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht online.");
+
+    new Query[128];
+    format(Query, sizeof(Query), "UPDATE `accounts` SET `userPremium` = `userPremium` + %i WHERE `Name` = '%s'", amount, GetName(pID));
+    mysql_pquery(Query, THREAD_DUMMY, playerid, gSQL, MySQLThreadOwner);
+    SCMFormatted(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast %s %i Coins gegeben.", GetName(pID), amount);
+    return SCMFormatted(pID, COLOR_ORANGE, "[INFO] {FFFFFF}%s %s hat dir %i Coins gegeben.", GetPlayerAdminRang(playerid), GetName(playerid), amount);
+}
+
 CMD:givecar(playerid, params[])
 {
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
@@ -33842,7 +33855,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(Spieler[playerid][pAdmin] >= 6)
                     {
-                        SendClientMessage(playerid, COLOR_ORANGE, "* PROJEKTLEITER *: {FFFFFF}/Makeadmin, /Gmx, /Event, /MakeBMOD, /Pwchange, /Namechange");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* PROJEKTLEITER *: {FFFFFF}/Makeadmin, /Gmx, /Event, /MakeBMOD, /Pwchange, /Namechange, /Givecoins");
                     }
                     if(IsPlayerAdmin(playerid))
                     {
