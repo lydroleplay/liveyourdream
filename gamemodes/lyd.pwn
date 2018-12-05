@@ -6370,7 +6370,7 @@ public OnPlayerConnect(playerid)
     NeedPIZZA[playerid] = 0;
     NeedTAXI[playerid] = 0;
     NeedWHEEL[playerid] = 0;
-    g_aiDestroyedVehicles{playerid} = 0;
+    g_aiDestroyedVehicles[playerid] = 0;
     TelefonzelleAn[playerid] = INVALID_PLAYER_ID;
     if (Spieler[playerid][tLoginTimeout] != INVALID_TIMER_ID) KillTimer(Spieler[playerid][tLoginTimeout]);
     Spieler[playerid][tLoginTimeout] = INVALID_TIMER_ID;
@@ -7348,7 +7348,7 @@ public OnPlayerDisconnect(playerid, reason)
     NeedPIZZA[playerid] = 0;
     NeedTAXI[playerid] = 0;
     NeedWHEEL[playerid] = 0;
-    g_aiDestroyedVehicles{playerid} = 0;
+    g_aiDestroyedVehicles[playerid] = 0;
     TelefonzelleAn[playerid] = INVALID_PLAYER_ID;
     Spieler[playerid][tLoginTimeout] = INVALID_TIMER_ID;
     Spieler[playerid][pHouseAngebot][0] = INVALID_PLAYER_ID;
@@ -10089,7 +10089,7 @@ public OnPlayerSpawn(playerid)
         ResetAugenbinde(playerid);
         Spieler[playerid][bAugenbinde] = false;
     }
-    g_aiDestroyedVehicles{playerid} = 0;
+    g_aiDestroyedVehicles[playerid] = 0;
     Spieler[playerid][pEisVerkaeufer] = INVALID_PLAYER_ID;
     Spieler[playerid][pHotDogVerkaeufer] = INVALID_PLAYER_ID;
     Spieler[playerid][iKidnapID] = INVALID_PLAYER_ID;
@@ -11110,24 +11110,24 @@ public OnVehicleSpawn(vehicleid) {
 
 forward Anti_OnVehicleDeath(playerid);
 public Anti_OnVehicleDeath(playerid) {
-    g_aiDestroyedVehicles{playerid}--;
+    if (g_aiDestroyedVehicles[playerid] != 0) g_aiDestroyedVehicles[playerid]--;
     return 1;
 }
 
 public OnVehicleDeath(vehicleid, killerid) {
-    if (Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
+    if (Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles[killerid] >= 5 ) {
         new String[128];
-        format(String, sizeof(String), "[Anti-Cheat] Spieler %s Verdacht auf Vehicle-Spam: %d Fahrzeug(e)", GetName(killerid), g_aiDestroyedVehicles{killerid});
+        format(String, sizeof(String), "[Anti-Cheat] Spieler %s Verdacht auf Vehicle-Spam: %d Fahrzeug(e)", GetName(killerid), g_aiDestroyedVehicles[killerid]);
         SendAdminMessage(COLOR_RED, String);
-        if (g_aiDestroyedVehicles{killerid} > 10) {
+        if (g_aiDestroyedVehicles[killerid] > 10) {
             format(String, sizeof(String), "[KICK] Spieler %s wurde gekickt, Grund: Vehicle-Spam", GetName(killerid));
             SendAdminMessage(COLOR_RED, String);
-            g_aiDestroyedVehicles{killerid} = 0;
+            g_aiDestroyedVehicles[killerid] = 0;
             Kick(killerid);
             return 0;
         }
     }
-    g_aiDestroyedVehicles{killerid}++;
+    g_aiDestroyedVehicles[killerid]++;
     SetTimerEx("Anti_OnVehicleDeath",5003,false,"d",killerid);
     Blinker_OnVehicleDeath(vehicleid,killerid);
 
@@ -14234,7 +14234,7 @@ CMD:configplayer(playerid, params[])
     
     if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler nicht online.");
 
-    if (Spieler[playerid][pAdmin] > 5) {
+    if (Spieler[playerid][pAdmin] > 3) {
         if (!strcmp(entry, "adventmin", true)) {
             if (wert < 0) return SendClientMessage(playerid, COLOR_RED, "Gebe einen positiven Wert an.");
             Spieler[pID][pAdventMin] = wert;
@@ -20709,7 +20709,7 @@ CMD:scheine(playerid, params[]) {
 }
 
 CMD:stats(playerid, params[]) {
-    if(gPlayerLogged[playerid] == 0) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt!");
+    if (gPlayerLogged[playerid] == 0) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht eingeloggt!");
     new pID;
     if(sscanf(params, "u", pID) || pID == playerid)
     {
@@ -33857,12 +33857,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
-                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Sban, /Confighouse, /Configbiz, /Rauswerfenhotel, /Configtanke, /Makeleader, /Setzoneowner");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Sban, /Confighouse, /Configbiz, /Rauswerfenhotel, /Configtanke, /Makeleader, /Setzoneowner, /Awaffenlager, /Fsbreset");
                         SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Gebefirma, /Delfirma, /Gebeclub, /Delclub, /Bfreischalten (2. Biz-Schlüssel), /SFreischalten (6. Schlüssel)");
                     }
                     if(Spieler[playerid][pAdmin] >= 5)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Givegun, /Awaffenlager, /Fsbreset, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
+                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Givegun, /Createhouse, /Createaplatz, /Createtanke, /Createhotelroom");
                     }
                     if(Spieler[playerid][pAdmin] >= 6)
                     {
@@ -66037,7 +66037,7 @@ COMMAND:arp(playerid,params[]) {
 }
 
 CMD:awaffenlager(playerid) {
-    if (Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if (Spieler[playerid][pAdmin] < 4) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new dialogText[256];
     dialogText = "Fraktion\tWaffenteile\n";
     for (new i = 0; i < g_iWaffenLager; i++) format(dialogText, sizeof(dialogText), "%s%s\t%s Stück\n", dialogText, GetFactionName(g_WaffenLager[i][WL_iFraktion]), AddDelimiters(g_WaffenLager[i][WL_iWaffenTeile]));
@@ -66045,7 +66045,7 @@ CMD:awaffenlager(playerid) {
 }
 
 CMD:fsbreset(playerid, params[]) {
-    if (Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if (Spieler[playerid][pAdmin] < 4) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new fraktion;
     if (sscanf(params, "d", fraktion) || fraktion < 0 || fraktion > sizeof(factionNames)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Fsbreset [Fraktions-ID]");
     
