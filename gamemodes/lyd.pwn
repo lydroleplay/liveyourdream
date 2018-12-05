@@ -50149,7 +50149,7 @@ public OnPlayerEnterDynamicArea(playerid, areaid) {
     }
     else if( e_streamer_extra_id == AREA_BLITZER ) {
         if( gettime() > Spieler[playerid][pBlitzerCooldown] ) {
-            if( BlitzerfreieFraktion(playerid) ) return 1;
+            if( BlitzerfreieFraktion(playerid) || Spieler[playerid][pAdminDienst]) return 1;
             if( /*IsPlayerInAnyVehicle(playerid) && */ GetPlayerState(playerid) == PLAYER_STATE_DRIVER ) {
                 //for(new i ; i < g_iBlitzer ; i++) {
                     //if( g_Blitzer[i][B_iArea] == areaid ) {
