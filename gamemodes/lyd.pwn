@@ -8734,14 +8734,25 @@ stock ShowEventItemDialog(playerid, type = DIALOG_EVENT_ITEM_MENU, extravar = 0)
     return 1;
 }
 
+CMD:clearweapons(playerid, params[]) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+
+    new pID;
+    if (sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Clearweapons [Spieler ID/Name]");
+    if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht online.");
+    ResetPlayerWeapons(pID);
+    SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}Du hast die Waffen von %s gecleart.", GetName(pID));
+    return SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}%s %s hat deine Waffen gecleart.", GetPlayerAdminRang(playerid), GetName(playerid));
+}
+
 CMD:aeventitem(playerid, params[]) {
     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
     if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     return ShowEventItemDialog(playerid);
 }
 
-CMD:eventitem(playerid)
-{
+CMD:eventitem(playerid) {
     if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst mindestens Level 3 dafür sein.");
     if (!gEventItem) return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Die Eventitems sind nicht aktiv.");
     if (gEventItemType && GetPVarInt(playerid, "EVENTITEM")) return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Die Eventitems können nur einmal genutzt werden.");
@@ -33842,7 +33853,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Clearweapons");
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
