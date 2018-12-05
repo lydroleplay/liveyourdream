@@ -451,6 +451,21 @@ new const g_shishaPipes[][E_SHISHA_PIPE] = {
     {"Blue NRG",        1200,   "{2BFFC4}"}
 };
 
+enum E_NEON {
+    NEON_NAME[5],
+    NEON_OBJECT_ID,
+    NEON_HEX_COLOR[9]
+}
+
+new const g_NeonLights[][E_NEON] = {
+    {"Rot",  18647, "{FF0000}"},
+    {"Blau", 18648, "{1018EF}"},
+    {"Grün", 18649, "{14FC0D}"},
+    {"Gelb", 18650, "{F6FF3F}"},
+    {"Pink", 18651, "{F230FD}"},
+    {"Weiß", 18652, "{FFFFFF}"}
+};
+
 enum E_EVENT_REWARD {
     EVENT_REWARD_POINTS,
     EVENT_REWARD_NAME[40]
@@ -2101,6 +2116,7 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_AWAFFENLAGER_MENU 1384
 #define     DIALOG_AWAFFENLAGER_CHANGE 1385
 #define     DIALOG_FINDMPARK 1386
+#define     DIALOG_NEON 1387
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -29086,6 +29102,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
         return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Das Motorrad ist nicht mehr abgeschleppt.");
     }
+    if (dialogid == DIALOG_NEON) {
+        if (!response) return 1;
+        if (listitem < 0 || listitem >= sizeof(g_NeonLights)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Ungültige Auswahl.");
+        if (Spieler[playerid][pPremiumNeon] != 1) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du besitzt kein Premium-Neon.");
+        if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst der Fahrer eines Fahrzeugs sein.");
+        new vehicleid = GetPlayerVehicleID(playerid);
+        if (!IsACar(GetVehicleModel(vehicleid))) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Neon kann nur an Autos angebracht werden.");
+        if (g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}An dem Auto ist bereits Neon angebracht.");
+        
+        g_aiVehicleSirene[vehicleid][0] = CreateDynamicObject(g_NeonLights[listitem][NEON_OBJECT_ID], 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
+        AttachDynamicObjectToVehicle(g_aiVehicleSirene[vehicleid][0], vehicleid, -0.899999, 0.100000, -0.500000, 0.000000, 0.000000, 0.000000);
+        g_aiVehicleSirene[vehicleid][1] = CreateDynamicObject(g_NeonLights[listitem][NEON_OBJECT_ID], 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
+        AttachDynamicObjectToVehicle(g_aiVehicleSirene[vehicleid][1], vehicleid, 0.900000, 0.100000, -0.499999, 0.000000, 0.000000, 0.000000);
+        Streamer_Update(playerid);
+        return SCMFormatted(playerid, COLOR_ORANGE, "[INFO] %s%se {FFFFFF}Neonlichter aktiviert.", g_NeonLights[listitem][NEON_HEX_COLOR], g_NeonLights[listitem][NEON_NAME]);
+    }
     if (dialogid == DIALOG_AWAFFENLAGER_MENU) {
         if (!response) return 1;
         if (listitem < 0 || listitem > g_iWaffenLager) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Keine gültige Auswahl.");
@@ -48577,223 +48609,50 @@ COMMAND:rtwsirene(playerid,params[]) {
     return 1;
 }
 
-COMMAND:neonweis(playerid,params[]) {
-    new vehicleid, modelid;
-    vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
-    }
-    modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) {
-        return SendClientMessage(playerid, COLOR_RED,"Neon kann nicht an Motorrädern angebaut werden!");
-    }
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur als Fahrer möglich.");
-    }
-    if( Spieler[playerid][pPremiumNeon] != 1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein Premium-Neon!");
-    }
-    if( g_aiVehicleSirene[vehicleid][0] == INVALID_OBJECT_ID ) {
-        g_aiVehicleSirene[vehicleid][0] = CreateDynamicObject( 18652, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][0] , vehicleid,-0.899999, 0.100000, -0.500000, 0.000000, 0.000000, 0.000000);
-        g_aiVehicleSirene[vehicleid][1] = CreateDynamicObject( 18652, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][1] , vehicleid,0.900000, 0.100000, -0.499999, 0.000000, 0.000000, 0.000000);
-        SendClientMessage(playerid,COLOR_GREEN,"Neonlichter aktiviert.");
-    }
-    else {
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][0] );
+CMD:neon(playerid) {
+    if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (Spieler[playerid][pPremiumNeon] != 1) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du besitzt kein Premium-Neon.");
+    if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du musst der Fahrer eines Fahrzeugs sein.");
+    new vehicleid = GetPlayerVehicleID(playerid);
+    if (!IsACar(GetVehicleModel(vehicleid))) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Neon kann nur an Autos angebracht werden.");
+
+    if (g_aiVehicleSirene[vehicleid][0] != INVALID_OBJECT_ID) {
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][0]);
         g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][1] );
+        DestroyDynamicObject(g_aiVehicleSirene[vehicleid][1]);
         g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        SendClientMessage(playerid,COLOR_ORANGE,"Neonlichter deaktiviert.");
+        return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Neonlichter deaktiviert.");
     }
-    Streamer_Update(playerid);
-    return 1;
+
+    new dialogText[256];
+    for (new i = 0; i < sizeof(g_NeonLights); i++)
+        format(dialogText, sizeof(dialogText), "%s%s%se Neonröhren\n", dialogText, g_NeonLights[i][NEON_HEX_COLOR], g_NeonLights[i][NEON_NAME]);
+
+    return ShowPlayerDialog(playerid, DIALOG_NEON, DIALOG_STYLE_LIST, "{FF9900}Neonlichter anbauen", dialogText, "Anbauen", "Schließen");
 }
 
-COMMAND:neonblau(playerid,params[]) {
-
-    new
-        vehicleid,
-        modelid;
-    vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
-    }
-    modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) {
-        return SendClientMessage(playerid, COLOR_RED,"Neon kann nicht an Motorrädern angebaut werden!");
-    }
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur als Fahrer möglich.");
-    }
-    if( Spieler[playerid][pPremiumNeon] != 1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein Premium-Neon!");
-    }
-    if( g_aiVehicleSirene[vehicleid][0] == INVALID_OBJECT_ID ) {
-        g_aiVehicleSirene[vehicleid][0] = CreateDynamicObject( 18648, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][0] , vehicleid,-0.899999, 0.100000, -0.500000, 0.000000, 0.000000, 0.000000);
-        g_aiVehicleSirene[vehicleid][1] = CreateDynamicObject( 18648, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][1] , vehicleid,0.900000, 0.100000, -0.499999, 0.000000, 0.000000, 0.000000);
-        SendClientMessage(playerid,COLOR_GREEN,"Neonlichter aktiviert.");
-    }
-    else {
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][0] );
-        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][1] );
-        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        SendClientMessage(playerid,COLOR_ORANGE,"Neonlichter deaktiviert.");
-    }
-    Streamer_Update(playerid);
-    return 1;
+CMD:neonweis(playerid) {
+    return cmd_neon(playerid);
 }
 
-COMMAND:neongruen(playerid,params[]) {
-
-    new
-        vehicleid,
-        modelid;
-    vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
-    }
-    modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) {
-        return SendClientMessage(playerid, COLOR_RED,"Neon kann nicht an Motorrädern angebaut werden!");
-    }
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur als Fahrer möglich.");
-    }
-    if( Spieler[playerid][pPremiumNeon] != 1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein Premium-Neon!");
-    }
-    if( g_aiVehicleSirene[vehicleid][0] == INVALID_OBJECT_ID ) {
-        g_aiVehicleSirene[vehicleid][0] = CreateDynamicObject( 18649, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][0] , vehicleid,-0.899999, 0.100000, -0.500000, 0.000000, 0.000000, 0.000000);
-        g_aiVehicleSirene[vehicleid][1] = CreateDynamicObject( 18649, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][1] , vehicleid,0.900000, 0.100000, -0.499999, 0.000000, 0.000000, 0.000000);
-        SendClientMessage(playerid,COLOR_GREEN,"Neonlichter aktiviert.");
-    }
-    else {
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][0] );
-        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][1] );
-        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        SendClientMessage(playerid,COLOR_ORANGE,"Neonlichter deaktiviert.");
-    }
-    Streamer_Update(playerid);
-    return 1;
+CMD:neonblau(playerid) {
+    return cmd_neon(playerid);
 }
 
-COMMAND:neonrot(playerid,params[]) {
-
-    new
-        vehicleid,
-        modelid;
-    vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
-    }
-    modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) {
-        return SendClientMessage(playerid, COLOR_RED,"Neon kann nicht an Motorrädern angebaut werden!");
-    }
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur als Fahrer möglich.");
-    }
-    if( Spieler[playerid][pPremiumNeon] != 1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein Premium-Neon!");
-    }
-    if( g_aiVehicleSirene[vehicleid][0] == INVALID_OBJECT_ID ) {
-        g_aiVehicleSirene[vehicleid][0] = CreateDynamicObject( 18647, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][0] , vehicleid,-0.899999, 0.100000, -0.500000, 0.000000, 0.000000, 0.000000);
-        g_aiVehicleSirene[vehicleid][1] = CreateDynamicObject( 18647, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][1] , vehicleid,0.900000, 0.100000, -0.499999, 0.000000, 0.000000, 0.000000);
-        SendClientMessage(playerid,COLOR_GREEN,"Neonlichter aktiviert.");
-    }
-    else {
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][0] );
-        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][1] );
-        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        SendClientMessage(playerid,COLOR_ORANGE,"Neonlichter deaktiviert.");
-    }
-    Streamer_Update(playerid);
-    return 1;
+CMD:neongruen(playerid) {
+    return cmd_neon(playerid);
 }
 
-COMMAND:neonpink(playerid,params[]) {
-
-    new
-        vehicleid,
-        modelid;
-    vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
-    }
-    modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) {
-        return SendClientMessage(playerid, COLOR_RED,"Neon kann nicht an Motorrädern angebaut werden!");
-    }
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur als Fahrer möglich.");
-    }
-    if( Spieler[playerid][pPremiumNeon] != 1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein Premium-Neon!");
-    }
-    if( g_aiVehicleSirene[vehicleid][0] == INVALID_OBJECT_ID ) {
-        g_aiVehicleSirene[vehicleid][0] = CreateDynamicObject( 18651, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][0] , vehicleid,-0.899999, 0.100000, -0.500000, 0.000000, 0.000000, 0.000000);
-        g_aiVehicleSirene[vehicleid][1] = CreateDynamicObject( 18651, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][1] , vehicleid,0.900000, 0.100000, -0.499999, 0.000000, 0.000000, 0.000000);
-        SendClientMessage(playerid,COLOR_GREEN,"Neonlichter aktiviert.");
-    }
-    else {
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][0] );
-        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][1] );
-        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        SendClientMessage(playerid,COLOR_ORANGE,"Neonlichter deaktiviert.");
-    }
-    Streamer_Update(playerid);
-    return 1;
+CMD:neonrot(playerid) {
+    return cmd_neon(playerid);
 }
 
-COMMAND:neongelb(playerid,params[]) {
+CMD:neonpink(playerid) {
+    return cmd_neon(playerid);
+}
 
-    new
-        vehicleid,
-        modelid;
-    vehicleid = GetPlayerVehicleID(playerid);
-    if(!vehicleid) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur in einem Fahrzeug möglich.");
-    }
-    modelid = GetVehicleModel(vehicleid);
-    if(!IsACar(modelid)) {
-        return SendClientMessage(playerid, COLOR_RED,"Neon kann nicht an Motorrädern angebaut werden!");
-    }
-    if( GetPlayerState(playerid) != PLAYER_STATE_DRIVER ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion ist nur als Fahrer möglich.");
-    }
-    if( Spieler[playerid][pPremiumNeon] != 1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt kein Premium-Neon!");
-    }
-    if( g_aiVehicleSirene[vehicleid][0] == INVALID_OBJECT_ID ) {
-        g_aiVehicleSirene[vehicleid][0] = CreateDynamicObject( 18650, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][0] , vehicleid,-0.899999, 0.100000, -0.500000, 0.000000, 0.000000, 0.000000);
-        g_aiVehicleSirene[vehicleid][1] = CreateDynamicObject( 18650, 0.0, 0.0, 0.0, 0.0, 0.0, 0.80 );
-        AttachDynamicObjectToVehicle( g_aiVehicleSirene[vehicleid][1] , vehicleid,0.900000, 0.100000, -0.499999, 0.000000, 0.000000, 0.000000);
-        SendClientMessage(playerid,COLOR_GREEN,"Neonlichter aktiviert.");
-    }
-    else {
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][0] );
-        g_aiVehicleSirene[vehicleid][0] = INVALID_OBJECT_ID;
-        DestroyDynamicObject( g_aiVehicleSirene[vehicleid][1] );
-        g_aiVehicleSirene[vehicleid][1] = INVALID_OBJECT_ID;
-        SendClientMessage(playerid,COLOR_ORANGE,"Neonlichter deaktiviert.");
-    }
-    Streamer_Update(playerid);
-    return 1;
+CMD:neongelb(playerid) {
+    return cmd_neon(playerid);
 }
 
 forward Pulse_Bankraub();
