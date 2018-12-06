@@ -12,7 +12,7 @@ static Float:DRAWDISTANCE   = 100.0;
 
 // Map variables
 new object_christmasCalendar[287];
-new text3D_christmasCalendar[1];
+new text3D_christmasCalendar[2];
 
 hook OnPlayerConnect(playerid) {
     
@@ -21,7 +21,8 @@ hook OnPlayerConnect(playerid) {
 hook OnGameModeInit() {
     // 3DTextLabels
     text3D_christmasCalendar[0] = _:CreateDynamic3DTextLabel("-> Adventskalender <-\n" COLOR_HEX_YELLOW "Benutze /Adventskalender um ein Türchen zu öffnen", COLOR_GREEN, CHRISTMASCALENDAR_COORDS, 30.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHRISTMASCALENDAR_INTERIOR); // Adventskalender
-
+    text3D_christmasCalendar[1] = _:CreateDynamic3DTextLabel("-> Weihnachtsmützen <-\n" COLOR_HEX_YELLOW "Benutze /Weihnachtsmuetze", 0xFF0000FF, 1265.3833, -1661.0238, 13.5663, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_CHRISTMASCALENDAR_INTERIOR);
+    
 	// Objects
     object_christmasCalendar[0] = CreateDynamicObject(19056, 1240.4448, -1653.4665, 13.1127, 0.0000, 0.0000, -30.2000, VW_MAIN, MAPS_CHRISTMASCALENDAR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //XmasBox3
     object_christmasCalendar[1] = CreateDynamicObject(18981, 1273.9001, -1647.3520, 12.0663, 0.0000, 90.0000, 0.0000, VW_MAIN, MAPS_CHRISTMASCALENDAR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m

@@ -45762,8 +45762,9 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
     return 1;
 }
 
-public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
-{
+public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ) {
+    if (Spieler[playerid][pAdmin] < 6) return 1;
+    SetPlayerPosFindZ(playerid, fX, fY, fZ);
     return 1;
 }
 
