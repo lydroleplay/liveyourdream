@@ -13745,7 +13745,7 @@ stock RemovePlayerFromFaction(playerid) {
     Spieler[playerid][pFrakLohn] = 0;
     Spieler[playerid][pRank] = 0;
     Spieler[playerid][pfrakwarn] = 0;
-    RemovePlayerFromPlantArrayData(playerid);
+    // RemovePlayerFromPlantArrayData(playerid);
     SetPlayerSkinEx(playerid, Spieler[playerid][pSex] == 1 ? 2 : 11);
     SaveAccount(playerid);
 
@@ -14326,8 +14326,8 @@ CMD:configplayer(playerid, params[])
     {
         if(wert < 0 || wert > 22) return SendClientMessage(playerid, COLOR_ORANGE, "Der Wert sollte zwischen 0 und 21 liegen.");
         Spieler[pID][pFraktion] = wert;
-        if (wert == 15) AddPlayerToPlantArrayData(pID);
-        else RemovePlayerFromPlantArrayData(pID);
+        // if (wert == 15) AddPlayerToPlantArrayData(pID);
+        // else RemovePlayerFromPlantArrayData(pID);
         format(string, sizeof(string), "Deine Fraktion wurde von %s %s auf %s gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), factionNames[wert]);
         SendClientMessage(pID, COLOR_LIGHTBLUE, string);
         format(string, sizeof(string), "Du hast die Fraktion von %s auf %s [%d] gesetzt.", GetName(pID), factionNames[wert], wert);
@@ -21590,7 +21590,7 @@ CMD:accept(playerid, params[])
             Spieler[playerid][pRank] = 0;
             Spieler[playerid][pfrakwarn] = 0;
             SpawnPlayerEx(playerid);
-            if (frakid == 15) AddPlayerToPlantArrayData(playerid);
+            // if (frakid == 15) AddPlayerToPlantArrayData(playerid);
             SaveAccount(playerid);
         }
     }
@@ -56432,7 +56432,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
                 SendClientMessage(playerid, COLOR_LIGHTRED, "Mit /Adventmin kannst du sehen, wie lange du noch warten musst.");
             }
 
-            AddPlayerToPlantArrayData(playerid);
+            //AddPlayerToPlantArrayData(playerid);
             /*
             if(Spieler[playerid][pLevel] < 99)
             {

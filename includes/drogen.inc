@@ -61,10 +61,10 @@ new g_DrogenPflanzen[MAX_DROGEN_PFLANZEN][e_DrogenPflanzen];
 
 // Function hooks
 
-hook OnPlayerDisconnect(playerid, reason) {
-    RemovePlayerFromPlantArrayData(playerid);
-    return 1;
-}
+// hook OnPlayerDisconnect(playerid, reason) {
+//     RemovePlayerFromPlantArrayData(playerid);
+//     return 1;
+// }
 
 hook OnGameModeInit() {
     for (new i = 0; i < sizeof(seedPoints); i++) {
