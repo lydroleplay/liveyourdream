@@ -66088,7 +66088,7 @@ CMD:ngeld(playerid, params[]) {
     new pID, money;
     if (sscanf(params, "ui", pID, money)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Ngeld [Spieler ID/Name] [$1 - $30.000]");
     if (!gPlayerLogged[pID]) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist nicht eingeloggt.");
-    if (Spieler[playerid][pLevel] > 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist über Level 3.");
+    if (Spieler[pID][pLevel] > 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler ist über Level 3.");
     if (money < 1 || money > 30000) return SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Der Geldbetrag muss zwischen $1 und $30.000 liegen.");
 
     GivePlayerCash(pID, money);
