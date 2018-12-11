@@ -4420,6 +4420,7 @@ new alcatrazGateHackTimestamp = 0;
 // Systems
 #include <paintball>
 //#include <halloween>
+#include <core\anticheat>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
