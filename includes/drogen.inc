@@ -338,19 +338,19 @@ COMMAND:pflanzen(playerid, params[]) {
 }
 
 COMMAND:nimmspice(playerid,params[]) {
-    if(Spieler[playerid][pSpice] < 1)return SendClientMessage(playerid, COLOR_GREY, "Du benötigst mindestens ein Gramm Spice.");
-    if( gettime() < Spieler[playerid][unixSpiceCooldown] ) {
+    if (Spieler[playerid][pSpice] < 3) return SendClientMessage(playerid, COLOR_GREY, "Du benötigst mindestens 3g Spice.");
+    if ( gettime() < Spieler[playerid][unixSpiceCooldown] ) {
         SendClientMessage(playerid,COLOR_RED,"Du musst noch einen Moment warten, bis du wieder Spice nehmen kannst.");
         return 1;
     }
     new
         Float:armor;
     GetPlayerArmour(playerid,armor);
-    if( armor >= 100.0 ) {
+    if ( armor >= 100.0 ) {
         SendClientMessage(playerid,COLOR_RED,"Du kannst kein Spice nehmen, da deine AP bereits voll sind.");
         return 1;
     }
-    if(damagesperre[playerid]>0)
+    if (damagesperre[playerid]>0)
     {
         SendClientMessage(playerid,COLOR_RED,"Du kannst noch kein Spice nehmen, da du gerade Schaden genommen hast.");
         return 1;
@@ -361,7 +361,7 @@ COMMAND:nimmspice(playerid,params[]) {
     Spieler[playerid][unixSpiceCooldown] = gettime() + 10;
 
     pDrogenEinfluss[playerid] = 1;
-    Spieler[playerid][pSpice] -= 1;
+    Spieler[playerid][pSpice] -= 3;
     KillTimer(DrogenTimer[playerid]);
     SetPlayerDrunkLevel(playerid, 50000);
     DrogenTimer[playerid] = SetTimerEx("Drogen_Clear", 30000, 0, "i", playerid);

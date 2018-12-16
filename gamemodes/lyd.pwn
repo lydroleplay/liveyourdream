@@ -13024,7 +13024,7 @@ CMD:rauchzig(playerid)
 CMD:nimmdrogen(playerid)
 {
     new string[128];
-    if(Spieler[playerid][pDrugs] < 1) return SendClientMessage(playerid, COLOR_RED, "Du benötigst mindestens 1g Drogen.");
+    if(Spieler[playerid][pDrugs] < 5) return SendClientMessage(playerid, COLOR_RED, "Du benötigst mindestens 5g Drogen.");
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x,y,z);
     new Float:health;
@@ -13036,11 +13036,11 @@ CMD:nimmdrogen(playerid)
     else if(health < 100.0 && health > 1.0)
     {
         pDrogenEinfluss[playerid] = 1;
-        health = health >= 90.0 ? 100.0 : health + 10.0;
+        health = health >= 85.0 ? 100.0 : health + 15.0;
         SetPlayerHealth(playerid, health);
         KillTimer(DrogenTimer[playerid]);
         DrogenTimer[playerid] = SetTimerEx("Drogen_Clear", 30000, 0, "i", playerid);
-        Spieler[playerid][pDrugs] -= 1;
+        Spieler[playerid][pDrugs] -= 5;
         format(string, sizeof(string), "* %s hat sich nen Joint gedreht.", GetName(playerid));
         SendRoundMessage(x,y,z, COLOR_PURPLE, string);
         SetPlayerDrunkLevel(playerid,50000);
