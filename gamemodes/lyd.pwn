@@ -42784,6 +42784,12 @@ public PayDay()
                 else earnedExp = 1;
             }
 
+            // Anti-Cheat Bonus
+            if (CAC_GetStatus(playerid) && !AC_mustUseAC(playerid)) {
+                finalcheck += 5000;
+                earnedExp += 1;
+            }
+
             Spieler[playerid][pExp] += earnedExp;
             new maxexp = (Spieler[playerid][pLevel] * 4);
             if( 1 <= Spieler[playerid][pHaustier] <= 3 )
@@ -42952,6 +42958,9 @@ public PayDay()
                 fbz = 50000;
 
             SendClientMessage(playerid, COLOR_YELLOW, "======================== {FFFFFF}[ PAYDAY ] {FFFF00}========================");
+
+            // Anti-Cheat Bonus
+            SCMFormatted(playerid, COLOR_WHITE, "Da du den Anti-Cheat Clienten auf freiwilliger Basis nutzt, erhälst du einen kleinen Bonus. (+1 Respektpunkt & $%s)", AddDelimiters(5000));
 
             if (fahrlehrerboni[playerid] == 0)
                 format(string, sizeof(string),"Dein Gehalt: "COLOR_HEX_GREEN"$%s"COLOR_HEX_WHITE", Steuerabzug: "COLOR_HEX_RED"-$%s"COLOR_HEX_WHITE\
