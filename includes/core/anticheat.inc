@@ -40,7 +40,7 @@ hook OnGameModeInit() {
 }
 
 hook OnPlayerSpawn(playerid) {
-	if (gPlayerLogged[playerid] && AC_mustUseAC(Spieler[playerid][pFraktion]) && !CAC_GetStatus(playerid))
+	if (gPlayerLogged[playerid] && AC_mustUseAC(playerid) && !CAC_GetStatus(playerid))
         return AC_kick(playerid, "Anti-Cheat Client Pflicht");
 
     if (gPlayerLogged[playerid] && GetPVarInt(playerid, "AC_cheatDetected") > 0)
@@ -163,9 +163,15 @@ AC_ban(playerid, reason[]) {
     return 1;
 }
 
-AC_mustUseAC(faction) {
+AC_mustUseAC(playerid) {
+    if (Spieler[playerid][pAdmin] > 0 && Spieler[playerid][pAdmin] < 5)
+        return true;
+
+    if (Spieler[playerid][pMustUseAC])
+        return true;
+
     for (new i = 0; i < sizeof(AC_factions); i++)
-        if (faction == AC_factions[i])
+        if (Spieler[playerid][pFraktion] == AC_factions[i])
             return true;
     
     return false;

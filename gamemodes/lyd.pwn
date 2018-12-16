@@ -4024,7 +4024,8 @@ enum SpielerDaten {
     pSusSentenceReason[128],
     pEventPoints,
     pAdventDay,
-    pAdventMin
+    pAdventMin,
+    pMustUseAC // AC obligation
 }
 
 enum e_FahrPruefung {
@@ -6276,6 +6277,7 @@ public OnPlayerConnect(playerid)
     format(postpsenden[playerid],MAX_PLAYER_NAME,"");
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
+    Spieler[playerid][pMustUseAC] = 0;
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -7254,6 +7256,7 @@ public OnPlayerDisconnect(playerid, reason)
     format(postpsenden[playerid],MAX_PLAYER_NAME,"");
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
+    Spieler[playerid][pMustUseAC] = 0;
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -14203,11 +14206,18 @@ CMD:configplayer(playerid, params[])
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Safewantedcodes, Waffenteile, Wantedcodes, SafeSpice, SafeDrogen, SafeWaffenteile, Waffensperre");
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Bankpin, Bankkonto, Skin, Geschlecht, Premium, Spielstunden, Kekse");
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Alizsperre, Flizsperre, Glizsperre, Lkwlizsperre, Mlizsperre, Eventpunkte");
+        
+        if (Spieler[playerid][pAdmin] > 4)
+            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Adm.) *: mustuseac");
+
+        if (Spieler[playerid][pAdmin] > 5)
+            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Dev.) *: adventmin, adventday")
         return 1;
     }
     
     if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler nicht online.");
 
+    // >= Developer
     if (Spieler[playerid][pAdmin] > 5) {
         if (!strcmp(entry, "adventmin", true)) {
             if (wert < 0) return SendClientMessage(playerid, COLOR_RED, "Gebe einen positiven Wert an.");
@@ -14223,6 +14233,29 @@ CMD:configplayer(playerid, params[])
         }
     }
 
+    // >= Administrator
+    if (Spieler[playerid][pAdmin] > 4) {
+        if (!strcmp(entry, "mustuseac", true)) {
+            if (wert <= 0 && wert >= 1) return SendClientMessage(playerid, COLOR_RED, "Gebe entweder 0 für Aus oder 1 für An ein.");
+            Spieler[pID][pMustUseAC] = wert;
+
+            if (Spieler[pID][pMustUseAC]) {
+                SCMFormatted(pID, COLOR_RED, "%s %s hat dir eine Anti-Cheat Pflicht verhängt.", GetPlayerAdminRang(playerid), GetName(playerid));
+                SendClientMessage(pID, COLOR_RED, "Lade den Anti-Cheat im Forum herunter, um weiterspielen zu können.");
+                SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast dem Spieler %s eine Anti-Cheat Pflicht verhängt.", GetName(pID));
+
+                AC_kick(pID, "Anti-Cheat Client Pflicht");
+            } else {
+                SCMFormatted(pID, COLOR_RED, "%s %s hat deine Anti-Cheat Pflicht aufgehoben.", GetPlayerAdminRang(playerid), GetName(playerid));
+                SendClientMessage(pID, COLOR_RED, "Du kannst nun wieder ohne Anti-Cheat spielen, sofern du nicht in einer Fraktion mit einer AC-Pflicht bist.");
+                SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast dem Spieler %s seine Anti-Cheat Pflicht aufgehoben.", GetName(pID));
+            }
+
+            return 1;
+        }
+    }
+
+    // >= Moderator
     if(strcmp(entry, "eventpunkte", true) == 0)
     {
         Spieler[pID][pEventPoints] = wert;
@@ -42057,7 +42090,8 @@ stock SaveAccount(playerid)
                 `BwStrafeGrund` = '%s', \
                 `Eventpoints` = %d, \
                 `AdventDay` = %d, \
-                `AdventMin` = %d",
+                `AdventMin` = %d, \
+                `MustUseAC` = %d",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -42083,7 +42117,8 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pSusSentenceReason],
                     Spieler[playerid][pEventPoints],
                     Spieler[playerid][pAdventDay],
-                    Spieler[playerid][pAdventMin]);
+                    Spieler[playerid][pAdventMin],
+                    Spieler[playerid][pMustUseAC]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -42256,7 +42291,8 @@ new const PlayerColumns[][] = {
     {"BwStrafeGrund"},
     {"Eventpoints"},
     {"AdventDay"},
-    {"AdventMin"}
+    {"AdventMin"},
+    {"MustUseAC"}
 };
 
 new
@@ -54642,6 +54678,7 @@ COMMAND:nameblacklist(playerid,params[]) {
     AddBlacklistName(name);
     return 1;
 }
+
 COMMAND:suche(playerid,params[]) {
     new giveid;
 
@@ -56471,6 +56508,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pEventPoints] = cache_get_row_int(0,141,connectionHandle);
             Spieler[playerid][pAdventDay] = cache_get_row_int(0,142,connectionHandle);
             Spieler[playerid][pAdventMin] = cache_get_row_int(0,143,connectionHandle);
+            Spieler[playerid][pMustUseAC] = cache_get_row_int(0, 144, connectionHandle);
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
