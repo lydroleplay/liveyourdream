@@ -14211,7 +14211,8 @@ CMD:configplayer(playerid, params[])
             SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Adm.) *: mustuseac");
 
         if (Spieler[playerid][pAdmin] > 5)
-            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Dev.) *: adventmin, adventday")
+            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Dev.) *: adventmin, adventday");
+        
         return 1;
     }
     
@@ -14241,10 +14242,12 @@ CMD:configplayer(playerid, params[])
 
             if (Spieler[pID][pMustUseAC]) {
                 SCMFormatted(pID, COLOR_RED, "%s %s hat dir eine Anti-Cheat Pflicht verhängt.", GetPlayerAdminRang(playerid), GetName(playerid));
-                SendClientMessage(pID, COLOR_RED, "Lade den Anti-Cheat im Forum herunter, um weiterspielen zu können.");
                 SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast dem Spieler %s eine Anti-Cheat Pflicht verhängt.", GetName(pID));
 
-                AC_kick(pID, "Anti-Cheat Client Pflicht");
+                if (!CAC_Status(pID)) {
+                    SendClientMessage(pID, COLOR_RED, "Lade den Anti-Cheat im Forum herunter, um weiterspielen zu können.");
+                    AC_kick(pID, "Anti-Cheat Client Pflicht");
+                }  
             } else {
                 SCMFormatted(pID, COLOR_RED, "%s %s hat deine Anti-Cheat Pflicht aufgehoben.", GetPlayerAdminRang(playerid), GetName(playerid));
                 SendClientMessage(pID, COLOR_RED, "Du kannst nun wieder ohne Anti-Cheat spielen, sofern du nicht in einer Fraktion mit einer AC-Pflicht bist.");
@@ -38100,7 +38103,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 new entry = strval(inputtext);
                 if(entry < 1 || entry > 1000000000)
                 {
-                    SendClientMessage(playerid, COLOR_RED, "Der Kaufpreis muss zwischen $1 und $50.000.000 liegen.");
+                    SendClientMessage(playerid, COLOR_RED, "Der Kaufpreis muss zwischen $1 und $1.000.000.000 liegen.");
                     new dStr[128];
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich den Kaufpreis ändern?\nDer derzeitige Kaufpreis beträgt:"COLOR_HEX_ORANGE" $%s", AddDelimiters(Biz[b][bPreis]));
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_KAUFPREIS, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ja", "Nein");
@@ -42960,7 +42963,8 @@ public PayDay()
             SendClientMessage(playerid, COLOR_YELLOW, "======================== {FFFFFF}[ PAYDAY ] {FFFF00}========================");
 
             // Anti-Cheat Bonus
-            SCMFormatted(playerid, COLOR_WHITE, "Da du den Anti-Cheat Clienten auf freiwilliger Basis nutzt, erhälst du einen kleinen Bonus. (+1 Respektpunkt & $%s)", AddDelimiters(5000));
+            if (CAC_GetStatus(playerid) && !AC_mustUseAC(playerid))
+                SCMFormatted(playerid, COLOR_WHITE, "Da du den Anti-Cheat Clienten auf freiwilliger Basis nutzt, erhälst du einen kleinen Bonus. (+1 Respektpunkt & $%s)", AddDelimiters(5000));
 
             if (fahrlehrerboni[playerid] == 0)
                 format(string, sizeof(string),"Dein Gehalt: "COLOR_HEX_GREEN"$%s"COLOR_HEX_WHITE", Steuerabzug: "COLOR_HEX_RED"-$%s"COLOR_HEX_WHITE\
@@ -54702,7 +54706,7 @@ COMMAND:suche(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Der Spieler wurde nicht gefunden");
 
     new String[128];
-    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "Ja" : "Nein");
+    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "An" : "Aus");
     SendClientMessage(playerid, COLOR_BLUE, String);
 
     return 1;
