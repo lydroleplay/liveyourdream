@@ -21,7 +21,7 @@ static AC_factions[] = {
 hook OnGameModeInit() {
     // Define allowed glitches
     CAC_SetGlitchStatus(CAC_GLITCH__ALL, 1);
-    CAC_SetGlitchStatus(CAC_GLITCH__FASTFIRE, 0);
+    CAC_SetGlitchStatus(CAC_GLITCH__CROUCHBUG, 0);
 
     // Define allowed game options
     CAC_SetGameOptionStatus(CAC_GAMEOPTION__ALL, 0);
@@ -163,7 +163,10 @@ AC_ban(playerid, reason[]) {
 }
 
 AC_mustUseAC(playerid) {
-    if (Spieler[playerid][pAdmin] > 0 && Spieler[playerid][pAdmin] < 5)
+    if (Spieler[playerid][pAdmin] >= 5)
+        return false;
+
+    if (Spieler[playerid][pAdmin])
         return true;
 
     if (Spieler[playerid][pMustUseAC])

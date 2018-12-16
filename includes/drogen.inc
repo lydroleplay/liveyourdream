@@ -363,8 +363,9 @@ COMMAND:nimmspice(playerid,params[]) {
     pDrogenEinfluss[playerid] = 1;
     Spieler[playerid][pSpice] -= 3;
     KillTimer(DrogenTimer[playerid]);
-    SetPlayerDrunkLevel(playerid, 50000);
-    DrogenTimer[playerid] = SetTimerEx("Drogen_Clear", 30000, 0, "i", playerid);
+    SetPlayerDrunkLevel(playerid, 2500);
+    ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.0, 0, 0, 0, 0, 0);//Essen
+    // DrogenTimer[playerid] = SetTimerEx("Drogen_Clear", 30000, 0, "i", playerid);
 
     new Float:x, Float:y, Float:z;
     new string[128];
