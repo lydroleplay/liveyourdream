@@ -2578,20 +2578,20 @@ enum e_Mobiltelefon {
 }
 
 new const g_Mobiltelefon[][e_Mobiltelefon] = {
-    {"iPhone X",225000},
-    {"iPhone 8",175000},
-    {"iPhone 7",100000},
-    {"iPhone 6",78000},
-    {"iPhone 5",67000},
-    {"iPhone 4",4500},
-    {"Samsung S8",185000},
-    {"Samsung S7",120000},
-    {"Samsung S6",87000},
-    {"Samsung S5",47000},
-    {"Samsung S4",38000},
-    {"Google Pixel",48000},
+    {"iPhone Xs",225000},
+    {"iPhone X",175000},
+    {"iPhone 8",100000},
+    {"iPhone 7",78000},
+    {"iPhone 6",67000},
+    {"iPhone 5",4500},
+    {"Samsung S9",185000},
+    {"Samsung S8",120000},
+    {"Samsung S7",87000},
+    {"Samsung S6",47000},
+    {"Samsung S5",38000},
+    {"Google Pixel 3",48000},
     {"HP Elite x3",50000},
-    {"Sony Xperia XZ",40000},
+    {"Sony Xperia XZ2",40000},
     {"Nokia Lumia 520",42000},
     {"HTC One X",6600},
     {"Sony Xperia M",4000},
@@ -3921,6 +3921,7 @@ enum SpielerDaten {
 	pKofferraumItem,
 	pDrogenSamen,
 	unixSpiceCooldown,
+    unixDrogenCooldown,
 	pGeburtstag[20],
 	pSpice,
 	pSafeSpice,
@@ -4024,7 +4025,8 @@ enum SpielerDaten {
     pSusSentenceReason[128],
     pEventPoints,
     pAdventDay,
-    pAdventMin
+    pAdventMin,
+    pMustUseAC // AC obligation
 }
 
 enum e_FahrPruefung {
@@ -4420,6 +4422,7 @@ new alcatrazGateHackTimestamp = 0;
 // Systems
 #include <paintball>
 //#include <halloween>
+#include <core\anticheat>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
@@ -6275,6 +6278,7 @@ public OnPlayerConnect(playerid)
     format(postpsenden[playerid],MAX_PLAYER_NAME,"");
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
+    Spieler[playerid][pMustUseAC] = 0;
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -7253,6 +7257,7 @@ public OnPlayerDisconnect(playerid, reason)
     format(postpsenden[playerid],MAX_PLAYER_NAME,"");
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
+    Spieler[playerid][pMustUseAC] = 0;
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -9907,6 +9912,8 @@ CMD:afk(playerid,params[])
     GetVehicleHealth(vid, vhealth);
     if (vid != 0 && (vhealth < 250 || GetPlayerState(playerid) == PLAYER_STATE_DRIVER && GetPlayerVehicleSpeed(playerid) > 2.0))
         return SendClientMessage(playerid, COLOR_RED, "Du kannst jetzt nicht einfach afk gehen.");
+    
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst gerade nicht AFK gehen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nicht während du fällst AFK gehen.");
 
     IsAFK[playerid] = 1;
@@ -12952,7 +12959,7 @@ CMD:isskeks(playerid)
     GetPlayerHealth(playerid, health);
     if(damagesperre[playerid]>0)
     {
-        SendClientMessage(playerid,COLOR_RED,"Da du Schaden genommen hast, kannst du erst nach 20 Sekunden deine HP wieder pushen.");
+        SendClientMessage(playerid,COLOR_RED,"Da du Schaden genommen hast, kannst du erst nach 5 Sekunden deine HP wieder pushen.");
     }
     else if( Spieler[playerid][pKekseValue] >= 7 ) {
         SendClientMessage(playerid,COLOR_RED,"Du hast zu viele Kekse hintereinander gegessen!");
@@ -13020,26 +13027,33 @@ CMD:rauchzig(playerid)
 CMD:nimmdrogen(playerid)
 {
     new string[128];
-    if(Spieler[playerid][pDrugs] < 1) return SendClientMessage(playerid, COLOR_RED, "Du benötigst mindestens 1g Drogen.");
+    if(Spieler[playerid][pDrugs] < 5) return SendClientMessage(playerid, COLOR_RED, "Du benötigst mindestens 5g Drogen.");
+    if ( gettime() < Spieler[playerid][unixDrogenCooldown] ) {
+        SendClientMessage(playerid,COLOR_RED,"Du musst noch einen Moment warten, bis du wieder Drogen nehmen kannst.");
+        return 1;
+    }
+    
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x,y,z);
     new Float:health;
     GetPlayerHealth(playerid, health);
     if(damagesperre[playerid]>0)
     {
-        SendClientMessage(playerid,COLOR_RED,"Da du Schaden genommen hast, kannst du erst nach 20 Sekunden deine HP wieder pushen.");
+        SendClientMessage(playerid,COLOR_RED,"Da du Schaden genommen hast, kannst du erst nach 5 Sekunden deine HP wieder pushen.");
     }
     else if(health < 100.0 && health > 1.0)
     {
         pDrogenEinfluss[playerid] = 1;
-        health = health >= 90.0 ? 100.0 : health + 10.0;
+        health = health >= 85.0 ? 100.0 : health + 15.0;
         SetPlayerHealth(playerid, health);
-        KillTimer(DrogenTimer[playerid]);
-        DrogenTimer[playerid] = SetTimerEx("Drogen_Clear", 30000, 0, "i", playerid);
-        Spieler[playerid][pDrugs] -= 1;
+        //KillTimer(DrogenTimer[playerid]);
+        //DrogenTimer[playerid] = SetTimerEx("Drogen_Clear", 30000, 0, "i", playerid);
+        Spieler[playerid][pDrugs] -= 5;
         format(string, sizeof(string), "* %s hat sich nen Joint gedreht.", GetName(playerid));
         SendRoundMessage(x,y,z, COLOR_PURPLE, string);
-        SetPlayerDrunkLevel(playerid,50000);
+        SetPlayerDrunkLevel(playerid, 2500);
+        Spieler[playerid][unixDrogenCooldown] = gettime() + 10;
+        ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.0, 0, 0, 0, 0, 0);//Essen
     }
     else
     {
@@ -14202,12 +14216,20 @@ CMD:configplayer(playerid, params[])
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Safewantedcodes, Waffenteile, Wantedcodes, SafeSpice, SafeDrogen, SafeWaffenteile, Waffensperre");
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Bankpin, Bankkonto, Skin, Geschlecht, Premium, Spielstunden, Kekse");
         SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Alizsperre, Flizsperre, Glizsperre, Lkwlizsperre, Mlizsperre, Eventpunkte");
+        
+        if (Spieler[playerid][pAdmin] > 3)
+            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Adm.) *: mustuseac");
+
+        if (Spieler[playerid][pAdmin] > 4)
+            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Dev.) *: adventmin, adventday");
+        
         return 1;
     }
     
     if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler nicht online.");
 
-    if (Spieler[playerid][pAdmin] > 5) {
+    // >= Developer
+    if (Spieler[playerid][pAdmin] > 4) {
         if (!strcmp(entry, "adventmin", true)) {
             if (wert < 0) return SendClientMessage(playerid, COLOR_RED, "Gebe einen positiven Wert an.");
             Spieler[pID][pAdventMin] = wert;
@@ -14222,6 +14244,31 @@ CMD:configplayer(playerid, params[])
         }
     }
 
+    // >= Administrator
+    if (Spieler[playerid][pAdmin] > 3) {
+        if (!strcmp(entry, "mustuseac", true)) {
+            if (wert <= 0 && wert >= 1) return SendClientMessage(playerid, COLOR_RED, "Gebe entweder 0 für Aus oder 1 für An ein.");
+            Spieler[pID][pMustUseAC] = wert;
+
+            if (Spieler[pID][pMustUseAC]) {
+                SCMFormatted(pID, COLOR_RED, "%s %s hat dir eine Anti-Cheat Pflicht verhängt.", GetPlayerAdminRang(playerid), GetName(playerid));
+                SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast dem Spieler %s eine Anti-Cheat Pflicht verhängt.", GetName(pID));
+
+                if (!CAC_GetStatus(pID)) {
+                    SendClientMessage(pID, COLOR_RED, "Lade den Anti-Cheat im Forum herunter, um weiterspielen zu können.");
+                    AC_kick(pID, "Anti-Cheat Client Pflicht");
+                }  
+            } else {
+                SCMFormatted(pID, COLOR_RED, "%s %s hat deine Anti-Cheat Pflicht aufgehoben.", GetPlayerAdminRang(playerid), GetName(playerid));
+                SendClientMessage(pID, COLOR_RED, "Du kannst nun wieder ohne Anti-Cheat spielen, sofern du nicht in einer Fraktion mit einer AC-Pflicht bist.");
+                SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast dem Spieler %s seine Anti-Cheat Pflicht aufgehoben.", GetName(pID));
+            }
+
+            return 1;
+        }
+    }
+
+    // >= Moderator
     if(strcmp(entry, "eventpunkte", true) == 0)
     {
         Spieler[pID][pEventPoints] = wert;
@@ -15319,6 +15366,7 @@ CMD:handsup(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     SetPlayerSpecialAction(playerid,SPECIAL_ACTION_HANDSUP);
     MakeAnimation[playerid] = 1;
@@ -15331,6 +15379,7 @@ CMD:drunk(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15342,6 +15391,7 @@ CMD:cry(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15353,6 +15403,7 @@ CMD:buhen(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15364,6 +15415,7 @@ CMD:bomb(playerid)
     if (Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if (Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15375,6 +15427,7 @@ CMD:getarrested(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15386,6 +15439,7 @@ CMD:laugh(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15397,6 +15451,7 @@ CMD:lookout(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15408,6 +15463,7 @@ CMD:robman(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15419,6 +15475,7 @@ CMD:wank(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15430,6 +15487,7 @@ CMD:angry(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15441,6 +15499,7 @@ CMD:follow(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15452,6 +15511,7 @@ CMD:crossarms(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15463,6 +15523,7 @@ CMD:lay(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15474,6 +15535,7 @@ CMD:hide(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15485,6 +15547,7 @@ CMD:vomit(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15496,6 +15559,7 @@ CMD:eat(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15510,6 +15574,7 @@ CMD:wave(playerid, params[])
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     if(nr > 2 || nr < 1)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Wave [1-2]");
     MakeAnimation[playerid] = 1;
@@ -15530,6 +15595,7 @@ CMD:taichi(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15541,6 +15607,7 @@ CMD:pee(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15552,6 +15619,7 @@ CMD:chairsit(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15563,6 +15631,7 @@ CMD:stretch(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15577,6 +15646,7 @@ CMD:idles(playerid, params[])
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     if(nr > 2 || nr < 1)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Idles [1-2]");
     MakeAnimation[playerid] = 1;
@@ -15597,6 +15667,7 @@ CMD:celebrate(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15610,6 +15681,7 @@ CMD:dance(playerid, params[])
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     if(nr > 4 || nr < 1)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Dance [1-4]");
     MakeAnimation[playerid] = 1;
@@ -15640,6 +15712,7 @@ CMD:copanim(playerid, params[])
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     if(nr > 6 || nr < 1)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Copanim [1-6]");
     MakeAnimation[playerid] = 1;
@@ -15678,6 +15751,7 @@ CMD:fallover(playerid, params[])
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     if(nr > 5 || nr < 1)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Fallover [1-5]");
     MakeAnimation[playerid] = 1;
@@ -15709,6 +15783,7 @@ CMD:deal(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15720,6 +15795,7 @@ CMD:smokem(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15731,6 +15807,7 @@ CMD:smokef(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15745,6 +15822,7 @@ CMD:groundsit(playerid, params[])
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     if(nr > 3 || nr < 1)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Groundsit [1-3]");
     MakeAnimation[playerid] = 1;
@@ -15778,6 +15856,7 @@ CMD:chat(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15789,6 +15868,7 @@ CMD:fucku(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15802,6 +15882,7 @@ CMD:kiss(playerid, params[])
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     if(nr > 6 || nr < 1)return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Kiss [1-6]");
     MakeAnimation[playerid] = 1;
@@ -15839,6 +15920,7 @@ CMD:clubdance1(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15851,6 +15933,7 @@ CMD:clubdance2(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15863,6 +15946,7 @@ CMD:clubdance3(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15875,6 +15959,7 @@ CMD:clubdance4(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15887,6 +15972,7 @@ CMD:clubdance5(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15899,6 +15985,7 @@ CMD:clubdance6(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -15911,6 +15998,7 @@ CMD:clubdance7(playerid)
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)return 1;
+    if (gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown]) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Animation im Moment nicht ausführen.");
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
@@ -38066,7 +38154,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 new entry = strval(inputtext);
                 if(entry < 1 || entry > 1000000000)
                 {
-                    SendClientMessage(playerid, COLOR_RED, "Der Kaufpreis muss zwischen $1 und $50.000.000 liegen.");
+                    SendClientMessage(playerid, COLOR_RED, "Der Kaufpreis muss zwischen $1 und $1.000.000.000 liegen.");
                     new dStr[128];
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich den Kaufpreis ändern?\nDer derzeitige Kaufpreis beträgt:"COLOR_HEX_ORANGE" $%s", AddDelimiters(Biz[b][bPreis]));
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_KAUFPREIS, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ja", "Nein");
@@ -42056,7 +42144,8 @@ stock SaveAccount(playerid)
                 `BwStrafeGrund` = '%s', \
                 `Eventpoints` = %d, \
                 `AdventDay` = %d, \
-                `AdventMin` = %d",
+                `AdventMin` = %d, \
+                `MustUseAC` = %d",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -42082,7 +42171,8 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pSusSentenceReason],
                     Spieler[playerid][pEventPoints],
                     Spieler[playerid][pAdventDay],
-                    Spieler[playerid][pAdventMin]);
+                    Spieler[playerid][pAdventMin],
+                    Spieler[playerid][pMustUseAC]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -42255,7 +42345,8 @@ new const PlayerColumns[][] = {
     {"BwStrafeGrund"},
     {"Eventpoints"},
     {"AdventDay"},
-    {"AdventMin"}
+    {"AdventMin"},
+    {"MustUseAC"}
 };
 
 new
@@ -42747,6 +42838,12 @@ public PayDay()
                 else earnedExp = 1;
             }
 
+            // Anti-Cheat Bonus
+            if (CAC_GetStatus(playerid) && !AC_mustUseAC(playerid)) {
+                finalcheck += 5000;
+                earnedExp += 1;
+            }
+
             Spieler[playerid][pExp] += earnedExp;
             new maxexp = (Spieler[playerid][pLevel] * 4);
             if( 1 <= Spieler[playerid][pHaustier] <= 3 )
@@ -42915,6 +43012,10 @@ public PayDay()
                 fbz = 50000;
 
             SendClientMessage(playerid, COLOR_YELLOW, "======================== {FFFFFF}[ PAYDAY ] {FFFF00}========================");
+
+            // Anti-Cheat Bonus
+            if (CAC_GetStatus(playerid) && !AC_mustUseAC(playerid))
+                SCMFormatted(playerid, COLOR_WHITE, "Da du den Anti-Cheat Clienten auf freiwilliger Basis nutzt, erhälst du einen kleinen Bonus. (+1 Respektpunkt & $%s)", AddDelimiters(5000));
 
             if (fahrlehrerboni[playerid] == 0)
                 format(string, sizeof(string),"Dein Gehalt: "COLOR_HEX_GREEN"$%s"COLOR_HEX_WHITE", Steuerabzug: "COLOR_HEX_RED"-$%s"COLOR_HEX_WHITE\
@@ -45666,7 +45767,7 @@ public split(const strsrc[], strdest[][], delimiter)
 
 public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
-    damagesperre[playerid]=20;
+    damagesperre[playerid] = 5;
     g_aiLastDamagedByPlayer[playerid] = issuerid;
     if( issuerid != INVALID_PLAYER_ID) {
         PlayerPlaySound(issuerid,17802,0.0,0.0,0.0);
@@ -50322,7 +50423,8 @@ public OnPlayerLeaveDynamicArea(playerid, areaid) {
     }
     return 1;
 }
-/*COMMAND:weihnachtsmuetze(playerid,params[]){
+
+COMMAND:weihnachtsmuetze(playerid,params[]){
 
     if( IsPlayerAttachedObjectSlotUsed(playerid,1) ) {
         RemovePlayerAttachedObject(playerid,1);
@@ -50335,6 +50437,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid) {
     return 1;
 }
 
+/*
 COMMAND:hexenhut(playerid,params[]){
 
     if( IsPlayerAttachedObjectSlotUsed(playerid,8) ) {
@@ -54641,19 +54744,24 @@ COMMAND:nameblacklist(playerid,params[]) {
     AddBlacklistName(name);
     return 1;
 }
+
+COMMAND:id(playerid, params[]) {
+    return cmd_suche(playerid, params);
+}
+
 COMMAND:suche(playerid,params[]) {
-    new
-        giveid;
-    if(sscanf(params,"u",giveid)) {
-        return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Suche [ID/Name]");
-    }
-    if( !IsPlayerConnected(giveid)) {
-        return SendClientMessage(playerid,COLOR_RED,"Der Spieler wurde nicht gefunden");
-    }
-    new
-        String[128];
-    format(String,sizeof(String),"Spielername: %s, ID: %d",GetName(giveid),giveid);
-    SendClientMessage(playerid,COLOR_BLUE,String);
+    new giveid;
+
+    if (sscanf(params, "u", giveid))
+        return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /Suche [ID/Name]");
+
+    if (!IsPlayerConnected(giveid))
+        return SendClientMessage(playerid, COLOR_RED, "Der Spieler wurde nicht gefunden");
+
+    new String[128];
+    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "An" : "Aus");
+    SendClientMessage(playerid, COLOR_BLUE, String);
+
     return 1;
 }
 COMMAND:w(playerid,params[]) {
@@ -56470,6 +56578,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pEventPoints] = cache_get_row_int(0,141,connectionHandle);
             Spieler[playerid][pAdventDay] = cache_get_row_int(0,142,connectionHandle);
             Spieler[playerid][pAdventMin] = cache_get_row_int(0,143,connectionHandle);
+            Spieler[playerid][pMustUseAC] = cache_get_row_int(0, 144, connectionHandle);
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
@@ -60156,6 +60265,12 @@ public NPC(var)
 }
 #endif
 */
+COMMAND:aaaaa(playerid, params[]) {
+    SCMFormatted(playerid, COLOR_WHITE, "DEBUG: /AAAAA called: %i, %s", playerid, params);
+
+    return 1;
+}
+
 COMMAND:allesspeichern(playerid,params[]) {
     #pragma unused params
     if(Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
@@ -65963,6 +66078,21 @@ COMMAND:fge(playerid,params[]) {
     return 1;
 }
 
+COMMAND:zeitsperre(playerid, params[]) {
+    new fightzone = GetPlayerGangZone(playerid);
+    
+    if (fightzone == -1) return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Gangfightgebiet.");
+    if (gettime() < g_GangZone[fightzone][GZ_iTimeout]) {
+        new diff = g_GangZone[fightzone][GZ_iTimeout] - gettime();
+        new h = diff / 3600 % 24;
+        new m = diff / 60 % 60;
+
+        return SCMFormatted(playerid, COLOR_RED, "Dieses Ganggebiet hat noch %i Stunden %i Minuten lang eine Zeitsperre.", h, m);
+    }
+    
+    return SendClientMessage(playerid, COLOR_GREEN, "Dieses Ganggebiet hat keine gültige Zeitsperre und ist angreifbar.");
+}
+
 stock UpdateGangFightInfo(id) {
     new
         secs_left = g_GangZone[id][GZ_iGangWarEnd] - gettime(),
@@ -66112,7 +66242,7 @@ COMMAND:ageld(playerid,params[]) {
     return 1;
 }
 
-COMMAND:alevel(playerid,params[]) {
+/*COMMAND:alevel(playerid,params[]) {
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new pID, level, string[128];
     if(sscanf(params, "ud", pID,level))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Alevel [SpielerID/Name] [Anzahl]");
@@ -66125,7 +66255,7 @@ COMMAND:alevel(playerid,params[]) {
     SetPlayerScore(playerid, Spieler[pID][pLevel]);
     SendClientMessage(pID,COLOR_GREEN,string);
     return 1;
-}
+}*/
 
 COMMAND:arp(playerid,params[]) {
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
@@ -66877,9 +67007,11 @@ COMMAND:ic(playerid,params[]) {
     format(String,sizeof(String),"{7F007F}(IC){FFFFFF}: %s",params);
     SetPlayerChatBubble(playerid,String,COLOR_WHITE,40.0 , strlen(params) * 65 + 150);
     if (GetPVarInt(playerid, "USE_CHAT_ANIM") && Spieler[playerid][pTot] == 0 && Cuffed[playerid] != 1 && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-        MakeAnimation[playerid] = 1;
-        // TextDrawShowForPlayer(playerid, Leer);
-        ApplyAnimation(playerid,"PED","IDLE_CHAT",4.0,0,0,0,0,0);
+        if (!(gettime() < Spieler[playerid][unixSpiceCooldown] || gettime() < Spieler[playerid][unixDrogenCooldown] || IsPlayerFalling(playerid))) {
+            MakeAnimation[playerid] = 1;
+            // TextDrawShowForPlayer(playerid, Leer);
+            ApplyAnimation(playerid,"PED","IDLE_CHAT",4.0,0,0,0,0,0);
+        }
     }
     GetPlayerPos(playerid,x,y,z);
     format(String,sizeof(String),"%s sagt %s",GetName(playerid),String);
