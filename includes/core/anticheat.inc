@@ -21,13 +21,14 @@ static AC_factions[] = {
 hook OnGameModeInit() {
     // Define allowed glitches
     CAC_SetGlitchStatus(CAC_GLITCH__ALL, 0);
-    CAC_SetGlitchStatus(CAC_GLITCH__FASTMOVE, 1);
+    CAC_SetGlitchStatus(CAC_GLITCH__QUICKRELOAD, 1);
     CAC_SetGlitchStatus(CAC_GLITCH__FASTSPRINT, 1);
     CAC_SetGlitchStatus(CAC_GLITCH__QUICKSTAND, 1);
 
     // Define allowed game options
     CAC_SetGameOptionStatus(CAC_GAMEOPTION__ALL, 0);
     CAC_SetGameOptionStatus(CAC_GAMEOPTION__VEHICLEBLIPS, 1);
+    CAC_SetGameOptionStatus(CAC_GAMEOPTION__MANUALRELOADING, 1);
     CAC_SetGameOptionStatus(CAC_GAMEOPTION__SPRINT, CAC_GAMEOPTION_STATUS__SPRINT_ALLSURFACES);
 
     // Define disallowed game ressources (reporting)

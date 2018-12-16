@@ -12956,7 +12956,7 @@ CMD:isskeks(playerid)
     GetPlayerHealth(playerid, health);
     if(damagesperre[playerid]>0)
     {
-        SendClientMessage(playerid,COLOR_RED,"Da du Schaden genommen hast, kannst du erst nach 20 Sekunden deine HP wieder pushen.");
+        SendClientMessage(playerid,COLOR_RED,"Da du Schaden genommen hast, kannst du erst nach 5 Sekunden deine HP wieder pushen.");
     }
     else if( Spieler[playerid][pKekseValue] >= 7 ) {
         SendClientMessage(playerid,COLOR_RED,"Du hast zu viele Kekse hintereinander gegessen!");
@@ -14244,7 +14244,7 @@ CMD:configplayer(playerid, params[])
                 SCMFormatted(pID, COLOR_RED, "%s %s hat dir eine Anti-Cheat Pflicht verhängt.", GetPlayerAdminRang(playerid), GetName(playerid));
                 SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast dem Spieler %s eine Anti-Cheat Pflicht verhängt.", GetName(pID));
 
-                if (!CAC_Status(pID)) {
+                if (!CAC_GetStatus(pID)) {
                     SendClientMessage(pID, COLOR_RED, "Lade den Anti-Cheat im Forum herunter, um weiterspielen zu können.");
                     AC_kick(pID, "Anti-Cheat Client Pflicht");
                 }  
@@ -45716,7 +45716,7 @@ public split(const strsrc[], strdest[][], delimiter)
 
 public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
-    damagesperre[playerid]=20;
+    damagesperre[playerid] = 5;
     g_aiLastDamagedByPlayer[playerid] = issuerid;
     if( issuerid != INVALID_PLAYER_ID) {
         PlayerPlaySound(issuerid,17802,0.0,0.0,0.0);
