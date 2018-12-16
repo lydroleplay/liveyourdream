@@ -54679,6 +54679,10 @@ COMMAND:nameblacklist(playerid,params[]) {
     return 1;
 }
 
+COMMAND:id(playerid, params[]) {
+    return cmd_suche(playerid, params);
+}
+
 COMMAND:suche(playerid,params[]) {
     new giveid;
 
