@@ -54643,18 +54643,18 @@ COMMAND:nameblacklist(playerid,params[]) {
     return 1;
 }
 COMMAND:suche(playerid,params[]) {
-    new
-        giveid;
-    if(sscanf(params,"u",giveid)) {
-        return SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Suche [ID/Name]");
-    }
-    if( !IsPlayerConnected(giveid)) {
-        return SendClientMessage(playerid,COLOR_RED,"Der Spieler wurde nicht gefunden");
-    }
-    new
-        String[128];
-    format(String,sizeof(String),"Spielername: %s, ID: %d",GetName(giveid),giveid);
-    SendClientMessage(playerid,COLOR_BLUE,String);
+    new giveid;
+
+    if (sscanf(params, "u", giveid))
+        return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /Suche [ID/Name]");
+
+    if (!IsPlayerConnected(giveid))
+        return SendClientMessage(playerid, COLOR_RED, "Der Spieler wurde nicht gefunden");
+
+    new String[128];
+    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "Ja" : "Nein");
+    SendClientMessage(playerid, COLOR_BLUE, String);
+
     return 1;
 }
 COMMAND:w(playerid,params[]) {
@@ -60157,6 +60157,12 @@ public NPC(var)
 }
 #endif
 */
+COMMAND:aaaaa(playerid, params[]) {
+    SCMFormatted(playerid, COLOR_WHITE, "DEBUG: /AAAAA called: %i, %s", playerid, params);
+
+    return 1;
+}
+
 COMMAND:allesspeichern(playerid,params[]) {
     #pragma unused params
     if(Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
@@ -66113,7 +66119,7 @@ COMMAND:ageld(playerid,params[]) {
     return 1;
 }
 
-COMMAND:alevel(playerid,params[]) {
+/*COMMAND:alevel(playerid,params[]) {
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new pID, level, string[128];
     if(sscanf(params, "ud", pID,level))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Alevel [SpielerID/Name] [Anzahl]");
@@ -66126,7 +66132,7 @@ COMMAND:alevel(playerid,params[]) {
     SetPlayerScore(playerid, Spieler[pID][pLevel]);
     SendClientMessage(pID,COLOR_GREEN,string);
     return 1;
-}
+}*/
 
 COMMAND:arp(playerid,params[]) {
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");

@@ -1,26 +1,24 @@
 #include <sampcac>
-#include <ArrayList>
 #include <YSI\y_hooks>
 
-new ArrayList:AC_factions;
+// Define factions that must use the AC
+static AC_factions[] = {
+    1, // LSPD
+    2, // FBI
+    6, // Grove Street
+    7, // Ballas
+    10, // Yakuza
+    11, // Aztecas
+    12, // LCN 
+    13, // Vagos
+    14, // Hitman
+    17, // Wheelman
+    20, // OutlawZ
+    21 // Triaden
+};
 
+//forward OnGameModeInit();
 hook OnGameModeInit() {
-    AC_factions = NewArrayList<INTEGER>(11);
-
-    // Define factions that must use the AC
-    ArrayList::Add(AC_factions, 1); // LSPD
-    ArrayList::Add(AC_factions, 2); // FBI
-    ArrayList::Add(AC_factions, 6); // Grove Street
-    ArrayList::Add(AC_factions, 7); // Ballas
-    ArrayList::Add(AC_factions, 10); // Yakuza
-    ArrayList::Add(AC_factions, 11); // Aztecas
-    ArrayList::Add(AC_factions, 12); // LCN 
-    ArrayList::Add(AC_factions, 13); // Vagos
-    ArrayList::Add(AC_factions, 14); // Hitman
-    ArrayList::Add(AC_factions, 17); // Wheelman
-    ArrayList::Add(AC_factions, 20); // OutlawZ
-    ArrayList::Add(AC_factions, 21); // Triaden
-
     // Define allowed glitches
     CAC_SetGlitchStatus(CAC_GLITCH__ALL, 0);
     CAC_SetGlitchStatus(CAC_GLITCH__FASTMOVE, 1);
@@ -42,13 +40,17 @@ hook OnGameModeInit() {
 }
 
 hook OnPlayerSpawn(playerid) {
-	if (gPlayerLogged[playerid] && ArrayList::IndexOf(AC_factions, Spieler[playerid][pFraktion]) > -1 && !CAC_GetStatus(playerid))
+	if (gPlayerLogged[playerid] && AC_mustUseAC(Spieler[playerid][pFraktion]) && !CAC_GetStatus(playerid))
         return AC_kick(playerid, "Anti-Cheat Client Pflicht");
 
+    if (gPlayerLogged[playerid] && GetPVarInt(playerid, "AC_cheatDetected") > 0)
+        return AC_OnCheatDetect(playerid, GetPVarInt(playerid, "AC_cheatDetected") - 1, 0, 0);
+    
     return 1;
 }
 
-public CAC_OnPlayerKick(player_id, reason_id) {
+forward AC_OnPlayerKick(player_id, reason_id);
+public AC_OnPlayerKick(player_id, reason_id) {
     static const kickReasons[][] = { "Verbindungsprobleme mit dem AC Client", "AC Client Version nicht kompatibel" };
 
     if(IsPlayerConnected(player_id))
@@ -57,7 +59,11 @@ public CAC_OnPlayerKick(player_id, reason_id) {
     return 1;
 }
 
-public CAC_OnCheatDetect(player_id, cheat_id, opt1, opt2) {    
+forward AC_OnCheatDetect(player_id, cheat_id, opt1, opt2);
+public AC_OnCheatDetect(player_id, cheat_id, opt1, opt2) {
+    if (!gPlayerLogged[player_id])
+        return SetPVarInt(player_id, "AC_cheatDetected", ++cheat_id);
+
     switch (cheat_id) {
         case CAC_CHEAT__AIMBOT_1,
              CAC_CHEAT__AIMBOT_2,
@@ -106,7 +112,8 @@ public CAC_OnCheatDetect(player_id, cheat_id, opt1, opt2) {
     return 1;
 }
 
-public CAC_OnGameResourceMismatch(player_id, model_id, component_type, checksum) {
+forward AC_OnGameResourceMismatch(player_id, model_id, component_type, checksum);
+public AC_OnGameResourceMismatch(player_id, model_id, component_type, checksum) {
     if (model_id == CAC_GAMERESOURCE_MODELID__PEDIFP)
         AC_kick(player_id, "Veränderungen in der PED.IFP Datei");
     
@@ -154,4 +161,12 @@ AC_ban(playerid, reason[]) {
     AdminLog(string);
     
     return 1;
+}
+
+AC_mustUseAC(faction) {
+    for (new i = 0; i < sizeof(AC_factions); i++)
+        if (faction == AC_factions[i])
+            return true;
+    
+    return false;
 }
