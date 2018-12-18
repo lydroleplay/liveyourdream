@@ -788,7 +788,9 @@ enum {
     THREAD_OFFEPOINTS,
     THREAD_OFFEPOINTS_CHECK,
     THREAD_OFFAGELD_CHECK,
-    THREAD_OFFAGELD
+    THREAD_OFFAGELD,
+    THREAD_GIVECOINS_CHECK,
+    THREAD_GIVECOINS
     //THREAD_SETUP_POST
 }
 
@@ -33985,7 +33987,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(Spieler[playerid][pAdmin] >= 6)
                     {
-                        SendClientMessage(playerid, COLOR_ORANGE, "* PROJEKTLEITER *: {FFFFFF}/Makeadmin, /Gmx, /Event, /MakeBMOD, /Pwchange");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* PROJEKTLEITER *: {FFFFFF}/Makeadmin, /Gmx, /Event, /MakeBMOD, /Pwchange, /Givecoins");
                     }
                     if(IsPlayerAdmin(playerid))
                     {
@@ -52519,6 +52521,23 @@ CMD:offageld(playerid, params[]) {
     return 1;
 }
 
+CMD:givecoins(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 6) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+
+    new sSpieler[MAX_PLAYER_NAME], amount;
+    GetPVarString(playerid, "GIVECOINS.NAME", sSpieler, sizeof(sSpieler));
+    if (!isnull(sSpieler)) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Du gibst gerade noch jemandem Coins.");
+
+    if (sscanf(params, "s[24]i", sSpieler, amount) || !amount) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Givecoins [Spielername] [Anzahl]");
+    new query[256];
+    mysql_real_escape_string(sSpieler, sSpieler);
+    SetPVarString(playerid, "GIVECOINS.NAME", sSpieler);
+    SetPVarInt(playerid, "GIVECOINS.AMOUNT", amount);
+    format(query, sizeof(query), "SELECT `Name` FROM `accounts` WHERE `Name` = '%s' LIMIT 1", sSpieler);
+    mysql_pquery(query, THREAD_GIVECOINS_CHECK, playerid, gSQL, MySQLThreadOwner);
+    return 1;
+}
+
 COMMAND:offbannen(playerid,params[]) {
     if(Spieler[playerid][pAdmin] < 3) {
         return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
@@ -57622,6 +57641,43 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
 
         DeletePVar(extraid, "OFFAGELD.NAME");
         DeletePVar(extraid, "OFFAGELD.AMOUNT");
+        return 1;
+    }
+    else if (resultid == THREAD_GIVECOINS_CHECK) {
+        if (!cache_get_row_count(connectionHandle)) {
+            DeletePVar(extraid, "GIVECOINS.NAME");
+            DeletePVar(extraid, "GIVECOINS.AMOUNT");
+            return SendClientMessage(extraid, COLOR_RED, "[INFO] {FFFFFF}Der Spieler existiert nicht.");
+        }
+
+        new query1[256], playerName[MAX_PLAYER_NAME];
+        GetPVarString(extraid, "GIVECOINS.NAME", playerName, sizeof(playerName));
+        if (isnull(playerName)) {
+            DeletePVar(extraid, "GIVECOINS.NAME");
+            DeletePVar(extraid, "GIVECOINS.AMOUNT");
+            return SendClientMessage(extraid, COLOR_RED, "[INFO] {FFFFFF}Es ist ein Fehler aufgetreten.");
+        }
+
+        format(query1, sizeof(query1), "UPDATE `accounts` SET `userPremium` = `userPremium` + %d WHERE `Name` = '%s'", GetPVarInt(extraid, "GIVECOINS.AMOUNT"), playerName);
+        mysql_pquery(query1, THREAD_GIVECOINS, extraid, gSQL, MySQLThreadOwner);
+        return 1;
+    }
+    else if (resultid == THREAD_GIVECOINS) {
+        new message[128], playerName[MAX_PLAYER_NAME], amount;
+        GetPVarString(extraid, "GIVECOINS.NAME", playerName, sizeof(playerName));
+        if (!isnull(playerName)) {
+            amount = GetPVarInt(extraid, "GIVECOINS.AMOUNT");
+            format(message, sizeof(message), "%s %s hat %s %s Coins gegeben.", GetPlayerAdminRang(extraid), GetName(extraid), playerName, AddDelimiters(amount));
+            AdminLog(message);
+            SendUCPAktenEintrag(extraid, GetName(extraid), playerName, message);
+            SCMFormatted(extraid, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast %s %s Coins gegeben.", playerName, AddDelimiters(amount));
+            new pID;
+            if (!sscanf(playerName, "u", pID) && IsPlayerConnected(pID)) SCMFormatted(pID, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast von {FFFF00}%s {FFFFFF}%s Coins erhalten.", GetName(extraid), AddDelimiters(amount));
+        }
+        else SendClientMessage(extraid, COLOR_RED, "[INFO] {FFFFFF}Es ist ein Fehler aufgetreten.");
+
+        DeletePVar(extraid, "GIVECOINS.NAME");
+        DeletePVar(extraid, "GIVECOINS.AMOUNT");
         return 1;
     }
     else if( resultid == THREAD_OAFKICK ) {
