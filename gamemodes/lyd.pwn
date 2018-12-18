@@ -17980,7 +17980,7 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 10))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Yakuza Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 8, 1);
+        //GivePlayerWeapon(playerid, 8, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0,2807.4153,-1165.1274,1025.5703))//Vagos
     {
