@@ -11,7 +11,7 @@ static AC_factions[] = {
     11, // Aztecas
     12, // LCN 
     13, // Vagos
-    14, // Hitman
+    15, // Nine Demons
     17, // Wheelman
     20, // OutlawZ
     21 // Triaden
