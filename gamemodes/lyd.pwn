@@ -22408,7 +22408,7 @@ CMD:stopmuell(playerid)
     return 1;
 }
 
-CMD:stoptrans(playerid)
+CMD:stoptransport(playerid)
 {
     if(!(Spieler[playerid][pJob] == 12))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Geld-Transportfahrer.");
     SendClientMessage(playerid, COLOR_RED, "Du hast die Arbeit abgebrochen.");
