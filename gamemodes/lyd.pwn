@@ -57672,7 +57672,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             SendUCPAktenEintrag(extraid, GetName(extraid), playerName, message);
             SCMFormatted(extraid, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast %s %s Coins gegeben.", playerName, AddDelimiters(amount));
             new pID;
-            if (!sscanf(playerName, "u", pID) && IsPlayerConnected(pID)) SCMFormatted(pID, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast von {FFFF00}%s {FFFFFF}%s Coins erhalten.", GetName(extraid), AddDelimiters(amount));
+            if (!sscanf(playerName, "k<playername>", pID) && IsPlayerConnected(pID)) SCMFormatted(pID, COLOR_ORANGE, "[INFO] {FFFFFF}Du hast von {FFFF00}%s {FFFFFF}%s Coins erhalten.", GetName(extraid), AddDelimiters(amount));
         }
         else SendClientMessage(extraid, COLOR_RED, "[INFO] {FFFFFF}Es ist ein Fehler aufgetreten.");
 
@@ -66901,7 +66901,7 @@ COMMAND:gebefirma(playerid, params[]) {
     if (strcmp(g_Firma[firmenindex][F_sBesitzer], "Niemand") != 0)
         return SCMFormatted(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Die Firma %s gehört aktuell noch %s", g_Firma[firmenindex][F_sBezeichnung], g_Firma[firmenindex][F_sBesitzer]);
 
-    Spieler[playerid][pPlayerFirma] = firmenindex;
+    Spieler[pID][pPlayerFirma] = firmenindex;
     format(g_Firma[firmenindex][F_sBesitzer], MAX_PLAYER_NAME, GetName(pID));
     format(message, sizeof(message), "[GEWERBEAMT] {FFFFFF}%s ist Firmeninhaber der '%s' geworden!", g_Firma[firmenindex][F_sBesitzer], g_Firma[firmenindex][F_sBezeichnung]);
     return SendClientMessageToAll(COLOR_YELLOW, message);
