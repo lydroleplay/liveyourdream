@@ -4240,6 +4240,10 @@ new g_iWantedHackerZone;
 new g_iAlcatraz;
 new g_iAlhambra;
 
+// Robbingzones:
+new g_iBankLS, g_iBankLV, g_iEvidenceRoom,
+    g_iBankLS_area, g_iBankLV_area, g_iEvidenceRoom_area;
+
 new CarName[][] = {
     "Landstalker", "Bravura", "Buffalo", "Linerunner", "Perrenial", "Sentinel",
     "Dumper", "Firetruck", "Trashmaster", "Stretch", "Manana", "Infernus",
@@ -4843,6 +4847,17 @@ OnGameModeInit2() {
     g_iAlcatraz = CreateDynamicRectangle(2794.0, 2000.0, 2929.0, 1763.0, .interiorid = 0, .worldid = 0);
     g_iWantedHackerZone = CreateDynamicRectangle(940.0, -1640.0, 978.0, -1611.0, .interiorid = 0 ,.worldid = 0);
     g_iAlhambra = CreateDynamicCube(470.0,-27.0,998.0,510.0,5.0,1010.0,.interiorid = 17);
+
+    // Robbing Zones:
+    g_iBankLS = GangZoneCreate(1388.0, -1053.0, 1516.0, -1008.0);
+    g_iBankLV = GangZoneCreate(1837.0, 1273.0, 2053.0, 1454.0);
+    g_iEvidenceRoom = GangZoneCreate(1757.0, -1620.0, 1832.0, -1555.0);
+    g_iBankLS_area = CreateDynamicRectangle(1388.0, -1053.0, 1516.0, -1008.0, .interiorid = 0, .worldid = 0);
+    g_iBankLV_area = CreateDynamicRectangle(1837.0, 1273.0, 2053.0, 1454.0, .interiorid = 0, .worldid = 0);
+    g_iEvidenceRoom_area = CreateDynamicRectangle(1757.0, -1620.0, 1832.0, -1555.0, .interiorid = 0, .worldid = 0);
+    stopBlinkAndHideZone(g_iBankLS);
+    stopBlinkAndHideZone(g_iBankLV);
+    stopBlinkAndHideZone(g_iEvidenceRoom);
 
     EnableStuntBonusForAll(0);
     for (new at = 0; at <sizeof(ATM); at++) CreateDynamic3DTextLabel("{FF7700}Bankautomat\n{00FF00}Tippe /Automat",0xFFFFFFFF, ATM[at][0], ATM[at][1], ATM[at][2]+1, 10.0);
@@ -48809,6 +48824,10 @@ public Pulse_Bankraub() {
 	}
 	else if( g_iBankraubStatus == Bankraub_Aktiv ) {
 	    g_iBankraubStatus = Bankraub_Wartezeit;
+
+        SetTimerEx("stopBlinkAndHideZone", 120000, false, "i", g_iBankLS);
+        SetTimerEx("stopBlinkAndHideZone", 120000, false, "i", g_iBankLV);
+
 		g_tPulseBank = SetTimer("Pulse_Bankraub",( (BANKRAUB_ZEIT)*1000)+197,false);
 	}
 	return 1;
@@ -48924,7 +48943,7 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
         SendClientMessage(playerid, COLOR_RED, "Du kannst die Bank nicht ohne eine Waffe ausrauben.");
         return 1;
     }
-    if( GetOnlineExekutive(playerid) < 4) {
+    if( GetOnlineExekutive(playerid) < 0) {
         SendClientMessage(playerid, COLOR_RED, "Es sind nicht genug Spieler der Exekutive online.");
 	    return 1;
 	}
@@ -48940,6 +48959,9 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
     g_tPulseBankPosition = SetTimerEx("LVBank_Position",1373,1,"d",playerid);
     g_iBankraubStatus = Bankraub_Aktiv;
     g_unixBankraub = gettime();
+
+    GangZoneShowForAll(g_iBankLV, 0xFF000090);
+    GangZoneFlashForAll(g_iBankLV, 0x0000FF90);
 
     SetPlayerAttachedObject( playerid, 0, 1550, 15, 0.000000, 0.280000, -0.310000, 0.000000, 15.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
 
@@ -48967,9 +48989,10 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
 
 forward ResetEvidenceRoomHeist();
 public ResetEvidenceRoomHeist() {
-		g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] = EVIDENCEROOM_STATUS_IDLE;
-		MoveDynamicObject(object_door_evroomInterior, 1254.1525, -14.1255, 999.9403, 999.0, 0.0000, 0.0000, -90.8999);
-		return SendClientMessageToAll(COLOR_RED, "Die Asservatenkammer kann nun wieder ausgeraubt werden.");
+    g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] = EVIDENCEROOM_STATUS_IDLE;
+
+    MoveDynamicObject(object_door_evroomInterior, 1254.1525, -14.1255, 999.9403, 999.0, 0.0000, 0.0000, -90.8999);
+    return SendClientMessageToAll(COLOR_RED, "Die Asservatenkammer kann nun wieder ausgeraubt werden.");
 }
 
 forward EvidenceRoomHeistFinished();
@@ -48998,6 +49021,7 @@ public EvidenceRoomHeistFinished() {
 
     g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] = EVIDENCEROOM_STATUS_COOLDOWN;
     SetTimer("ResetEvidenceRoomHeist", 2400000, false);
+    SetTimerEx("stopBlinkAndHideZone", 120000, false, "i", g_iEvidenceRoom);
     return 1;
 }
 
@@ -49013,6 +49037,10 @@ COMMAND:kammerausrauben(playerid, params[]) {
     new breakingNewsMessage[128];
     g_evidenceRoomHeist[EVIDENCEROOM_HEIST_RAIDER] = playerid;
     g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] = EVIDENCEROOM_STATUS_ONGOING;
+
+    GangZoneShowForAll(g_iEvidenceRoom, 0xFF000090);
+    GangZoneFlashForAll(g_iEvidenceRoom, 0x0000FF90);
+
     Spieler[playerid][pWanteds] += 6;
     SendClientMessage(playerid, COLOR_DARKRED, "Du hast ein Verbrechen begangen! (Raub/Überfall) Reporter: Polizeizentrale");
     format(breakingNewsMessage, sizeof(breakingNewsMessage), "Dein Aktuelles Wanted Level: %d", Spieler[playerid][pWanteds]);
@@ -49054,6 +49082,9 @@ COMMAND:bankausrauben(playerid,params[]) {
     g_tPulseBankPosition = SetTimerEx("Bank_Position", 1373, 1, "d", playerid);
     g_iBankraubStatus = Bankraub_Aktiv;
     g_unixBankraub = gettime();
+
+    GangZoneShowForAll(g_iBankLS, 0xFF000090);
+    GangZoneFlashForAll(g_iBankLS, 0x0000FF90);
 
     SetPlayerAttachedObject( playerid, 0, 1550, 15, 0.000000, 0.280000, -0.310000, 0.000000, 15.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
 
@@ -50118,6 +50149,13 @@ COMMAND:mundbinde(playerid,params[]) {
     return 1;
 }
 
+forward stopBlinkAndHideZone(zoneid);
+public stopBlinkAndHideZone(zoneid) {
+    GangZoneStopFlashForAll(zoneid);
+    GangZoneHideForAll(zoneid);
+
+    return 1;
+}
 
 public OnPlayerEnterDynamicArea(playerid, areaid) {
     //printf("OnPlayerEnterDynamicArea(%d,%d)",playerid,areaid);
@@ -50134,10 +50172,13 @@ public OnPlayerEnterDynamicArea(playerid, areaid) {
         PlayAudioStreamForPlayer(playerid,SOUND_ALHAMBRA,0.0,0.0,0.0,60.0);
     }
 
-    if( areaid == g_iAlcatraz && Spieler[playerid][pJailed] != 2 && !IsPlayerExecutive(playerid)) {
+    if ((areaid == g_iAlcatraz && Spieler[playerid][pJailed] != 2 && !IsPlayerExecutive(playerid)) || 
+        ((areaid == g_iBankLS_area || areaid == g_iBankLV_area) && g_iBankraubStatus == Bankraub_Aktiv) ||
+        (areaid == g_iEvidenceRoom_area && g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING)) {
         SendClientMessage(playerid, 0xCC3333FF, "[STAAT] {FF5500}Achtung! Sie befinden sich in einer Gefahrenzone!");
         SendClientMessage(playerid, 0xCC3333FF, "[STAAT] {FF5500}Verlassen Sie umgehend das Gebiet sonst müssen Sie mit Beschuss rechnen!");
     }
+
     new e_streamer_extra_id = Streamer_GetIntData(STREAMER_TYPE_AREA,areaid,E_STREAMER_EXTRA_ID);
     if( e_streamer_extra_id == AREA_BLITZER_OUTER ) {
         if( Spieler[playerid][pRadarfallenWarnung] == 0 ) return 1;
