@@ -4,8 +4,8 @@
 #define MAPS_TUEV_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 180.0;
 
 // TÜV stations
 #define TUEV_INFO_POINT         556.9567, -1258.7034, 17.2422

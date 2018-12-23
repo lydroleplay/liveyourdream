@@ -4,13 +4,13 @@
 #define MAPS_BIKERENTAL_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 130.0;
 
 // Bike rental in LS points
 #define BIKERENTAL_NOOBSPAWN_COORDS       791.4501, -1341.0048, 13.5469
 #define BIKERENTAL_DRIVINGSCHOOL_COORDS   1242.3182, -1857.9050, 13.5469
-#define BIKERENTAL_CITYHALL_COORDS        1496.3137, -1719.4701, 13.7969
+#define BIKERENTAL_CITYHALL_COORDS        1493.4347, -1741.1992, 13.5469
 
 // Map variables
 new object_bikeRental[16];
@@ -37,7 +37,7 @@ hook OnGameModeInit() {
     text3D_bikeRental[2] = _:CreateDynamic3DTextLabel("Zweiradverleih\n{FFFFFF}Fahrzeuge von Level 1 bis 3 hier mieten\n{33EE55}/Mieten", 0x33EE55FF, BIKERENTAL_CITYHALL_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR);
 
     // Actors
-    actor_bikeRental[0] = CreateDynamicActor(51, 1496.1652, -1716.4005, 14.0469, 183.0903, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // White bike guy
+    actor_bikeRental[0] = CreateDynamicActor(51, 1493.4165, -1744.6586, 13.8904, 0.0000, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // White bike guy
     ApplyDynamicActorAnimation(actor_bikeRental[0], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);
     actor_bikeRental[1] = CreateDynamicActor(52, 1242.4252, -1860.8560, 13.5469, 359.4532, .worldid = VW_MAIN, .interiorid = MAPS_BIKERENTAL_INTERIOR); // Other bike guy
     ApplyDynamicActorAnimation(actor_bikeRental[1], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);
@@ -45,11 +45,18 @@ hook OnGameModeInit() {
     ApplyDynamicActorAnimation(actor_bikeRental[2], "MUSCULAR", "MuscleIdle", 4.0, 1, 0, 0, 0, 0);
 
 	// Objects
-    object_bikeRental[0] = CreateDynamicObject(3861, 1496.144165, -1717.231933, 14.176877, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    /*object_bikeRental[0] = CreateDynamicObject(3861, 1496.144165, -1717.231933, 14.176877, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bikeRental[1] = CreateDynamicObject(1514, 1495.362182, -1717.618286, 14.026882, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bikeRental[2] = CreateDynamicObject(1514, 1496.942260, -1717.618286, 14.026882, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bikeRental[3] = CreateDynamicObject(19564, 1496.375610, -1717.710693, 13.826882, -86.800003, 0.000000, 0.000000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bikeRental[4] = CreateDynamicObject(19564, 1495.965209, -1717.710693, 13.826882, -86.800003, 0.000000, 0.000000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    */
+    object_bikeRental[0] = CreateDynamicObject(3861, 1493.4326, -1743.9877, 13.6796, 0.0000, 0.0000, 180.0000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //marketstall01_SFXRF
+    object_bikeRental[1] = CreateDynamicObject(19564, 1494.2410, -1743.3937, 13.3196, 0.0000, 0.0000, -0.1999, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //JuiceBox2
+    object_bikeRental[2] = CreateDynamicObject(2369, 1492.6209, -1743.6745, 13.3029, 0.0000, 0.0000, -155.4000, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_Till
+    object_bikeRental[3] = CreateDynamicObject(19564, 1494.4512, -1743.3944, 13.3196, 0.0000, 0.0000, -0.1999, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //JuiceBox2
+    object_bikeRental[4] = CreateDynamicObject(19564, 1494.3415, -1743.2640, 13.3196, 0.0000, 0.0000, -0.1999, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //JuiceBox2
+
     object_bikeRental[5] = CreateDynamicObject(3861, 1242.276245, -1860.037597, 13.662813, 0.000000, -0.000002, -178.900024, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bikeRental[6] = CreateDynamicObject(1514, 1241.612670, -1859.639648, 13.545246, 0.000000, -0.000002, -178.900024, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_bikeRental[7] = CreateDynamicObject(1514, 1243.053222, -1859.612060, 13.545246, 0.000000, -0.000002, -178.900024, VW_MAIN, MAPS_BIKERENTAL_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);

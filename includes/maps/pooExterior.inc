@@ -5,8 +5,8 @@
 #define MAPS_POOINTERIOR_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 180.0;
 
 // POO points
 #define POO_INTERIOR_ENTER_COORDS		1977.1448, -1303.3643, 23.9824

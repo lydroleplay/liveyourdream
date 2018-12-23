@@ -4,8 +4,8 @@
 #define MAPS_CHEAPCARDEALERSHIPLS_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 130.0;
 
 // Cheap car dealership points
 #define CHEAPCARDEALERSHIPLS_COORDS    1808.0851, -1889.7792, 13.4073

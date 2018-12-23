@@ -5,8 +5,8 @@
 #define MAPS_CASINOINTERIOR_INTERIOR      10
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 190.0;
 
 // Casino points
 #define CASINOEXTERIOR_INFO_POINT     1498.3309, -1585.8683, 13.5469

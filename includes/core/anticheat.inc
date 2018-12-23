@@ -11,7 +11,7 @@ static AC_factions[] = {
     11, // Aztecas
     12, // LCN 
     13, // Vagos
-    14, // Hitman
+    15, // Nine Demons
     17, // Wheelman
     20, // OutlawZ
     21 // Triaden
@@ -64,13 +64,37 @@ public AC_OnCheatDetect(player_id, cheat_id, opt1, opt2) {
         return SetPVarInt(player_id, "AC_cheatDetected", ++cheat_id);
 
     switch (cheat_id) {
-        case CAC_CHEAT__AIMBOT_1,
+        /*case CAC_CHEAT__AIMBOT_1,
              CAC_CHEAT__AIMBOT_2,
              CAC_CHEAT__AIMBOT_3,
              CAC_CHEAT__AIMBOT_4,
              CAC_CHEAT__AIMBOT_5,
              CAC_CHEAT__AIMBOT_6: {
             AC_ban(player_id, "Aimbot");
+        }*/
+
+        case CAC_CHEAT__AIMBOT_1: {
+            AC_ban(player_id, "Aimbot (1)");
+        }
+
+        case CAC_CHEAT__AIMBOT_2: {
+            AC_ban(player_id, "Aimbot (2)");
+        }
+
+        case CAC_CHEAT__AIMBOT_3: {
+            AC_ban(player_id, "Aimbot (3)");
+        }
+
+        case CAC_CHEAT__AIMBOT_4: {
+            AC_ban(player_id, "Aimbot (4)");
+        }
+
+        case CAC_CHEAT__AIMBOT_5: {
+            AC_ban(player_id, "Aimbot (5)");
+        }
+
+        case CAC_CHEAT__AIMBOT_6: {
+            AC_kick(player_id, "Verdacht auf Aimassist");
         }
 
         case CAC_CHEAT__TRIGGERBOT_1,
@@ -122,6 +146,11 @@ public AC_OnGameResourceMismatch(player_id, model_id, component_type, checksum) 
 AC_kick(playerid, reason[]) {
     new string[256];
 
+    if (GetPVarInt(playerid, "AC_isGettingKicked") == 1)
+        return 1;
+
+    SetPVarInt(playerid, "AC_isGettingKicked", 1);
+
     format(string, sizeof(string), "[KICK]: Spieler %s wurde vom Anti-Cheat aus dem Server gekickt. Grund: %s", GetName(playerid), reason);
     SendAdminMessage(COLOR_RED, string);
 
@@ -138,6 +167,11 @@ AC_kick(playerid, reason[]) {
 
 AC_ban(playerid, reason[]) {
     new string[256];
+
+    if (GetPVarInt(playerid, "AC_isGettingKicked") == 1)
+        return 1;
+
+    SetPVarInt(playerid, "AC_isGettingKicked", 1);
 
     format(string, sizeof(string), "[BANNED]: Spieler %s wurde vom Anti-Cheat dauerhaft aus dem Server gebannt, Grund: %s", GetName(playerid), reason);
     SendAdminMessage(COLOR_RED, string);

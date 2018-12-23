@@ -4,8 +4,8 @@
 #define MAPS_LUXURYCARDEALERSHIP_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 180.0;
 
 // Luxury car dealership points
 #define LUXURYCARDEALERSHIP_COORDS    1142.3765, -1619.0011, 13.9445

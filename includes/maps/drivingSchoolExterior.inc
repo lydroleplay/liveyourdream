@@ -5,8 +5,8 @@
 #define MAPS_DRIVINGSCHOOLINTERIOR_INTERIOR      6
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 190.0;
 
 // Map variables
 new object_drivingSchoolExterior[235];

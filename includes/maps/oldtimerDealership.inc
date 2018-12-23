@@ -4,8 +4,8 @@
 #define MAPS_OLDTIMERDEALERSHIP_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 180.0;
 
 // Oldtimer dealership points
 #define OLDTIMERDEALERSHIP_COORDS  902.5354, -945.0310, 40.9409
