@@ -4,8 +4,8 @@
 #define MAPS_SANABASE_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 250.0;
+static Float:DRAWDISTANCE   = 230.0;
 
 // SA-NA donation, spawn and duty point
 #define SANABASE_DONATION_POINT             -26.9868, -2499.7585, 36.6484

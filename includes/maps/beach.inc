@@ -4,8 +4,8 @@
 #define MAPS_BEACH_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 130.0;
 
 // Beach points
 #define BEACH_FIGHTINGSTYLE_POINT    660.3523, -1869.5139, 5.5537

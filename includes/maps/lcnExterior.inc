@@ -5,8 +5,8 @@
 #define MAPS_LCNINTERIOR_INTERIOR      1
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 130.0;
 
 // La Cosa Nostra base points
 #define LCN_INTERIOR_ENTER_COORDS        1083.0183, -1226.5609, 15.8203

@@ -4,15 +4,15 @@
 #define MAPS_TAXISTATIONS_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 180.0;
 
 // Taxi stations in LS points
-#define TAXISTATIONS_JOBSKIN_POINT_CITYHALL     1437.4211, -1694.0231, 13.5469
+#define TAXISTATIONS_JOBSKIN_POINT_CITYHALL     1416.1967, -1693.5393, 13.5469
 #define TAXISTATIONS_JOBSKIN_POINT_BUSSTATION   1272.3879, -1353.3357, 13.5069
 
 // Map variables
-new object_taxiStations[36];
+//new object_taxiStations[36];
 new pickup_taxiStations[2];
 new text3D_taxiStations[2];
 new actor_taxiStations[2];
@@ -32,11 +32,11 @@ hook OnGameModeInit() {
     pickup_taxiStations[1] = CreateDynamicPickup(1275, 1, TAXISTATIONS_JOBSKIN_POINT_BUSSTATION, VW_MAIN, MAPS_TAXISTATIONS_INTERIOR); // Job clothes point
 
     // 3DTextLabels
-    text3D_taxiStations[0] = _:CreateDynamic3DTextLabel("Arbeitskleidung fÃ¼r Taxifahrer\n" COLOR_HEX_WHITE "Tippe /Jobkleidung", COLOR_YELLOW, TAXISTATIONS_JOBSKIN_POINT_CITYHALL, 25.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TAXISTATIONS_INTERIOR); // Job clothes
-    text3D_taxiStations[1] = _:CreateDynamic3DTextLabel("Arbeitskleidung fÃ¼r Taxifahrer\n" COLOR_HEX_WHITE "Tippe /Jobkleidung", COLOR_YELLOW, TAXISTATIONS_JOBSKIN_POINT_BUSSTATION, 25.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TAXISTATIONS_INTERIOR); // Job clothes
+    text3D_taxiStations[0] = _:CreateDynamic3DTextLabel("Arbeitskleidung für Taxifahrer\n" COLOR_HEX_WHITE "Tippe /Jobkleidung", COLOR_YELLOW, TAXISTATIONS_JOBSKIN_POINT_CITYHALL, 25.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TAXISTATIONS_INTERIOR); // Job clothes
+    text3D_taxiStations[1] = _:CreateDynamic3DTextLabel("Arbeitskleidung für Taxifahrer\n" COLOR_HEX_WHITE "Tippe /Jobkleidung", COLOR_YELLOW, TAXISTATIONS_JOBSKIN_POINT_BUSSTATION, 25.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TAXISTATIONS_INTERIOR); // Job clothes
     
     // Actors
-    actor_taxiStations[0] = CreateDynamicActor(189, 1438.5156, -1696.6446, 13.5469, 359.6128, .worldid = VW_MAIN, .interiorid = MAPS_TAXISTATIONS_INTERIOR); // Greeting woman
+    actor_taxiStations[0] = CreateDynamicActor(189, 1416.1381, -1691.5406, 13.5469, 264.7755, .worldid = VW_MAIN, .interiorid = MAPS_TAXISTATIONS_INTERIOR); // Greeting woman
     ApplyDynamicActorAnimation(actor_taxiStations[0], "SHOP", "Smoke_RYD", 4.0, 1, 0, 0, 0, 0);
 
     actor_taxiStations[1] = CreateDynamicActor(189, 1271.5378, -1350.7891, 13.5032, 271.0947, .worldid = VW_MAIN, .interiorid = MAPS_TAXISTATIONS_INTERIOR); // Greeting woman
@@ -49,11 +49,12 @@ hook OnGameModeInit() {
     vehicle_taxiStations[3] = AddStaticVehicleEx(420, 1276.6139, -1320.3938, 13.1200, 180.2275, 6, 6, 60*10); // Taxicar1
     vehicle_taxiStations[4] = AddStaticVehicleEx(438, 1276.5392, -1310.1168, 13.3321, 180.3863, 6, 6, 60*10); // Taxicar1
     vehicle_taxiStations[5] = AddStaticVehicleEx(420, 1276.4485, -1299.5356, 13.1214, 180.5707, 6, 6, 60*10); // Taxicar1
-    vehicle_taxiStations[6] = AddStaticVehicleEx(420, 1435.9677, -1698.9344, 13.3256, 359.5016, 6, 6, 60*10); // Taxicar1
-    vehicle_taxiStations[7] = AddStaticVehicleEx(438, 1435.9534, -1706.5477, 13.5496, 0.0620,   6, 6, 60*10); // Taxicar1
-    vehicle_taxiStations[8] = AddStaticVehicleEx(420, 1436.0543, -1713.8870, 13.3349, 0.2145,   6, 6, 60*10); // Taxicar1
+    vehicle_taxiStations[6] = AddStaticVehicleEx(420, 1422.6663, -1690.2717, 13.3263, 0.0000, 6, 6, 60*10); // Taxicar1
+    vehicle_taxiStations[7] = AddStaticVehicleEx(438, 1422.5546, -1683.8484, 13.5508, 0.0000, 6, 6, 60*10); // Taxicar1
+    vehicle_taxiStations[8] = AddStaticVehicleEx(420, 1422.6586, -1677.2521, 13.3251, 0.0000, 6, 6, 60*10); // Taxicar1
 
 	// Objects
+    /*
     object_taxiStations[0] = CreateDynamicObject(997, 1434.7246, -1717.3287, 12.6930, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_TAXISTATIONS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lhouse_barrier3
     object_taxiStations[1] = CreateDynamicObject(997, 1437.8950, -1714.1589, 12.6930, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_TAXISTATIONS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lhouse_barrier3
     object_taxiStations[2] = CreateDynamicObject(997, 1437.8950, -1709.7183, 12.6930, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_TAXISTATIONS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //lhouse_barrier3
@@ -114,4 +115,5 @@ hook OnGameModeInit() {
     object_taxiStations[33] = CreateDynamicObject(19425, 1434.5103, -1695.9299, 12.3527, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_TAXISTATIONS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //speed_bump01
     object_taxiStations[34] = CreateDynamicObject(19425, 1434.9079, -1718.8837, 12.3527, 0.0000, 0.0000, -75.8999, VW_MAIN, MAPS_TAXISTATIONS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //speed_bump01
     object_taxiStations[35] = CreateDynamicObject(19425, 1434.9049, -1692.7419, 12.3527, 0.0000, 0.0000, 75.8999, VW_MAIN, MAPS_TAXISTATIONS_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //speed_bump01
+    */
 }

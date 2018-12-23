@@ -4,8 +4,8 @@
 #define MAPS_PETSHOP_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 160.0;
+static Float:DRAWDISTANCE   = 150.0;
 
 // Pet shop points
 #define PETSHOP_COORDS  1805.2650, -1709.8883, 13.5630

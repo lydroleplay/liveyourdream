@@ -4,8 +4,8 @@
 #define MAPS_SAFEBOXES_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 130.0;
 
 // Safebox points
 #define SAFEBOX_COORDS_LS   2349.7061, -1246.4760, 22.5000

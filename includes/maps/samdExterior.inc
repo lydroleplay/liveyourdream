@@ -5,8 +5,8 @@
 #define MAPS_SAMDINTERIOR_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 180.0;
 
 // SAMD enter / exit points, staterepair and garage points
 #define SAMD_INTERIOR_ENTER_COORDS		1465.6685, -1048.3032, 24.0305

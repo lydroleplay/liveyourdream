@@ -4,8 +4,8 @@
 #define MAPS_NOOBSPAWN_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 250.0;
+static Float:DRAWDISTANCE   = 230.0;
 
 // Noob spawn in LS points
 #define NOOBSPAWN_STARTBONUS_POINT   809.3212, -1339.9855, 13.5408

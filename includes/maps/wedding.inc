@@ -4,8 +4,8 @@
 #define MAPS_WEDDING_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 140.0;
 
 // Wedding place points
 #define WEDDING_COORDS       1310.1578, -1368.4930, 13.5499

@@ -131,6 +131,7 @@ Yakuza:
 #define PREIS_SCHEIDUNG 32000
 #define SOUND_ALHAMBRA "http://lyd-roleplay.de/musik/disco.mp3"
 #define URL_LOGINMUSIC "http://42oo.de/loginmusiklyd.mp3"
+#define STREAMER_MAX_OBJECTS 900
 
 #define HAUSTIER_OFFSET 1.5
 
@@ -2618,7 +2619,7 @@ new const g_Mobiltelefon[][e_Mobiltelefon] = {
     {"Nokia 106",2500}
 };
 
-new g_aiDestroyedVehicles[MAX_PLAYERS char], g_aiLastVehicle[MAX_PLAYERS], g_aiLastDamagedByPlayer[MAX_PLAYERS];
+new g_aiDestroyedVehicles[MAX_PLAYERS], g_aiLastVehicle[MAX_PLAYERS], g_aiLastDamagedByPlayer[MAX_PLAYERS];
 
 enum e_PolizeiPartner {
     PP_iPartner,
@@ -4437,6 +4438,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\gsfInterior>
 #include <maps\parcour>
 #include <maps\christmasCalendar>
+#include <maps\christmasMarket>
 
 // Systems
 #include <paintball>
@@ -4726,7 +4728,7 @@ public HauptTimer() {
 
 public OnGameModeInit() {
 	Connect_To_Database();
-	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 800, -1); // Object fix
+	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, STREAMER_MAX_OBJECTS, -1); // Object fix
     OnGameModeInit2();
 }
 
@@ -6377,7 +6379,7 @@ public OnPlayerConnect(playerid)
     NeedPIZZA[playerid] = 0;
     NeedTAXI[playerid] = 0;
     NeedWHEEL[playerid] = 0;
-    g_aiDestroyedVehicles{playerid} = 0;
+    g_aiDestroyedVehicles[playerid] = 0;
     TelefonzelleAn[playerid] = INVALID_PLAYER_ID;
     if (Spieler[playerid][tLoginTimeout] != INVALID_TIMER_ID) KillTimer(Spieler[playerid][tLoginTimeout]);
     Spieler[playerid][tLoginTimeout] = INVALID_TIMER_ID;
@@ -7356,7 +7358,7 @@ public OnPlayerDisconnect(playerid, reason)
     NeedPIZZA[playerid] = 0;
     NeedTAXI[playerid] = 0;
     NeedWHEEL[playerid] = 0;
-    g_aiDestroyedVehicles{playerid} = 0;
+    g_aiDestroyedVehicles[playerid] = 0;
     TelefonzelleAn[playerid] = INVALID_PLAYER_ID;
     Spieler[playerid][tLoginTimeout] = INVALID_TIMER_ID;
     Spieler[playerid][pHouseAngebot][0] = INVALID_PLAYER_ID;
@@ -7898,13 +7900,7 @@ stock GivePlayerGift(playerid, rValue = -1) {
 
         case 170..339: {
             GivePlayerCash(playerid, 100000);
-            Spieler[playerid][pExp] += 5;
-            if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
-                Spieler[playerid][pLevel]++;
-                SetPlayerScore(playerid, Spieler[playerid][pLevel]);
-                Spieler[playerid][pExp] = 0;
-                GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
-            }
+            GivePlayerRP(playerid, 5);
 
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+5 Respektpunkte und $100.000 {FFFFFF}hinter dem Türchen gefunden!");
             format(message, sizeof(message), "%s hat +5 Respektpunkte und $100.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
@@ -7912,13 +7908,7 @@ stock GivePlayerGift(playerid, rValue = -1) {
 
         case 340..509: {
             GivePlayerCash(playerid, 150000);
-            Spieler[playerid][pExp] += 3;
-            if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
-                Spieler[playerid][pLevel]++;
-                SetPlayerScore(playerid, Spieler[playerid][pLevel]);
-                Spieler[playerid][pExp] = 0;
-                GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
-            }
+            GivePlayerRP(playerid, 3);
 
             SendClientMessage(playerid, COLOR_LIGHTRED, "[Adventskalender] {FFFFFF}Du hast {FF9900}+3 Respektpunkte und $150.000 {FFFFFF}hinter dem Türchen gefunden!");
             format(message, sizeof(message), "%s hat +3 Respektpunkte und $150.000 im Adventskalender gefunden. (Automatisch erhalten)", GetName(playerid));
@@ -10088,7 +10078,7 @@ public OnPlayerSpawn(playerid)
         ResetAugenbinde(playerid);
         Spieler[playerid][bAugenbinde] = false;
     }
-    g_aiDestroyedVehicles{playerid} = 0;
+    g_aiDestroyedVehicles[playerid] = 0;
     Spieler[playerid][pEisVerkaeufer] = INVALID_PLAYER_ID;
     Spieler[playerid][pHotDogVerkaeufer] = INVALID_PLAYER_ID;
     Spieler[playerid][iKidnapID] = INVALID_PLAYER_ID;
@@ -11114,19 +11104,19 @@ public Anti_OnVehicleDeath(playerid) {
 }
 
 public OnVehicleDeath(vehicleid, killerid) {
-    if (Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles{killerid} >= 5 ) {
+    if (Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles[killerid] >= 5 ) {
         new String[128];
-        format(String, sizeof(String), "[Anti-Cheat] Spieler %s Verdacht auf Vehicle-Spam: %d Fahrzeug(e)", GetName(killerid), g_aiDestroyedVehicles{killerid});
+        format(String, sizeof(String), "[Anti-Cheat] Spieler %s Verdacht auf Vehicle-Spam: %d Fahrzeug(e)", GetName(killerid), g_aiDestroyedVehicles[killerid]);
         SendAdminMessage(COLOR_RED, String);
-        if (g_aiDestroyedVehicles{killerid} > 10) {
+        if (g_aiDestroyedVehicles[killerid] > 10) {
             format(String, sizeof(String), "[KICK] Spieler %s wurde gekickt, Grund: Vehicle-Spam", GetName(killerid));
             SendAdminMessage(COLOR_RED, String);
-            g_aiDestroyedVehicles{killerid} = 0;
+            g_aiDestroyedVehicles[killerid] = 0;
             Kick(killerid);
             return 0;
         }
     }
-    g_aiDestroyedVehicles{killerid}++;
+    g_aiDestroyedVehicles[killerid]++;
     SetTimerEx("Anti_OnVehicleDeath",5003,false,"d",killerid);
     Blinker_OnVehicleDeath(vehicleid,killerid);
 
@@ -33384,7 +33374,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     format(String,sizeof(String),"Du hast den Zufalls Startbonus gewählt: %d Respektpunkte und +$%s",respekt, AddDelimiters(geld));
                 }
-                Spieler[playerid][pExp] += respekt;
+                GivePlayerRP(playerid, respekt);
                 GivePlayerCash(playerid,geld);
 
                 SendClientMessage(playerid,COLOR_LIGHTRED2,String);
@@ -42933,7 +42923,7 @@ public PayDay()
                 earnedExp += 1;
             }
 
-            Spieler[playerid][pExp] += earnedExp;
+            GivePlayerRP(playerid, earnedExp);
             new maxexp = (Spieler[playerid][pLevel] * 4);
             if( 1 <= Spieler[playerid][pHaustier] <= 3 )
             {
@@ -43087,13 +43077,6 @@ public PayDay()
                     Spieler[playerid][pKreditGezahlt] = 0;
                     Spieler[playerid][pKreditwert] = 0;
                 }
-            }
-            if (Spieler[playerid][pExp] >= maxexp)
-            {
-                Spieler[playerid][pLevel]++;
-                SetPlayerScore(playerid, Spieler[playerid][pLevel]);
-                Spieler[playerid][pExp] = 0;
-                GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
             }
 
             // Reichensteuer 2.0
@@ -43978,7 +43961,7 @@ CMD:event(playerid, params[])
         {
             if(IsPlayerConnected(i) && gPlayerLogged[i] == 1)
             {
-                Spieler[i][pExp] += entry;
+                GivePlayerRP(i, entry);
             }
         }
         format(string, sizeof(string), COLOR_HEX_WHITE"Alle Spieler haben von "COLOR_HEX_ORANGE"%s "COLOR_HEX_GREEN"+%d "COLOR_HEX_WHITE"Respektpunkte erhalten.", GetName(playerid), entry);
@@ -66269,7 +66252,7 @@ COMMAND:ageld(playerid,params[]) {
     return 1;
 }
 
-/*COMMAND:alevel(playerid,params[]) {
+COMMAND:alevel(playerid,params[]) {
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new pID, level, string[128];
     if(sscanf(params, "ud", pID,level))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Alevel [SpielerID/Name] [Anzahl]");
@@ -66282,7 +66265,7 @@ COMMAND:ageld(playerid,params[]) {
     SetPlayerScore(playerid, Spieler[pID][pLevel]);
     SendClientMessage(pID,COLOR_GREEN,string);
     return 1;
-}*/
+}
 
 CMD:clearweapons(playerid, params[]) {
     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
@@ -66296,6 +66279,18 @@ CMD:clearweapons(playerid, params[]) {
     return SCMFormatted(playerid, COLOR_YELLOW, "[INFO] {FFFFFF}%s %s hat deine Waffen gecleart.", GetPlayerAdminRang(playerid), GetName(playerid));
 }
 
+stock GivePlayerRP(playerid, points) {
+    Spieler[playerid][pExp] += points;
+    if (Spieler[playerid][pExp] >= Spieler[playerid][pLevel] * 4) {
+        Spieler[playerid][pExp] = Spieler[playerid][pExp] - Spieler[playerid][pLevel] * 4;
+        Spieler[playerid][pLevel]++;
+        SetPlayerScore(playerid, Spieler[playerid][pLevel]);
+        GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
+    }
+
+    return 1;
+}
+
 COMMAND:arp(playerid,params[]) {
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new pID, respect, string[128];
@@ -66305,15 +66300,8 @@ COMMAND:arp(playerid,params[]) {
     format(string,sizeof(string),"%s %s gab %d Respektpunkte an Spieler %s.", GetPlayerAdminRang(playerid), GetName(playerid), respect, GetName(pID));
     SendAdminMessage(COLOR_YELLOW, string);
     format(string,sizeof(string),"%s %s gab dir %d Respektpunkte.", GetPlayerAdminRang(playerid), GetName(playerid), respect);
-    Spieler[pID][pExp] += respect;
 
-    if (Spieler[pID][pExp] >= Spieler[pID][pLevel] * 4) {
-        Spieler[playerid][pLevel]++;
-        SetPlayerScore(playerid, Spieler[playerid][pLevel]);
-        Spieler[playerid][pExp] = 0;
-        GameTextForPlayer(playerid, "~y~Level UP", 4000, 3);
-    }
-
+    GivePlayerRP(pID, respect);
     SendClientMessage(pID,COLOR_GREEN,string);
     return 1;
 }

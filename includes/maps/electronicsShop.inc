@@ -4,8 +4,8 @@
 #define MAPS_ELECTRONICSSHOP_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 120.0;
+static Float:DRAWDISTANCE   = 110.0;
 
 // Electronics shop points
 #define ELECTRONICSSHOP_COORDS     1228.1368, -1423.4741, 13.5548

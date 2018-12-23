@@ -4,8 +4,8 @@
 #define MAPS_BUSSTATION_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 200.0;
+static Float:DRAWDISTANCE   = 190.0;
 
 // Bus station in LS points
 #define BUSSTATION_JOBSKIN_POINT   1257.3746, -1334.1302, 13.2733

@@ -4,8 +4,8 @@
 #define MAPS_BICYCLEDEALERSHIP_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 130.0;
 
 // Bicycle dealership points
 #define BICYCLEDEALERSHIP_COORDS    688.2108, -1181.0293, 15.3516

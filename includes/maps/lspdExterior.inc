@@ -5,8 +5,8 @@
 #define MAPS_LSPDINTERIOR_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 250.0;
+static Float:DRAWDISTANCE   = 230.0;
 
 // LSPD points
 #define LSPD_INTERIOR_ENTER_COORDS		        960.5489, -1598.3197, 13.6220

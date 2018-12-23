@@ -4,8 +4,8 @@
 #define MAPS_ALHAMBRAEXTERIOR_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 110.0;
+static Float:DRAWDISTANCE   = 100.0;
 
 // Map variables
 new object_alhambraExterior[15];

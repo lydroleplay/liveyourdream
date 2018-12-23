@@ -4,8 +4,8 @@
 #define MAPS_CARRENTALSTATIONS_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 150.0;
+static Float:DRAWDISTANCE   = 130.0;
 
 // Car rental stations
 #define CARRENTALSTATIONS_COORDS_AMMU         1335.2418, -1250.3275, 14.5218
