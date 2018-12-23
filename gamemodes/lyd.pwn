@@ -64360,12 +64360,6 @@ CMD:hsirene(playerid, params[])
                 AttachDynamicObjectToVehicle(sireneobj[vehicleid][1], vehicleid, 1.600000, -4.099998, 0.799999, 0.000000, 0.000000, 0.000000);
                 Flasher[vehicleid] = 1;
             }
-            case 470:
-            {
-                sireneobj[vehicleid][0] = CreateDynamicObject(18646, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-                AttachDynamicObjectToVehicle(sireneobj[vehicleid][0], vehicleid, -0.000000, -0.299999, 1.100000, 0.000000, 0.000000, 0.000000);
-                Flasher[vehicleid] = 1;
-            }
             case 523:
             {
                 sireneobj[vehicleid][0] = CreateDynamicObject(18646, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
