@@ -7886,7 +7886,7 @@ CMD:adventskalender(playerid) {
     if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Adventskalender ist erst ab Level 3 zugänglich.");
     new wjahr, wmonat, wday;
     getdate(wjahr, wmonat, wday);
-    if (wmonat != 12 || wday > 24) return 1;
+    if (wmonat != 12) return SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Der Adventskalender wurde nur bis zum 31.12.2018 verlängert.");
     if (!IsPlayerInRangeOfPoint(playerid, 5, CHRISTMASCALENDAR_COORDS))
         return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht am Adventskalender! Mit /Findekalender wird der Adventskalender auf der Karte markiert!");
     
