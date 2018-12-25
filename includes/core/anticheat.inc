@@ -52,8 +52,13 @@ forward AC_OnPlayerKick(player_id, reason_id);
 public AC_OnPlayerKick(player_id, reason_id) {
     static const kickReasons[][] = { "Verbindungsprobleme mit dem AC Client", "AC Client Version nicht kompatibel" };
 
-    if(IsPlayerConnected(player_id))
+    if (IsPlayerConnected(player_id) && reason_id != 0)
         AC_kick(player_id, kickReasons[reason_id]);
+    else {
+        new kickStr[256];
+        format(kickStr, sizeof(kickStr), "[AC] %s (ID: %d) hat Verbindungsprobleme mit dem AC Client.", GetName(player_id), player_id);
+        SendAdminMessage(0xFFFF00FF, kickStr);
+    }
 
     return 1;
 }
