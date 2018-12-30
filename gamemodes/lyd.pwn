@@ -6029,19 +6029,10 @@ public OnPlayerConnect(playerid)
 		Kick(playerid);
 	}
 	format(string, sizeof(string), "* %s hat Live your Dream betreten.", sName);
-	// SendAdminMessage(COLOR_GREY, str);
-	for(new i = 0 ; i < MAX_PLAYERS ; i++)
-	{
-	    if(IsPlayerConnected(i) && gPlayerLogged[i] == 1)
-	    {
-	        if(Spieler[i][pAdmin] >= 1)
-	        {
-	            if( pJL[i] == 1 ) {
-		            SendClientMessage(i, COLOR_GREY, string);
-	            }
-			}
-	    }
-	}
+    
+	for (new i = 0; i < MAX_PLAYERS; i++)
+	    if (IsPlayerConnected(i) && gPlayerLogged[i] == 1 && pJL[i] == 1)
+            SendClientMessage(i, COLOR_GREY, string);
 
     PlayAudioStreamForPlayer(playerid, URL_LOGINMUSIC);
     //PlayAudioStreamForPlayer(playerid, "http://www.uploadmusic.org/MUSIC/5384711376757549.mp3");
