@@ -14743,6 +14743,7 @@ CMD:createaplatz(playerid, params[])
         return 1;
 }
 
+CMD:createhaus(playerid, params[]) return cmd_createhouse(playerid, params);
 
 CMD:createhouse(playerid, params[])
 {
@@ -14971,7 +14972,7 @@ public Servername()
     }
     else if(serverhost == 2)
     {
-        SendRconCommand("hostname Live your Dream ~ Roleplay [WEIHNACHTSEVENT]");
+        SendRconCommand("hostname Live your Dream ~ Roleplay [NEUJAHRSFEIER 01.01.2019!]");
         serverhost = 1;
     }
 }
@@ -33986,7 +33987,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Sban, /Confighouse, /Configbiz, /Rauswerfenhotel, /Configtanke, /Makeleader, /Setzoneowner");
                         SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Gebefirma, /Delfirma, /Gebeclub, /Delclub, /Bfreischalten (2. Biz-Schlüssel), /SFreischalten (6. Schlüssel)");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Awaffenlager, /Fsbreset, /Namechange, /Createhouse");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Awaffenlager, /Fsbreset, /Namechange, /Createhouse, /delhouse");
                     }
                     if(Spieler[playerid][pAdmin] >= 5)
                     {
@@ -66955,8 +66956,10 @@ COMMAND:delfirma(playerid, params[]) {
     return 1;
 }
 
+CMD:delhouse(playerid, params[]) return cmd_delhaus(playerid, params);
+
 COMMAND:delhaus(playerid,params[]) {
-    if(Spieler[playerid][pAdmin] < 5)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte ( Admin Level 5)");
+    if(Spieler[playerid][pAdmin] < 4) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new hids;
     for(new i;i<MAX_HOUSES;i++)
     {
@@ -66973,8 +66976,8 @@ COMMAND:delhaus(playerid,params[]) {
         format(string,sizeof(string),"DELETE FROM `houses` WHERE `ID` = '%d'",hids);
         mysql_oquery(string,THREAD_DELETEPLAYERCAR,INVALID_PLAYER_ID,gSQL);
         SendClientMessage(playerid,COLOR_GREEN,"Du hast das Haus vollständig gelöscht!");
-        format(string,200,"%s %s hat HausID [%d] gelöscht.", GetPlayerAdminRang(playerid), GetName(playerid),hids);
-        SendClientMessageToAll(COLOR_YELLOW,string);
+        format(string,200,"[INFO] %s %s hat HausID [%d] gelöscht.", GetPlayerAdminRang(playerid), GetName(playerid),hids);
+        SendAdminMessage(COLOR_YELLOW,string);
     }
     return 1;
 }
