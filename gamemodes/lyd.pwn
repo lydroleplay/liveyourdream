@@ -14253,12 +14253,14 @@ CMD:configplayer(playerid, params[])
             if (wert < 0) return SendClientMessage(playerid, COLOR_RED, "Gebe einen positiven Wert an.");
             Spieler[pID][pAdventMin] = wert;
             SCMFormatted(pID, COLOR_LIGHTBLUE, "Deine Adventminuten wurden von %s %s auf %d gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), wert);
+            SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast die Adventminuten von %s auf %d gesetzt.", GetName(pID), wert);
             return 1;
         }
         else if (!strcmp(entry, "adventday", true)) {
-            if (wert < 1 || wert > 24) return SendClientMessage(playerid, COLOR_RED, "Gebe einen Wert von 1-24 an.");
+            if (wert < 1 || wert > 31) return SendClientMessage(playerid, COLOR_RED, "Gebe einen Wert von 1-31 an.");
             Spieler[pID][pAdventDay] = wert;
             SCMFormatted(pID, COLOR_LIGHTBLUE, "Dein Adventstag wurde von %s %s auf %d gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), wert);
+            SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast den Adventstag von %s auf %d gesetzt.", GetName(pID), wert);
             return 1;
         }
     }
