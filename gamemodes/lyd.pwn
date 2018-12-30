@@ -4764,11 +4764,7 @@ OnGameModeInit2() {
     SetTimer("gwarentimer",60000*60*3,true);
     SetTimer("PayDay",60000,true);
     SetTimer("NagelBand_Timer",NAGELBAND_TIMER_INTERVALL,true);
-    #if defined DEVELOPMENT
-        SetTimer("SaveAll", ( 2*60*1000 ) + 2161 ,true); // Alle ~2 Minuten
-    #else
-        SetTimer("SaveAll", ( 10*60*1000 ) + 2161 ,true); // Alle ~10 Minuten
-    #endif
+    SetTimer("SaveAll", ( 10*60*1000 ) + 2161 ,true); // Alle ~10 Minuten
     World_Pulse();
     SetTimer("World_Pulse",60013 * 59 , true ); // Alle ~60 Minuten
     g_EventUhr[EU_tTimer] = INVALID_TIMER_ID;
@@ -5881,6 +5877,7 @@ OnGameModeInit2() {
 
 forward SaveAll();
 public SaveAll() {
+    print("Saving everything to the database...");
     HouseSave();
     HotelSave();
     StaticBizSave();
@@ -5920,22 +5917,22 @@ public OnGameModeExit() {
     for(new i=0;i<iAngel;i++)
     {
         DestroyDynamic3DTextLabel(Angel[i][aText]);
-        DestroyPickup(Angel[i][aPickup]);
+        DestroyDynamicPickup(Angel[i][aPickup]);
     }
     for(new i=0;i<iHaus;i++)
     {
         DestroyDynamic3DTextLabel(Haus[i][hText]);
-        DestroyPickup(Haus[i][hPickup]);
+        DestroyDynamicPickup(Haus[i][hPickup]);
     }
     for(new i=1;i<MAX_BIZES;i++)
     {
         DestroyDynamic3DTextLabel(Biz[i][bText]);
-        DestroyPickup(Biz[i][bPickup]);
+        DestroyDynamicPickup(Biz[i][bPickup]);
     }
     for(new i=0;i<iTanke;i++)
     {
         DestroyDynamic3DTextLabel(Tanke[i][tText]);
-        DestroyPickup(Tanke[i][tPickup]);
+        DestroyDynamicPickup(Tanke[i][tPickup]);
     }
     DestroyDynamic3DTextLabel(lager3d);
 
@@ -26599,7 +26596,9 @@ public OnPlayerLeaveRaceCheckpoint(playerid)
 
 public OnRconCommand(cmd[])
 {
-    if (!strcmp(cmd, "saveandrestart", true)) { 
+    if (!strcmp(cmd, "saveandrestart", true)) {
+        print("STOPPING THE SERVER THROUGH RCON - saveandrestart");
+
         SendClientMessageToAll(COLOR_ORANGE, "[SERVER-UPDATE] {FFFFFF}Der Server wird zwecks eines Updates nun neugestartet.");
         SendClientMessageToAll(COLOR_ORANGE, "[SERVER-UPDATE] {FFFFFF}Im Forum könnt ihr im Update-Thread die Neuerungen nachlesen.");
         for(new i = 0 ; i <= GetPlayerPoolSize() ; i++)
@@ -66959,25 +66958,44 @@ COMMAND:delfirma(playerid, params[]) {
 CMD:delhouse(playerid, params[]) return cmd_delhaus(playerid, params);
 
 COMMAND:delhaus(playerid,params[]) {
-    if(Spieler[playerid][pAdmin] < 4) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if (Spieler[playerid][pAdmin] < 4) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+
     new hids;
-    for(new i;i<MAX_HOUSES;i++)
-    {
-        if(IsPlayerInRangeOfPoint(playerid,5,Haus[i][EnterX],Haus[i][EnterY],Haus[i][EnterZ]))
-        {
+    for (new i; i < MAX_HOUSES; i++) {
+        if (IsPlayerInRangeOfPoint(playerid, 5.0, Haus[i][EnterX], Haus[i][EnterY], Haus[i][EnterZ])) {
             hids=Haus[i][hID];
-            format(Haus[i][hName],32,"geloescht");
+
+            Haus[i][EnterX] = 13337.0; // Invalid Coords, to prevent the user from buying it when spawning
+            Haus[i][EnterY] = 13337.0;
+            Haus[i][EnterZ] = 13337.0;
+            format(Haus[i][hBesitzer], MAX_PLAYER_NAME, "geloescht");
+            Haus[i][hMieterMax] = 0;
+            Haus[i][hMieterAnzahl] = 0;
+            format(Haus[i][hName], 32, "geloescht"); // Muss sein weil ein Autist das so gelöst hat... smh
+            Haus[i][hPreis] = 999999999;
+            Haus[i][hMieten] = 0;
+            Haus[i][hID] = 0;
+            Haus[i][hMietPreis] = 999999999;
+            Haus[i][hLock] = 1;
+            
+            DestroyDynamic3DTextLabel(Haus[i][hText]);
+            Haus[i][hText] = Text3D:INVALID_STREAMER_ID;
+            DestroyDynamicPickup(Haus[i][hPickup]);
+            Haus[i][hPickup] = INVALID_STREAMER_ID;
+            
+            DestroyHouseSellObject(i);
+
             break;
         }
     }
-    if(hids!=0)
-    {
-        new string[200];
-        format(string,sizeof(string),"DELETE FROM `houses` WHERE `ID` = '%d'",hids);
-        mysql_oquery(string,THREAD_DELETEPLAYERCAR,INVALID_PLAYER_ID,gSQL);
-        SendClientMessage(playerid,COLOR_GREEN,"Du hast das Haus vollständig gelöscht!");
-        format(string,200,"[INFO] %s %s hat HausID [%d] gelöscht.", GetPlayerAdminRang(playerid), GetName(playerid),hids);
-        SendAdminMessage(COLOR_YELLOW,string);
+
+    if (hids != 0) {
+        new string[128];
+        format(string, sizeof(string), "DELETE FROM `houses` WHERE `ID` = '%d'", hids);
+        mysql_oquery(string, THREAD_DUMMY, INVALID_PLAYER_ID, gSQL);
+        SendClientMessage(playerid, COLOR_GREEN, "Du hast das Haus vollständig gelöscht!");
+        format(string, sizeof(string), "[INFO] %s %s hat das Haus mit der ID %d gelöscht.", GetPlayerAdminRang(playerid), GetName(playerid), hids);
+        SendAdminMessage(COLOR_DARKRED, string);
     }
     return 1;
 }
