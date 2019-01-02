@@ -5630,7 +5630,7 @@ OnGameModeInit2() {
 	CreateDynamicPickup(1239, 1, 2.2396,-29.0123,1003.5494, 24);//24/7-3
 	CreateDynamicPickup(1239, 1, 2.2396,-29.0123,1003.5494, 26);//24/7-4
 	CreateDynamicPickup(1239, 1, 2.2396,-29.0123,1003.5494, 27);//24/7-5
-	CreateDynamicPickup(1239, 1, 2.2396,-29.0123,1003.5494, 28);//24/7-6
+	CreateDynamicPickup(1239, 1, 2.2396,-29.0123,1003.5494, 60);//24/7-6
 	CreateDynamicPickup(1239, 1, 296.4476,-37.9833,1001.5156, 53);//Ammu LV
 	CreateDynamicPickup(1239, 1, 312.1370,-165.9137,999.6010, 40);//Ammu LS Ballas
 	CreateDynamicPickup(1239, 1, 295.5200,-80.3668,1001.5156, 1);//Ammu LS
@@ -5786,7 +5786,7 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 24);//24/7-3
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 26);//24/7-4
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 27);//24/7-5
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 28);//24/7-6
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 60);//24/7-6
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Subway\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 2);//BSN (BS 1)
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 4);//BSS (BS 2)
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Cluckin Bell\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 369.8342,-6.2002,1001.8589, 10.0, .worldid = 3);//Cluckin Bell 1
@@ -11667,7 +11667,7 @@ CMD:lotto(playerid, params[])
 CMD:supermarkt(playerid)
 {
     new pVW = GetPlayerVirtualWorld(playerid);
-    if(pVW == 22 || pVW == 23 || pVW == 24 || pVW == 26 || pVW == 27 || pVW == 28)
+    if(pVW == 22 || pVW == 23 || pVW == 24 || pVW == 26 || pVW == 27 || pVW == 60)
     {
         if(IsPlayerInRangeOfPoint(playerid, 2.0, 2.2396,-29.0123,1003.5494))
         {
@@ -36664,11 +36664,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 else if (listitem == 3) {
                     if (Spieler[playerid][pMP3Player]) return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Musikkit.");
-                    if (GetPlayerMoney(playerid) < 1500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if (GetPlayerMoney(playerid) < 2500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
                     if (Biz[HandyShopBiz_Index][bWaren] < 3) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
                     Biz[HandyShopBiz_Index][bWaren] -= 3;
-                    Biz[HandyShopBiz_Index][bKasse] += 1500;
-                    GivePlayerCash(playerid, -1500);
+                    Biz[HandyShopBiz_Index][bKasse] += 2500;
+                    GivePlayerCash(playerid, -2500);
                     Spieler[playerid][pMP3Player] = 1;
                     SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                     ShowBuyInformation(playerid,"~y~Musikkit ~w~gekauft!");
@@ -36694,748 +36694,120 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         {
             if(response)
             {
+                new pVW = GetPlayerVirtualWorld(playerid);
+                
+                SCMFormatted(playerid, COLOR_WHITE, "DEBUG: vwid: %i", pVW);
+
+                if (pVW != 22 && pVW != 23 && pVW != 24 && pVW != 26 && pVW != 27 && pVW != 60)
+                    return 1;
+
+                SCMFormatted(playerid, COLOR_WHITE, "DEBUG: pVW ok %s", "");
+
                 if(listitem==0)//Telefonbuch
                 {
-                    if(Spieler[playerid][pPhoneBook] == 1)return SendClientMessage(playerid, COLOR_RED, "Du hast bereits ein Telefonbuch.");
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < 400)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 2;
-                            Biz[39][bKasse] += 400;
-                            GivePlayerCash(playerid, -400);
-                            Spieler[playerid][pPhoneBook] = 1;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < 400)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 2;
-                        Biz[22][bKasse] += 400;
-                        GivePlayerCash(playerid, -400);
-                        Spieler[playerid][pPhoneBook] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < 400)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 2;
-                        Biz[23][bKasse] += 400;
-                        GivePlayerCash(playerid, -400);
-                        Spieler[playerid][pPhoneBook] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < 400)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 2;
-                        Biz[24][bKasse] += 400;
-                        GivePlayerCash(playerid, -400);
-                        Spieler[playerid][pPhoneBook] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < 400)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 2;
-                        Biz[26][bKasse] += 400;
-                        GivePlayerCash(playerid, -400);
-                        Spieler[playerid][pPhoneBook] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < 400)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 2;
-                        Biz[27][bKasse] += 400;
-                        GivePlayerCash(playerid, -400);
-                        Spieler[playerid][pPhoneBook] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < 400)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 2;
-                        Biz[28][bKasse] += 400;
-                        GivePlayerCash(playerid, -400);
-                        Spieler[playerid][pPhoneBook] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
-                    }
+                    if(Spieler[playerid][pPhoneBook] == 1) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits ein Telefonbuch.");
+
+                    if(GetPlayerMoney(playerid) < 400) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 2) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 2;
+                    Biz[pVW][bKasse] += 400;
+                    GivePlayerCash(playerid, -400);
+                    Spieler[playerid][pPhoneBook] = 1;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir das Telefonbuch für 400$ gekauft.");
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du kannst nun die Nummern anderer Spieler per /Nummer [ID] herausfinden.");
                     ShowBuyInformation(playerid,"~y~Telefonbuch ~w~gekauft!");
                 }
                 if(listitem==1)//5 Kekse
                 {
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < 150)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 1;
-                            Biz[39][bKasse] += 150;
-                            GivePlayerCash(playerid, -150);
-                            Spieler[playerid][pKekse] = 5;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < 150)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 1;
-                        Biz[22][bKasse] += 150;
-                        GivePlayerCash(playerid, -150);
-                        Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < 150)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 1;
-                        Biz[23][bKasse] += 150;
-                        GivePlayerCash(playerid, -150);
-                        Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < 150)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 1;
-                        Biz[24][bKasse] += 150;
-                        GivePlayerCash(playerid, -150);
-                        Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < 150)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 1;
-                        Biz[26][bKasse] += 150;
-                        GivePlayerCash(playerid, -150);
-                        Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < 150)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 1;
-                        Biz[27][bKasse] += 150;
-                        GivePlayerCash(playerid, -150);
-                        Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < 150)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 1;
-                        Biz[28][bKasse] += 150;
-                        GivePlayerCash(playerid, -150);
-                        Spieler[playerid][pKekse] += 5;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
-                    }
+                    if(GetPlayerMoney(playerid) < 150) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 1) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 1;
+                    Biz[pVW][bKasse] += 150;
+                    GivePlayerCash(playerid, -150);
+                    Spieler[playerid][pKekse] += 5;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 5 Kekse für $150 gekauft. Verwende sie per /Isskeks. Sie bringen dir +2HP.");
                     ShowBuyInformation(playerid,"~y~Kekse ~w~gekauft!");
                 }
                 if(listitem==2)//Zigs
                 {
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < 225)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 2;
-                            Biz[39][bKasse] += 225;
-                            GivePlayerCash(playerid, -225);
-                            Spieler[playerid][pZigaretten] = 10;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < 225)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 2;
-                        Biz[22][bKasse] += 225;
-                        GivePlayerCash(playerid, -225);
-                        Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < 225)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 2;
-                        Biz[23][bKasse] += 225;
-                        GivePlayerCash(playerid, -225);
-                        Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < 225)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 2;
-                        Biz[24][bKasse] += 225;
-                        GivePlayerCash(playerid, -225);
-                        Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < 225)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 2;
-                        Biz[26][bKasse] += 225;
-                        GivePlayerCash(playerid, -225);
-                        Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < 225)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 2;
-                        Biz[27][bKasse] += 225;
-                        GivePlayerCash(playerid, -225);
-                        Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < 225)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 2;
-                        Biz[28][bKasse] += 225;
-                        GivePlayerCash(playerid, -225);
-                        Spieler[playerid][pZigaretten] += 10;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
-                    }
+                    if(GetPlayerMoney(playerid) < 225) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 2) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 2;
+                    Biz[pVW][bKasse] += 225;
+                    GivePlayerCash(playerid, -225);
+                    Spieler[playerid][pZigaretten] += 10;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir 10 Zigaretten für $225 gekauft. Verwende sie per /Rauchzig.");
                     ShowBuyInformation(playerid,"~y~Zigeretten ~w~gekauft!");
                 }
                 if(listitem==3)//brecheisen
                 {
-                    /*
-                    if( Spieler[playerid][pBrecheisen] ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Du besitzt bereits ein Brecheisen");
-                    }
-                    */
-                    if(Spieler[playerid][pBrecheisen] < 1)return SendClientMessage(playerid, COLOR_RED, "Du hast bereits ein Brecheisen.");
-                    new preis = 3500;
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 2;
-                            Biz[39][bKasse] += preis;
-                            GivePlayerCash(playerid, -preis);
-                            Spieler[playerid][pBrecheisen]++;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 2;
-                        Biz[22][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pBrecheisen]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 2;
-                        Biz[23][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pBrecheisen]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 2;
-                        Biz[24][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pBrecheisen]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 2;
-                        Biz[26][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pBrecheisen]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 2;
-                        Biz[27][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
-                        Spieler[playerid][pBrecheisen]++;
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 2;
-                        Biz[28][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
-                        Spieler[playerid][pBrecheisen]++;
-                    }
+                    if(GetPlayerMoney(playerid) < 3500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 2) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 2;
+                    Biz[pVW][bKasse] += 3500;
+                    GivePlayerCash(playerid, -3500);
+                    Spieler[playerid][pBrecheisen]++;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir ein Brecheisen gekauft.");
                     ShowBuyInformation(playerid,"~y~Brecheisen ~w~gekauft!");
                 }
                 if(listitem==4)//Helm
                 {
-                    /*
-                    if( Spieler[playerid][pBrecheisen] ) {
-                        return SendClientMessage(playerid,COLOR_RED,"Du besitzt bereits ein Brecheisen");
-                    }
-                    */
-                    new preis = 2000;
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if( Spieler[playerid][pHelm] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Helm.");
-                    }
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 2;
-                            Biz[39][bKasse] += preis;
-                            GivePlayerCash(playerid, -preis);
-                            Spieler[playerid][pHelm]++;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 2;
-                        Biz[22][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pHelm]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 2;
-                        Biz[23][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pHelm]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 2;
-                        Biz[24][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pHelm]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 2;
-                        Biz[26][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pHelm]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 2;
-                        Biz[27][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
-                        Spieler[playerid][pHelm]++;
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 2;
-                        Biz[28][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
-                        Spieler[playerid][pHelm]++;
-                    }
+                    if( Spieler[playerid][pHelm] ) return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Helm.");
+                    if(GetPlayerMoney(playerid) < 2000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 2) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 2;
+                    Biz[pVW][bKasse] += 2000;
+                    GivePlayerCash(playerid, -2000);
+                    Spieler[playerid][pHelm]++;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Motorrad Helm gekauft.");
                     ShowBuyInformation(playerid,"~y~Helm ~w~gekauft!");
                 }
-                if(listitem==5)//MP3Player
+                if(listitem==5)// Musikkit
                 {
-                    new preis = 1500;
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if( Spieler[playerid][pMP3Player] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Musikkit.");
-                    }
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 3)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 3;
-                            Biz[39][bKasse] += preis;
-                            GivePlayerCash(playerid, -preis);
-                            Spieler[playerid][pMP3Player]++;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 3)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 3;
-                        Biz[22][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 3)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 3;
-                        Biz[23][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 3)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 3;
-                        Biz[24][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 3)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 3;
-                        Biz[26][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 3)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 3;
-                        Biz[27][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
-                        Spieler[playerid][pMP3Player]++;
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 3)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 3;
-                        Biz[28][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
-                        Spieler[playerid][pMP3Player]++;
-                    }
-                    ShowBuyInformation(playerid,"~y~MP3Player ~w~gekauft!");
+                    if( Spieler[playerid][pMP3Player] ) return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Musikkit.");
+                    if(GetPlayerMoney(playerid) < 2500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 3) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 3;
+                    Biz[pVW][bKasse] += 2500;
+                    GivePlayerCash(playerid, -2500);
+                    Spieler[playerid][pMP3Player]++;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
+                    ShowBuyInformation(playerid,"~y~Musikkit ~w~gekauft!");
                 }
                 if(listitem==6)//Koffer
                 {
-                    new preis = 1500;
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if( Spieler[playerid][pKoffer] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Koffer.");
-                    }
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 2;
-                            Biz[39][bKasse] += preis;
-                            GivePlayerCash(playerid, -preis);
-                            Spieler[playerid][pKoffer] = true;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 2;
-                        Biz[22][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pKoffer] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 2;
-                        Biz[23][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pKoffer] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 2;
-                        Biz[24][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pKoffer] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 2;
-                        Biz[26][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pKoffer] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 2;
-                        Biz[27][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
-                        Spieler[playerid][pKoffer] = true;
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 2;
-                        Biz[28][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
-                        Spieler[playerid][pKoffer] = true;
-                    }
+                    if( Spieler[playerid][pKoffer] ) return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Koffer.");
+                    if(GetPlayerMoney(playerid) < 1500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 2) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 2;
+                    Biz[pVW][bKasse] += 1500;
+                    GivePlayerCash(playerid, -1500);
+                    Spieler[playerid][pKoffer] = true;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Koffer gekauft.");
                     ShowBuyInformation(playerid,"~y~Koffer ~w~gekauft!");
                 }
                 if(listitem==7)//RadarfallenWarnung
                 {
-                    new preis = 15000;
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if( Spieler[playerid][pRadarfallenWarnung] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Radarfallen-Warner.");
-                    }
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 5;
-                            Biz[39][bKasse] += preis;
-                            GivePlayerCash(playerid, -preis);
-                            Spieler[playerid][pRadarfallenWarnung] = true;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 5;
-                        Biz[22][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pRadarfallenWarnung] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 5;
-                        Biz[23][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pRadarfallenWarnung] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 5;
-                        Biz[24][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pRadarfallenWarnung] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 5;
-                        Biz[26][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        Spieler[playerid][pRadarfallenWarnung] = true;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 5;
-                        Biz[27][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
-                        Spieler[playerid][pRadarfallenWarnung] = true;
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < preis)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 5;
-                        Biz[28][bKasse] += preis;
-                        GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
-                        Spieler[playerid][pRadarfallenWarnung] = true;
-                    }
+                    if( Spieler[playerid][pRadarfallenWarnung] ) return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Radarfallen-Warner.");
+                    if(GetPlayerMoney(playerid) < 15000)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 5)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 5;
+                    Biz[pVW][bKasse] += 15000;
+                    GivePlayerCash(playerid, -15000);
+                    Spieler[playerid][pRadarfallenWarnung] = true;
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Radarfallen-Warner gekauft.");
                     ShowBuyInformation(playerid,"~y~Radarfallen Warner ~w~gekauft!");
                 }
                 if(listitem==8)//Fallschirm
                 {
-                    new pVW = GetPlayerVirtualWorld(playerid);
-                    if(pVW == 0)
-                    {
-                        if(IsPlayerInRangeOfPoint(playerid, 2.0, 1718.0939,-1770.7455,13.7035))
-                        {
-                            if(GetPlayerMoney(playerid) < 2500)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                            if(Biz[39][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                            Biz[39][bWaren] -= 2;
-                            Biz[39][bKasse] += 2500;
-                            GivePlayerWeapon(playerid, 46, 1);
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
-                            SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
-                        }
-                    }
-                    if(pVW == 22)
-                    {
-                        if(GetPlayerMoney(playerid) < 2500)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[22][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[22][bWaren] -= 2;
-                        Biz[22][bKasse] += 2500;
-                        GivePlayerCash(playerid, -2500);
-                        GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
-                    }
-                    if(pVW == 23)
-                    {
-                        if(GetPlayerMoney(playerid) < 2500)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[23][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[23][bWaren] -= 2;
-                        Biz[23][bKasse] += 2500;
-                        GivePlayerCash(playerid, -2500);
-                        GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
-                    }
-                    if(pVW == 24)
-                    {
-                        if(GetPlayerMoney(playerid) < 2500)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[24][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[24][bWaren] -= 2;
-                        Biz[24][bKasse] += 2500;
-                        GivePlayerCash(playerid, -2500);
-                        GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
-                    }
-                    if(pVW == 26)
-                    {
-                        if(GetPlayerMoney(playerid) < 2500)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[26][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[26][bWaren] -= 2;
-                        Biz[26][bKasse] += 2500;
-                        GivePlayerCash(playerid, -2500);
-                        GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
-                    }
-                    if(pVW == 27)
-                    {
-                        if(GetPlayerMoney(playerid) < 2500)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[27][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[27][bWaren] -= 2;
-                        Biz[27][bKasse] += 2500;
-                        GivePlayerCash(playerid, -2500);
-                        GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
-                    }
-                    if(pVW == 28)
-                    {
-                        if(GetPlayerMoney(playerid) < 2500)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
-                        if(Biz[28][bWaren] < 2)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
-                        Biz[28][bWaren] -= 2;
-                        Biz[28][bKasse] += 2500;
-                        GivePlayerCash(playerid, -2500);
-                        GivePlayerWeapon(playerid, 46, 1);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
-                        SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
-                    }
+                    if(GetPlayerMoney(playerid) < 2500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
+                    if(Biz[pVW][bWaren] < 2) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
+                    Biz[pVW][bWaren] -= 2;
+                    Biz[pVW][bKasse] += 2500;
+                    GivePlayerCash(playerid, -2500);
+                    GivePlayerWeapon(playerid, 46, 1);
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Fallschirm für $2.500 gekauft.");
+                    SendClientMessage(playerid, COLOR_WHITE, "* Mit der Taste 'Enter' kannst du ihn im Sprung in die Tiefe öffnen.");
                     ShowBuyInformation(playerid,"~y~Fallschirm ~w~gekauft!");
                 }
             }
@@ -39128,7 +38500,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 8)
                 {
-                    ShowPlayerDialog(playerid, DIESHOPS, DIALOG_STYLE_LIST, "24/7 Shops", "24/7 Shop in Los Santos, Nähe dem LSPD\n24/7 Shop in Los Santos, Nähe dem Subway\n24/7 Shop in Los Santos, Nähe der Grove Street\n24/7 Shop im Los Santos Shopping Markt", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, DIESHOPS, DIALOG_STYLE_LIST, "24/7 Shops", "24/7 Shop in Los Santos, Nähe dem LSPD\n24/7 Shop in Los Santos, Nähe dem Subway\n24/7 Shop in Los Santos, Nähe der Grove Street\n24/7 Shop im Los Santos Shopping Markt\n24/7 Shop an der Stadthalle", "Auswählen", "Abbrechen");
                 }
                 if(listitem == 9)
                 {
@@ -39509,6 +38881,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     SetPlayerCheckpointEx(playerid, 1154.7301,-1457.9226,15.7969,2.0, CP_NAVI28);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop im Shopping Market in Los Santos wurde auf der Karte Rot markiert.");
+                }
+                if(listitem==4)
+                {
+                    SetPlayerCheckpointEx(playerid, 1522.9300, -1755.8000, 13.5200, 2.0, CP_NAVI28);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Der 24/7 Shop an der Stadthalle, wurde auf der Karte Rot markiert.");
                 }
             }
             if(!response)return 1;
@@ -43226,7 +42603,7 @@ stock Stats(playerid, targetid)
             Accounttyp: [%s], Adminrang: [%d], Adminverwarnungen: [%d/3], Fraktionssperre: [%s]\nBargeld: [$%s], Bank: [$%s], Zusätzliche-Steuern: [$%s]\n\n\
             " #COL_LIGHTBLUE "Daten:" #COL_DEFAULT "\nTelefonnummer: [%d], Handyvertrag: [%s]\nStaatsangehörigkeit: [%s], Verheiratet mit: [%s]\n\n\
             " #COL_LIGHTBLUE "Beruf:" #COL_DEFAULT "\nFraktion: [%s], Rang: [%s], Fraktionswarns: [%i/3], Beruf: [%s]\n\n\
-            " #COL_LIGHTBLUE "Inventare:" #COL_DEFAULT "\nDrogen: [%s], Waffenteile: [%s], Wantedcodes: [%s], Spice: [%s] \n\
+            " #COL_LIGHTBLUE "Inventare:" #COL_DEFAULT "\nDrogen: [%s], Waffenteile: [%s], Wantedcodes: [%s], Spice: [%s], Brecheisen: [%s]\n\
             Safebox Drogen: [%s], Safebox Waffenteile: [%s], Safebox Wantedcodes: [%s], Safebox Spice: [%s]\n\
             Lotto-Ticket: [%s], Zigaretten: [%s], Kekse: [%s], Tankkanister: [%d]\nFische: [%d], Köder: [%d], Angel: [%s]\n\n\
             " #COL_LIGHTBLUE "Statistiken:" #COL_DEFAULT "\nMorde: [%d], Verbrechen: [%d], Tode: [%d], KD-Rate: [%.2f], Wantedtode: [%d], Wantedlevel: [%d]\
@@ -43238,7 +42615,7 @@ stock Stats(playerid, targetid)
             AddDelimiters(Spieler[targetid][pBank]), AddDelimiters(Spieler[targetid][pSSteuer]), Spieler[targetid][pHandyNr],
             Spieler[targetid][pHandyGeld] == HANDY_VERTRAG ? "Ja" : "Nein", GetPlayerStaat(targetid), Spieler[targetid][pMarriageName], team, rankname, Spieler[targetid][pfrakwarn], jtext,
             AddDelimiters(Spieler[targetid][pDrugs]), AddDelimiters(Spieler[targetid][pWaffenteile]), AddDelimiters(Spieler[targetid][pWantedCodes]),
-            AddDelimiters(Spieler[targetid][pSpice]), AddDelimiters(Spieler[targetid][pSafeDrogen]), AddDelimiters(Spieler[targetid][pSafeTeile]),
+            AddDelimiters(Spieler[targetid][pSpice]), AddDelimiters(Spieler[targetid][pBrecheisen]), AddDelimiters(Spieler[targetid][pSafeDrogen]), AddDelimiters(Spieler[targetid][pSafeTeile]),
             AddDelimiters(Spieler[targetid][pSafeWantedCodes]), AddDelimiters(Spieler[targetid][pSafeSpice]), lotto, AddDelimiters(Spieler[targetid][pZigaretten]),
             AddDelimiters(Spieler[targetid][pKekse]), Spieler[targetid][pKanister], Spieler[targetid][pFische], Spieler[targetid][pKoeder],
             Spieler[targetid][pAngel] ? "Ja" : "Nein", Spieler[targetid][pKills], Spieler[targetid][pCrimes], Spieler[targetid][pDeaths],
@@ -66472,10 +65849,10 @@ CMD:elektromarkt(playerid)
     if( IsPlayerInRangeOfPoint(playerid,5.0, ELECTRONICSSHOP_COORDS) )
     {
         if( Spieler[playerid][pHandyGeld] == HANDY_VERTRAG ) {
-            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandyvertrag kündigen\nKamera kaufen ($750)\nMusikkit (MP3-Player + Ghettoblaster) ($1.500)", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandyvertrag kündigen\nKamera kaufen ($750)\nMusikkit (MP3-Player + Ghettoblaster) ($2.500)", "Kaufen", "Abbrechen");
         }
         else {
-            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandy Vertrag ($1.500)\nKamera kaufen ($750)\nMusikkit (MP3-Player + Ghettoblaster) ($1.500)\nCallYa-Handykarte\nCallYa Guthaben", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandy Vertrag ($1.500)\nKamera kaufen ($750)\nMusikkit (MP3-Player + Ghettoblaster) ($2.500)\nCallYa-Handykarte\nCallYa Guthaben", "Kaufen", "Abbrechen");
         }
         return 1;
     }
