@@ -12946,7 +12946,7 @@ CMD:configbiz(playerid)
 
 CMD:check(playerid, params[])
 {
-    if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if(Spieler[playerid][pAdmin] < 1)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new pID;
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Check [SpielerID/Name]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
@@ -33963,14 +33963,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if(Spieler[playerid][pAdmin] >= 1)
                     {
                         SendClientMessage(playerid, COLOR_BLUE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Ac, /Freeze, /Unfreeze, /Guncheck, /Checkscheine, /Supauto /Respawncar");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Ac, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
                         SendClientMessage(playerid, COLOR_BLUE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar");
                     }
                     if(Spieler[playerid][pAdmin] >= 3)
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Check, /Gotoliste, /Gotopos, /Gotohaus, /Veh, /Delveh, /Delallvehs, /Spec, /Specoff, /Changeweather");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gotoliste, /Gotopos, /Gotohaus, /Veh, /Delveh, /Delallvehs, /Spec, /Specoff, /Changeweather");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem, /Atafelentmieten, /Checkskill");
                         SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
@@ -63798,7 +63798,7 @@ COMMAND:gluecksrad(playerid,params[]) {
 */
 
 CMD:fixveh(playerid, params[]) {
-    if (Spieler[playerid][pAdmin] < 5) return 0;
+    if (Spieler[playerid][pAdmin] < 4) return 0;
     new vehicleid = GetPlayerVehicleID(playerid);
     if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist in keinem Fahrzeug.");
     new Float:vehhealth;
