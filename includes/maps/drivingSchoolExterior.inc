@@ -38,7 +38,7 @@ hook OnPlayerConnect(playerid) {
     RemoveBuildingForPlayer(playerid, 14401, 1264.6016, -781.0078, 1083.3281, 0.25);
     RemoveBuildingForPlayer(playerid, 14468, 1255.3125, -773.6328, 1083.9531, 0.25);
     RemoveBuildingForPlayer(playerid, 14469, 1275.2188, -777.1563, 1090.5156, 0.25);
-    //Entfernte Palmen an der Fahrschule f?r Landebahn
+    //Entfernte Palmen an der Fahrschule für Landebahn
     RemoveBuildingForPlayer(playerid, 620, 1075.3750, -1826.4766, 12.3516, 0.25);
     RemoveBuildingForPlayer(playerid, 620, 1075.3750, -1797.3594, 12.3516, 0.25);
 }
@@ -470,7 +470,7 @@ hook OnGameModeInit() {
 
 
 
-    //Schie?stand in Fahrschule
+    //Schiessstand in Fahrschule
     object_drivingSchoolInterior[0] = CreateDynamicObject(1586, 298.68085, -142.06290, 998.57440, -0.02000, 0.00000, 90.00000, -1, MAPS_DRIVINGSCHOOLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_drivingSchoolInterior[1] = CreateDynamicObject(3018, 293.17230, -161.02029, 1002.22028, 0.00000, 0.00000, 90.00000, -1, MAPS_DRIVINGSCHOOLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_drivingSchoolInterior[2] = CreateDynamicObject(3019, 293.17230, -161.03600, 1002.22028, 0.00000, 0.00000, 90.00000, -1, MAPS_DRIVINGSCHOOLINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
