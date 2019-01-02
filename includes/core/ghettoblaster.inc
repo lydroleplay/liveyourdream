@@ -22,41 +22,14 @@ hook OnPlayerDisconnect(playerid) {
     return 1;
 }
 
-hook OnPlayerEnterDynamicArea(playerid, areaid) {
+hook OnPlayerEnterDynArea(playerid, areaid) {
     GC_StartStream(playerid, areaid);
 
     return 1;
 }
 
-hook OnPlayerLeaveDynamicArea(playerid, areaid) {
+hook OnPlayerLeaveDynArea(playerid, areaid) {
     GC_StopStream(playerid, areaid);
-
-    return 1;
-}
-
-stock GC_StartStream(playerid, areaid) {
-    // Wrapper cause samp is buggy
-    for (new i = 0; i <= GetPlayerPoolSize(); i++) {
-        if (IsValidDynamicArea(GB_ghettoBlasters[i][GB_areaID]) && areaid == GB_ghettoBlasters[i][GB_areaID] && strlen(GB_ghettoBlasters[i][GB_streamURL]) > 0) { // TODO: Check for other streams (MP3 & Radio)
-            if (GetPVarInt(playerid, "GB.ON"))
-                StopAudioStreamForPlayer(playerid);
-            
-            SetPVarInt(playerid, "GB.ON", 1);
-            return PlayAudioStreamForPlayer(playerid, GB_ghettoBlasters[i][GB_streamURL], GB_ghettoBlasters[i][GB_posX], GB_ghettoBlasters[i][GB_posY], GB_ghettoBlasters[i][GB_posZ], GB_GHETTOBLASTER_RANGE, 1);
-        }
-    }
-
-    return 1;
-}
-
-stock GC_StopStream(playerid, areaid) {
-    // Wrapper cause samp is buggy
-    for (new i = 0; i <= GetPlayerPoolSize(); i++) {
-        if (IsValidDynamicArea(GB_ghettoBlasters[i][GB_areaID]) && areaid == GB_ghettoBlasters[i][GB_areaID]) { // TODO: Check for other streams (MP3 & Radio)
-            DeletePVar(playerid, "GB.ON");
-            return StopAudioStreamForPlayer(playerid);
-        }
-    }
 
     return 1;
 }
@@ -102,6 +75,33 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
                 SetPlayerPosEx(playerid, GB_ghettoBlasters[gbID][GB_posX], GB_ghettoBlasters[gbID][GB_posY], GB_ghettoBlasters[gbID][GB_posZ] + 2.0, 0, 0);
                 return 1;
             }
+        }
+    }
+
+    return 1;
+}
+
+stock GC_StartStream(playerid, areaid) {
+    // Wrapper cause samp is buggy
+    for (new i = 0; i <= GetPlayerPoolSize(); i++) {
+        if (IsValidDynamicArea(GB_ghettoBlasters[i][GB_areaID]) && areaid == GB_ghettoBlasters[i][GB_areaID] && strlen(GB_ghettoBlasters[i][GB_streamURL]) > 0) { // TODO: Check for other streams (MP3 & Radio)
+            if (GetPVarInt(playerid, "GB.ON"))
+                StopAudioStreamForPlayer(playerid);
+            
+            SetPVarInt(playerid, "GB.ON", 1);
+            return PlayAudioStreamForPlayer(playerid, GB_ghettoBlasters[i][GB_streamURL], GB_ghettoBlasters[i][GB_posX], GB_ghettoBlasters[i][GB_posY], GB_ghettoBlasters[i][GB_posZ], GB_GHETTOBLASTER_RANGE, 1);
+        }
+    }
+
+    return 1;
+}
+
+stock GC_StopStream(playerid, areaid) {
+    // Wrapper cause samp is buggy
+    for (new i = 0; i <= GetPlayerPoolSize(); i++) {
+        if (IsValidDynamicArea(GB_ghettoBlasters[i][GB_areaID]) && areaid == GB_ghettoBlasters[i][GB_areaID]) { // TODO: Check for other streams (MP3 & Radio)
+            DeletePVar(playerid, "GB.ON");
+            return StopAudioStreamForPlayer(playerid);
         }
     }
 
