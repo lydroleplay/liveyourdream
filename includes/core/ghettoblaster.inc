@@ -189,6 +189,8 @@ CMD:ghettoblaster(playerid, params[]) {
     return ShowPlayerDialog(playerid, DIALOG_GHETTOBLASTER, DIALOG_STYLE_LIST, "Verfügbare Radiostationen", GB_stations, "Auswählen", "Abbrechen");
 }
 
+CMD:rghettoblaster(playerid, params[]) return cmd_removeghettoblaster(playerid, params);
+
 CMD:removeghettoblaster(playerid, params[]) {
     if (!IsValidDynamicObject(GB_ghettoBlasters[playerid][GB_objID]) && Spieler[playerid][pAdmin] < 1)
         return SendClientMessage(playerid, COLOR_DARKRED, "Du hast kein Ghettoblaster aufgestellt.");

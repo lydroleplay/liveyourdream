@@ -33232,7 +33232,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SendClientMessage(playerid, COLOR_BLUE, "* KONSUMIEREN *: {FFFFFF}/Nimmdrogen, /Isskeks, /Rauchzig, /Zigweg");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Geben, /Liste, /Inventar, /Koffer, /Kofferauf, /Firmen, /Kampfstyle, /Pickwaffe, /Sellkekse");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Jailtime, /Tottime, /Mutetime, /Animlist, /Staatskasse, /Killauftrag, /Leader, /Gutscheincode");
-                    SendClientMessage(playerid, COLOR_BLUE, "* MUSIK-BEFEHLE *: {FFFFFF}/Musik, /Mp3player, /Ghettoblaster, /Removeghettoblaster");
+                    SendClientMessage(playerid, COLOR_BLUE, "* MUSIK-BEFEHLE *: {FFFFFF}/Musik, /Mp3player, /Ghettoblaster, /Removeghettoblaster (/Rghettoblaster)");
                     SendClientMessage(playerid, COLOR_BLUE, "* GELD-BEFEHLE *: {FFFFFF}/Automat, /Ueberweisen, /Gebecheck, /Guthaben, /Zahlen");
                     SendClientMessage(playerid, COLOR_BLUE, "* GANGFIGHT-BEFEHLE *: {FFFFFF}/Gangfightwette, /Gangfightinfo");
                     SendClientMessage(playerid, COLOR_BLUE, "* RAUBBEFEHLE *: {FFFFFF}/Transporterausrauben, /Bankausrauben, /Tankstelleausrauben");
@@ -33788,17 +33788,18 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 else if(listitem == 11 ) {
                     if(Spieler[playerid][pAdmin] >= 1)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Ac, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
-                        SendClientMessage(playerid, COLOR_BLUE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster)");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar");
                     }
                     if(Spieler[playerid][pAdmin] >= 3)
                     {
-                        SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gotoliste, /Gotopos, /Gotohaus, /Veh, /Delveh, /Delallvehs, /Spec, /Specoff, /Changeweather");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem, /Atafelentmieten, /Checkskill");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons");
