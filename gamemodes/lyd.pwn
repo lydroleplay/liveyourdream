@@ -14784,12 +14784,12 @@ public Servername()
 {
     if(serverhost == 1)
     {
-        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay [ADVENTSKALENDER]");
+        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay [FROHES NEUES]");
         serverhost = 2;
     }
     else if(serverhost == 2)
     {
-        SendRconCommand("hostname Live your Dream ~ Roleplay [NEUJAHRSFEIER 01.01.2019!]");
+        SendRconCommand("hostname Live your Dream ~ Roleplay [NEUJAHRSFEIER 05.01.2019!]");
         serverhost = 1;
     }
 }
