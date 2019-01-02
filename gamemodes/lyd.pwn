@@ -5132,14 +5132,14 @@ OnGameModeInit2() {
     ballascars[15]=AddStaticVehicleEx(566,2022.5289,-1141.0352,24.5565,89.6170,233,233,-1); // TahomaBallas
     ballascars[16]=AddStaticVehicleEx(415,2026.1147,-1130.4745,24.4481,89.5987,233,233,-1); // CheetahBallas
 
-	fscars[0] = AddStaticVehicleEx(445,1263.2448,-1795.6274,13.3110,269.4153,3,3,-1); // FAHRFS
-	fscars[1] = AddStaticVehicleEx(445,1263.3678,-1800.2133,13.3047,270.6445,3,3,-1); // FAHRFS
-	fscars[2] = AddStaticVehicleEx(445,1263.1033,-1804.4402,13.2867,269.5510,3,3,-1); // FAHRFS
-	fscars[3] = AddStaticVehicleEx(445,1263.1484,-1809.0742,13.2964,269.5421,3,3,-1); // FAHRFS
-	fscars[4] = AddStaticVehicleEx(445,1263.0479,-1813.4319,13.2942,268.2029,3,3,-1); // FAHRFS
+	fscars[0] = AddStaticVehicleEx(405,1263.2448,-1795.6274,13.3110,269.4153,3,3,-1); // FAHRFS
+	fscars[1] = AddStaticVehicleEx(405,1263.3678,-1800.2133,13.3047,270.6445,3,3,-1); // FAHRFS
+	fscars[2] = AddStaticVehicleEx(405,1263.1033,-1804.4402,13.2867,269.5510,3,3,-1); // FAHRFS
+	fscars[3] = AddStaticVehicleEx(405,1263.1484,-1809.0742,13.2964,269.5421,3,3,-1); // FAHRFS
+	fscars[4] = AddStaticVehicleEx(405,1263.0479,-1813.4319,13.2942,268.2029,3,3,-1); // FAHRFS
 	fscars[5] = AddStaticVehicleEx(525,1279.3492,-1834.8304,13.4539,90.2772,3,3,-1); // FAHRFS
-	fscars[6] = AddStaticVehicleEx(445,1262.9385,-1817.7603,13.2450,270.3015,3,3,-1); // FAHRFS
-	fscars[7] = AddStaticVehicleEx(445,1262.9637,-1821.9283,13.2833,270.3065,3,3,-1); // FAHRFS
+	fscars[6] = AddStaticVehicleEx(405,1262.9385,-1817.7603,13.2450,270.3015,3,3,-1); // FAHRFS
+	fscars[7] = AddStaticVehicleEx(405,1262.9637,-1821.9283,13.2833,270.3065,3,3,-1); // FAHRFS
 	fscars[8] = AddStaticVehicleEx(522,1281.5190,-1800.4894,12.9598,0.2219,3,3,-1); // FSFAHRMOT
 	fscars[9] = AddStaticVehicleEx(522,1279.1785,-1800.5511,12.9582,0.3022,3,3,-1); // FSFAHRMOT
 	fscars[10] = AddStaticVehicleEx(522,1276.7729,-1800.6061,12.9556,0.0330,3,3,-1); // FSFAHRMOT
@@ -5148,8 +5148,8 @@ OnGameModeInit2() {
 	fscars[13] = AddStaticVehicleEx(452,941.0000000,-2064.8999000,0.0000000,181.0000000,1,1,-1);//FS Boot
 	fscars[14] = AddStaticVehicleEx(452,940.5000000,-2050.0000000,0.0000000,0.0000000,1,1,-1);//FS Boot
 	fscars[15] = AddStaticVehicleEx(593,1225.2351,-1797.4314,34.1174,90.1936,3,1,-1); // fs fahr
-	fscars[16] = AddStaticVehicleEx(431,1200.3561,-1831.2299,13.5042,270.4382,3,3,-1); // bus fahrschule
-	fscars[17] = AddStaticVehicleEx(431,1200.3883,-1835.4598,13.5199,270.4391,3,3,-1); // bus fahrschule
+	//fscars[16] = AddStaticVehicleEx(431,1200.3561,-1831.2299,13.5042,270.4382,3,3,-1); // bus fahrschule
+	//fscars[17] = AddStaticVehicleEx(431,1200.3883,-1835.4598,13.5199,270.4391,3,3,-1); // bus fahrschule
 
     fsacars[0] = AddStaticVehicleEx(435,1172.6271,-1789.8167,14.0381,179.9523,1,1,-1); // fslkwhange
     fsacars[1] = AddStaticVehicleEx(435,1181.6830,-1791.7823,14.0243,179.5749,1,1,-1); // fslkwhanger
@@ -43771,13 +43771,13 @@ stock ReturnPlayerRank(playerid, rank[35])
     }
     else if(Spieler[playerid][pFraktion] == 8)
     {
-        if(Spieler[playerid][pRank] == 0){rank ="Praktikant";}
+        if(Spieler[playerid][pRank] == 0){rank ="Fahrlehrer in Ausbildung";}
         else if(Spieler[playerid][pRank] == 1){rank ="Fahrlehrer";}
-        else if(Spieler[playerid][pRank] == 2){rank ="Fahrlehrer";}
-        else if(Spieler[playerid][pRank] == 3){rank ="Fahrlehrer";}
-        else if(Spieler[playerid][pRank] == 4){rank ="Fahrlehrer";}
-        else if(Spieler[playerid][pRank] == 5){rank ="Fahrlehrer";}
-        else if(Spieler[playerid][pRank] == 6){rank ="Leiter";}
+        else if(Spieler[playerid][pRank] == 2){rank ="Erfahrener Fahrlehrer";}
+        else if(Spieler[playerid][pRank] == 3){rank ="Treuer Fahrlehrer";}
+        else if(Spieler[playerid][pRank] == 4){rank ="Fahrschulausbilder";}
+        else if(Spieler[playerid][pRank] == 5){rank ="Stellv. Leiter der Fahrschule";}
+        else if(Spieler[playerid][pRank] == 6){rank ="Leiter der Fahrschule";}
     }
     else if(Spieler[playerid][pFraktion] == 9)
     {
@@ -55356,13 +55356,13 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             }
             else if(fID == 8)
             {
-                if(rk == 0){rank ="Praktikant";}
-                else if(rk == 1){rank ="Fahrlehrer R1";}
-                else if(rk == 2){rank ="Fahrlehrer R2";}
-                else if(rk == 3){rank ="Fahrlehrer R3";}
-                else if(rk == 4){rank ="Fahrlehrer R4";}
-                else if(rk == 5){rank ="Fahrlehrer R5";}
-                else if(rk == 6){rank ="Fahrlehrer Chef";}
+                if(rk == 0){rank ="Fahrlehrer in Ausbildung";}
+                else if(rk == 1){rank ="Fahrlehrer";}
+                else if(rk == 2){rank ="Erfahrener Fahrlehrer";}
+                else if(rk == 3){rank ="Treuer Fahrlehrer";}
+                else if(rk == 4){rank ="Fahrschulausbilder";}
+                else if(rk == 5){rank ="Stellv. Leiter der Fahrschule";}
+                else if(rk == 6){rank ="Leiter der Fahrschule";}
             }
             else if(fID == 9)
             {
