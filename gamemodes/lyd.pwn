@@ -2122,6 +2122,8 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_AWAFFENLAGER_CHANGE 1385
 #define     DIALOG_FINDMPARK 1386
 #define     DIALOG_NEON 1387
+#define     DIALOG_GHETTOBLASTER 1388
+#define     DIALOG_ADMIN_GHETTOBLASTER 1389
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -4448,6 +4450,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <paintball>
 //#include <halloween>
 #include <core\anticheat>
+#include <core\ghettoblaster>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
@@ -11669,7 +11672,7 @@ CMD:supermarkt(playerid)
         if(IsPlayerInRangeOfPoint(playerid, 2.0, 2.2396,-29.0123,1003.5494))
         {
 
-            ShowPlayerDialog(playerid, DIALOG_MARKT, DIALOG_STYLE_LIST, "Super Markt", "Telefonbuch ($400)\n5 Kekse ($150)\n10 Zigaretten ($225)\nBrecheisen ($3.500)\nHelm ($2.000)\nMP3-Player ($2.500)\nKoffer ($1.500)\nRadarfallen-Warnung ($15.000)\nFallschirm ($1.200)", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_MARKT, DIALOG_STYLE_LIST, "Super Markt", "Telefonbuch ($400)\n5 Kekse ($150)\n10 Zigaretten ($225)\nBrecheisen ($3.500)\nHelm ($2.000)\nMusikkit (MP3-Player + Ghettoblaster) ($2.500)\nKoffer ($1.500)\nRadarfallen-Warnung ($15.000)\nFallschirm ($1.200)", "Kaufen", "Abbrechen");
             return 1;
         }
         else
@@ -33403,6 +33406,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SendClientMessage(playerid, COLOR_BLUE, "* KONSUMIEREN *: {FFFFFF}/Nimmdrogen, /Isskeks, /Rauchzig, /Zigweg");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Geben, /Liste, /Inventar, /Koffer, /Kofferauf, /Firmen, /Kampfstyle, /Pickwaffe, /Sellkekse");
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Jailtime, /Tottime, /Mutetime, /Animlist, /Staatskasse, /Killauftrag, /Leader, /Gutscheincode");
+                    SendClientMessage(playerid, COLOR_BLUE, "* MUSIK-BEFEHLE *: {FFFFFF}/Musik, /Mp3player, /Ghettoblaster, /Removeghettoblaster");
                     SendClientMessage(playerid, COLOR_BLUE, "* GELD-BEFEHLE *: {FFFFFF}/Automat, /Ueberweisen, /Gebecheck, /Guthaben, /Zahlen");
                     SendClientMessage(playerid, COLOR_BLUE, "* GANGFIGHT-BEFEHLE *: {FFFFFF}/Gangfightwette, /Gangfightinfo");
                     SendClientMessage(playerid, COLOR_BLUE, "* RAUBBEFEHLE *: {FFFFFF}/Transporterausrauben, /Bankausrauben, /Tankstelleausrauben");
@@ -33977,7 +33981,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Sban, /Confighouse, /Configbiz, /Rauswerfenhotel, /Configtanke, /Makeleader, /Setzoneowner");
                         SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Gebefirma, /Delfirma, /Gebeclub, /Delclub, /Bfreischalten (2. Biz-Schlüssel), /SFreischalten (6. Schlüssel)");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Awaffenlager, /Fsbreset, /Namechange, /Createhouse, /delhouse");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* ADMINISTRATOR *: {FFFFFF}/Awaffenlager, /Fsbreset, /Namechange, /Createhouse, /delhouse, /Fixveh /Removeghettoblaster");
                     }
                     if(Spieler[playerid][pAdmin] >= 5)
                     {
@@ -36659,15 +36663,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     GivePlayerWeapon(playerid, WEAPON_CAMERA, 50);
                 }
                 else if (listitem == 3) {
-                    if (Spieler[playerid][pMP3Player]) return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen MP3-Player.");
+                    if (Spieler[playerid][pMP3Player]) return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Musikkit.");
                     if (GetPlayerMoney(playerid) < 1500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
                     if (Biz[HandyShopBiz_Index][bWaren] < 3) return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat nicht mehr genügend Waren!");
                     Biz[HandyShopBiz_Index][bWaren] -= 3;
                     Biz[HandyShopBiz_Index][bKasse] += 1500;
                     GivePlayerCash(playerid, -1500);
                     Spieler[playerid][pMP3Player] = 1;
-                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
-                    ShowBuyInformation(playerid,"~y~MP3-Player ~w~gekauft!");
+                    SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
+                    ShowBuyInformation(playerid,"~y~Musikkit ~w~gekauft!");
                 }
                 else if(listitem==4) { //Call-Ya Handy-Karte Kaufen
                     if( Spieler[playerid][pHandyGeld] == HANDY_VERTRAG ) return SendClientMessage(playerid, COLOR_RED, "Du musst erst deinen Handyvertrag kündigen!");
@@ -37109,7 +37113,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new preis = 1500;
                     new pVW = GetPlayerVirtualWorld(playerid);
                     if( Spieler[playerid][pMP3Player] ) {
-                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen MP3-Player.");
+                        return SendClientMessage(playerid, COLOR_RED, "Du besitzt bereits einen Musikkit.");
                     }
                     if(pVW == 0)
                     {
@@ -37121,7 +37125,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                             Biz[39][bKasse] += preis;
                             GivePlayerCash(playerid, -preis);
                             Spieler[playerid][pMP3Player]++;
-                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
+                            SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                         }
                     }
                     if(pVW == 22)
@@ -37132,7 +37136,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[22][bKasse] += preis;
                         GivePlayerCash(playerid, -preis);
                         Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                     }
                     if(pVW == 23)
                     {
@@ -37142,7 +37146,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[23][bKasse] += preis;
                         GivePlayerCash(playerid, -preis);
                         Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                     }
                     if(pVW == 24)
                     {
@@ -37152,7 +37156,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[24][bKasse] += preis;
                         GivePlayerCash(playerid, -preis);
                         Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                     }
                     if(pVW == 26)
                     {
@@ -37162,7 +37166,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[26][bKasse] += preis;
                         GivePlayerCash(playerid, -preis);
                         Spieler[playerid][pMP3Player]++;
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                     }
                     if(pVW == 27)
                     {
@@ -37171,7 +37175,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[27][bWaren] -= 3;
                         Biz[27][bKasse] += preis;
                         GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                         Spieler[playerid][pMP3Player]++;
                     }
                     if(pVW == 28)
@@ -37181,7 +37185,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         Biz[28][bWaren] -= 3;
                         Biz[28][bKasse] += preis;
                         GivePlayerCash(playerid, -preis);
-                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen MP3-Player gekauft.");
+                        SendClientMessage(playerid, COLOR_WHITE, "* Du hast dir einen Musikkit gekauft.");
                         Spieler[playerid][pMP3Player]++;
                     }
                     ShowBuyInformation(playerid,"~y~MP3Player ~w~gekauft!");
@@ -66468,14 +66472,14 @@ CMD:elektromarkt(playerid)
     if( IsPlayerInRangeOfPoint(playerid,5.0, ELECTRONICSSHOP_COORDS) )
     {
         if( Spieler[playerid][pHandyGeld] == HANDY_VERTRAG ) {
-            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandyvertrag kündigen\nKamera kaufen ($750)\nMP3-Player ($1.500", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandyvertrag kündigen\nKamera kaufen ($750)\nMusikkit (MP3-Player + Ghettoblaster) ($1.500)", "Kaufen", "Abbrechen");
         }
         else {
-            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandy Vertrag ($1.500)\nKamera kaufen ($750)\nMP3-Player ($1.500)\nCallYa-Handykarte\nCallYa Guthaben", "Kaufen", "Abbrechen");
+            ShowPlayerDialog(playerid, DIALOG_HANDYSHOP, DIALOG_STYLE_LIST, "Elektromarkt", "Handy kaufen\nHandy Vertrag ($1.500)\nKamera kaufen ($750)\nMusikkit (MP3-Player + Ghettoblaster) ($1.500)\nCallYa-Handykarte\nCallYa Guthaben", "Kaufen", "Abbrechen");
         }
         return 1;
     }
-    SendClientMessage(playerid, COLOR_RED, "Du musst dich im Handy-Shop an der Kasse befinden!");
+    SendClientMessage(playerid, COLOR_RED, "Du musst dich im Elektromarkt an der Kasse befinden!");
     return 1;
 }
 
