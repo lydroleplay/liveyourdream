@@ -45169,7 +45169,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
-    if (Spieler[playerid][pAdmin] < 1) return 1;
+    if (Spieler[playerid][pAdmin] < 3 || !Spieler[playerid][pAdminDienst]) return 1;
     SetPlayerPosFindZ(playerid, fX, fY, fZ);
     return 1;
 }
