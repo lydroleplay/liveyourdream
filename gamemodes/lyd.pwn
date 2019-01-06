@@ -28419,10 +28419,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                 }
                 else if(skin==237)
                 {
-                    pChoosedSkin[playerid] = 223;
-                }
-                else if(skin==223)
-                {
                     pChoosedSkin[playerid] = 47;
                 }
                 SetPlayerSkin(playerid, pChoosedSkin[playerid]);
