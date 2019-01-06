@@ -38394,7 +38394,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 14)
                 {
-                    ShowPlayerDialog(playerid, VERKAUFH, DIALOG_STYLE_LIST, "Weitere Verkaufshäuser", "Elektromarkt in Los Santos\nAngelshop in Los Santos\nTierhandel in Los Santos", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, VERKAUFH, DIALOG_STYLE_LIST, "Weitere Verkaufshäuser", "Elektromarkt in Los Santos\nAngelshop in Los Santos\nTierhandel in Los Santos\nMünzkassette", "Auswählen", "Abbrechen");
                 }
                 if(listitem == 15)
                 {
@@ -38790,6 +38790,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     SetPlayerCheckpointEx(playerid, PETSHOP_COORDS, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Tierhandel in Los Santos wurde auf der Karte Rot markiert.");
+                }
+                if(listitem==3)
+                {
+                    SetPlayerCheckpointEx(playerid, COINBASE_COORDS, 2.0, CP_NAVI76);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Münzkassette in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
             if(!response)return 1;
