@@ -65953,7 +65953,7 @@ stock ShowNextMuellStation(playerid) {
     while( (Spieler[playerid][pMuell][index] & bitval) );
     Spieler[playerid][pMuell][index] |= bitval;
     Spieler[playerid][pMuellCP] = r;
-    SetPlayerCheckpointEx(playerid,g_Muell[r][M_fPosX],g_Muell[r][M_fPosY],g_Muell[r][M_fPosZ],3.0,CP_MUELL);
+    SetPlayerCheckpointEx(playerid,g_Muell[r][M_fPosX],g_Muell[r][M_fPosY],g_Muell[r][M_fPosZ],8.0,CP_MUELL);
     return 1;
 }
 
@@ -66016,7 +66016,7 @@ COMMAND:entleeren(playerid,params[]) {
     SetPlayerSpecialAction(playerid,SPECIAL_ACTION_CARRY);
     GetXYInFrontOfPosition(x, y, face, -4.25 );
     SetPlayerAttachedObject( playerid, 0, 1265, 5, 0.150000, 0.300000, 0.000000, 270.000000, 0.000000, 0.000000, 0.800000, 0.800000, 0.800000 ); // BlackBag2 - trashblabla
-    SetPlayerCheckpointEx(playerid,x,y,z,2.,CP_MUELL_CARRY);
+    SetPlayerCheckpointEx(playerid,x,y,z,2.0,CP_MUELL_CARRY);
     return 1;
 }
 
