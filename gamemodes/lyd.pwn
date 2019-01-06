@@ -4857,7 +4857,7 @@ OnGameModeInit2() {
     g_aiNoDM[1] = CreateDynamicRectangle(1284.0, -1776.0, 1157.0, -1846.0, .interiorid = -1); // Fahrschule
     g_aiNoDM[2] = CreateDynamicRectangle(1614.3436, -1331.6265, 1671.4816, -1403.0798, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // LSPD Interior
     g_aiNoDM[3] = CreateDynamicRectangle(882.1005, -1438.1812, 965.1881, -1483.2373, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Cityhall Interior
-	g_aiNoDM[4] = CreateDynamicRectangle(1400.2966, -1742.9885, 1558.1973, -1804.2220, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall Exterior
+	g_aiNoDM[4] = CreateDynamicRectangle(1486.3165, -1742.7417, 1399.4124, -1862.0428, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall Exterior
     g_waiNoDM[0] = CreateDynamicRectangle( 1602.0 , -1864.0 , 1419.0 , -1581.0, .interiorid = -1 );
     g_waiNoDM[1] = CreateDynamicRectangle( 788.0 , -1388.0 , 849.0 , -1331.0, .interiorid = -1 );
     g_iAlcatraz = CreateDynamicRectangle(2794.0, 2000.0, 2929.0, 1763.0, .interiorid = 0, .worldid = 0);
@@ -43626,6 +43626,10 @@ CMD:giveschein(playerid, params[])
         SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
         Spieler[pID][pLKWLic] = 1;
     }
+    else {
+        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Giveschein [SpielerID/Name] [Schein]");
+        SendClientMessage(playerid, COLOR_ORANGE, "* Scheine *: Fahrschein, Motorradschein, Lkwschein, Flugschein, Bootsschein, Awaffenschein, Bwaffenschein");
+    }
     return 1;
 }
 
@@ -58638,44 +58642,33 @@ COMMAND:caufbrechen(playerid,params[]) {
 
 forward FreeLicence();
 public FreeLicence() {
-    new
-        now = gettime();
-    for(new i ; i < MAX_PLAYERS ; i++) {
-        if( IsPlayerConnected(i) ) {
+    new now = gettime();
+    for (new i; i <= GetPlayerPoolSize() ; i++) {
+        if (IsPlayerConnected(i)) {
             // Auto
-            if( Spieler[i][punixFSperre] != 0 && Spieler[i][pCarLic] == 0 && Spieler[i][pFPunkte] == 0) {
-                if( Spieler[i][punixFSperre] < now ) {
-                    Spieler[i][punixFSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Autoschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixFSperre] != 0 && Spieler[i][punixFSperre] < now) {
+                Spieler[i][punixFSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Autoschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // Flug
-            if( Spieler[i][punixFlSperre] != 0 && Spieler[i][pFlyLic] == 0 && Spieler[i][pFlPunkte] == 0) {
-                if( Spieler[i][punixFlSperre] < now ) {
-                    Spieler[i][punixFlSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Flugschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixFlSperre] != 0 && Spieler[i][punixFlSperre] < now) {
+                Spieler[i][punixFlSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Flugschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // Motorrad
-            if( Spieler[i][punixMotoSperre] != 0 && Spieler[i][pMotoLic] == 0 && Spieler[i][pMotoPunkte] == 0) {
-                if( Spieler[i][punixMotoSperre] < now ) {
-                    Spieler[i][punixMotoSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Motorradschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixMotoSperre] != 0 && Spieler[i][punixMotoSperre] < now) {
+                Spieler[i][punixMotoSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Motorradschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // LKW
-            if( Spieler[i][punixLKWSperre] != 0 && Spieler[i][pLKWLic] == 0 && Spieler[i][pLKWPunkte] == 0) {
-                if( Spieler[i][punixLKWSperre] < now ) {
-                    Spieler[i][punixLKWSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine LKW Scheinsperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixLKWSperre] != 0 && Spieler[i][punixLKWSperre] < now) {
+                Spieler[i][punixLKWSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine LKW Scheinsperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // Gun
-            if( Spieler[i][punixGunSperre] != 0 && (Spieler[i][pGunLic] == 0 && Spieler[i][pGunLicB] == 0 ) && Spieler[i][pGunPunkte] == 0) {
-                if( Spieler[i][punixGunSperre] < now ) {
-                    Spieler[i][punixGunSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Waffenschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixGunSperre] != 0 && Spieler[i][punixGunSperre] < now) {
+                Spieler[i][punixGunSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Waffenschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
         }
     }
@@ -65960,7 +65953,7 @@ stock ShowNextMuellStation(playerid) {
     while( (Spieler[playerid][pMuell][index] & bitval) );
     Spieler[playerid][pMuell][index] |= bitval;
     Spieler[playerid][pMuellCP] = r;
-    SetPlayerCheckpointEx(playerid,g_Muell[r][M_fPosX],g_Muell[r][M_fPosY],g_Muell[r][M_fPosZ],8.0,CP_MUELL);
+    SetPlayerCheckpointEx(playerid,g_Muell[r][M_fPosX],g_Muell[r][M_fPosY],g_Muell[r][M_fPosZ],3.0,CP_MUELL);
     return 1;
 }
 
@@ -66006,7 +65999,7 @@ COMMAND:entleeren(playerid,params[]) {
     if( !(pCheckpoint[playerid] == CP_MUELL_ENTLEEREN) ) return SendClientMessage(playerid, COLOR_RED, "Du kannst jetzt nicht entleeren machen.");
     new
         cp = Spieler[playerid][pMuellCP];
-    if( !IsPlayerInRangeOfPoint(playerid,2.0,g_Muell[cp][M_fPosX],g_Muell[cp][M_fPosY],g_Muell[cp][M_fPosZ])) {
+    if( !IsPlayerInRangeOfPoint(playerid,3.0,g_Muell[cp][M_fPosX],g_Muell[cp][M_fPosY],g_Muell[cp][M_fPosZ])) {
         return SendClientMessage(playerid, COLOR_RED, "Du bist nicht an der Mülltonne.");
     }
     if( IsPlayerInAnyVehicle(playerid) ) {
@@ -66023,7 +66016,7 @@ COMMAND:entleeren(playerid,params[]) {
     SetPlayerSpecialAction(playerid,SPECIAL_ACTION_CARRY);
     GetXYInFrontOfPosition(x, y, face, -4.25 );
     SetPlayerAttachedObject( playerid, 0, 1265, 5, 0.150000, 0.300000, 0.000000, 270.000000, 0.000000, 0.000000, 0.800000, 0.800000, 0.800000 ); // BlackBag2 - trashblabla
-    SetPlayerCheckpointEx(playerid,x,y,z,0.8,CP_MUELL_CARRY);
+    SetPlayerCheckpointEx(playerid,x,y,z,2.,CP_MUELL_CARRY);
     return 1;
 }
 
@@ -68684,9 +68677,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 1;
         if(Spieler[giveid][pCarLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_RED,"Der Spieler besitzt bereits diesen Schein.");
+            return SendClientMessage(playerid,COLOR_RED,"Der Spieler besitzt bereits diesen Schein.");
         }
-        if(Spieler[playerid][punixFSperre]!=0)
+        if(Spieler[giveid][punixFSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_RED,"Der Spieler hat eine gültige Scheinsperre auf dem Schein.");
         }
@@ -68695,9 +68688,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 2;
         if(Spieler[giveid][pMotoLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixMotoSperre]!=0)
+        if(Spieler[giveid][punixMotoSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68706,9 +68699,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 3;
         if(Spieler[giveid][pFlyLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixFlSperre]!=0)
+        if(Spieler[giveid][punixFlSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68717,16 +68710,16 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 4;
         if(Spieler[giveid][pBoatLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
     }
     else if( !strcmp(pruefung,"lkwschein",true)) {
         modus = 5;
         if(Spieler[giveid][pLKWLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixLKWSperre]!=0)
+        if(Spieler[giveid][punixLKWSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68735,9 +68728,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 6;
         if(Spieler[giveid][pGunLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixGunSperre]!=0)
+        if(Spieler[giveid][punixGunSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68746,9 +68739,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 7;
         if(Spieler[giveid][pGunLicB]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixGunSperre]!=0)
+        if(Spieler[giveid][punixGunSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
