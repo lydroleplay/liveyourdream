@@ -13381,7 +13381,7 @@ CMD:gotopos(playerid, params[])
 {
     new Float:x, Float:y, Float:z, string[128];
     if(sscanf(params, "fff", x,y,z))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Gotopos [Float-X] [Float-Y] [Float-Z]");
-    if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
     new vID = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid))
     {
@@ -13411,6 +13411,19 @@ CMD:gotopos(playerid, params[])
     format(string, sizeof(string), "Du hast dich zur folgenden Koordinate teleportiert: %f, %f, %f", x,y,z);
     SendClientMessage(playerid, COLOR_GREEN, string);
     return 1;
+}
+
+CMD:gotocp(playerid, params[]) return cmd_gotomarker(playerid, params);
+
+CMD:gotomarker(playerid, params[]) {
+    if (!Spieler[playerid][pAdmin])
+        return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
+
+    if (!GetPVarFloat(playerid, "MARKER.X"))
+        return SendClientMessage(playerid, COLOR_DARKRED, "Du hast keinen Checkpoint auf der Karte.");
+
+    format(params, 128, "%f %f %f", GetPVarFloat(playerid, "MARKER.X"), GetPVarFloat(playerid, "MARKER.Y"), GetPVarFloat(playerid, "MARKER.Z"));
+    return cmd_gotopos(playerid, params);
 }
 
 CMD:stadthalle(playerid)
@@ -24833,7 +24846,7 @@ public OnPlayerEnterCheckpoint(playerid)
         pFahrschuleCP[playerid]++;
         cp = pFahrschuleCP[playerid];
         Spieler[playerid][unixFahrschuleZeit] = gettime() + 25;
-        DisablePlayerCheckpoint(playerid);
+        DisablePlayerCheckpointEx(playerid);
         format(String,sizeof(String),"%d/%d",cp,sizeof(g_FahrpruefungCP));
         SendClientMessage(playerid,COLOR_WHITE,String);
         if( cp >= sizeof( g_FahrpruefungCP ) ) {
@@ -25546,7 +25559,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Du hast die Straßen gereinigt! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     ShowBuyInformation(playerid,"~y~Die Straßen sind sauber! ~w~Feierabend!");
@@ -25610,7 +25623,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Du hast die Fracht abgeliefert! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
@@ -25817,7 +25830,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%d", rand);
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     ShowBuyInformation(playerid,"~y~Müll abgeholt und entsorgt! ~w~Feierabend!");
@@ -25932,7 +25945,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     ShowBuyInformation(playerid,"~y~Route abgefahren! ~w~Feierabend!");
@@ -26082,7 +26095,7 @@ public OnPlayerEnterCheckpoint(playerid)
                 new string[128];
                 format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                 GameTextForPlayer(playerid, string, 5000, 1);
-                DisablePlayerCheckpoint(playerid);
+                DisablePlayerCheckpointEx(playerid);
                 SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                 SetVehicleToRespawn(vID);
                 ShowBuyInformation(playerid,"~y~Route abgefahren! ~w~Feierabend!");
@@ -26231,7 +26244,7 @@ public OnPlayerEnterCheckpoint(playerid)
                 new string[128];
                 format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                 GameTextForPlayer(playerid, string, 5000, 1);
-                DisablePlayerCheckpoint(playerid);
+                DisablePlayerCheckpointEx(playerid);
                 SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                 SetVehicleToRespawn(vID);
                 ShowBuyInformation(playerid,"~y~Route abgefahren! ~w~Feierabend!");
@@ -26339,7 +26352,7 @@ public OnPlayerEnterCheckpoint(playerid)
         else {
             SendClientMessage(playerid,COLOR_RED,"Du bist hier falsch.");
         }
-        DisablePlayerCheckpoint(playerid);
+        DisablePlayerCheckpointEx(playerid);
     }
     return 1;
 }
@@ -41767,7 +41780,8 @@ public OnPlayerMoneyCheck()
                 ResetPlayerMoney(i);
                 GivePlayerMoney(i, Spieler[i][pCash]);
                 
-                if (Spieler[playerid][pAdminDienst]) SetPlayerHealth(playerid, 100000);
+                if (Spieler[i][pAdminDienst])
+                    SetPlayerHealth(i, 100000);
             }
             if(fuelcountactive[i]==1&&!IsPlayerInAnyVehicle(i))
             {
@@ -44103,22 +44117,27 @@ stock SendModMessage(color, string[])
     return 1;
 }
 
-stock SetPlayerCheckpointEx(playerid, Float:x, Float:y, Float:z, Float:size, var)
-{
-    if(var == 0)
-    {
-        DisablePlayerCheckpoint(playerid);
-        pCheckpoint[playerid] = CP_NONE;
-        return 1;
-    }
+stock SetPlayerCheckpointEx(playerid, Float:x, Float:y, Float:z, Float:size, var) {
+    if (!var)
+        return DisablePlayerCheckpointEx(playerid);
+    
     pCheckpoint[playerid] = var;
     SetPlayerCheckpoint(playerid, x,y,z,size);
+    SetPVarFloat(playerid, "MARKER.X", x);
+    SetPVarFloat(playerid, "MARKER.Y", y);
+    SetPVarFloat(playerid, "MARKER.Z", z);
+    SetPVarFloat(playerid, "MARKER.SIZE", size);
     return 1;
 }
 stock DisablePlayerCheckpointEx(playerid)
 {
     pCheckpoint[playerid] = CP_NONE;
     DisablePlayerCheckpoint(playerid);
+    DeletePVar(playerid, "MARKER.X");
+    DeletePVar(playerid, "MARKER.Y");
+    DeletePVar(playerid, "MARKER.Z");
+    DeletePVar(playerid, "MARKER.SIZE");
+    return 1;
 }
 forward IsAExhaust(componentid);
 public IsAExhaust(componentid)
@@ -54144,7 +54163,7 @@ public Pulse_Fahrschule(playerid) {
 }
 
 stock FahrschuleAbbruch(playerid) {
-    DisablePlayerCheckpoint(playerid);
+    DisablePlayerCheckpointEx(playerid);
     RemovePlayerFromVehicle(playerid);
     DestroyVehicleEx( pFahrschulCar[playerid] );
     if( pFahrschulCar[playerid] != INVALID_VEHICLE_ID ) {
