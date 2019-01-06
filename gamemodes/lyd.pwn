@@ -45106,7 +45106,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
             return 1;
         }
         // Headshot Script von dir, soll NUR für Hitmans eingestellt werden und nur bei der Zielperson funktionieren.
-        if( Spieler[issuerid][pFraktion] == 14 ) {
+        if( Spieler[issuerid][pFraktion] == 14 && !Spieler[playerid][pAdminDienst]) {
             if(weaponid == 34 ) {
                 if(bodypart == 9) {
                     new
