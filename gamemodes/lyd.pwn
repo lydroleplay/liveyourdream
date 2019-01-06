@@ -3448,7 +3448,7 @@ enum aHaus {
     Tank,
 };
 
-new dealerShipBizIndex[] = {31, 32, 33, 34, 46, 47, 19, 20, 28, 44, 43};
+new dealerShipBizIndex[] = {31, 32, 33, 34, 46, 47, 19, 20, 28, 29, 44};
 
 new Kaufliste[84][aHaus] = {
 //Normal-Karosserien - Intercars
@@ -19162,7 +19162,7 @@ CMD:tankkassestand(playerid)
 {
     new t = IsPlayerAtTanke(playerid);
     if(t == 999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keiner Tankstelle.");
-    if(strcmp(GetName(playerid), Tanke[t][tBesitzer], true) == 0)
+    if(Spieler[playerid][pAdmin] > 3 || strcmp(GetName(playerid), Tanke[t][tBesitzer], true) == 0)
     {
         new string[128];
         format(string, sizeof(string), "* Tankstellen-Kasse: $%s *", AddDelimiters(Tanke[t][tKasse]));
@@ -19181,7 +19181,7 @@ CMD:bizkassestand(playerid)
 {
     new h=IsPlayerAtBiz(playerid);
     if(h==999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich vor keinem Geschäft.");
-    if(strcmp(GetName(playerid), Biz[h][bBesitzer], true) == 0)
+    if(Spieler[playerid][pAdmin] > 3 || strcmp(GetName(playerid), Biz[h][bBesitzer], true) == 0)
     {
         new string[128];
         format(string, sizeof(string), "* Geschäfts-Kasse: $%s *", AddDelimiters(Biz[h][bKasse]));
@@ -19200,7 +19200,7 @@ CMD:hauskassestand(playerid)
 {
     new h=IsPlayerAtHouse(playerid);
     if(h==999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich vor keinem Haus.");
-    if(Spieler[playerid][pPlayerHouse] == h )
+    if(Spieler[playerid][pAdmin] > 3 || Spieler[playerid][pPlayerHouse] == h )
     {
         new string[128];
         format(string, sizeof(string), "* Haus-Kasse: $%s *", AddDelimiters(Haus[h][hKasse]));
@@ -30713,7 +30713,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 Streamer_Update(playerid);
                 format(String,sizeof(String),"Du hast folgendes Möbelstück gekauft: %s (-$%s)",g_HausMoebel[index][HM_sTitel], AddDelimiters(g_HausMoebel[index][HM_iPrice]));
                 SendClientMessage(playerid,COLOR_YELLOW,String);
-                GivePlayerCash(playerid, -g_HausMoebel[index][HM_iPrice]);
+                //GivePlayerCash(playerid, -g_HausMoebel[index][HM_iPrice]);
 
                 // DB ID holen
                 format(String,sizeof(String),"INSERT INTO `hausmoebel` (`id`, `houseid`, `moebelid`, `x`, `y`, `z`, `rx`, `ry`, `rz`) \
@@ -33563,7 +33563,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         format(string1, sizeof(string1), "Deine Aufgabe als Drogendealer ist es Pakete aufzuladen und, sie an einem bestimmten Ort zu entladen und Drogen zu verkaufen. \n");
                         format(string2, sizeof(string2), "Die Drogendealer-Cars findest du unter /Showjob. Achte drauf, dass dich kein Polizist beim Drogenverkauf erwischt!\n");
                         format(string3, sizeof(string3), "\nBefehle:\n{0077FF}/Paketeinladen => Damit nimmst Drogenpakete in dein Van auf.\n/Paketentladen => Damit lässt du die aufgeladenen Drogenpakete am SF-Hafen ab.\n/Selldrogen => Damit verkaufst du Drogen.\n/Showjob => Dein Arbeitsplatz/Ort wird dir als Marker angezeigt.\n/Jc => Der Dealer Jobchat.\n");
-                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Detektiv-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufern!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
+                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Drogendealer-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufern!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
                         format(string4, sizeof(string4), "%s%s%s%s", string1, string2, string3, string4);
                         ShowPlayerDialog(playerid, DIALOG_BAUERHELP, DIALOG_STYLE_MSGBOX, "BERUF DROGENDEALER", string4, "OK", "");
                     }
@@ -33577,7 +33577,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         format(string1, sizeof(string1), "Deine Aufgabe als Waffendealer ist es Pakete aufzuladen und, sie an einem bestimmten Ort zu entladen und Waffen zu verkaufen. \n");
                         format(string2, sizeof(string2), "Die Waffendealer-Cars findest du unter /Showjob. Achte drauf, dass dich kein Polizist beim Waffenverkauf erwischt!\n");
                         format(string3, sizeof(string3), "\nBefehle:\n{0077FF}/Paketeinladen => Damit nimmst du Pakete in dein Van auf.\n/Paketentladen => Damit lässt du die aufgeladenen Pakete am SF-Hafen ab.\n/Sellgun => Damit verkaufst du Waffen, die du aus deinen Waffenteilen baust.\n/Sellwaffenteile => Damit kannst du deine Waffenteile verkaufen.\n/Showjob => Dein Arbeitsplatz/Ort wird dir als Marker angezeigt\n/Jc => Der Dealer Jobchat\n");
-                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Detektiv-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufer!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
+                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Waffendealer-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufer!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
                         format(string4, sizeof(string4), "%s%s%s%s", string1, string2, string3, string4);
                         ShowPlayerDialog(playerid, DIALOG_BAUERHELP, DIALOG_STYLE_MSGBOX, "BERUF WAFFENDEALER", string4, "OK", "");
                     }
