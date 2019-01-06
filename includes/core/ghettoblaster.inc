@@ -1,3 +1,5 @@
+#include <YSI\y_hooks>
+
 #define GB_GHETTOBLASTER_RANGE              20.0
 #define GB_GHETTOBLASTER_RANGE_THRESHOLD    25.0
 

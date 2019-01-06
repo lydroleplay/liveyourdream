@@ -2125,7 +2125,17 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_GHETTOBLASTER 1388
 #define     DIALOG_ADMIN_GHETTOBLASTER 1389
 
+#define     DIALOG_COINBASE_CHOOSE 1390
+#define     DIALOG_COINBASE_BUYORSELL 1391
+#define     DIALOG_COINBASE_AMOUNT 1392
+#define     DIALOG_COINBASE_CONFIRM 1393
+
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
+
+enum {
+    HTTP_NONE,
+    HTTP_COINBASE
+}
 
 enum {
     CP_NONE,//0
@@ -2455,7 +2465,7 @@ enum {
 
 #define     MAX_HOUSES          703
 #define     MAX_HOTELS          30
-#define     MAX_BIZES           62
+#define     MAX_BIZES           63
 #define     MAX_TANKEN          30
 #define     MAX_FISCHE_PRO_PLATZ    20
 #define     MAX_APLATZ          10
@@ -4048,7 +4058,12 @@ enum SpielerDaten {
     pEventPoints,
     pAdventDay,
     pAdventMin,
-    pMustUseAC // AC obligation
+    pMustUseAC, // AC obligation
+    Float:pBTC, // Coinbase start
+    Float:pETH,
+    Float:pLTC,
+    Float:pAAPL,
+    Float:pSSUNF // Coinbase end
 }
 
 enum e_FahrPruefung {
@@ -4445,11 +4460,13 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\parcour>
 //#include <maps\christmasCalendar>
 //#include <maps\christmasMarket>
+#include <maps\coinbase>
 
 // Systems
 #include <paintball>
 //#include <halloween>
 #include <core\anticheat>
+#include <core\coinbase_system>
 #include <core\ghettoblaster>
 
 enum E_VEHICLE_DEALERSHIP {
@@ -6306,6 +6323,12 @@ public OnPlayerConnect(playerid)
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
     Spieler[playerid][pMustUseAC] = 0;
+    
+    Spieler[playerid][pBTC] = 0.0; // Coinbase start
+    Spieler[playerid][pETH] = 0.0;
+    Spieler[playerid][pLTC] = 0.0;
+    Spieler[playerid][pAAPL] = 0.0;
+    Spieler[playerid][pSSUNF] = 0.0; // Coinbase end
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -7285,6 +7308,12 @@ public OnPlayerDisconnect(playerid, reason)
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
     Spieler[playerid][pMustUseAC] = 0;
+
+    Spieler[playerid][pBTC] = 0.0; // Coinbase start
+    Spieler[playerid][pETH] = 0.0;
+    Spieler[playerid][pLTC] = 0.0;
+    Spieler[playerid][pAAPL] = 0.0;
+    Spieler[playerid][pSSUNF] = 0.0; // Coinbase end
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -41440,7 +41469,12 @@ stock SaveAccount(playerid)
                 `Eventpoints` = %d, \
                 `AdventDay` = %d, \
                 `AdventMin` = %d, \
-                `MustUseAC` = %d",
+                `MustUseAC` = %d, \
+                `cb_BTC` = %f, \
+                `cb_ETH` = %f, \
+                `cb_LTC` = %f, \
+                `cb_AAPL` = %f, \
+                `cb_SSUNF` = %f",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -41467,7 +41501,12 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pEventPoints],
                     Spieler[playerid][pAdventDay],
                     Spieler[playerid][pAdventMin],
-                    Spieler[playerid][pMustUseAC]);
+                    Spieler[playerid][pMustUseAC],
+                    Spieler[playerid][pBTC],
+                    Spieler[playerid][pETH],
+                    Spieler[playerid][pLTC],
+                    Spieler[playerid][pAAPL],
+                    Spieler[playerid][pSSUNF]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -41641,7 +41680,12 @@ new const PlayerColumns[][] = {
     {"Eventpoints"},
     {"AdventDay"},
     {"AdventMin"},
-    {"MustUseAC"}
+    {"MustUseAC"},
+    {"cb_BTC"},
+    {"cb_ETH"},
+    {"cb_LTC"},
+    {"cb_AAPL"},
+    {"cb_SSUNF"}
 };
 
 new
@@ -46416,6 +46460,19 @@ stock StripNewLine(str[]) //ysi_misc.own
     new
         l = strlen(str);
     while (l-- && str[l] <= ' ') str[l] = '\0';
+}
+
+stock LogCoinbase(name[], boughtOrSold, Float:amount, asset[], fiat)
+{
+    new File:LogFile, jahr, monat, tag, stunde, minute, sekunde, string[128], path[64];
+    getdate(jahr, monat, tag);
+    gettime(stunde, minute, sekunde);
+    format(path, sizeof(path), "/Logs/CoinbaseLog/%02d-%02d-%d.txt", tag, monat, jahr);
+    LogFile = fopen(path, io_append);
+    format(string, sizeof(string), "[COINBASE] [%02d:%02d:%02d] - %s %s %.5f %s for $%d.\r\n", stunde, minute, sekunde, name, boughtOrSold ? "sold" : "bought", amount, asset, fiat);
+    fwrite(LogFile, string);
+    fclose(LogFile);
+    return 1;
 }
 
 stock LogCommand(text[])
@@ -55752,6 +55809,12 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pAdventDay] = cache_get_row_int(0,142,connectionHandle);
             Spieler[playerid][pAdventMin] = cache_get_row_int(0,143,connectionHandle);
             Spieler[playerid][pMustUseAC] = cache_get_row_int(0, 144, connectionHandle);
+
+            Spieler[playerid][pBTC] = cache_get_row_float(0, 145, connectionHandle); // Coinbase start
+            Spieler[playerid][pETH] = cache_get_row_float(0, 146, connectionHandle);
+            Spieler[playerid][pLTC] = cache_get_row_float(0, 147, connectionHandle);
+            Spieler[playerid][pAAPL] = cache_get_row_float(0, 148, connectionHandle);
+            Spieler[playerid][pSSUNF] = cache_get_row_float(0, 149, connectionHandle); // Coinbase end
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
