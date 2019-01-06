@@ -213,7 +213,7 @@ CMD:removeghettoblaster(playerid, params[]) {
         }
 
         // Admin action
-        if (Spieler[playerid][pAdmin] > 1) {
+        if (Spieler[playerid][pAdmin]) {
             removeGhettoBlaster(i);
             SCMFormatted(i, COLOR_DARKRED, "%s %s hat deinen Ghettoblaster entfernt.", GetPlayerAdminRang(playerid), GetName(playerid));
             return SCMFormatted(playerid, COLOR_LIGHTBLUE, "Du hast den Ghettoblaster von %s entfernt.", GetName(i));
