@@ -2125,7 +2125,17 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_GHETTOBLASTER 1388
 #define     DIALOG_ADMIN_GHETTOBLASTER 1389
 
+#define     DIALOG_COINBASE_CHOOSE 1390
+#define     DIALOG_COINBASE_BUYORSELL 1391
+#define     DIALOG_COINBASE_AMOUNT 1392
+#define     DIALOG_COINBASE_CONFIRM 1393
+
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
+
+enum {
+    HTTP_NONE,
+    HTTP_COINBASE
+}
 
 enum {
     CP_NONE,//0
@@ -2455,7 +2465,7 @@ enum {
 
 #define     MAX_HOUSES          703
 #define     MAX_HOTELS          30
-#define     MAX_BIZES           62
+#define     MAX_BIZES           63
 #define     MAX_TANKEN          30
 #define     MAX_FISCHE_PRO_PLATZ    20
 #define     MAX_APLATZ          10
@@ -3438,7 +3448,7 @@ enum aHaus {
     Tank,
 };
 
-new dealerShipBizIndex[] = {31, 32, 33, 34, 46, 47, 19, 20, 28, 44, 43};
+new dealerShipBizIndex[] = {31, 32, 33, 34, 46, 47, 19, 20, 28, 29, 44};
 
 new Kaufliste[84][aHaus] = {
 //Normal-Karosserien - Intercars
@@ -4048,7 +4058,12 @@ enum SpielerDaten {
     pEventPoints,
     pAdventDay,
     pAdventMin,
-    pMustUseAC // AC obligation
+    pMustUseAC, // AC obligation
+    Float:pBTC, // Coinbase start
+    Float:pETH,
+    Float:pLTC,
+    Float:pAAPL,
+    Float:pSSUNF // Coinbase end
 }
 
 enum e_FahrPruefung {
@@ -4445,11 +4460,13 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\parcour>
 //#include <maps\christmasCalendar>
 //#include <maps\christmasMarket>
+#include <maps\coinbase>
 
 // Systems
 #include <paintball>
 //#include <halloween>
 #include <core\anticheat>
+#include <core\coinbase_system>
 #include <core\ghettoblaster>
 
 enum E_VEHICLE_DEALERSHIP {
@@ -4840,7 +4857,7 @@ OnGameModeInit2() {
     g_aiNoDM[1] = CreateDynamicRectangle(1284.0, -1776.0, 1157.0, -1846.0, .interiorid = -1); // Fahrschule
     g_aiNoDM[2] = CreateDynamicRectangle(1614.3436, -1331.6265, 1671.4816, -1403.0798, .worldid = VW_LSPDINTERIOR, .interiorid = MAPS_LSPDINTERIOR_INTERIOR); // LSPD Interior
     g_aiNoDM[3] = CreateDynamicRectangle(882.1005, -1438.1812, 965.1881, -1483.2373, .worldid = VW_CITYHALLINTERIOR, .interiorid = MAPS_CITYHALLINTERIOR_INTERIOR); // Cityhall Interior
-	g_aiNoDM[4] = CreateDynamicRectangle(1400.2966, -1742.9885, 1558.1973, -1804.2220, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall Exterior
+	g_aiNoDM[4] = CreateDynamicRectangle(1486.3165, -1742.7417, 1399.4124, -1862.0428, .worldid = VW_MAIN, .interiorid = MAPS_CITYHALLEXTERIOR_INTERIOR); // Cityhall Exterior
     g_waiNoDM[0] = CreateDynamicRectangle( 1602.0 , -1864.0 , 1419.0 , -1581.0, .interiorid = -1 );
     g_waiNoDM[1] = CreateDynamicRectangle( 788.0 , -1388.0 , 849.0 , -1331.0, .interiorid = -1 );
     g_iAlcatraz = CreateDynamicRectangle(2794.0, 2000.0, 2929.0, 1763.0, .interiorid = 0, .worldid = 0);
@@ -6306,6 +6323,12 @@ public OnPlayerConnect(playerid)
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
     Spieler[playerid][pMustUseAC] = 0;
+    
+    Spieler[playerid][pBTC] = 0.0; // Coinbase start
+    Spieler[playerid][pETH] = 0.0;
+    Spieler[playerid][pLTC] = 0.0;
+    Spieler[playerid][pAAPL] = 0.0;
+    Spieler[playerid][pSSUNF] = 0.0; // Coinbase end
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -7285,6 +7308,12 @@ public OnPlayerDisconnect(playerid, reason)
     format(postpid[playerid],300,""),firstspawn[playerid]=0;
     Spieler[playerid][pKillsGangFightSession] = 0;
     Spieler[playerid][pMustUseAC] = 0;
+
+    Spieler[playerid][pBTC] = 0.0; // Coinbase start
+    Spieler[playerid][pETH] = 0.0;
+    Spieler[playerid][pLTC] = 0.0;
+    Spieler[playerid][pAAPL] = 0.0;
+    Spieler[playerid][pSSUNF] = 0.0; // Coinbase end
 
     ClearKFZZulassung(playerid);
     ClearPolizeiPartner(playerid);
@@ -13352,7 +13381,7 @@ CMD:gotopos(playerid, params[])
 {
     new Float:x, Float:y, Float:z, string[128];
     if(sscanf(params, "fff", x,y,z))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Gotopos [Float-X] [Float-Y] [Float-Z]");
-    if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
     new vID = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid))
     {
@@ -13382,6 +13411,19 @@ CMD:gotopos(playerid, params[])
     format(string, sizeof(string), "Du hast dich zur folgenden Koordinate teleportiert: %f, %f, %f", x,y,z);
     SendClientMessage(playerid, COLOR_GREEN, string);
     return 1;
+}
+
+CMD:gotocp(playerid, params[]) return cmd_gotomarker(playerid, params);
+
+CMD:gotomarker(playerid, params[]) {
+    if (!Spieler[playerid][pAdmin])
+        return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
+
+    if (!GetPVarFloat(playerid, "MARKER.X"))
+        return SendClientMessage(playerid, COLOR_DARKRED, "Du hast keinen Checkpoint auf der Karte.");
+
+    format(params, 128, "%f %f %f", GetPVarFloat(playerid, "MARKER.X"), GetPVarFloat(playerid, "MARKER.Y"), GetPVarFloat(playerid, "MARKER.Z"));
+    return cmd_gotopos(playerid, params);
 }
 
 CMD:stadthalle(playerid)
@@ -17507,12 +17549,21 @@ COMMAND:vliefers(playerid,params[]){
 CMD:givegun(playerid, params[])
 {
     new pID, wID, ammo, string[128];
-    if(Spieler[playerid][pAdmin] < 5)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     if(sscanf(params, "uii", pID, wID, ammo))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Givegun [Spieler/Name] [Waffen-ID] [Munition]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
-    format(string, sizeof(string), "Du hast von %s eine Waffe erhalten. (ID: %d, Munition: %d)", GetName(playerid), wID, ammo);
+
+    if (Spieler[playerid][pAdmin] < 5 && (wID == 38 || wID == 37 || wID == 36 || wID == 35 || wID == 45 || wID == 44 || wID == 40 || wID == 39 || wID == 26 || wID == 28))
+        return SendClientMessage(playerid, COLOR_DARKRED, "Dein Rang erlaubt es dir nicht, dem Spieler diese Waffe zu geben.");
+
+    if (Spieler[playerid][pAdmin] < 5) {
+        format(string, sizeof(string), "%s %s hat dem Spieler %s eine %s gegeben. (ID: %d, Munition: %d)", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), ReturnWeaponName(wID), wID, ammo);
+        SendAdminMessage(COLOR_ORANGE, string);
+    }
+
+    format(string, sizeof(string), "Du hast von %s %s eine Waffe erhalten. (ID: %d, Munition: %d)", GetPlayerAdminRang(playerid), GetName(playerid), wID, ammo);
     SendClientMessage(pID, COLOR_YELLOW, string);
-    format(string, sizeof(string), "Du hast %s eine Waffe gegeben. (ID: %d, Munition: %d)", GetName(pID), wID, ammo);
+    format(string, sizeof(string), "Du hast %s %s eine Waffe gegeben. (ID: %d, Munition: %d)", GetPlayerAdminRang(playerid), GetName(pID), wID, ammo);
     SendClientMessage(playerid, COLOR_YELLOW, string);
     GivePlayerWeapon(pID, wID, ammo);
     if( GetPlayerState(pID) == PLAYER_STATE_PASSENGER ) {
@@ -17601,6 +17652,11 @@ CMD:kidnap(playerid, params[])
     if( Spieler[pID][pLevel] <= 2 ) {
         return SendClientMessage(playerid, COLOR_RED, "Du kannst kein Neuling entführen!");
     }
+
+    // Buguse
+    if (Spieler[pID][pJailed] == 2)
+        return GiveCheckpointPrison(playerid, 120, "Bugusing, Gruß das Entwickler-Team");
+    
     if( Spieler[playerid][tKidnap] != INVALID_TIMER_ID ) {
         return SendClientMessage(playerid, COLOR_RED, "Du versuchst gerade noch einen Spieler zu entführen.");
     }
@@ -18290,7 +18346,7 @@ CMD:adienst(playerid)
             //Spieler[playerid][pAdminLabel] = Create3DTextLabel("** ADMINISTRATOR IM DIENST **", 0xFF3030FF, 0.0, 0.0, 0.0, 35.0 , .attachedplayer = playerid );
             format(string, sizeof(string), "* %s arbeitet nun als %s im Dienst *", GetName(playerid), GetPlayerAdminRang(playerid));
             SendAdminMessage(COLOR_RED, string);
-            SetPlayerHealth(playerid, 500);
+            SetPlayerHealth(playerid, 100000);
             Spieler[playerid][pAdminDienst] = 1;
         }
         else
@@ -19106,7 +19162,7 @@ CMD:tankkassestand(playerid)
 {
     new t = IsPlayerAtTanke(playerid);
     if(t == 999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keiner Tankstelle.");
-    if(strcmp(GetName(playerid), Tanke[t][tBesitzer], true) == 0)
+    if(Spieler[playerid][pAdmin] > 3 || strcmp(GetName(playerid), Tanke[t][tBesitzer], true) == 0)
     {
         new string[128];
         format(string, sizeof(string), "* Tankstellen-Kasse: $%s *", AddDelimiters(Tanke[t][tKasse]));
@@ -19125,7 +19181,7 @@ CMD:bizkassestand(playerid)
 {
     new h=IsPlayerAtBiz(playerid);
     if(h==999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich vor keinem Geschäft.");
-    if(strcmp(GetName(playerid), Biz[h][bBesitzer], true) == 0)
+    if(Spieler[playerid][pAdmin] > 3 || strcmp(GetName(playerid), Biz[h][bBesitzer], true) == 0)
     {
         new string[128];
         format(string, sizeof(string), "* Geschäfts-Kasse: $%s *", AddDelimiters(Biz[h][bKasse]));
@@ -19144,7 +19200,7 @@ CMD:hauskassestand(playerid)
 {
     new h=IsPlayerAtHouse(playerid);
     if(h==999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich vor keinem Haus.");
-    if(Spieler[playerid][pPlayerHouse] == h )
+    if(Spieler[playerid][pAdmin] > 3 || Spieler[playerid][pPlayerHouse] == h )
     {
         new string[128];
         format(string, sizeof(string), "* Haus-Kasse: $%s *", AddDelimiters(Haus[h][hKasse]));
@@ -24799,7 +24855,7 @@ public OnPlayerEnterCheckpoint(playerid)
         pFahrschuleCP[playerid]++;
         cp = pFahrschuleCP[playerid];
         Spieler[playerid][unixFahrschuleZeit] = gettime() + 25;
-        DisablePlayerCheckpoint(playerid);
+        DisablePlayerCheckpointEx(playerid);
         format(String,sizeof(String),"%d/%d",cp,sizeof(g_FahrpruefungCP));
         SendClientMessage(playerid,COLOR_WHITE,String);
         if( cp >= sizeof( g_FahrpruefungCP ) ) {
@@ -25512,7 +25568,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Du hast die Straßen gereinigt! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     ShowBuyInformation(playerid,"~y~Die Straßen sind sauber! ~w~Feierabend!");
@@ -25576,7 +25632,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Du hast die Fracht abgeliefert! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
@@ -25783,7 +25839,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%d", rand);
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     ShowBuyInformation(playerid,"~y~Müll abgeholt und entsorgt! ~w~Feierabend!");
@@ -25898,7 +25954,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     new string[128];
                     format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                     GameTextForPlayer(playerid, string, 5000, 1);
-                    DisablePlayerCheckpoint(playerid);
+                    DisablePlayerCheckpointEx(playerid);
                     SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                     SetVehicleToRespawn(vID);
                     ShowBuyInformation(playerid,"~y~Route abgefahren! ~w~Feierabend!");
@@ -26048,7 +26104,7 @@ public OnPlayerEnterCheckpoint(playerid)
                 new string[128];
                 format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                 GameTextForPlayer(playerid, string, 5000, 1);
-                DisablePlayerCheckpoint(playerid);
+                DisablePlayerCheckpointEx(playerid);
                 SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                 SetVehicleToRespawn(vID);
                 ShowBuyInformation(playerid,"~y~Route abgefahren! ~w~Feierabend!");
@@ -26197,7 +26253,7 @@ public OnPlayerEnterCheckpoint(playerid)
                 new string[128];
                 format(string, sizeof(string), "~g~+$%s", AddDelimiters(g_Firma[firmenindex][F_iGehalt]));
                 GameTextForPlayer(playerid, string, 5000, 1);
-                DisablePlayerCheckpoint(playerid);
+                DisablePlayerCheckpointEx(playerid);
                 SendClientMessage(playerid, COLOR_GREEN, "Deine Arbeit ist erledigt! Dein Gehalt erhältst du beim PayDay!");
                 SetVehicleToRespawn(vID);
                 ShowBuyInformation(playerid,"~y~Route abgefahren! ~w~Feierabend!");
@@ -26305,7 +26361,7 @@ public OnPlayerEnterCheckpoint(playerid)
         else {
             SendClientMessage(playerid,COLOR_RED,"Du bist hier falsch.");
         }
-        DisablePlayerCheckpoint(playerid);
+        DisablePlayerCheckpointEx(playerid);
     }
     return 1;
 }
@@ -28384,10 +28440,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                     pChoosedSkin[playerid] = 237;
                 }
                 else if(skin==237)
-                {
-                    pChoosedSkin[playerid] = 223;
-                }
-                else if(skin==223)
                 {
                     pChoosedSkin[playerid] = 47;
                 }
@@ -30661,7 +30713,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 Streamer_Update(playerid);
                 format(String,sizeof(String),"Du hast folgendes Möbelstück gekauft: %s (-$%s)",g_HausMoebel[index][HM_sTitel], AddDelimiters(g_HausMoebel[index][HM_iPrice]));
                 SendClientMessage(playerid,COLOR_YELLOW,String);
-                GivePlayerCash(playerid, -g_HausMoebel[index][HM_iPrice]);
+                //GivePlayerCash(playerid, -g_HausMoebel[index][HM_iPrice]);
 
                 // DB ID holen
                 format(String,sizeof(String),"INSERT INTO `hausmoebel` (`id`, `houseid`, `moebelid`, `x`, `y`, `z`, `rx`, `ry`, `rz`) \
@@ -33511,7 +33563,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         format(string1, sizeof(string1), "Deine Aufgabe als Drogendealer ist es Pakete aufzuladen und, sie an einem bestimmten Ort zu entladen und Drogen zu verkaufen. \n");
                         format(string2, sizeof(string2), "Die Drogendealer-Cars findest du unter /Showjob. Achte drauf, dass dich kein Polizist beim Drogenverkauf erwischt!\n");
                         format(string3, sizeof(string3), "\nBefehle:\n{0077FF}/Paketeinladen => Damit nimmst Drogenpakete in dein Van auf.\n/Paketentladen => Damit lässt du die aufgeladenen Drogenpakete am SF-Hafen ab.\n/Selldrogen => Damit verkaufst du Drogen.\n/Showjob => Dein Arbeitsplatz/Ort wird dir als Marker angezeigt.\n/Jc => Der Dealer Jobchat.\n");
-                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Detektiv-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufern!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
+                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Drogendealer-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufern!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
                         format(string4, sizeof(string4), "%s%s%s%s", string1, string2, string3, string4);
                         ShowPlayerDialog(playerid, DIALOG_BAUERHELP, DIALOG_STYLE_MSGBOX, "BERUF DROGENDEALER", string4, "OK", "");
                     }
@@ -33525,7 +33577,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         format(string1, sizeof(string1), "Deine Aufgabe als Waffendealer ist es Pakete aufzuladen und, sie an einem bestimmten Ort zu entladen und Waffen zu verkaufen. \n");
                         format(string2, sizeof(string2), "Die Waffendealer-Cars findest du unter /Showjob. Achte drauf, dass dich kein Polizist beim Waffenverkauf erwischt!\n");
                         format(string3, sizeof(string3), "\nBefehle:\n{0077FF}/Paketeinladen => Damit nimmst du Pakete in dein Van auf.\n/Paketentladen => Damit lässt du die aufgeladenen Pakete am SF-Hafen ab.\n/Sellgun => Damit verkaufst du Waffen, die du aus deinen Waffenteilen baust.\n/Sellwaffenteile => Damit kannst du deine Waffenteile verkaufen.\n/Showjob => Dein Arbeitsplatz/Ort wird dir als Marker angezeigt\n/Jc => Der Dealer Jobchat\n");
-                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Detektiv-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufer!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
+                        format(string4, sizeof(string4), "\n/Skill => Dein aktueller Waffendealer-Skill\n\n{00AA00}Dein Gehalt erhältst du vom Käufer!\n{FF0000}Bei weiteren Fragen oder Problemen schreib ein Support-Ticket mit dem Befehl /SUP\n");
                         format(string4, sizeof(string4), "%s%s%s%s", string1, string2, string3, string4);
                         ShowPlayerDialog(playerid, DIALOG_BAUERHELP, DIALOG_STYLE_MSGBOX, "BERUF WAFFENDEALER", string4, "OK", "");
                     }
@@ -33790,7 +33842,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster)");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster), /Gotocp");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar");
                     }
@@ -38351,7 +38403,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 14)
                 {
-                    ShowPlayerDialog(playerid, VERKAUFH, DIALOG_STYLE_LIST, "Weitere Verkaufshäuser", "Elektromarkt in Los Santos\nAngelshop in Los Santos\nTierhandel in Los Santos", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, VERKAUFH, DIALOG_STYLE_LIST, "Weitere Verkaufshäuser", "Elektromarkt in Los Santos\nAngelshop in Los Santos\nTierhandel in Los Santos\nMünzkassette", "Auswählen", "Abbrechen");
                 }
                 if(listitem == 15)
                 {
@@ -38747,6 +38799,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     SetPlayerCheckpointEx(playerid, PETSHOP_COORDS, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Der Tierhandel in Los Santos wurde auf der Karte Rot markiert.");
+                }
+                if(listitem==3)
+                {
+                    SetPlayerCheckpointEx(playerid, COINBASE_COORDS, 2.0, CP_NAVI76);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Münzkassette in Los Santos wurde auf der Karte Rot markiert.");
                 }
             }
             if(!response)return 1;
@@ -41440,7 +41497,12 @@ stock SaveAccount(playerid)
                 `Eventpoints` = %d, \
                 `AdventDay` = %d, \
                 `AdventMin` = %d, \
-                `MustUseAC` = %d",
+                `MustUseAC` = %d, \
+                `cb_BTC` = %f, \
+                `cb_ETH` = %f, \
+                `cb_LTC` = %f, \
+                `cb_AAPL` = %f, \
+                `cb_SSUNF` = %f",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -41467,7 +41529,12 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pEventPoints],
                     Spieler[playerid][pAdventDay],
                     Spieler[playerid][pAdventMin],
-                    Spieler[playerid][pMustUseAC]);
+                    Spieler[playerid][pMustUseAC],
+                    Spieler[playerid][pBTC],
+                    Spieler[playerid][pETH],
+                    Spieler[playerid][pLTC],
+                    Spieler[playerid][pAAPL],
+                    Spieler[playerid][pSSUNF]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -41641,7 +41708,12 @@ new const PlayerColumns[][] = {
     {"Eventpoints"},
     {"AdventDay"},
     {"AdventMin"},
-    {"MustUseAC"}
+    {"MustUseAC"},
+    {"cb_BTC"},
+    {"cb_ETH"},
+    {"cb_LTC"},
+    {"cb_AAPL"},
+    {"cb_SSUNF"}
 };
 
 new
@@ -41714,13 +41786,16 @@ stock CheckMoney(playerid)
 forward OnPlayerMoneyCheck();
 public OnPlayerMoneyCheck()
 {
-    for(new i ; i < MAX_PLAYERS ; i++)
+    for(new i ; i <= GetPlayerPoolSize() ; i++)
     {
         if( IsPlayerConnected(i) )
         {
             {
                 ResetPlayerMoney(i);
                 GivePlayerMoney(i, Spieler[i][pCash]);
+                
+                if (Spieler[i][pAdminDienst])
+                    SetPlayerHealth(i, 100000);
             }
             if(fuelcountactive[i]==1&&!IsPlayerInAnyVehicle(i))
             {
@@ -43551,6 +43626,10 @@ CMD:giveschein(playerid, params[])
         SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
         Spieler[pID][pLKWLic] = 1;
     }
+    else {
+        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Giveschein [SpielerID/Name] [Schein]");
+        SendClientMessage(playerid, COLOR_ORANGE, "* Scheine *: Fahrschein, Motorradschein, Lkwschein, Flugschein, Bootsschein, Awaffenschein, Bwaffenschein");
+    }
     return 1;
 }
 
@@ -44056,22 +44135,27 @@ stock SendModMessage(color, string[])
     return 1;
 }
 
-stock SetPlayerCheckpointEx(playerid, Float:x, Float:y, Float:z, Float:size, var)
-{
-    if(var == 0)
-    {
-        DisablePlayerCheckpoint(playerid);
-        pCheckpoint[playerid] = CP_NONE;
-        return 1;
-    }
+stock SetPlayerCheckpointEx(playerid, Float:x, Float:y, Float:z, Float:size, var) {
+    if (!var)
+        return DisablePlayerCheckpointEx(playerid);
+    
     pCheckpoint[playerid] = var;
     SetPlayerCheckpoint(playerid, x,y,z,size);
+    SetPVarFloat(playerid, "MARKER.X", x);
+    SetPVarFloat(playerid, "MARKER.Y", y);
+    SetPVarFloat(playerid, "MARKER.Z", z);
+    SetPVarFloat(playerid, "MARKER.SIZE", size);
     return 1;
 }
 stock DisablePlayerCheckpointEx(playerid)
 {
     pCheckpoint[playerid] = CP_NONE;
     DisablePlayerCheckpoint(playerid);
+    DeletePVar(playerid, "MARKER.X");
+    DeletePVar(playerid, "MARKER.Y");
+    DeletePVar(playerid, "MARKER.Z");
+    DeletePVar(playerid, "MARKER.SIZE");
+    return 1;
 }
 forward IsAExhaust(componentid);
 public IsAExhaust(componentid)
@@ -45057,7 +45141,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
             return 1;
         }
         // Headshot Script von dir, soll NUR für Hitmans eingestellt werden und nur bei der Zielperson funktionieren.
-        if( Spieler[issuerid][pFraktion] == 14 ) {
+        if( Spieler[issuerid][pFraktion] == 14 && !Spieler[playerid][pAdminDienst]) {
             if(weaponid == 34 ) {
                 if(bodypart == 9) {
                     new
@@ -45089,6 +45173,8 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
+    if (Spieler[playerid][pAdmin] < 3 || !Spieler[playerid][pAdminDienst]) return 1;
+    SetPlayerPosFindZ(playerid, fX, fY, fZ);
     return 1;
 }
 
@@ -46416,6 +46502,19 @@ stock StripNewLine(str[]) //ysi_misc.own
     new
         l = strlen(str);
     while (l-- && str[l] <= ' ') str[l] = '\0';
+}
+
+stock LogCoinbase(name[], boughtOrSold, Float:amount, asset[], fiat)
+{
+    new File:LogFile, jahr, monat, tag, stunde, minute, sekunde, string[128], path[64];
+    getdate(jahr, monat, tag);
+    gettime(stunde, minute, sekunde);
+    format(path, sizeof(path), "/Logs/CoinbaseLog/%02d-%02d-%d.txt", tag, monat, jahr);
+    LogFile = fopen(path, io_append);
+    format(string, sizeof(string), "[COINBASE] [%02d:%02d:%02d] - %s %s %.5f %s for $%d.\r\n", stunde, minute, sekunde, name, boughtOrSold ? "sold" : "bought", amount, asset, fiat);
+    fwrite(LogFile, string);
+    fclose(LogFile);
+    return 1;
 }
 
 stock LogCommand(text[])
@@ -54084,7 +54183,7 @@ public Pulse_Fahrschule(playerid) {
 }
 
 stock FahrschuleAbbruch(playerid) {
-    DisablePlayerCheckpoint(playerid);
+    DisablePlayerCheckpointEx(playerid);
     RemovePlayerFromVehicle(playerid);
     DestroyVehicleEx( pFahrschulCar[playerid] );
     if( pFahrschulCar[playerid] != INVALID_VEHICLE_ID ) {
@@ -55752,6 +55851,12 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pAdventDay] = cache_get_row_int(0,142,connectionHandle);
             Spieler[playerid][pAdventMin] = cache_get_row_int(0,143,connectionHandle);
             Spieler[playerid][pMustUseAC] = cache_get_row_int(0, 144, connectionHandle);
+
+            Spieler[playerid][pBTC] = cache_get_row_float(0, 145, connectionHandle); // Coinbase start
+            Spieler[playerid][pETH] = cache_get_row_float(0, 146, connectionHandle);
+            Spieler[playerid][pLTC] = cache_get_row_float(0, 147, connectionHandle);
+            Spieler[playerid][pAAPL] = cache_get_row_float(0, 148, connectionHandle);
+            Spieler[playerid][pSSUNF] = cache_get_row_float(0, 149, connectionHandle); // Coinbase end
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
@@ -58537,44 +58642,33 @@ COMMAND:caufbrechen(playerid,params[]) {
 
 forward FreeLicence();
 public FreeLicence() {
-    new
-        now = gettime();
-    for(new i ; i < MAX_PLAYERS ; i++) {
-        if( IsPlayerConnected(i) ) {
+    new now = gettime();
+    for (new i; i <= GetPlayerPoolSize() ; i++) {
+        if (IsPlayerConnected(i)) {
             // Auto
-            if( Spieler[i][punixFSperre] != 0 && Spieler[i][pCarLic] == 0 && Spieler[i][pFPunkte] == 0) {
-                if( Spieler[i][punixFSperre] < now ) {
-                    Spieler[i][punixFSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Autoschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixFSperre] != 0 && Spieler[i][punixFSperre] < now) {
+                Spieler[i][punixFSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Autoschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // Flug
-            if( Spieler[i][punixFlSperre] != 0 && Spieler[i][pFlyLic] == 0 && Spieler[i][pFlPunkte] == 0) {
-                if( Spieler[i][punixFlSperre] < now ) {
-                    Spieler[i][punixFlSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Flugschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixFlSperre] != 0 && Spieler[i][punixFlSperre] < now) {
+                Spieler[i][punixFlSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Flugschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // Motorrad
-            if( Spieler[i][punixMotoSperre] != 0 && Spieler[i][pMotoLic] == 0 && Spieler[i][pMotoPunkte] == 0) {
-                if( Spieler[i][punixMotoSperre] < now ) {
-                    Spieler[i][punixMotoSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Motorradschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixMotoSperre] != 0 && Spieler[i][punixMotoSperre] < now) {
+                Spieler[i][punixMotoSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Motorradschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // LKW
-            if( Spieler[i][punixLKWSperre] != 0 && Spieler[i][pLKWLic] == 0 && Spieler[i][pLKWPunkte] == 0) {
-                if( Spieler[i][punixLKWSperre] < now ) {
-                    Spieler[i][punixLKWSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine LKW Scheinsperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixLKWSperre] != 0 && Spieler[i][punixLKWSperre] < now) {
+                Spieler[i][punixLKWSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine LKW Scheinsperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
             // Gun
-            if( Spieler[i][punixGunSperre] != 0 && (Spieler[i][pGunLic] == 0 && Spieler[i][pGunLicB] == 0 ) && Spieler[i][pGunPunkte] == 0) {
-                if( Spieler[i][punixGunSperre] < now ) {
-                    Spieler[i][punixGunSperre] = 0;
-                    SendClientMessage(i,COLOR_YELLOW,"Deine Waffenschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
-                }
+            if( Spieler[i][punixGunSperre] != 0 && Spieler[i][punixGunSperre] < now) {
+                Spieler[i][punixGunSperre] = 0;
+                SendClientMessage(i,COLOR_YELLOW,"Deine Waffenschein Sperre ist abgelaufen! Du kannst die Lizenz neu erwerben.");
             }
         }
     }
@@ -65905,7 +65999,7 @@ COMMAND:entleeren(playerid,params[]) {
     if( !(pCheckpoint[playerid] == CP_MUELL_ENTLEEREN) ) return SendClientMessage(playerid, COLOR_RED, "Du kannst jetzt nicht entleeren machen.");
     new
         cp = Spieler[playerid][pMuellCP];
-    if( !IsPlayerInRangeOfPoint(playerid,2.0,g_Muell[cp][M_fPosX],g_Muell[cp][M_fPosY],g_Muell[cp][M_fPosZ])) {
+    if( !IsPlayerInRangeOfPoint(playerid,3.0,g_Muell[cp][M_fPosX],g_Muell[cp][M_fPosY],g_Muell[cp][M_fPosZ])) {
         return SendClientMessage(playerid, COLOR_RED, "Du bist nicht an der Mülltonne.");
     }
     if( IsPlayerInAnyVehicle(playerid) ) {
@@ -65922,7 +66016,7 @@ COMMAND:entleeren(playerid,params[]) {
     SetPlayerSpecialAction(playerid,SPECIAL_ACTION_CARRY);
     GetXYInFrontOfPosition(x, y, face, -4.25 );
     SetPlayerAttachedObject( playerid, 0, 1265, 5, 0.150000, 0.300000, 0.000000, 270.000000, 0.000000, 0.000000, 0.800000, 0.800000, 0.800000 ); // BlackBag2 - trashblabla
-    SetPlayerCheckpointEx(playerid,x,y,z,0.8,CP_MUELL_CARRY);
+    SetPlayerCheckpointEx(playerid,x,y,z,2.0,CP_MUELL_CARRY);
     return 1;
 }
 
@@ -66320,23 +66414,32 @@ COMMAND:cprison(playerid,params[]) {
     new pID, grund[64], anzahl;
     if(sscanf(params, "uis[64]", pID, anzahl,grund))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /cprison [SpielerID/Name] [Anzahl] [Grund]");
     if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    return GiveCheckpointPrison(pID, anzahl, grund, playerid);
+}
+
+stock GiveCheckpointPrison(pID, amount, reason[], playerid = INVALID_PLAYER_ID) { // playerid can be left empty (Server-System)
+    new issuer[64] = "Server-System";
+
+    if (playerid != INVALID_PLAYER_ID)
+        format(issuer, sizeof(issuer), "%s %s", GetPlayerAdminRang(playerid), GetName(playerid));
+
     new String[256];
-    format(String,sizeof(String),"[PRISON] Du wurdest von %s %s zum Checkpoint-Lauf verdonnert!", GetPlayerAdminRang(playerid), GetName(playerid));
+    format(String,sizeof(String),"[PRISON] Du wurdest von %s zum Checkpoint-Lauf verdonnert!", issuer);
     SendClientMessage(pID,COLOR_RED,String);
-    format(String,sizeof(String),"Du musst insgesammt %d Checkpoints ablaufen. Grund: %s",anzahl,grund);
+    format(String,sizeof(String),"Du musst insgesamt %d Checkpoints ablaufen. Grund: %s.", amount, reason);
     SendClientMessage(pID,COLOR_RED,String);
 
-    mysql_real_escape_string(grund,grund);
-    format(String,sizeof(String),"[PRISON] Spieler %s wurde von %s %s zum Checkpoint-Lauf verdonnert!",GetName(pID), GetPlayerAdminRang(playerid), GetName(playerid));
+    mysql_real_escape_string(reason, reason);
+    format(String,sizeof(String),"[PRISON] Spieler %s wurde von %s zum Checkpoint-Lauf verdonnert!", GetName(pID), issuer);
     SendAdminMessage(COLOR_RED,String);
-    format(String,sizeof(String),"[PRISON] Checkpoints: %d, Grund: %s",anzahl,grund);
+    format(String,sizeof(String),"[PRISON] Checkpoints: %d, Grund: %s", amount, reason);
     SendAdminMessage(COLOR_RED,String);
 
-    format(String,sizeof(String),"Spieler %s wurde von %s %s zum Checkpoint-Lauf verdonnert! Checkpoints: %d, Grund: %s",GetName(pID), GetPlayerAdminRang(playerid), GetName(playerid),anzahl,grund);
-    SendUCPAktenEintrag( playerid, GetName(playerid) ,  GetName(pID) , String );
+    format(String,sizeof(String),"Spieler %s wurde von %s zum Checkpoint-Lauf verdonnert! Checkpoints: %d, Grund: %s", GetName(pID), issuer, amount, reason);
+    SendUCPAktenEintrag(pID, playerid != INVALID_PLAYER_ID ? GetName(playerid) : issuer, GetName(pID) , String);
 
     SetPlayerPrisonRun(pID);
-    Spieler[pID][pPrisonRun] = anzahl;
+    Spieler[pID][pPrisonRun] = amount;
     Spieler[pID][pPrisonRunCount] = 0;
     Spieler[pID][pPrisonRunStep] = 0;
     SpawnPlayerEx(pID);
@@ -68574,9 +68677,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 1;
         if(Spieler[giveid][pCarLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_RED,"Der Spieler besitzt bereits diesen Schein.");
+            return SendClientMessage(playerid,COLOR_RED,"Der Spieler besitzt bereits diesen Schein.");
         }
-        if(Spieler[playerid][punixFSperre]!=0)
+        if(Spieler[giveid][punixFSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_RED,"Der Spieler hat eine gültige Scheinsperre auf dem Schein.");
         }
@@ -68585,9 +68688,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 2;
         if(Spieler[giveid][pMotoLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixMotoSperre]!=0)
+        if(Spieler[giveid][punixMotoSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68596,9 +68699,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 3;
         if(Spieler[giveid][pFlyLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixFlSperre]!=0)
+        if(Spieler[giveid][punixFlSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68607,16 +68710,16 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 4;
         if(Spieler[giveid][pBoatLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
     }
     else if( !strcmp(pruefung,"lkwschein",true)) {
         modus = 5;
         if(Spieler[giveid][pLKWLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixLKWSperre]!=0)
+        if(Spieler[giveid][punixLKWSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68625,9 +68728,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 6;
         if(Spieler[giveid][pGunLic]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixGunSperre]!=0)
+        if(Spieler[giveid][punixGunSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -68636,9 +68739,9 @@ COMMAND:fpreis(playerid,params[]) {
         modus = 7;
         if(Spieler[giveid][pGunLicB]!=0)
         {
-            SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
+            return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler besitzt bereits diesen Schein");
         }
-        if(Spieler[playerid][punixGunSperre]!=0)
+        if(Spieler[giveid][punixGunSperre]!=0)
         {
             return SendClientMessage(playerid,COLOR_YELLOW,"Der Spieler hat eine gültige Scheinsperre auf dem Schein");
         }
@@ -69053,6 +69156,13 @@ stock GetWeaponNameEx(weaponid, weapon[], len = sizeof(weapon))
         }
     }
     return false;
+}
+
+stock ReturnWeaponName(weaponid) {
+    new string[64];
+    GetWeaponNameEx(weaponid, string, sizeof(string));
+
+    return string;
 }
 
 COMMAND:delallvehs(playerid,params[]) {

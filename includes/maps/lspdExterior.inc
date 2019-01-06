@@ -32,7 +32,7 @@ static Float:DRAWDISTANCE   = 230.0;
 new object_lspdExterior[304];
 new pickup_lspdExterior[5];
 new text3D_lspdExterior[2];
-new actor_lspdExterior[2];
+new actor_lspdExterior[1];
 new vehicle_lspdExterior[35]; // using vehicle_lspdExterior for the alcatraz vehicles
 new object_lspdExterior_gate;
 
@@ -107,11 +107,10 @@ hook OnGameModeInit() {
     // 3DTextLabels
     text3D_lspdExterior[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "Staats-Reparatur\n" COLOR_HEX_WHITE "Tippe /Staatrepair", COLOR_WHITE, LSPD_STATEREPAIR_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_LSPDEXTERIOR_INTERIOR); // Staterepair
     text3D_lspdExterior[1] = _:CreateDynamic3DTextLabel(COLOR_HEX_BLUE "Einsperrpunkt\n" COLOR_HEX_WHITE "Tippe /Arrest", COLOR_WHITE, LSPD_ARREST_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_LSPDEXTERIOR_INTERIOR); // /arrest
+    
     // Actors
     actor_lspdExterior[0] = CreateDynamicActor(50, 1031.0018, -1619.6342, 6.2667, -0.1000); //Mechanic
     ApplyDynamicActorAnimation(actor_lspdExterior[0], "BD_FIRE", "M_SMKLEAN_LOOP", 4.0999, 1, 0, 0, 0, 0);
-    actor_lspdExterior[1] = CreateDynamicActor(307, 997.8622, -1607.8023, 7.8608, -82.3001); //San Fierro Police Of
-    ApplyDynamicActorAnimation(actor_lspdExterior[1], "ON_LOOKERS", "WAVE_LOOP", 4.0999, 1, 0, 0, 0, 0);
 
 	// Vehicles
     vehicle_lspdExterior[0] = AddStaticVehicleEx(596, 1041.4632, -1598.8326, 5.6530, 178.9314, 0, 1, -1); //Police Car (LSPD)

@@ -115,7 +115,7 @@ hook OnGameModeInit() {
     text3D_governmentExterior[0] = _:CreateDynamic3DTextLabel("Staats-Reparatur\n" COLOR_HEX_WHITE "Tippe /Staatrepair", COLOR_YELLOW, GOVERNMENT_STATEREPAIR_COORDS, 10.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_GOVERNMENTEXTERIOR_INTERIOR); // Staterepair
 
     // Vehicles
-    vehicle_governmentExterior[0] = AddStaticVehicle(409, 1528.7433, -1683.8628, 5.6721, 269.4835, 1, 1); // gov
+    /*vehicle_governmentExterior[0] = AddStaticVehicle(409, 1528.7433, -1683.8628, 5.6721, 269.4835, 1, 1); // gov
     vehicle_governmentExterior[1] = AddStaticVehicle(409, 1528.9263, -1688.0830, 5.6606, 268.8083, 1, 1); // gov
     vehicle_governmentExterior[2] = AddStaticVehicle(490, 1545.6693, -1672.2111, 6.0186, 90.8823, 1, 1); // gov
     vehicle_governmentExterior[3] = AddStaticVehicle(490, 1545.7642, -1667.8514, 6.0373, 90.4662, 1, 1); // gov
@@ -131,7 +131,7 @@ hook OnGameModeInit() {
     vehicle_governmentExterior[13] = AddStaticVehicle(523, 1529.7935, -1669.4871, 5.7856, 272.5232, 1, 1); // gov
     vehicle_governmentExterior[14] = AddStaticVehicle(523, 1529.6549, -1667.1039, 5.7902, 271.1700, 1, 1); // gov
     vehicle_governmentExterior[15] = AddStaticVehicle(523, 1529.4812, -1664.3744, 5.7885, 271.2509, 1, 1); // gov
-    vehicle_governmentExterior[16] = AddStaticVehicle(487, 1566.1991, -1703.9496, 28.5721, 89.6789, 1, 1); // gov
+    vehicle_governmentExterior[16] = AddStaticVehicle(487, 1566.1991, -1703.9496, 28.5721, 89.6789, 1, 1); // gov*/
     
     // Objects
     object_governmentExterior[0] = CreateDynamicObject(2614, 1524.1695, -1677.9045, 9.3204, 0.0000, 0.0000, 89.9999, VW_MAIN, MAPS_GOVERNMENTEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //CJ_US_FLAG
