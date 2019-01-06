@@ -17630,6 +17630,11 @@ CMD:kidnap(playerid, params[])
     if( Spieler[pID][pLevel] <= 2 ) {
         return SendClientMessage(playerid, COLOR_RED, "Du kannst kein Neuling entführen!");
     }
+
+    // Buguse
+    if (Spieler[pID][pJailed] == 2)
+        return GiveCheckpointPrison(playerid, 120, "Bugusing, Gruß das Entwickler-Team");
+    
     if( Spieler[playerid][tKidnap] != INVALID_TIMER_ID ) {
         return SendClientMessage(playerid, COLOR_RED, "Du versuchst gerade noch einen Spieler zu entführen.");
     }
@@ -66383,23 +66388,32 @@ COMMAND:cprison(playerid,params[]) {
     new pID, grund[64], anzahl;
     if(sscanf(params, "uis[64]", pID, anzahl,grund))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /cprison [SpielerID/Name] [Anzahl] [Grund]");
     if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    return GiveCheckpointPrison(pID, anzahl, grund, playerid);
+}
+
+stock GiveCheckpointPrison(pID, amount, reason[], playerid = INVALID_PLAYER_ID) { // playerid can be left empty (Server-System)
+    new issuer[64] = "Server-System";
+
+    if (playerid != INVALID_PLAYER_ID)
+        format(issuer, sizeof(issuer), "%s %s", GetPlayerAdminRang(playerid), GetName(playerid));
+
     new String[256];
-    format(String,sizeof(String),"[PRISON] Du wurdest von %s %s zum Checkpoint-Lauf verdonnert!", GetPlayerAdminRang(playerid), GetName(playerid));
+    format(String,sizeof(String),"[PRISON] Du wurdest von %s zum Checkpoint-Lauf verdonnert!", issuer);
     SendClientMessage(pID,COLOR_RED,String);
-    format(String,sizeof(String),"Du musst insgesammt %d Checkpoints ablaufen. Grund: %s",anzahl,grund);
+    format(String,sizeof(String),"Du musst insgesamt %d Checkpoints ablaufen. Grund: %s.", amount, reason);
     SendClientMessage(pID,COLOR_RED,String);
 
-    mysql_real_escape_string(grund,grund);
-    format(String,sizeof(String),"[PRISON] Spieler %s wurde von %s %s zum Checkpoint-Lauf verdonnert!",GetName(pID), GetPlayerAdminRang(playerid), GetName(playerid));
+    mysql_real_escape_string(reason, reason);
+    format(String,sizeof(String),"[PRISON] Spieler %s wurde von %s zum Checkpoint-Lauf verdonnert!", GetName(pID), issuer);
     SendAdminMessage(COLOR_RED,String);
-    format(String,sizeof(String),"[PRISON] Checkpoints: %d, Grund: %s",anzahl,grund);
+    format(String,sizeof(String),"[PRISON] Checkpoints: %d, Grund: %s", amount, reason);
     SendAdminMessage(COLOR_RED,String);
 
-    format(String,sizeof(String),"Spieler %s wurde von %s %s zum Checkpoint-Lauf verdonnert! Checkpoints: %d, Grund: %s",GetName(pID), GetPlayerAdminRang(playerid), GetName(playerid),anzahl,grund);
-    SendUCPAktenEintrag( playerid, GetName(playerid) ,  GetName(pID) , String );
+    format(String,sizeof(String),"Spieler %s wurde von %s zum Checkpoint-Lauf verdonnert! Checkpoints: %d, Grund: %s", GetName(pID), issuer, amount, reason);
+    SendUCPAktenEintrag(pID, playerid != INVALID_PLAYER_ID ? GetName(playerid) : issuer, GetName(pID) , String);
 
     SetPlayerPrisonRun(pID);
-    Spieler[pID][pPrisonRun] = anzahl;
+    Spieler[pID][pPrisonRun] = amount;
     Spieler[pID][pPrisonRunCount] = 0;
     Spieler[pID][pPrisonRunStep] = 0;
     SpawnPlayerEx(pID);
