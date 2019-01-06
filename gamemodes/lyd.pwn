@@ -18324,7 +18324,7 @@ CMD:adienst(playerid)
             //Spieler[playerid][pAdminLabel] = Create3DTextLabel("** ADMINISTRATOR IM DIENST **", 0xFF3030FF, 0.0, 0.0, 0.0, 35.0 , .attachedplayer = playerid );
             format(string, sizeof(string), "* %s arbeitet nun als %s im Dienst *", GetName(playerid), GetPlayerAdminRang(playerid));
             SendAdminMessage(COLOR_RED, string);
-            SetPlayerHealth(playerid, 500);
+            SetPlayerHealth(playerid, 100000);
             Spieler[playerid][pAdminDienst] = 1;
         }
         else
@@ -41763,13 +41763,15 @@ stock CheckMoney(playerid)
 forward OnPlayerMoneyCheck();
 public OnPlayerMoneyCheck()
 {
-    for(new i ; i < MAX_PLAYERS ; i++)
+    for(new i ; i <= GetPlayerPoolSize() ; i++)
     {
         if( IsPlayerConnected(i) )
         {
             {
                 ResetPlayerMoney(i);
                 GivePlayerMoney(i, Spieler[i][pCash]);
+                
+                if (Spieler[playerid][pAdminDienst]) SetPlayerHealth(playerid, 100000);
             }
             if(fuelcountactive[i]==1&&!IsPlayerInAnyVehicle(i))
             {
