@@ -17549,12 +17549,21 @@ COMMAND:vliefers(playerid,params[]){
 CMD:givegun(playerid, params[])
 {
     new pID, wID, ammo, string[128];
-    if(Spieler[playerid][pAdmin] < 5)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     if(sscanf(params, "uii", pID, wID, ammo))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Givegun [Spieler/Name] [Waffen-ID] [Munition]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
-    format(string, sizeof(string), "Du hast von %s eine Waffe erhalten. (ID: %d, Munition: %d)", GetName(playerid), wID, ammo);
+
+    if (Spieler[playerid][pAdmin] < 5 && (wID == 38 || wID == 37 || wID == 36 || wID == 35 || wID == 45 || wID == 44 || wID == 40 || wID == 39 || wID == 26 || wID == 28))
+        return SendClientMessage(playerid, COLOR_DARKRED, "Dein Rang erlaubt es dir nicht, dem Spieler diese Waffe zu geben.");
+
+    if (Spieler[playerid][pAdmin] < 5) {
+        format(string, sizeof(string), "%s %s hat dem Spieler %s eine %s gegeben. (ID: %d, Munition: %d)", GetPlayerAdminRang(playerid), GetName(playerid), GetName(pID), ReturnWeaponName(wID), wID, ammo);
+        SendAdminMessage(COLOR_ORANGE, string);
+    }
+
+    format(string, sizeof(string), "Du hast von %s %s eine Waffe erhalten. (ID: %d, Munition: %d)", GetPlayerAdminRang(playerid), GetName(playerid), wID, ammo);
     SendClientMessage(pID, COLOR_YELLOW, string);
-    format(string, sizeof(string), "Du hast %s eine Waffe gegeben. (ID: %d, Munition: %d)", GetName(pID), wID, ammo);
+    format(string, sizeof(string), "Du hast %s %s eine Waffe gegeben. (ID: %d, Munition: %d)", GetPlayerAdminRang(playerid), GetName(pID), wID, ammo);
     SendClientMessage(playerid, COLOR_YELLOW, string);
     GivePlayerWeapon(pID, wID, ammo);
     if( GetPlayerState(pID) == PLAYER_STATE_PASSENGER ) {
@@ -33833,7 +33842,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster)");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster), /Gotocp");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar");
                     }
@@ -45160,6 +45169,8 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
+    if (Spieler[playerid][pAdmin] < 1) return 1;
+    SetPlayerPosFindZ(playerid, fX, fY, fZ);
     return 1;
 }
 
@@ -69152,6 +69163,13 @@ stock GetWeaponNameEx(weaponid, weapon[], len = sizeof(weapon))
         }
     }
     return false;
+}
+
+stock ReturnWeaponName(weaponid) {
+    new string[64];
+    GetWeaponNameEx(weaponid, string, sizeof(string));
+
+    return string;
 }
 
 COMMAND:delallvehs(playerid,params[]) {
