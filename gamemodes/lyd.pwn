@@ -30744,8 +30744,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 printf("index %d",index);
                 printf("moebel_index %d",moebel_index);
                 */
-                payback = ( g_HausMoebel[moebel_index][HM_iPrice] / 2 );
-                Spieler[playerid][pCash] += payback ;
+                payback = 0;
+                Spieler[playerid][pCash] += payback;
                 format(String,sizeof(String),"Du hast erfolgreich folgendes Möbelstück verkauft: %s (+$%s)",g_HausMoebel[moebel_index][HM_sTitel], AddDelimiters(payback));
                 SendClientMessage(playerid,COLOR_GREEN,String);
                 format(String,sizeof(String),"DELETE FROM `hausmoebel` WHERE `id` = %d", g_HausMoebelObjekt[h][index][HMO_iID]);
