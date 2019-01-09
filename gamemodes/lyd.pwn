@@ -796,6 +796,8 @@ enum {
 }
 
 #include <a_samp>
+#include <timerfix>
+#include <YSI\y_timers>
 #include <YSI\y_hooks>
 
 #if defined MAX_PLAYERS
@@ -881,6 +883,7 @@ native gpci(playerid, serial [], len);
 #endif
 
 #define MAX_DEATH_ICONS 50
+#define MAX_FACTIONS 22
 
 enum e_DeathIcon {
     DI_iPickup,
@@ -4039,6 +4042,7 @@ enum SpielerDaten {
     pWheelmenP,
     pWModus,
     pKillsGangFight,
+    pKillsStreetwar,
     pKillsGangFightSession,
     pPremiumNeon,
     tLoginTimeout,
@@ -4468,6 +4472,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <core\anticheat>
 #include <core\coinbase_system>
 #include <core\ghettoblaster>
+#include <core\streetwar>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
@@ -4753,10 +4758,11 @@ public HauptTimer() {
 public OnGameModeInit() {
 	Connect_To_Database();
 	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, STREAMER_MAX_OBJECTS, -1); // Object fix
-    OnGameModeInit2();
+    CallLocalFunction("OnGameModeInit2", ""); // y_hooks
 }
 
-OnGameModeInit2() {
+forward OnGameModeInit2();
+public OnGameModeInit2() {
     CollectUnusedAccount();
     HashPasswords();
     LoadInfos();
@@ -6315,6 +6321,7 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][pFLehrer] = INVALID_PLAYER_ID;
     Spieler[playerid][pPremiumNeon] = 0;
     Spieler[playerid][pKillsGangFight] = 0;
+    Spieler[playerid][pKillsStreetwar] = 0;
     Spieler[playerid][pMP3Player] = 0;
     Spieler[playerid][pRadarfallenWarnung] = 0;
     Spieler[playerid][pPremiumBizSlot] = 0;
@@ -7300,6 +7307,7 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pFLehrer] = INVALID_PLAYER_ID;
     Spieler[playerid][pPremiumNeon] = 0;
     Spieler[playerid][pKillsGangFight] = 0;
+    Spieler[playerid][pKillsStreetwar] = 0;
     Spieler[playerid][pMP3Player] = 0;
     Spieler[playerid][pRadarfallenWarnung] = 0;
     Spieler[playerid][pPremiumBizSlot] = 0;
@@ -10812,7 +10820,7 @@ public OnPlayerDeath(playerid, killerid, reason)
         GivePlayerCash(playerid, -500);
         Spieler[playerid][pDeaths]++;
         if(!bGangfight) {
-            SetTimerEx("NotrufDialog", 100, false, "%i", playerid);
+            SetTimerEx("NotrufDialog", 100, false, "i", playerid);
             //SendClientMessage(playerid,COLOR_YELLOW,"Du bist schwer verletzt! Wähle '/Service -> Rettungsdienst' um ein Notarzt zu rufen.");
         }
         SetPlayerPos(playerid,Spieler[playerid][pTotX],Spieler[playerid][pTotY],Spieler[playerid][pTotZ]);
@@ -13186,7 +13194,7 @@ CMD:gmx(playerid)
             InterpolateCameraLookAt(i, 370.090270, -2041.220214, 7.687465, 371.139587, -1813.225585, 9.687144, 60000);
             SendClientMessage(i, COLOR_RED, "Speichere Daten ... Es kann zu starken Lags kommen!");
         }
-        SaveAll();
+        CallLocalFunction("SaveAll", ""); // y_hooks
         GMXMode = 1;
         gmxtimer = SetTimer("GMXModeTimer", 10000, 1);
         SendAdminMessage(COLOR_YELLOW, "Der Server kann nun restartet werden!");
@@ -26487,7 +26495,7 @@ public OnRconCommand(cmd[])
             SendClientMessage(i, COLOR_RED, "Speichere Daten...");
         }
 
-        SaveAll();
+        CallLocalFunction("SaveAll", ""); // y_hooks
         SetTimer("GMXModeTimer", 5000, 1);
         return 1;
     }
@@ -33286,7 +33294,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Jailtime, /Tottime, /Mutetime, /Animlist, /Staatskasse, /Killauftrag, /Leader, /Gutscheincode");
                     SendClientMessage(playerid, COLOR_BLUE, "* MUSIK-BEFEHLE *: {FFFFFF}/Musik, /Mp3player, /Ghettoblaster, /Removeghettoblaster (/Rghettoblaster)");
                     SendClientMessage(playerid, COLOR_BLUE, "* GELD-BEFEHLE *: {FFFFFF}/Automat, /Ueberweisen, /Gebecheck, /Guthaben, /Zahlen");
-                    SendClientMessage(playerid, COLOR_BLUE, "* GANGFIGHT-BEFEHLE *: {FFFFFF}/Gangfightwette, /Gangfightinfo");
+                    SendClientMessage(playerid, COLOR_BLUE, "* GANGFIGHT-BEFEHLE *: {FFFFFF}/Gangfightwette, /Gangfightinfo, /Swinfo");
                     SendClientMessage(playerid, COLOR_BLUE, "* RAUBBEFEHLE *: {FFFFFF}/Transporterausrauben, /Bankausrauben, /Tankstelleausrauben");
                     SendClientMessage(playerid, COLOR_BLUE, "* CASINO-BEFEHLE *: {FFFFFF}/Spielautomat, /Wettspiel, /Kartenspiel, /Gluecksrad");
                 }
@@ -33714,7 +33722,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* GROVE GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* GROVE GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 7)
@@ -33722,7 +33730,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* BALLAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* BALLAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 8)
@@ -33741,7 +33749,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 11)
@@ -33749,7 +33757,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 12)
@@ -33757,7 +33765,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* LCN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* LCN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 13)
@@ -33765,7 +33773,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* VAGOS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* VAGOS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 14)
@@ -33814,7 +33822,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 21)
@@ -33822,7 +33830,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     if(Spieler[playerid][pFraktion] == 22)
@@ -41502,7 +41510,8 @@ stock SaveAccount(playerid)
                 `cb_ETH` = %f, \
                 `cb_LTC` = %f, \
                 `cb_AAPL` = %f, \
-                `cb_SSUNF` = %f",
+                `cb_SSUNF` = %f, \
+                `KillsStreetwar` = %d",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -41534,7 +41543,8 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pETH],
                     Spieler[playerid][pLTC],
                     Spieler[playerid][pAAPL],
-                    Spieler[playerid][pSSUNF]);
+                    Spieler[playerid][pSSUNF],
+                    Spieler[playerid][pKillsStreetwar]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -41713,7 +41723,8 @@ new const PlayerColumns[][] = {
     {"cb_ETH"},
     {"cb_LTC"},
     {"cb_AAPL"},
-    {"cb_SSUNF"}
+    {"cb_SSUNF"},
+    {"KillsStreetwar"}
 };
 
 new
@@ -53256,6 +53267,7 @@ COMMAND:skill(playerid, params[]) {
     SendClientMessage(giveid, COLOR_YELLOW, String);
     format(String, sizeof(String), "Waffenteile-Skill: {FFFFFF}%d/%d (Bis zu %d Päckchen)", GetPlayerWaffenteileSkillLevel(playerid), sizeof(g_WaffenteileSkills), GetPlayerWaffenteileSkillValue(playerid));
     SendClientMessage(giveid, COLOR_YELLOW, String);
+    SCMFormatted(giveid, COLOR_YELLOW, "Streetwar-Kills: {FFFFFF}%d Kills", Spieler[giveid][pKillsStreetwar]);
     return 1;
 }
 
@@ -55857,6 +55869,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pLTC] = cache_get_row_float(0, 147, connectionHandle);
             Spieler[playerid][pAAPL] = cache_get_row_float(0, 148, connectionHandle);
             Spieler[playerid][pSSUNF] = cache_get_row_float(0, 149, connectionHandle); // Coinbase end
+            Spieler[playerid][pKillsStreetwar] = cache_get_row_int(0, 150, connectionHandle);
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
@@ -59614,7 +59627,7 @@ COMMAND:allesspeichern(playerid,params[]) {
     #pragma unused params
     if(Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     SendClientMessage(playerid,COLOR_YELLOW,"Daten werden zum Speichern gesendet ...");
-    SaveAll();
+    CallLocalFunction("SaveAll", ""); // y_hooks
     mysql_pquery("SELECT NOW()",THREAD_SAVEALL,playerid,gSQL,MySQLThreadOwner);
     return 1;
 }
@@ -66978,16 +66991,16 @@ COMMAND:ticketkaufen(playerid,params[]) {
 
 stock GetFreeWasserScooterSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_WasserScooterSlot) ; i++) {
         if( g_WasserScooterSlot[i][ASS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_WasserScooterSlot) ; i++) {
             if( g_WasserScooterSlot[i][ASS_bUsed] == false ) {
                 if( c == r) {
@@ -67073,16 +67086,16 @@ stock RemovePlayerWasserScooter(playerid) {
 
 stock GetFreeAutoScooterSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_AutoScooterSlot) ; i++) {
         if( g_AutoScooterSlot[i][ASS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_AutoScooterSlot) ; i++) {
             if( g_AutoScooterSlot[i][ASS_bUsed] == false ) {
                 if( c == r) {
@@ -67168,16 +67181,16 @@ stock RemovePlayerAutoscooter(playerid) {
 
 stock GetFreeKartbahnSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_KartbahnSlot) ; i++) {
         if( g_KartbahnSlot[i][ASS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_KartbahnSlot) ; i++) {
             if( g_KartbahnSlot[i][ASS_bUsed] == false ) {
                 if( c == r) {
@@ -67332,17 +67345,17 @@ public Pulse_Fallturm() {
 
 stock GetFreeFallTurmSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < 4 ; i++) {
         if( g_FallTurm[FT_abUsed][i] == false ) {
-            free++;
+            freecount++;
         }
     }
     //printf("GetFreeFallTurmSlot() free %d",free);
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < 4 ; i++) {
             if( g_FallTurm[FT_abUsed][i] == false ) {
                 if( c == r) {
@@ -67601,16 +67614,16 @@ public Pulse_Schiff() {
 
 stock GetFreeBreakdancerSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_BreakDancerSlot) ; i++) {
         if( g_BreakDancerSlot[i][BDS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_BreakDancerSlot) ; i++) {
             if( g_BreakDancerSlot[i][BDS_bUsed] == false ) {
                 if( c == r) {
