@@ -107,6 +107,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
             SendFraktionMessage(Spieler[killerid][pFraktion], COLOR_DARKGREEN, message);
             SW_score[Spieler[killerid][pFraktion]]++;
             Spieler[killerid][pKillsStreetwar]++;
+            GivePlayerCash(killerid, 450);
         }
     }
     
