@@ -7898,6 +7898,10 @@ public gwarentimer()
     }
 }
 
+CMD:gfinfo(playerid) {
+    return cmd_gangfightinfo(playerid);
+}
+
 CMD:gangfightinfo(playerid)
 {
     new string[400], bool:gangfightRunning = false;
@@ -7907,9 +7911,9 @@ CMD:gangfightinfo(playerid)
         {
             new wartime;
             wartime=gettime()-g_GangZone[i][GZ_iGangWarEnd];
-            format(string,400,"%s (%i Punkte) vs. %s (%i Punkte), Gangfightende: in %i Sekunden",
+            format(string,400,"%s (%i Punkte) vs. %s (%i Punkte), Gangfightende: in %02i:%02i Minuten.",
             GetFactionNameOfFaction(g_GangZone[i][GZ_iAttacker]),g_GangZone[i][GZ_iAttackerScore],
-            GetFactionNameOfFaction(g_GangZone[i][GZ_iOwner]),g_GangZone[i][GZ_iOwnerScore],wartime);
+            GetFactionNameOfFaction(g_GangZone[i][GZ_iOwner]),g_GangZone[i][GZ_iOwnerScore], floatround(-wartime / 60, floatround_floor), floatround(-wartime % 60, floatround_floor));
             SendClientMessage(playerid,COLOR_YELLOW,string);
             gangfightRunning = true;
         }
@@ -64868,7 +64872,7 @@ public GangZone_Pulse() {
             // Gangwar Zeit agelaufen
             if( g_GangZone[i][GZ_iStatus] == 1 ) {
                 new
-                    betrag = 40000,
+                    betrag = 50000,
                     score,
                     winner,
                     loser;
@@ -65022,7 +65026,7 @@ public GangZone_Pulse() {
                 format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF}Die %s hat den Gangfight mit %dP. gewonnen!",GetFactionNameOfFaction(winner),score);
                 SendFraktionMessage(winner,COLOR_YELLOW,String);
                 SendFraktionMessage(loser,COLOR_YELLOW,String);
-                format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$50.000 und das Gebiet geht an die %s",GetFactionNameOfFaction(winner));
+                format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$50.000 + 25.000 Waffenteile und das Gebiet gehen an die %s.",GetFactionNameOfFaction(winner));
                 SendFraktionMessage(winner,COLOR_YELLOW,String);
                 SendFraktionMessage(loser,COLOR_YELLOW,String);
                 format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben den Gangfight mit %dP. gegen die %s gewonnen!",GetFactionNameOfFaction(winner),score,GetFactionNameOfFaction(loser));
@@ -65101,21 +65105,22 @@ stock GetPlayerGangZone(playerid) {
 }
 
 #define GANG_FIGHT_PLAYERS 3
+#define GANGFIGHT_DURATION 50 // Minutes
 
 COMMAND:gangfight(playerid,params[]) {
     new
         frak = Spieler[playerid][pFraktion];
     if( !IsAFightFaction(frak) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion.");
     }
     /*if( Spieler[playerid][pAdmin] < 3 ) {
         return SendClientMessage(playerid, COLOR_RED, "Ein Wettkampf kann nur durch ein Moderatoren gestartet werden!");
     }*/
     if( Spieler[playerid][pRank] < 4 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 in deiner Gang sein");
+        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 in deiner Gang sein.");
     }
     if( IsGangInFight(frak) ){
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich zur Zeit in einem Gangfight");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich zur Zeit in einem Gangfight.");
     }
 
     if( GetFactionOnlinePlayers( frak ) < GANG_FIGHT_PLAYERS ) {
@@ -65126,33 +65131,33 @@ COMMAND:gangfight(playerid,params[]) {
         index;
     index = GetPlayerGangZone(playerid);
     if( index == -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Ganggebiet");
+        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Ganggebiet.");
     }
     if( !IsPlayerInRangeOfPoint( playerid , 6.0 , g_GangZone[index][GZ_fIconX],g_GangZone[index][GZ_fIconY],g_GangZone[index][GZ_fIconZ] )) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der nähe des Icons");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Icons.");
     }
     if( frak == g_GangZone[index][GZ_iOwner] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet gehört bereits deiner Gang");
+        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet gehört bereits deiner Gang.");
     }
     if( gettime() < g_GangZone[index][GZ_iTimeout] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet hat noch eine Zeitsperre, bevor das Gebiet angegriffen werden kann");
+        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet hat noch eine Zeitsperre, bevor das Gebiet angegriffen werden kann.");
     }
     if( IsGangInFight(g_GangZone[index][GZ_iOwner]) ){
-        return SendClientMessage(playerid, COLOR_RED, "Die Gang ist bereits noch in einem Gangfight involviert");
+        return SendClientMessage(playerid, COLOR_RED, "Die Gang ist bereits in einem Gangfight involviert.");
     }
     if( GetFactionOnlinePlayers( g_GangZone[index][GZ_iOwner] ) < GANG_FIGHT_PLAYERS ) {
-        return SendClientMessage(playerid, COLOR_RED, "Von der Besitzerfraktion sind nicht genug Spieler Online");
+        return SendClientMessage(playerid, COLOR_RED, "Von der Besitzerfraktion sind nicht genug Spieler online.");
     }
     if(gangfightpause[frak]<gettime())
     {
         if(gangfightpause[g_GangZone[index][GZ_iOwner]]<gettime())
         {
             new String[128];
-            format(String,sizeof(String),"Gangfight gegen %s wird gestartet! Der Kampf dauert 40 Minuten.",GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
+            format(String,sizeof(String),"Gangfight gegen %s wird gestartet! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
             SendFraktionMessage( frak, COLOR_RED, String );
-            format(String,sizeof(String),"%s startet einen Gangfight. Der Kampf dauert 40 Minuten.",GetFactionNameOfFaction(frak));
+            format(String,sizeof(String),"%s startet einen Gangfight. Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(frak));
             SendFraktionMessage( g_GangZone[index][GZ_iOwner], COLOR_RED, String );
-            format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s startet ein Gangfight gegen die %s! Der Kampf dauert 40 Minuten.",GetFactionNameOfFaction(frak),GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
+            format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s startet ein Gangfight gegen die %s! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(frak),GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
             SendClientMessageToAll(COLOR_YELLOW, String);
             SendClientMessageToAll(COLOR_YELLOW, "Mit /Gangfightwette kannst du für den Sieg einer Gangfraktion wetten!");
             for(new i;i<4;i++)
@@ -65169,7 +65174,7 @@ COMMAND:gangfight(playerid,params[]) {
             g_GangZone[index][GZ_iAttacker] = frak;
             g_GangZone[index][GZ_iAttackerScore] = 0;
             g_GangZone[index][GZ_iOwnerScore] = 0;
-            g_GangZone[index][GZ_iGangWarEnd] = gettime() + 40*60;
+            g_GangZone[index][GZ_iGangWarEnd] = gettime() + GANGFIGHT_DURATION * 60;
             //g_GangZone[index][GZ_iGangWarEnd] = gettime() + 2*60;
             g_GangZone[index][GZ_iFlagge] = -1;
             g_GangZone[index][GZ_iFlaggePlayer] = INVALID_PLAYER_ID;
@@ -65190,13 +65195,13 @@ COMMAND:gangfight(playerid,params[]) {
         {
             new string[200];
             format(string,200,
-            "Die %s kann nicht angegriffen werden, da sie vor 10 Minuten zuletzt ein Gangfight hatten",
+            "Die %s kann nicht angegriffen werden, da sie vor 10 Minuten zuletzt einen Gangfight hatten.",
             GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
         }
     }
     else
     {
-        SendClientMessage(playerid,COLOR_RED,"Ihr habt eine 10 minütige Gangfightpause, da ihr vorhin schon ein Gangfight hattet.");
+        SendClientMessage(playerid,COLOR_RED,"Ihr habt eine 10 minütige Gangfightpause, da ihr vorhin schon einen Gangfight hattet.");
     }
     return 1;
 }
@@ -65206,19 +65211,19 @@ COMMAND:gangfightstop(playerid,params[]) {
     new
         frak = Spieler[playerid][pFraktion];
     if( !IsAFightFaction(frak) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang-Fraktion.");
     }
     if( Spieler[playerid][pRank] < 4 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 sein in deiner Gang");
+        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 sein in deiner Gang.");
     }
     if( !IsGangInFight(frak) ){
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight.");
     }
     new
         index;
     index = GetGangFight( Spieler[playerid][pFraktion] );
     if( index == -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight.");
     }
     new
         betrag = 40000,
@@ -65355,10 +65360,10 @@ COMMAND:gangfightstop(playerid,params[]) {
         format(gangfightwettenp[b],32,"");
     }
 
-    format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF} Die %s hat den Gangfight aufgegeben. Die %s haben gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
+    format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF} Die %s haben den Gangfight aufgegeben. Die %s haben gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
     SendFraktionMessage( winner , COLOR_YELLOW, String );
     SendFraktionMessage( loser , COLOR_YELLOW, String );
-    format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$40.000 + 25.000 Waffenteile und das Gebiet geht an die %s. ",GetFactionNameOfFaction(winner));
+    format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$50.000 + 25.000 Waffenteile und das Gebiet geht an die %s. ",GetFactionNameOfFaction(winner));
     SendFraktionMessage( winner , COLOR_YELLOW, String );
     SendFraktionMessage( loser , COLOR_YELLOW, String );
     format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben den Gangfight aufgegeben. Die %s haben somit gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
