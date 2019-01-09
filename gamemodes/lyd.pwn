@@ -884,6 +884,7 @@ native gpci(playerid, serial [], len);
 
 #define MAX_DEATH_ICONS 50
 #define MAX_FACTIONS 22
+#define MAX_CANISTER 3
 
 enum e_DeathIcon {
     DI_iPickup,
@@ -30931,7 +30932,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(strcmp(Tanke[t][tBesitzer], "Niemand", true) == 0)return SendClientMessage(playerid, COLOR_RED, "Die Tankstelle hat keinen Besitzer.");
 
                 if (listitem >= sizeof(g_SnackShop)) {
-                    if (Spieler[playerid][pKanister] >= 3) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits drei Kanister.");
+                    if (Spieler[playerid][pKanister] >= MAX_CANISTER) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits " #MAX_CANISTER " Kanister.");
                     if (Tanke[t][tBenzin] < 10) return SendClientMessage(playerid, COLOR_RED, "Die Tankstelle hat zu wenig Benzin dafür.");
                     if (Spieler[playerid][pCash] < 2500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dafür.");
                     GivePlayerCash(playerid, -2500);
@@ -32321,7 +32322,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response) {
                 new t = IsPlayerAtTanke(playerid);
                 if(t == 999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keiner Tankstelle.");
-                if(Spieler[playerid][pKanister] >= 3)return SendClientMessage(playerid, COLOR_RED, "Du hast bereits drei Kanister.");
+                if(Spieler[playerid][pKanister] >= MAX_CANISTER) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits " #MAX_CANISTER " Kanister.");
                 if (Tanke[t][tBenzin] < 10) return SendClientMessage(playerid, COLOR_RED, "Die Tankstelle hat zu wenig Benzin dafür.");
 
                 new preis;
@@ -52485,153 +52486,101 @@ stock IsBizOpened(biz) {
     return 0;
 }
 
-COMMAND:geben(playerid,params[]) {
-    new
-        methode,
-        giveid,
-        inventar[24],
-        anzahl;
-    if(sscanf(params,"us[24]d",giveid,inventar,anzahl)) {
-        SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
-        return SendClientMessage(playerid,COLOR_ORANGE,"Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
+COMMAND:geben(playerid, params[]) {
+    new methode, giveid, inventar[24], anzahl;
+    if (sscanf(params, "us[24]d", giveid, inventar, anzahl)) {
+        SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
+        return SendClientMessage(playerid, COLOR_ORANGE, "Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
     }
-    if( !IsPlayerConnected(giveid)) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Der Spieler konnte nicht gefunden werden.");
-    }
-    if( Spieler[giveid][pAdminDienst] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist gerade im Admindienst.");
-    }
-    if( Spieler[playerid][pLevel] < 3 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst Level 3 sein um einem anderen Spieler etwas zu geben!");
-    }
-    if( Spieler[giveid][pLevel] < 3 ) {
-        return SendClientMessage(giveid, COLOR_RED, "Der Spieler muss mindestens Level 3 sein!");
-    }
-    if( playerid == giveid ) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Das ergibt keinen Sinn. Wirklich nicht.");
-    }
-    if( anzahl <= 0 ) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Gebe eine gültige Anzahl ein.");
-    }
-    new
-        Float:x,
-        Float:y,
-        Float:z;
-    GetPlayerPos(playerid,x,y,z);
-    if( !IsPlayerInRangeOfPoint(giveid,5.0,x,y,z)) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Der Spieler ist nicht in deiner Nähe.");
-    }
-    if(!strcmp(inventar,"Waffen", true) || !strcmp(inventar,"Waffe", true)) {
+
+    if (!IsPlayerConnected(giveid)) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Der Spieler konnte nicht gefunden werden.");
+    if (Spieler[giveid][pAdminDienst]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist gerade im Admindienst.");
+    if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "Du musst Level 3 sein um einem anderen Spieler etwas zu geben!");
+    if (Spieler[giveid][pLevel] < 3) return SendClientMessage(giveid, COLOR_RED, "Der Spieler muss mindestens Level 3 sein!");
+    if (playerid == giveid) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Das ergibt keinen Sinn. Wirklich nicht.");
+    if (anzahl <= 0) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Gebe eine gültige Anzahl ein.");
+
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+    if (!IsPlayerInRangeOfPoint(giveid, 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Der Spieler ist nicht in deiner Nähe.");
+
+    if (!strcmp(inventar, "Waffen", true) || !strcmp(inventar, "Waffe", true)) {
         inventar = "Waffen";
         methode = 1;
     }
-    else if(!strcmp(inventar,"Kekse", true)) {
+    else if (!strcmp(inventar, "Kekse", true))
         methode = 2;
-    }
-    else if(!strcmp(inventar,"Zigaretten", true)) {
+    else if (!strcmp(inventar, "Zigaretten", true))
         methode = 3;
-    }
-    else if(!strcmp(inventar,"Tankkanister", true) || !strcmp(inventar,"Kanister", true)) {
-        inventar = "einen Kanister";
+    else if (!strcmp(inventar, "Tankkanister", true) || !strcmp(inventar, "Kanister", true)) {
+        inventar = "Kanister";
         methode = 4;
     }
-    else if(!strcmp(inventar,"Fische", true)) {
+    else if (!strcmp(inventar, "Fische", true))
         methode = 5;
-    }
-    new
-        String[128];
-    if( methode == 0 ) {
-        SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
-        return SendClientMessage(playerid,COLOR_ORANGE,"Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
-    }
-    else if( methode == 1 ) {
-        //Waffen
-        new
-            weapon,
-            muni;
-        weapon = GetPlayerWeapon(playerid);
-        if( weapon ) {
-            if(HasWeaponBlock(giveid)) {
-                SendClientMessage(playerid,COLOR_ORANGE,"Der Spieler hat noch eine Waffensperre.");
-                return SendWeaponBlockInfo(giveid);
-            }
-            new
-                armed_weapon,
-                slot;
-            slot = GetWeaponSlot(weapon);
-            GetPlayerWeaponData( playerid,slot,weapon,muni);
-            if( muni < anzahl ) {
-                return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du besitzt nicht genug Munition von dieser Waffe.");
-            }
-            armed_weapon = GetPlayerWeapon(giveid);
-            GivePlayerWeapon( giveid, weapon , anzahl );
-            if( armed_weapon ) {
-                SetPlayerArmedWeapon(playerid,armed_weapon);
-            }
-            if( GetPlayerState(giveid) == PLAYER_STATE_PASSENGER ) {
-                if( weapon == 29 || weapon == 31 ) {
-                    SetPlayerArmedWeapon(playerid,weapon);
+
+    new String[128];
+    switch (methode) {
+        case 0: {
+            SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
+            return SendClientMessage(playerid, COLOR_ORANGE, "Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
+        }
+        case 1: {
+            new weapon = GetPlayerWeapon(playerid), muni;
+            if (weapon) {
+                if (HasWeaponBlock(giveid)) {
+                    SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler hat noch eine Waffensperre.");
+                    return SendWeaponBlockInfo(giveid);
                 }
-                else {
-                    SetPlayerArmedWeapon(playerid,0);
-                }
+
+                new armed_weapon = GetPlayerWeapon(giveid), slot = GetWeaponSlot(weapon);
+                GetPlayerWeaponData(playerid, slot, weapon, muni);
+                if (muni < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du besitzt nicht genug Munition von dieser Waffe.");
+                GivePlayerWeapon(giveid, weapon, anzahl);
+                GivePlayerWeapon(playerid, weapon, -anzahl);
+                if (IsPlayerInAnyVehicle(giveid)) SetPlayerArmedWeapon(giveid, weapon == 29 || weapon == 31 ? weapon : 0);
+                else SetPlayerArmedWeapon(giveid, weapon);
             }
-            GivePlayerWeapon( playerid, weapon , -anzahl );
+            else 
+                return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du musst die Waffe auf der Hand tragen.");
         }
-        else {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du musst die Waffe auf der Hand tragen.");
+        case 2: {
+            if (Spieler[playerid][pKekse] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Kekse.");
+            if (anzahl > 100) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du darfst maximal 100 Kekse vergeben.");
+            Spieler[playerid][pKekse] -= anzahl;
+            Spieler[giveid][pKekse] += anzahl;
+        }
+        case 3: {
+            if (Spieler[playerid][pZigaretten] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Zigaretten.");
+            Spieler[playerid][pZigaretten] -= anzahl;
+            Spieler[giveid][pZigaretten] += anzahl;
+        }
+        case 4: {
+            if (Spieler[playerid][pKanister] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Tankkanister.");
+            if (Spieler[giveid][pKanister] + anzahl > MAX_CANISTER) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Der Spieler kann maximal " #MAX_CANISTER " Kanister haben.");
+            Spieler[playerid][pKanister] -= anzahl;
+            Spieler[giveid][pKanister] += anzahl;
+        }
+        case 5: {
+            if (Spieler[playerid][pFische] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Fische.");
+            Spieler[playerid][pFische] -= anzahl;
+            Spieler[giveid][pFische] += anzahl;
         }
     }
-    else if( methode == 2 ) {
-        //Kekse
-        // Spieler[playerid][pKekse]
-        if( Spieler[playerid][pKekse] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast nicht genug Kekse.");
-        }
-        if (anzahl > 100) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du darfst maximal 100 Kekse vergeben.");
-        Spieler[playerid][pKekse] -= anzahl;
-        Spieler[giveid][pKekse] += anzahl;
-    }
-    else if( methode == 3 ) {
-        //Zigaretten
-        // pZigaretten
-        if( Spieler[playerid][pZigaretten] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast nicht genug Zigaretten.");
-        }
-        Spieler[playerid][pZigaretten] -= anzahl;
-        Spieler[giveid][pZigaretten] += anzahl;
-    }
-    else if( methode == 4 ) {
-        //Tankkanister
-        // pKanister
-        anzahl = 1;
-        if( Spieler[playerid][pFische] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast keinen Tankkanister.");
-        }
-        Spieler[playerid][pFische] -= anzahl;
-        Spieler[giveid][pFische] += anzahl;
-    }
-    else if( methode == 5 ) {
-        //Fische
-        // pFische
-        if( Spieler[playerid][pFische] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast nicht genug Fische.");
-        }
-        Spieler[playerid][pFische] -= anzahl;
-        Spieler[giveid][pFische] += anzahl;
-    }
+
     format(String, sizeof(String), "* %s gab %s %s.", GetName(playerid), GetName(giveid), inventar);
-    SendRoundMessage(x,y,z, COLOR_PURPLE, String);
+    SendRoundMessage(x, y, z, COLOR_PURPLE, String);
+
     // ApplyAnimation(playerid,"BAR","Barserve_give",4.1,0,1,1,1,1);
     // ApplyAnimation(giveid,"BAR","Barserve_give",4.1,0,1,1,1,1);
 
-    format(String,sizeof(String),"Du hast %s %d %s gegeben.",GetName(giveid),anzahl,inventar);
-    SendClientMessage(playerid,COLOR_GREEN,String);
+    format(String, sizeof(String), "Du hast %s %d %s gegeben.", GetName(giveid), anzahl, inventar);
+    SendClientMessage(playerid, COLOR_GREEN, String);
 
-    format(String,sizeof(String),"Du hast von %s %d %s erhalten!",GetName(playerid),anzahl,inventar);
-    SendClientMessage(giveid,COLOR_GREEN,String);
+    format(String,sizeof(String), "Du hast von %s %d %s erhalten!", GetName(playerid), anzahl, inventar);
+    SendClientMessage(giveid, COLOR_GREEN, String);
 
-    format(String,sizeof(String),"%s hat %s %d %s gegeben",GetName(playerid),GetName(giveid),anzahl,inventar);
+    format(String,sizeof(String), "%s hat %s %d %s gegeben", GetName(playerid), GetName(giveid), anzahl, inventar);
     GebeLog(String);
     return 1;
 }
