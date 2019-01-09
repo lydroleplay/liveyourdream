@@ -17661,9 +17661,11 @@ CMD:kidnap(playerid, params[])
     GetPlayerPos(playerid, x,y,z);
     if(!IsPlayerInRangeOfPoint(pID, 5.0, x,y,z))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
     if(!IsPlayerInAnyVehicle(playerid))return SendClientMessage(playerid, COLOR_RED, "Du bist in keinem Fahrzeug.");
+    new maxSeats = GetVehicleMaxPassengers(GetVehicleModel(GetPlayerVehicleID(playerid)));
+    if (!maxSeats || maxSeats == 0xF) return SendClientMessage(playerid, COLOR_RED, "Dieses Fahrzeug hat keinen Beifahrersitz.");
     if(IsPlayerInAnyVehicle(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist in einem anderen Fahrzeug.");
-    if( Spieler[pID][pLevel] <= 2 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst kein Neuling entführen!");
+    if( Spieler[pID][pLevel] < 3 ) {
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Neuling entführen!");
     }
 
     // Buguse
@@ -17674,11 +17676,11 @@ CMD:kidnap(playerid, params[])
         return SendClientMessage(playerid, COLOR_RED, "Du versuchst gerade noch einen Spieler zu entführen.");
     }
     if( Spieler[pID][bKidnapped] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Der Spieler wird bereits entführt");
+        return SendClientMessage(playerid, COLOR_RED, "Der Spieler wird bereits entführt.");
     }
     Spieler[playerid][tickKidnap] = gettime() + 7;
     Spieler[playerid][tKidnap] = SetTimerEx("Pulse_Kidnap",1627,true,"dd",playerid,pID );
-    format(string,sizeof(string),"%s versucht %s ins Fahrzeug zu zerren",GetName(playerid),GetName(pID));
+    format(string,sizeof(string),"%s versucht %s ins Fahrzeug zu zerren.",GetName(playerid),GetName(pID));
     SendRoundMessage(x,y,z, COLOR_LIGHTRED2, string);
 
     // PutPlayerInVehicle(pID, GetPlayerVehicleID(playerid), 1);
@@ -22107,6 +22109,23 @@ stock GetBusIndex(vehicleid){
         }
     }
     return -1;
+}
+
+stock GetVehicleMaxPassengers(iModel)
+{
+    if(400 <= iModel <= 611)
+    {
+        static
+            s_MaxPassengers[] =
+            {
+                271782163, 288428337, 288559891, -2146225407, 327282960, 271651075, 268443408, 286339857, 319894289, 823136512, 805311233,
+                285414161, 286331697, 268513553, 18026752, 286331152, 286261297, 286458129, 856765201, 286331137, 856690995, 269484528, 
+                51589393, -15658689, 322109713, -15527663, 65343    
+            }
+        ;
+        return ((s_MaxPassengers[(iModel -= 400) >>> 3] >>> ((iModel & 7) << 2)) & 0xF);
+    }
+    return 0xF;
 }
 
 CMD:startgarten(playerid)
@@ -52533,7 +52552,7 @@ COMMAND:geben(playerid, params[]) {
                     return SendWeaponBlockInfo(giveid);
                 }
 
-                new armed_weapon = GetPlayerWeapon(giveid), slot = GetWeaponSlot(weapon);
+                new slot = GetWeaponSlot(weapon);
                 GetPlayerWeaponData(playerid, slot, weapon, muni);
                 if (muni < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du besitzt nicht genug Munition von dieser Waffe.");
                 GivePlayerWeapon(giveid, weapon, anzahl);
