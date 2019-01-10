@@ -58496,10 +58496,12 @@ COMMAND:promille(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     }
     if( !(( Spieler[playerid][pFraktion] == 1) || ( Spieler[playerid][pFraktion] == 2) || ( Spieler[playerid][pFraktion] == 5) || ( Spieler[playerid][pFraktion] == 16 ) || ( Spieler[playerid][pFraktion] == 22 )) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist kein Polizist");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist kein Exekutivbeamter.");
     }
-    new
-        String[128];
+
+    if (!IsPlayerInRangeOfPlayer(playerid, giveid, 5.0)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
+
+    new String[128];
     if( pDrogenEinfluss[playerid] == 1 ) {
         format(String,sizeof(String),"Spieler %s steht unter Drogen Einfluss.",GetName(giveid));
         SendClientMessage(playerid,COLOR_YELLOW,String);
@@ -58512,10 +58514,8 @@ COMMAND:promille(playerid,params[]) {
         format(String,sizeof(String),"Spieler %s steht nicht unter Alkohol- noch Drogeneinfluss",GetName(giveid));
         SendClientMessage(playerid,COLOR_YELLOW,String);
     }
-    new
-        Float:x,
-        Float:y,
-        Float:z;
+    
+    new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid,x,y,z);
     format(String,sizeof(String),"Beamter %s prüft den Alkohol-Drogeneinfluss von %s",GetName(playerid),GetName(giveid));
     SendRoundMessage(x,y,z, COLOR_PURPLE, String);
