@@ -3677,7 +3677,9 @@ new Float:ATM[][] = {
     {921.592407, -1207.274780, 16.619688},
     {1790.9886, -1303.7802, 119.8556},
     {1484.833862, -1805.827637, 14.740836},
-    {959.964539, -1562.702515, 13.211584}
+    {959.964539, -1562.702515, 13.211584}, 
+    {-29.488010, -2522.075195, 36.048595},
+    {1137.1497, -1630.7759, 12.9359}
 };
 
 enum e_FahrpruefungCP {
@@ -58514,7 +58516,7 @@ COMMAND:promille(playerid,params[]) {
         format(String,sizeof(String),"Spieler %s steht nicht unter Alkohol- noch Drogeneinfluss",GetName(giveid));
         SendClientMessage(playerid,COLOR_YELLOW,String);
     }
-    
+
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid,x,y,z);
     format(String,sizeof(String),"Beamter %s prüft den Alkohol-Drogeneinfluss von %s",GetName(playerid),GetName(giveid));
