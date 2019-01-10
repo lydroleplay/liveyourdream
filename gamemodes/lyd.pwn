@@ -54016,7 +54016,7 @@ COMMAND:suche(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Der Spieler wurde nicht gefunden");
 
     new String[128];
-    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "An" : "Aus");
+    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s, Paketverlust: %.2f Prozent", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "An" : "Aus", NetStats_PacketLossPercent(giveid));
     SendClientMessage(playerid, COLOR_BLUE, String);
 
     return 1;
