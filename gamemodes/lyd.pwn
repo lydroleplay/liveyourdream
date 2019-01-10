@@ -3274,7 +3274,7 @@ new const g_HausMoebel[][e_HausMoebel] = {
         {29,2127,3,6500,"Moderner Kühlschrank in Rot"},
         {30,2130,3,3600,"Moderne Küchenkommode in Rot"},
         {31,19609,3,3420,"Kühlschrank in Weiß"},
-        {32,19819,3,1800,"Badewanne"},
+        {32,2526,3,1800,"Badewanne"},
         {33,19581,3,180,"Kochpfanne"},
         {34,19585,3,200,"Kochtopf"},
         {35,19586,3,150,"Pfannenwender"},
