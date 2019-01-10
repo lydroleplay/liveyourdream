@@ -17752,6 +17752,11 @@ public Pulse_Kidnap(entfuehrer,opferid){
         new string[128];
         KillTimer(Spieler[entfuehrer][tKidnap]);
         Spieler[entfuehrer][tKidnap] = INVALID_TIMER_ID;
+        new maxSeats = GetVehicleMaxPassengers(GetVehicleModel(GetPlayerVehicleID(entfuehrer)));
+        if (!maxSeats || maxSeats == 0xF) {
+            SendClientMessage(entfuehrer, COLOR_RED, "Dieses Fahrzeug hat keinen Beifahrersitz.");
+            return SendClientMessage(opferid, COLOR_GREEN, "Du bist deinem Entführer entkommen.");
+        }
         SendClientMessage(opferid, COLOR_GREEN, "Du bist deinem Entführer nicht entkommen.");
         PutPlayerInVehicle(opferid, GetPlayerVehicleID(entfuehrer), 1);
         FreezePlayer(opferid);
