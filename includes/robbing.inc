@@ -131,6 +131,11 @@ public Robbing_Pulse() {
 	        // Prüfen ob Jemand zielt und starten
 	        if(IsPlayerConnected(g_RobbingBiz[i][RB_iTmpRobberID]))
 			{
+				if (g_aSettings[ASETTING_ROBBLOCK][ASETTING_TOGGLE]) {
+					SendClientMessage(g_RobbingBiz[i][RB_iTmpRobberID], COLOR_RED, "Zurzeit ist die Überfallsperre aktiviert.");
+					g_RobbingBiz[i][RB_iTmpRobberID]=MAX_PLAYERS+1;
+					break;
+				}
 				if( GetOnlineExekutive(g_RobbingBiz[i][RB_iTmpRobberID]) < ROBBING_POLICE_MEN_ONLINE )
 				{
 					SendClientMessage(g_RobbingBiz[i][RB_iTmpRobberID],COLOR_RED,"Es sind nicht genügend Polizisten online, um ein Raub zu starten!");

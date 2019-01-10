@@ -393,7 +393,6 @@ new gSQL;
 new gWebSQL;
 new MySQLConnected = 0;
 new tMySQL;
-new bool:g_bRegSperre = false;
 new savewetterid;
 
 // Global vars
@@ -531,6 +530,26 @@ enum {
     CARKEY_TYPE_MOVE1,
     CARKEY_TYPE_MOVE2
 }
+
+enum {
+    ASETTING_GLOBALCHAT,
+    ASETTING_GANGFIGHTBLOCK,
+    ASETTING_ROBBLOCK,
+    ASETTING_REGBLOCK
+}
+
+enum E_ASETTING {
+    ASETTING_NAME[20],
+    ASETTING_RANK,
+    bool:ASETTING_TOGGLE
+}
+
+new g_aSettings[][E_ASETTING] = {
+    {"Globaler Chat", 3, true},
+    {"Gangfightsperre", 3, false},
+    {"Überfallsperre", 3, false},
+    {"Regsperre", 1, false}
+};
 
 new jobNames[][] = {
     "Arbeitslos",
@@ -2133,6 +2152,7 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_COINBASE_BUYORSELL 1391
 #define     DIALOG_COINBASE_AMOUNT 1392
 #define     DIALOG_COINBASE_CONFIRM 1393
+#define     DIALOG_ASETTINGS 1394
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -4224,7 +4244,6 @@ new vSirene[MAX_VEHICLES];
 new vNeon[MAX_VEHICLES];
 new OAmtSirene[MAX_VEHICLES];
 
-new GCOff;
 new GMXMode;
 new gmxtimer;
 new automsg;
@@ -5484,7 +5503,6 @@ public OnGameModeInit2() {
 
     KillTimer(gmxtimer);
     GMXMode = 0;
-    GCOff = 0;
     automsg = 0;
 
 	/*CreateDynamicPickup(19346, 23, 1782.0698,-2087.7612,13.5469, 0);//Bratwurst
@@ -10455,7 +10473,7 @@ public SetPlayerSpawn(playerid)
                 Spieler[playerid][tSpawnView] = SetTimerEx("SetPlayerView",5003,false,"dd",playerid,1); // Muss,sonst klappt Spectate nicht
             }
             else {
-                if(g_bRegSperre) {
+                if(g_aSettings[ASETTING_REGBLOCK][ASETTING_TOGGLE]) {
                     static String[] = "\
                                     Wir begrüßen dich ganz Herzlich auf Live your Dream!\n\
                                     Aus aktuellem Anlass ist eine Registrierung gerade nicht möglich.\n\
@@ -20494,23 +20512,14 @@ CMD:sc(playerid, params[])
 CMD:gcoff(playerid)
 {
     new string[128];
-    if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    if(GCOff == 0)
-    {
-        GCOff = 1;
-        format(string, sizeof(string), "Der Globale Chat wurde von %s %s deaktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-        SendClientMessageToAll(COLOR_GREEN, string);
-    }
-    else if(GCOff == 1)
-    {
-        GCOff = 0;
-        format(string, sizeof(string), "Der Globale Chat wurde von %s %s aktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-        SendClientMessageToAll(COLOR_GREEN, string);
-    }
-    return 1;
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    return ToggleASetting(playerid, ASETTING_GLOBALCHAT, false);
 }
 
-
+CMD:regsperre(playerid)
+{
+    return cmd_asettings(playerid);
+}
 
 CMD:gc(playerid, params[])
 {
@@ -20526,7 +20535,7 @@ CMD:gc(playerid, params[])
     }
     if(Spieler[playerid][pAdmin] < 3)
     {
-        if(GCOff == 1)return SendClientMessage(playerid, COLOR_RED, "Der Globale Chat ist derzeit deaktiviert.");
+        if(!g_aSettings[ASETTING_GLOBALCHAT][ASETTING_TOGGLE])return SendClientMessage(playerid, COLOR_RED, "Der Globale Chat ist derzeit deaktiviert.");
         if(!pGC[playerid])return SendClientMessage(playerid, COLOR_YELLOW, "Du hast den Globalen Chat für dich deaktiviert, tippe /chatoff.");
         format(string, sizeof(string), "(( %s: %s ))", GetName(playerid), text);
         SendGlobalMessage(COLOR_CHAT_GC_NONADM, string);
@@ -29139,12 +29148,56 @@ stock DestroyVehicleEx(vehicleid) {
     return DestroyVehicle(vehicleid);
 }
 
+stock ToggleASetting(playerid, index, showDialog = false) {
+    g_aSettings[index][ASETTING_TOGGLE] = !g_aSettings[index][ASETTING_TOGGLE];
+
+    new message[144];
+    switch (index) {
+        case ASETTING_GLOBALCHAT: {
+            format(message, sizeof(message), "[SERVER] {FFFFFF}Der Globale Chat wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendClientMessageToAll(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_GREEN : COLOR_RED, message);
+        }
+        case ASETTING_GANGFIGHTBLOCK: {
+            format(message, sizeof(message), "[SERVER] {FFFFFF}Die Gangfightsperre wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendClientMessageToAll(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_RED : COLOR_GREEN, message);
+        }
+        case ASETTING_ROBBLOCK: {
+            format(message, sizeof(message), "[SERVER] {FFFFFF}Die Überfallsperre wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendClientMessageToAll(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_RED : COLOR_GREEN, message);
+        }
+        case ASETTING_REGBLOCK: {
+            format(message, sizeof(message), "[ADMIN] {FFFFFF}Die Regsperre wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendAdminMessage(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_RED : COLOR_GREEN, message);
+        }
+    }
+
+    if (showDialog)
+        return cmd_asettings(playerid);
+
+    return 1;
+}
+
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     for(new i , len = strlen(inputtext) ; i < len ; i++) {
         if( inputtext[i] == '%' ) inputtext[i] = ' ';
     }
     if(Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if (dialogid == DIALOG_ASETTINGS) {
+        if (!response) return 1;
+        if (listitem < 0 || listitem >= sizeof(g_aSettings)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Ungültige Auswahl.");
+        if (Spieler[playerid][pAdmin] < 1) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Dafür hast du keine Berechtigung.");
+        if (Spieler[playerid][pAdmin] < g_aSettings[listitem][ASETTING_RANK]) {
+            SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Dafür hast du nicht die nötigen Rechte.");
+            return cmd_asettings(playerid);
+        }
+
+        return ToggleASetting(playerid, listitem, true);
+    }
     if (dialogid == DIALOG_NEON) {
         if (!response) return 1;
         if (listitem < 0 || listitem >= sizeof(g_NeonLights)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Ungültige Auswahl.");
@@ -33878,8 +33931,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if(Spieler[playerid][pAdmin] >= 1)
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster), /Gotocp");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster), /Gotocp, /Asettings");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar");
                     }
@@ -33890,7 +33943,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem, /Atafelentmieten, /Checkskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons");
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
@@ -48264,6 +48317,7 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
         SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Las Venturas Zentralbank.");
         return 1;
     }
+    if (g_aSettings[ASETTING_ROBBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Überfallsperre aktiviert.");
     if( g_iBankraubStatus == Bankraub_Wartezeit ) {
         SendClientMessage(playerid, COLOR_RED, "Die Bank kann zur Zeit nicht ausgeraubt werden.");
         return 1;
@@ -48276,7 +48330,7 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
         SendClientMessage(playerid, COLOR_RED, "Du kannst die Bank nicht ohne eine Waffe ausrauben.");
         return 1;
     }
-    if( GetOnlineExekutive(playerid) < 0) {
+    if( GetOnlineExekutive(playerid) < 4) {
         SendClientMessage(playerid, COLOR_RED, "Es sind nicht genug Spieler der Exekutive online.");
 	    return 1;
 	}
@@ -48362,6 +48416,7 @@ COMMAND:kammerausrauben(playerid, params[]) {
     if (!(IsPlayerInRangeOfPoint(playerid, 2.0, EVIDENCEROOM_INTERIOR_HEIST_P) && GetPlayerInterior(playerid) == 18 && GetPlayerVirtualWorld(playerid) == VW_EVIDENCEROOMINTERIOR)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Asservatenkammer.");
     if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "Du bist noch zu frisch auf dem Server.");
     if (IsPlayerExecutive(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du bist Teil der Exekutive.");
+    if (g_aSettings[ASETTING_ROBBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Überfallsperre aktiviert.");
     if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING) return SendClientMessage(playerid, COLOR_RED, "Es läuft bereits ein Überfall auf die Asservatenkammer.");
     if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_COOLDOWN) return SendClientMessage(playerid, COLOR_RED, "Die Asservatenkammer kann noch nicht wieder überfallen werden.");
     if (GetOnlineExekutive(playerid) < 4) return SendClientMessage(playerid, COLOR_RED, "Es sind nicht genug Spieler der Exekutive online.");
@@ -48401,6 +48456,7 @@ COMMAND:kammerausrauben(playerid, params[]) {
 
 COMMAND:bankausrauben(playerid,params[]) {
     if ((!IsPlayerInRangeOfPoint(playerid,2.0,2144.1409,1641.5856,993.5761) ) || (GetPlayerInterior(playerid) != 1)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Los Santos Zentralbank.");
+    if (g_aSettings[ASETTING_ROBBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Überfallsperre aktiviert.");
     if (g_iBankraubStatus == Bankraub_Wartezeit) return SendClientMessage(playerid, COLOR_RED, "Die Bank kann zur Zeit nicht ausgeraubt werden.");
     if (g_iBankraubStatus == Bankraub_Aktiv) return SendClientMessage(playerid, COLOR_RED, "Ein Bankraub läuft gerade. ");
     if (!HasPlayerWeapon(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Bank nicht ohne eine Waffe ausrauben.");
@@ -56330,7 +56386,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][tSpawnView] = SetTimerEx("SetPlayerView",5003,false,"dd",playerid,1); // Muss,sonst klappt Spectate nicht
         }
         else {
-            if(g_bRegSperre) {
+            if(g_aSettings[ASETTING_REGBLOCK][ASETTING_TOGGLE]) {
                 static String[] = "\
                                 Wir begrüßen dich ganz Herzlich auf Live your Dream!\n\
                                 Aus aktuellem Anlass ist eine Registrierung gerade nicht möglich.\n\
@@ -65089,6 +65145,7 @@ COMMAND:gangfight(playerid,params[]) {
     /*if( Spieler[playerid][pAdmin] < 3 ) {
         return SendClientMessage(playerid, COLOR_RED, "Ein Wettkampf kann nur durch ein Moderatoren gestartet werden!");
     }*/
+    if (g_aSettings[ASETTING_GANGFIGHTBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Gangfightsperre aktiviert.");
     if( Spieler[playerid][pRank] < 4 ) {
         return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 in deiner Gang sein.");
     }
@@ -69791,18 +69848,14 @@ COMMAND:hausverstaatlichen(playerid,params[]) {
     return 1;
 }
 
-COMMAND:regsperre(playerid,params[]) {
+CMD:asettings(playerid) {
     if (Spieler[playerid][pAdmin] < 1) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-
-    new String[128];
-    if(g_bRegSperre) {
-        format(String,sizeof(String),"%s %s hat die Reg-Sperre deaktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-    }
-    else {
-        format(String,sizeof(String),"%s %s hat die Reg-Sperre aktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-    }
-    SendAdminMessage(COLOR_RED, String);
-    g_bRegSperre = !g_bRegSperre;
+    new dialogText[256];
+    dialogText = "Einstellung\tStatus\n";
+    for (new i = 0; i < sizeof(g_aSettings); i++)
+        format(dialogText, sizeof(dialogText), "%s%s\t%s\n", dialogText, g_aSettings[i][ASETTING_NAME], g_aSettings[i][ASETTING_TOGGLE] ? "{00FF00}AN" : "{FF0000}AUS");
+    
+    ShowPlayerDialog(playerid, DIALOG_ASETTINGS, DIALOG_STYLE_TABLIST_HEADERS, "{FF9900}Admineinstellungen", dialogText, "Ändern", "Schließen");
     return 1;
 }
 
