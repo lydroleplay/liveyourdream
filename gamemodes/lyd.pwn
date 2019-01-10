@@ -65164,8 +65164,12 @@ COMMAND:gangfight(playerid,params[]) {
     if( frak == g_GangZone[index][GZ_iOwner] ) {
         return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet gehört bereits deiner Gang.");
     }
-    if( gettime() < g_GangZone[index][GZ_iTimeout] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet hat noch eine Zeitsperre, bevor das Gebiet angegriffen werden kann.");
+    if (gettime() < g_GangZone[index][GZ_iTimeout]) {
+        new diff = g_GangZone[index][GZ_iTimeout] - gettime();
+        new h = diff / 3600 % 24;
+        new m = diff / 60 % 60;
+
+        return SCMFormatted(playerid, COLOR_RED, "Dieses Ganggebiet hat noch %i Stunden %i Minuten lang eine Zeitsperre.", h, m);
     }
     if( IsGangInFight(g_GangZone[index][GZ_iOwner]) ){
         return SendClientMessage(playerid, COLOR_RED, "Die Gang ist bereits in einem Gangfight involviert.");
