@@ -36664,13 +36664,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response)
             {
                 new pVW = GetPlayerVirtualWorld(playerid);
-                
-                SCMFormatted(playerid, COLOR_WHITE, "DEBUG: vwid: %i", pVW);
-
                 if (pVW != 22 && pVW != 23 && pVW != 24 && pVW != 26 && pVW != 27 && pVW != 60)
                     return 1;
-
-                SCMFormatted(playerid, COLOR_WHITE, "DEBUG: pVW ok %s", "");
 
                 if(listitem==0)//Telefonbuch
                 {
@@ -61130,12 +61125,12 @@ COMMAND:bank(playerid,params[]) {
 }
 
 COMMAND:koffer(playerid,params[]) {
-    if(Spieler[playerid][pKoffer] == false ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
-    }
-    if( PlayerIsPaintballing[playerid] == 1 ) {
-            return SendClientMessage(playerid, COLOR_RED, "In der Paintball-Arena kannst du keinen Koffer rausholen!");
-    }
+    if (Spieler[playerid][pKoffer] == false ) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
+    if (Spieler[playerid][pTotTime] || Spieler[playerid][bKidnapped] || Cuffed[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer jetzt gerade nicht benutzen.");
+    if (Spieler[playerid][pJailed] || Spieler[playerid][pPrisonRun] || PlayerIsPaintballing[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer hier nicht benutzen.");
+
     if( IsPlayerAttachedObjectSlotUsed(playerid,ATTACHED_INDEX_KOFFER) ) {
         RemovePlayerAttachedObject(playerid,ATTACHED_INDEX_KOFFER);
     }
@@ -61145,14 +61140,14 @@ COMMAND:koffer(playerid,params[]) {
     return 1;
 }
 
-COMMAND:kofferauf(playerid,params[]) {
-    if(Spieler[playerid][pKoffer] == false ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
-    }
-    if( !IsPlayerAttachedObjectSlotUsed(playerid,ATTACHED_INDEX_KOFFER) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer nur öffnen, wenn du ihn gerade trägst.");
-    }
-    ShowKoffer(playerid,playerid);
+COMMAND:kofferauf(playerid, params[]) {
+    if (Spieler[playerid][pKoffer] == false) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
+    if (!IsPlayerAttachedObjectSlotUsed(playerid, ATTACHED_INDEX_KOFFER)) return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer nur öffnen, wenn du ihn gerade trägst.");
+    if (Spieler[playerid][pTotTime] || Spieler[playerid][bKidnapped] || Cuffed[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer jetzt gerade nicht benutzen.");
+    if (Spieler[playerid][pJailed] || Spieler[playerid][pPrisonRun] || PlayerIsPaintballing[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer hier nicht benutzen.");
+    ShowKoffer(playerid, playerid);
     return 1;
 }
 
