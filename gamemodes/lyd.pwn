@@ -14116,6 +14116,27 @@ CMD:setbwstrafe(playerid, params[]) {
     return 1;
 }
 
+CMD:lastdamage(playerid, params[]) {
+    return cmd_lastdmg(playerid, params);
+}
+
+CMD:lastdmg(playerid, params[]) {
+    new pID;
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if (sscanf(params, "u", pID))
+        return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Lastdmg [SpielerID/Name]");
+
+    if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler wurde nicht gefunden.");
+    if (!GetPVarInt(pID, "DAMAGE.TIME")) return SCMFormatted(playerid, COLOR_ORANGE, "[DAMAGE] {FFFFFF}%s hat noch keinen Schaden von einem Spieler erhalten.", GetName(pID));
+
+    new pName[MAX_PLAYER_NAME], sWeapon[32];
+    GetWeaponNameEx(GetPVarInt(pID, "DAMAGE.WEAPON"), sWeapon, sizeof(sWeapon));
+    GetPVarString(pID, "DAMAGE.NAME", pName, sizeof(pName));
+    if (isnull(sWeapon)) sWeapon = "Fist";
+    return SCMFormatted(playerid, COLOR_ORANGE, "[DAMAGE] {FFFFFF}%s hat zuletzt von %s %.0f Schaden erhalten, vor %i Sekunden (Waffe: %s).", GetName(pID),\
+        pName, GetPVarFloat(pID, "DAMAGE.AMOUNT"), gettime() - GetPVarInt(pID, "DAMAGE.TIME"), sWeapon);
+}
+
 CMD:configplayer(playerid, params[])
 {
     new pID, string[140], entry[32], wert;
@@ -33946,7 +33967,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons, /Lastdmg");
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
@@ -45225,6 +45246,10 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
     damagesperre[playerid] = 5;
     g_aiLastDamagedByPlayer[playerid] = issuerid;
     if( issuerid != INVALID_PLAYER_ID) {
+        SetPVarString(playerid, "DAMAGE.NAME", GetName(issuerid));
+        SetPVarFloat(playerid, "DAMAGE.AMOUNT", amount);
+        SetPVarInt(playerid, "DAMAGE.WEAPON", weaponid);
+        SetPVarInt(playerid, "DAMAGE.TIME", gettime());
         PlayerPlaySound(issuerid,17802,0.0,0.0,0.0);
         if( 1 <= Spieler[playerid][pTot] <= 2 ) {
             SetPlayerHealth(playerid,100.0); // Kann man es irgendwie verhindern, dass man kein Leben verliert wenn man Tod ist?
