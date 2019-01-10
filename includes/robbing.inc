@@ -183,7 +183,9 @@ public Robbing_Pulse() {
 					{
 						biz = g_RobbingBiz[i][RB_iBizID];
 						bizindex = GetBizIndexByID(biz);
-						format(String,sizeof(String),"[ZENTRALE] Geschäft: %s, Inhaber: %s wird von %s ausgeraubt!",Biz[bizindex][bName],Biz[bizindex][bBesitzer],GetName(playerid));
+						new ort[28];
+    					GetPoint2DZone(Biz[bizindex][EnterX], Biz[bizindex][EnterY], ort, 28);
+						format(String,sizeof(String),"[ZENTRALE] Geschäft: %s, Inhaber: %s wird von %s ausgeraubt! Ort: %s.",Biz[bizindex][bName],Biz[bizindex][bBesitzer],GetName(playerid), ort);
 						SendExecutiveMessage(COLOR_RED,String);
 						SendClientMessage(playerid,COLOR_YELLOW,"Ziele weiter auf die Verkäuferin, bis sie die Beute in den Beutel gepackt hat!");
 
@@ -263,12 +265,12 @@ public Robbing_Pulse() {
 	            g_RobbingBiz[i][RB_iError]++;
 				if( g_RobbingBiz[i][RB_iError] >= 30 ) {
 				    // Abbruch, zu wenig eingeschüchtert.
-		            SendClientMessage( g_RobbingBiz[i][RB_iRobberID], COLOR_RED,"Du hast es nicht geschafft, den Verkäufer genug einzuschüchtern. Der Überfall ist gescheitert");
+		            SendClientMessage( g_RobbingBiz[i][RB_iRobberID], COLOR_RED,"Du hast es nicht geschafft, den Verkäufer genug einzuschüchtern. Der Überfall ist gescheitert!");
                     g_RobbingBiz[i][RB_timeAction] = time + ROBBING_COOL_DOWN_TIME;
                     g_RobbingBiz[i][RB_ibState] = ROBBING_STATE_COOLDOWN;
                     g_RobbingBiz[i][RB_iRobberID] = INVALID_PLAYER_ID;
                     g_RobbingBiz[i][RB_iError] = 0;
-				    SetPlayerChatBubble(target,"Du machst mir keine Angst! Die Polizei wird bald hier sein",0xFFFF00FF,15.0,6500);
+				    SetPlayerChatBubble(target,"Du machst mir keine Angst! Die Polizei wird bald hier sein!",0xFFFF00FF,15.0,6500);
                     ClearAnimationsExx( g_RobbingBiz[i][RB_iBotID],3800);
 				}
 				/*

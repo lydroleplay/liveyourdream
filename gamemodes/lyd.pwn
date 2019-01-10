@@ -63807,7 +63807,9 @@ COMMAND:tankstelleausrauben(playerid,params[]) {
     }
     // Nachricht an Polizei
     if( Tanke[t][tAutomatischerNotruf] == true ) {
-        format(String,sizeof(String),"[ZENTRALE] Die Tankstelle von %s wird vom %s überfallen!",Tanke[t][tBesitzer],GetName(playerid) );
+        new ort[28];
+        GetPoint2DZone(Tanke[t][EnterX], Tanke[t][EnterY], ort, 28);
+        format(String,sizeof(String),"[ZENTRALE] Die Tankstelle von %s wird von %s überfallen! Ort: %s.",Tanke[t][tBesitzer],GetName(playerid), ort);
         SendExecutiveMessage(COLOR_RED,String);
     }
 
@@ -63852,7 +63854,7 @@ stock Tankstelle_Ueberfall_Stop(playerid,tankstelle,reason) {
                 SendClientMessage(besitzerid,COLOR_YELLOW,String);
             }
         }
-        SendClientMessage(playerid,COLOR_RED,"Tankstellen-Überfall abgebrochen. Du hast dich zu weit entfernt");
+        SendClientMessage(playerid,COLOR_RED,"Tankstellen-Überfall abgebrochen. Du hast dich zu weit entfernt.");
     }
     else if( reason == 1 ) { // Erfolgreich
         new besitzerid;
