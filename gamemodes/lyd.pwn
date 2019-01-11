@@ -4348,6 +4348,8 @@ stock Float:frandom(Float:max, Float:min = 0.0, dp = 4) {
     return float(random(imax - imin) + imin) / mul;
 }
 
+#define ALCATRAZ_WANTEDS 40
+
 #define MAX_GANGZONES 20
 
 enum e_GangZone {
@@ -10789,13 +10791,13 @@ public OnPlayerDeath(playerid, killerid, reason)
                 SendFraktionMessage(16, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(18, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(22, COLOR_COP_MELDUNG, string);
-                if(Spieler[killerid][pFraktion] == 1){format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 2){format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 16){format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 18){format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 22){format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
+                if(Spieler[killerid][pFraktion] == 1){format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 2){format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 16){format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 18){format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 22){format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
                 SendClientMessageToAll(COLOR_DARKRED, string);
-                if( Spieler[playerid][pWanteds] >= 20 ) {
+                if( Spieler[playerid][pWanteds] >= ALCATRAZ_WANTEDS ) {
                     Spieler[playerid][pJailed] = 2;
                 }
                 else {
@@ -15149,11 +15151,11 @@ CMD:suicidearrest(playerid, params[])
     GetPlayerPos(pID, x, y, z);
     if(IsPlayerInRangeOfPoint(playerid, 10, x, y, z))
     {
-        if(Spieler[playerid][pFraktion] == 1)format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 2)format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 16)format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 18)format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 22)format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
+        if(Spieler[playerid][pFraktion] == 1)format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 2)format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 16)format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 18)format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 22)format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
         if(Spieler[playerid][pFraktion] == 1) {
             SendJobMessage(6, COLOR_RED, string);
         }
@@ -15167,7 +15169,7 @@ CMD:suicidearrest(playerid, params[])
         Spieler[playerid][pPayCheck] += gehalt;
         GivePlayerCash(pID, -gehalt);
 
-        if( Spieler[pID][pWanteds] >= 20 ) {
+        if( Spieler[pID][pWanteds] >= ALCATRAZ_WANTEDS ) {
             Spieler[pID][pJailed] = 2;
         }
         else {
@@ -20534,7 +20536,6 @@ CMD:sc(playerid, params[])
 
 CMD:gcoff(playerid)
 {
-    new string[128];
     if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     return ToggleASetting(playerid, ASETTING_GLOBALCHAT, false);
 }
@@ -47152,9 +47153,9 @@ CMD:gefangene(playerid, params[])
 
             if (Spieler[i][pJailed] == 1 && (Spieler[playerid][pJob] == 6 || bPlayerExecutive) || Spieler[i][pJailed] == 2 && (bPlayerExecutive || Spieler[playerid][pFraktion] == 17) || Spieler[i][pJailed] == 4 && bPlayerExecutive)
             {
-                new giveplayer[MAX_PLAYER_NAME], string[128], jailTypeString[128];
+                new giveplayer[MAX_PLAYER_NAME], string[144], jailTypeString[128];
                 GetPlayerName(i, giveplayer, sizeof(giveplayer));
-                jailTypeString = Spieler[i][pJailed] == 1 ? "Knast" : (Spieler[i][pJailed] == 4 ? "Gangjail" : "Alcatraz");
+                format(jailTypeString, sizeof(jailTypeString), "%s", Spieler[i][pJailed] == 1 ? "Knast" : (Spieler[i][pJailed] == 4 ? "Gangjail" : "Alcatraz"));
                 new playerJailTimeout = JAIL_TIMEOUT - (gettime() - GetPVarInt(i, "JAIL.TIMESTAMP"));
                 if (playerJailTimeout > 0) {
                     if (playerJailTimeout == 1) format(jailTypeString, sizeof(jailTypeString), "%s - eine Sekunde Wartezeit", jailTypeString);
