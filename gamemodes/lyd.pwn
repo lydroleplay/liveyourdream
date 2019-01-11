@@ -15292,7 +15292,7 @@ CMD:animlist(playerid)
 {
     SendClientMessage(playerid, COLOR_GREEN, "==> Verfügbare Animationen:");
     SendClientMessage(playerid,COLOR_WHITE,"/Handsup, /Drunk, /Bomb, /Getarrested, /Laugh, /Lookout, /Robman, /Wank, /Chairsit, /Celebrate");
-    SendClientMessage(playerid,COLOR_WHITE,"/Crossarms, /Lay, /Hide, /Vomit, /Eat, /Wave[1-2], /Taichi, /Pee, /Dance[1-4], /Idles, /Buhen");
+    SendClientMessage(playerid,COLOR_WHITE,"/Crossarms, /Lay, /Hide, /Vomit, /Eat, /Wave[1-2], /Taichi, /Pee, /Dance[1-4], /Idles, /Tired");
     SendClientMessage(playerid,COLOR_WHITE,"/Deal, /Smokem, /Smokef, /Groundsit[1-3], /Chat, /Fucku, /Kiss[1-6], /Angry, /Follow, /Cry");
     SendClientMessage(playerid,COLOR_WHITE,"Stoppen mit Enter");
     return 1;
@@ -15335,7 +15335,7 @@ CMD:cry(playerid)
     ApplyAnimation(playerid,"GRAVEYARD","mrnF_loop", 4.0, 1, 0, 0, 0, 0);
     return 1;
 }
-CMD:buhen(playerid)
+CMD:tired(playerid)
 {
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
@@ -15344,7 +15344,7 @@ CMD:buhen(playerid)
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
-    ApplyAnimation(playerid,"BEACH", "SitnWait_loop_W", 4.0, 1, 0, 0, 0, 0, 1);
+    ApplyAnimation(playerid,"PED", "IDLE_tired", 4.0, 1, 0, 0, 0, 0, 1);
     return 1;
 }
 CMD:bomb(playerid)
