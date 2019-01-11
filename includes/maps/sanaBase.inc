@@ -15,20 +15,21 @@ static Float:DRAWDISTANCE   = 230.0;
 #define SANABASE_HELICOPTER_UP_POINT        -28.9242, -2493.6992, 40.2647
 #define SANABASE_HELICOPTER_DOWN_FACING     33.1628
 #define SANABASE_HELICOPTER_UP_FACING       33.1628
-#define SANABASE_GARAGE_FOR_RANGE_COORDS	-6.7410, -2508.9094, 37.4948
-#define SANABASE_GARAGE_OPEN_Z				33.8548
-#define SANABASE_GARAGE_CLOSED_Z			37.4948
+#define SANABASE_GARAGE_FOR_RANGE_COORDS    -6.7410, -2508.9094, 37.4948
+#define SANABASE_GARAGE_OPEN_Z              33.8548
+#define SANABASE_GARAGE_CLOSED_Z            37.4948
+#define SANABASE_FSKIN_POINT                -43.1879, -2498.9961, 36.7248
 
 
 // Map variables
 new object_sanaBase[438];
-new pickup_sanaBase[4];
-new text3D_sanaBase[1];
+new pickup_sanaBase[5];
+new text3D_sanaBase[3];
 new vehicle_sanaBase[9];
 new object_sanaBase_garageDoor;
 
 hook OnPlayerConnect(playerid) {
-	// Remove RenderWare objects
+    // Remove RenderWare objects
     RemoveBuildingForPlayer(playerid, 17445, -11.2734, -2498.9766, 35.4766, 0.25);
     RemoveBuildingForPlayer(playerid, 17446, -34.8594, -2486.6016, 35.4766, 0.25);
     RemoveBuildingForPlayer(playerid, 17447, -10.1719, -2526.5859, 37.2500, 0.25);
@@ -40,44 +41,47 @@ hook OnPlayerConnect(playerid) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if (newkeys & KEY_SECONDARY_ATTACK) {
-		if (IsPlayerInRangeOfPoint(playerid, 2.0, SANABASE_HELICOPTER_DOWN_POINT) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Down
-			SetPlayerFacingAngle(playerid, SANABASE_HELICOPTER_UP_FACING);
-			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, SANABASE_HELICOPTER_UP_POINT, MAPS_SANABASE_INTERIOR, VW_MAIN);
-		} else if (IsPlayerInRangeOfPoint(playerid, 2.0, SANABASE_HELICOPTER_UP_POINT) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Up
+    if (newkeys & KEY_SECONDARY_ATTACK) {
+        if (IsPlayerInRangeOfPoint(playerid, 2.0, SANABASE_HELICOPTER_DOWN_POINT) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Down
+            SetPlayerFacingAngle(playerid, SANABASE_HELICOPTER_UP_FACING);
+            SetCameraBehindPlayer(playerid);
+            SetPlayerPosEx(playerid, SANABASE_HELICOPTER_UP_POINT, MAPS_SANABASE_INTERIOR, VW_MAIN);
+        } else if (IsPlayerInRangeOfPoint(playerid, 2.0, SANABASE_HELICOPTER_UP_POINT) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Up
             SetPlayerFacingAngle(playerid, SANABASE_HELICOPTER_DOWN_FACING);
-			SetCameraBehindPlayer(playerid);
-			SetPlayerPosEx(playerid, SANABASE_HELICOPTER_DOWN_POINT, MAPS_SANABASE_INTERIOR, VW_MAIN);
+            SetCameraBehindPlayer(playerid);
+            SetPlayerPosEx(playerid, SANABASE_HELICOPTER_DOWN_POINT, MAPS_SANABASE_INTERIOR, VW_MAIN);
         }
-	}
+    }
 
-	return 1;
+    return 1;
 }
 
 hook OnGameModeInit() {
-	// Pickups
+    // Pickups
     pickup_sanaBase[0] = CreateDynamicPickup(1274, 1, SANABASE_DONATION_POINT, VW_MAIN, MAPS_SANABASE_INTERIOR); // Donations
-	pickup_sanaBase[1] = CreateDynamicPickup(1240, 1, SANABASE_DUTY_POINT, VW_MAIN, MAPS_SANABASE_INTERIOR); // SA-NA Duty
+    pickup_sanaBase[1] = CreateDynamicPickup(1240, 1, SANABASE_DUTY_POINT, VW_MAIN, MAPS_SANABASE_INTERIOR); // SA-NA Duty
     pickup_sanaBase[2] = CreateDynamicPickup(19197, 1, SANABASE_HELICOPTER_DOWN_POINT, VW_MAIN, MAPS_SANABASE_INTERIOR); // Teleport to Helicopter
-	pickup_sanaBase[3] = CreateDynamicPickup(19197, 1, SANABASE_HELICOPTER_UP_POINT, VW_MAIN, MAPS_SANABASE_INTERIOR); // Teleport from Helicopter
+    pickup_sanaBase[3] = CreateDynamicPickup(19197, 1, SANABASE_HELICOPTER_UP_POINT, VW_MAIN, MAPS_SANABASE_INTERIOR); // Teleport from Helicopter
+    pickup_sanaBase[4] = CreateDynamicPickup(1275, 1, SANABASE_FSKIN_POINT, VW_MAIN, MAPS_SANABASE_INTERIOR); // FSkin Point
 
-	// 3DTextLabels
+    // 3DTextLabels
     text3D_sanaBase[0] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "SA-NA - SPENDENKASSE\n" COLOR_HEX_BLUE "/Newsspenden", COLOR_WHITE, SANABASE_DONATION_POINT, 28.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SANABASE_INTERIOR); // Donations
+    text3D_sanaBase[1] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "SA-NA - Dienstpunkt\n" COLOR_HEX_BLUE "/Dienst", COLOR_WHITE, SANABASE_DUTY_POINT, 8.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SANABASE_INTERIOR); // Duty
+    text3D_sanaBase[2] = _:CreateDynamic3DTextLabel(COLOR_HEX_YELLOW "SA-NA - Fraktionsskin\n" COLOR_HEX_BLUE "/Fskin", COLOR_WHITE, SANABASE_FSKIN_POINT, 8.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_SANABASE_INTERIOR); // Fskin Point
 
     // Vehicles
     vehicle_sanaBase[0] = AddStaticVehicleEx(582, -15.9140, -2504.3687, 36.7524, 240.5006, 252, 3, -1);
-	vehicle_sanaBase[1] = AddStaticVehicleEx(582, -12.0308, -2500.4768, 36.7838, 210.9168, 252, 3, -1);
-	vehicle_sanaBase[2] = AddStaticVehicleEx(582, -6.5823, -2499.5076, 36.7461, 173.8799, 252, 3, -1);
-	vehicle_sanaBase[3] = AddStaticVehicleEx(586, 0.7940, -2507.0969, 36.1744, 120.2104, 252, 237, -1);
-	vehicle_sanaBase[4] = AddStaticVehicleEx(586, 1.7753, -2509.0540, 36.1744, 118.9045, 252, 237, -1);
-	vehicle_sanaBase[5] = AddStaticVehicleEx(586, 2.8586, -2510.8201, 36.1712, 119.4415, 252, 237, -1);
-	vehicle_sanaBase[6] = AddStaticVehicleEx(507, 6.1631, -2519.2834, 36.3668, 26.5717, 252, 157, -1);
-	vehicle_sanaBase[7] = AddStaticVehicleEx(579, 1.8224, -2521.4883, 36.5807, 28.0272, 252, 43, -1);
-	vehicle_sanaBase[8] = AddStaticVehicleEx(488, -38.9985, -2495.0537, 40.4055, 215.1756, 252, 17, -1);
+    vehicle_sanaBase[1] = AddStaticVehicleEx(582, -12.0308, -2500.4768, 36.7838, 210.9168, 252, 3, -1);
+    vehicle_sanaBase[2] = AddStaticVehicleEx(582, -6.5823, -2499.5076, 36.7461, 173.8799, 252, 3, -1);
+    vehicle_sanaBase[3] = AddStaticVehicleEx(586, 0.7940, -2507.0969, 36.1744, 120.2104, 252, 237, -1);
+    vehicle_sanaBase[4] = AddStaticVehicleEx(586, 1.7753, -2509.0540, 36.1744, 118.9045, 252, 237, -1);
+    vehicle_sanaBase[5] = AddStaticVehicleEx(586, 2.8586, -2510.8201, 36.1712, 119.4415, 252, 237, -1);
+    vehicle_sanaBase[6] = AddStaticVehicleEx(507, 6.1631, -2519.2834, 36.3668, 26.5717, 252, 157, -1);
+    vehicle_sanaBase[7] = AddStaticVehicleEx(579, 1.8224, -2521.4883, 36.5807, 28.0272, 252, 43, -1);
+    vehicle_sanaBase[8] = AddStaticVehicleEx(488, -38.9985, -2495.0537, 40.4055, 215.1756, 252, 17, -1);
 
-	// Objects
-	object_sanaBase[0] = CreateDynamicObject(19464, -8.0312, -2491.2834, 37.4416, 180.0000, 0.0000, -60.2999, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
+    // Objects
+    object_sanaBase[0] = CreateDynamicObject(19464, -8.0312, -2491.2834, 37.4416, 180.0000, 0.0000, -60.2999, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_sanaBase[0], 0, 10765, "airportgnd_sfse", "white", 0xFF656A79);
     object_sanaBase[1] = CreateDynamicObject(1886, -29.2042, -2486.4641, 36.2607, 180.0000, 0.0000, 32.1002, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //shop_sec_cam
     object_sanaBase[2] = CreateDynamicObject(18981, -4.8544, -2491.8571, 27.7178, 0.0000, 0.0000, 29.3999, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
@@ -607,7 +611,7 @@ hook OnGameModeInit() {
     object_sanaBase[294] = CreateDynamicObject(19464, -11.9224, -2485.2656, 35.6916, 0.0000, 90.0000, -150.5997, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
     SetDynamicObjectMaterial(object_sanaBase[294], 0, 14853, "gen_pol_vegas", "grey_carpet_256", 0xFF58595A);
     object_sanaBase[295] = CreateDynamicObject(19175, -9.5304, -2484.6171, 37.3516, 0.0000, 0.0000, -60.5998, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
-    SetDynamicObjectMaterialText(object_sanaBase[295], 0, "Ã¼", 90, "Webdings", 130, 1, 0xFFFFFFFF, 0x0, 0);
+    SetDynamicObjectMaterialText(object_sanaBase[295], 0, "ü", 90, "Webdings", 130, 1, 0xFFFFFFFF, 0x0, 0);
     SetDynamicObjectMaterial(object_sanaBase[295], 1, 0, "INVALID", "INVALID", 0xFFFFFFFF);
     object_sanaBase[296] = CreateDynamicObject(19175, -13.8472, -2483.7009, 35.8115, -90.0000, 90.0000, -60.5998, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture4
     SetDynamicObjectMaterialText(object_sanaBase[296], 0, "________________", 90, "Arial", 100, 1, 0xFFFFFFFF, 0x0, 0);

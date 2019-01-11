@@ -19022,22 +19022,25 @@ stock GiveFahrWeapons(playerid)
 
 CMD:news(playerid, params[])
 {
-    new text[96], string[128], vID = GetPlayerVehicleID(playerid);
+    new text[96], string[128];
     if(!(Spieler[playerid][pFraktion] == 4))return SendClientMessage(playerid, COLOR_RED, "Du bist kein San Andreas News Agentur Mitglied.");
     if(Spieler[playerid][pRank] < 3) {
         return SendClientMessage(playerid,COLOR_LIGHTRED2,"Dein Rank ist zu niedrig! Du musst mind. Rank 3 sein, um News schreiben zu dürfen.");
     }
     if(sscanf(params, "s[96]", text))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /News [Nachricht]");
     format(string, sizeof(string), "Reporter %s: %s", GetName(playerid), text);
+    new Float:x, Float:y, Float:z, Float:vX, Float:vY, Float:vZ;
+    GetPlayerPos(playerid, x, y, z);
     for(new i=0;i<sizeof(vehicle_sanaBase);i++)
     {
-        if(vID == vehicle_sanaBase[i])
+        GetVehiclePos(vehicle_sanaBase[i], vX, vY, vZ);
+        if (GetDistance(x, y, z, vX, vY, vZ) < 30.0)
         {
             SendClientMessageToAll(COLOR_ORANGE, string);
             return 1;
         }
     }
-    SendClientMessage(playerid, COLOR_RED, "Du bist in keinem San Andreas News Agentur Fahrzeug.");
+    SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe eines San Andreas News Agentur Fahrzeuges.");
     return 1;
 }
 
@@ -27979,13 +27982,53 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             {
                 if(skin == 57)
                 {
-                    pChoosedSkin[playerid] = 55;
+                    pChoosedSkin[playerid] = 187;
                 }
-                else if(skin == 55)
+                else if(skin == 187)
                 {
-                    pChoosedSkin[playerid] = 56;
+                    pChoosedSkin[playerid] = 147;
                 }
-                else if(skin == 56)
+                else if(skin == 147)
+                {
+                    pChoosedSkin[playerid] = 192;
+                }
+                else if(skin == 192)
+                {
+                    pChoosedSkin[playerid] = 40;
+                }
+                else if(skin == 40)
+                {
+                    pChoosedSkin[playerid] = 91;
+                }
+                else if(skin == 91)
+                {
+                    pChoosedSkin[playerid] = 2;
+                }
+                else if(skin == 2)
+                {
+                    pChoosedSkin[playerid] = 66;
+                }
+                else if(skin == 66)
+                {
+                    pChoosedSkin[playerid] = 1;
+                }
+                else if(skin == 1)
+                {
+                    pChoosedSkin[playerid] = 15;
+                }
+                else if(skin == 15)
+                {
+                    pChoosedSkin[playerid] = 23;
+                }
+                else if(skin == 23)
+                {
+                    pChoosedSkin[playerid] = 29;
+                }
+                else if(skin == 29)
+                {
+                    pChoosedSkin[playerid] = 72;
+                }
+                else if(skin == 72)
                 {
                     pChoosedSkin[playerid] = 57;
                 }
@@ -33812,6 +33855,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     else if(Spieler[playerid][pFraktion] == 4)
                     {
                         SendClientMessage(playerid, COLOR_BLUE, "* SA-NA *: {FFFFFF}/Dienst, /News, /Starteventpoint, /Stopeventpoint, /Interview, /Fc, /Kasse, /Kassenstand, /Mitglieder");
+                        SendClientMessage(playerid, COLOR_BLUE, "* SA-NA *: {FFFFFF}/Sanagarage, /Fskin");
                     }
                     else if(Spieler[playerid][pFraktion] == 5)
                     {
@@ -49011,7 +49055,8 @@ new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	{NINEDEMONSBASE_SPAWN_POINT,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
 	{2284.1960,	2423.7107,	3.4766,		16, { 282 , 285 , 303 , 305 , 304 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{307.6244,  -131.3671,  999.6083,	18, { 287 , 303 , 305 , 304 , 44 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } }
+	{326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } },
+    {SANABASE_FSKIN_POINT,    4, { 57, 187, 147, 192, 40, 91, 2, 66, 1, 15, 23, 29, 72 } } // SANA
 };
 
 
