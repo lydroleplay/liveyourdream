@@ -54930,7 +54930,8 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
                 SendClientMessage(extraid,COLOR_GREEN,String);
                 format(String,sizeof(String),"Du erhältst: \"%s\"",g_Gutschein[gutschein]);
                 SendClientMessage(extraid,COLOR_GREEN,String);
-
+                format(String, sizeof(String), "[GUTSCHEIN] {FFFFFF}%s hat den Gutscheincode '%s' (%s) eingelöst!", GetName(extraid), inputtext, g_Gutschein[gutschein]);
+                SendClientMessageToAll(COLOR_GREEN, String);
                 format(String,sizeof(String),"UPDATE `gutschein` SET `expired` = 1 WHERE `id` = %d",id);
                 mysql_pquery( String , THREAD_GUTSCHEINCODE , extraid, gSQL,MySQLThreadOwner);
                 switch(gutschein) {
