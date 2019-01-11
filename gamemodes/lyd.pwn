@@ -3742,7 +3742,7 @@ stock Float:GetPlayerVehicleSpeedEx(playerid) {
 }
 
 //Servername
-new serverhost = 1;
+new bool:serverhost = false;
 new lagerbestand = 0;
 new Lottostand = 0;
 
@@ -7032,14 +7032,9 @@ public OnPlayerDisconnect(playerid, reason)
     // SendAdminMessage(COLOR_GREY, str);
     for(new i = 0 ; i < MAX_PLAYERS ; i++)
     {
-        if(IsPlayerConnected(i) && gPlayerLogged[i] == 1)
+        if (IsPlayerConnected(i) && gPlayerLogged[i] == 1)
         {
-            if(Spieler[i][pAdmin] >= 1)
-            {
-                if( pJL[i] == 1 ) {
-                    SendClientMessage(i, COLOR_GREY, String);
-                }
-            }
+            if (pJL[i] == 1) SendClientMessage(i, COLOR_GREY, String);
         }
     }
     KillTimer( Spieler[playerid][tFahrschule] );
@@ -13416,7 +13411,7 @@ CMD:gotopos(playerid, params[])
 {
     new Float:x, Float:y, Float:z, string[128];
     if(sscanf(params, "fff", x,y,z))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Gotopos [Float-X] [Float-Y] [Float-Z]");
-    if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
+    if(Spieler[playerid][pAdmin] < 1)return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
     new vID = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid))
     {
@@ -13451,7 +13446,7 @@ CMD:gotopos(playerid, params[])
 CMD:gotocp(playerid, params[]) return cmd_gotomarker(playerid, params);
 
 CMD:gotomarker(playerid, params[]) {
-    if (!Spieler[playerid][pAdmin])
+    if (Spieler[playerid][pAdmin] < 1)
         return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
 
     if (!GetPVarFloat(playerid, "MARKER.X"))
@@ -14880,16 +14875,10 @@ CMD:createhouse(playerid, params[])
 forward Servername();
 public Servername()
 {
-    if(serverhost == 1)
-    {
-        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay");
-        serverhost = 2;
-    }
-    else if(serverhost == 2)
-    {
-        SendRconCommand("hostname Live your Dream ~ Roleplay");
-        serverhost = 1;
-    }
+    new sName[128];
+    format(sName, sizeof(sName), "hostname %sLive your Dream ~ Roleplay%s", (serverhost = !serverhost) ? "[LyD] " : "", GetWeekDayNumber() < 2 ? " - [DOUBLE-EXP]" : "");
+    SendRconCommand(sName);
+    return 1;
 }
 
 CMD:clear(playerid, params[])
@@ -34002,12 +33991,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster), /Gotocp, /Asettings, /Gotohaus, /Regelwarnung, /Delveh");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar, /Gotopos");
                     }
                     if(Spieler[playerid][pAdmin] >= 3)
                     {
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gotoliste, /Gotopos, /Veh, /Delallvehs, /Spec, /Specoff, /Changeweather, /Bizkassestand");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gotoliste, /Veh, /Delallvehs, /Spec, /Specoff, /Changeweather, /Bizkassestand");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem, /Atafelentmieten, /Checkskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
@@ -70287,6 +70276,29 @@ GetWeekDay(day=0, month=0, year=0)
   }
 
   return weekday_str;
+}
+
+GetWeekDayNumber(day=0, month=0, year=0)
+{
+  if (!day)
+    getdate(year, month, day);
+
+  new
+    weekday_str[20],
+    j,
+    e
+  ;
+
+  if (month <= 2)
+  {
+    month += 12;
+    --year;
+  }
+
+  j = year % 100;
+  e = year / 100;
+
+  return ((day + (month+1)*26/10 + j + j/4 + e/4 - 2*e) % 7);
 }
 
 forward fraklabeltimer();
