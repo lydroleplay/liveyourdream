@@ -25,7 +25,7 @@ static Float:DRAWDISTANCE   = 230.0;
 new object_sanaBase[438];
 new pickup_sanaBase[5];
 new text3D_sanaBase[3];
-new vehicle_sanaBase[9];
+new vehicle_sanaBase[11];
 new object_sanaBase_garageDoor;
 
 hook OnPlayerConnect(playerid) {
@@ -79,6 +79,8 @@ hook OnGameModeInit() {
     vehicle_sanaBase[6] = AddStaticVehicleEx(507, 6.1631, -2519.2834, 36.3668, 26.5717, 252, 157, -1);
     vehicle_sanaBase[7] = AddStaticVehicleEx(579, 1.8224, -2521.4883, 36.5807, 28.0272, 252, 43, -1);
     vehicle_sanaBase[8] = AddStaticVehicleEx(488, -38.9985, -2495.0537, 40.4055, 215.1756, 252, 17, -1);
+    vehicle_sanaBase[9] = AddStaticVehicleEx(587, -2.6064, -2523.9758, 36.3095, 27.8225, 252, 3, -1);
+    vehicle_sanaBase[10] = AddStaticVehicleEx(587, -7.0678, -2526.2000, 36.3769, 27.8225, 252, 3, -1);
 
     // Objects
     object_sanaBase[0] = CreateDynamicObject(19464, -8.0312, -2491.2834, 37.4416, 180.0000, 0.0000, -60.2999, VW_MAIN, MAPS_SANABASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //wall104
