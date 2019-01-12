@@ -42371,13 +42371,12 @@ public PayDay()
             check += Spieler[playerid][pPayCheck];
             new finalcheck, earnedExp;
             finalcheck=check+fahrlehrerboni[playerid];
-            //jedensamstag
-            if (!strcmp(GetWeekDay(), "Samstag", true)) {
-                if(Spieler[playerid][pDonateRank] >= 1) earnedExp = 3;
+            
+            if (GetWeekDayNumber() < 2) { // Saturday & Sunday
+                if (Spieler[playerid][pDonateRank] >= 1) earnedExp = 3;
                 else earnedExp = 2;
-            }
-            else {
-                if(Spieler[playerid][pDonateRank] >= 1) earnedExp = 2;
+            } else {
+                if (Spieler[playerid][pDonateRank] >= 1) earnedExp = 2;
                 else earnedExp = 1;
             }
 
@@ -70272,61 +70271,40 @@ public meslockrelease(playerid)
 {
     meslock[playerid]=0;
 }
-GetWeekDay(day=0, month=0, year=0)
-{
-  if (!day)
-    getdate(year, month, day);
 
-  new
-    weekday_str[20],
-    j,
-    e
-  ;
+stock GetWeekDay(day = 0, month = 0, year = 0) {
+    new weekday_str[20];
 
-  if (month <= 2)
-  {
-    month += 12;
-    --year;
-  }
+    switch (GetWeekDayNumber(day, month, year))
+    {
+        case 0: weekday_str = "Samstag";
+        case 1: weekday_str = "Sonntag";
+        case 2: weekday_str = "Montag";
+        case 3: weekday_str = "Dienstag";
+        case 4: weekday_str = "Mittwoch";
+        case 5: weekday_str = "Donnerstag";
+        case 6: weekday_str = "Freitag";
+    }
 
-  j = year % 100;
-  e = year / 100;
-
-  switch ((day + (month+1)*26/10 + j + j/4 + e/4 - 2*e) % 7)
-  {
-    case 0: weekday_str = "Samstag";
-    case 1: weekday_str = "Sonntag";
-    case 2: weekday_str = "Montag";
-    case 3: weekday_str = "Dienstag";
-    case 4: weekday_str = "Mittwoch";
-    case 5: weekday_str = "Donnerstag";
-    case 6: weekday_str = "Freitag";
-  }
-
-  return weekday_str;
+    return weekday_str;
 }
 
-GetWeekDayNumber(day=0, month=0, year=0)
-{
-  if (!day)
-    getdate(year, month, day);
+GetWeekDayNumber(day = 0, month = 0, year = 0) {
+    if (!day)
+        getdate(year, month, day);
 
-  new
-    weekday_str[20],
-    j,
-    e
-  ;
+    new j, e;
 
-  if (month <= 2)
-  {
-    month += 12;
-    --year;
-  }
+    if (month <= 2)
+    {
+        month += 12;
+        --year;
+    }
 
-  j = year % 100;
-  e = year / 100;
+    j = year % 100;
+    e = year / 100;
 
-  return ((day + (month+1)*26/10 + j + j/4 + e/4 - 2*e) % 7);
+    return ((day + (month + 1) * 26 / 10 + j + j / 4 + e / 4 - 2 * e) % 7);
 }
 
 forward fraklabeltimer();
