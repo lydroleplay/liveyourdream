@@ -5,8 +5,8 @@
 #define MAPS_YAKUZAINTERIOR_INTERIOR      1
 
 // Local drawdistance & streamdistance setting
-// static Float:STREAMDISTANCE = 350.0;
-// static Float:DRAWDISTANCE   = 350.0;
+static Float:STREAMDISTANCE = 350.0;
+static Float:DRAWDISTANCE   = 350.0;
 
 // Yakuza interior points
 #define YAKUZA_INTERIOR_SPAWN_POINT               2235.7871, 1676.2056, 1008.3594
@@ -16,6 +16,7 @@
 #define YAKUZA_INTERIOR_WEAPONS_DEPOT_POINT       2246.1025, 1698.0223, 1008.3594 // coords for functionality are loaded from database in lyd.pwn
 
 // Map variables
+new object_yakuzaInterior[1];
 new pickup_yakuzaInterior[4];
 new text3D_yakuzaInterior[4];
 
@@ -54,4 +55,5 @@ hook OnGameModeInit() {
     // Actors
 
 	// Objects
+    object_yakuzaInterior[0] = CreateDynamicObject(18981, 2237.211426, 1656.288208, 998.949890, 0.000000, 0.000000, -90.00000, VW_YAKUZAINTERIOR, MAPS_YAKUZAINTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
 }
