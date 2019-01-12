@@ -4490,6 +4490,7 @@ new alcatrazGateHackTimestamp = 0;
 //#include <maps\christmasCalendar>
 //#include <maps\christmasMarket>
 #include <maps\coinbase>
+#include <maps\hallOfFame>
 
 // Systems
 #include <paintball>
@@ -38589,7 +38590,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 19)
                 {
-                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nShisha-Bar\nSan News Agency", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nShisha-Bar\nSan News Agency\nHall of Fame", "Auswählen", "Abbrechen");
                 }
                 if (listitem == 20) return cmd_suchatm(playerid);
             }
@@ -39323,6 +39324,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     SetPlayerCheckpointEx(playerid, SANABASE_DONATION_POINT, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die San News Agency wurde auf der Karte Rot markiert.");
+                }
+                if(listitem==16)
+                {
+                    SetPlayerCheckpointEx(playerid, HALL_OF_FAME_COORDS, 2.0, CP_NAVI76);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Hall of Fame wurde auf der Karte Rot markiert.");
                 }
             }
             if(!response)return 1;
