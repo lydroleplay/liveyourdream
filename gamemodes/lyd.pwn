@@ -816,6 +816,7 @@ enum {
 
 #include <a_samp>
 #include <timerfix>
+#include <pause>
 #include <YSI\y_timers>
 #include <YSI\y_hooks>
 
@@ -29030,6 +29031,33 @@ public UnFreeze(playerid)
 public OnRconLoginAttempt(ip[], password[], success)
 {
     return 1;
+}
+
+public OnPlayerPause(playerid) {
+    if (Spieler[playerid][pAdmin] && Spieler[playerid][pAdminDienst]) {
+        new Float:fX, Float:fY, Float:fZ;
+        GetPlayerPos(playerid, fX, fY, fZ);
+        SetPVarFloat(playerid, "ADMIN.PRETELEPORT.X", fX);
+        SetPVarFloat(playerid, "ADMIN.PRETELEPORT.Y", fY);
+        SetPVarFloat(playerid, "ADMIN.PRETELEPORT.Z", fZ);
+    }
+}
+
+forward ResetPlayerPosFindZ(playerid);
+public ResetPlayerPosFindZ(playerid) {
+    new Float:fX, Float:fY, Float:fZ;
+    GetPlayerPos(playerid, fX, fY, fZ);
+    return SetPlayerPosFindZ(playerid, fX, fY, fZ);
+}
+
+public OnPlayerResume(playerid, pausedtime) {
+    if (Spieler[playerid][pAdmin] && Spieler[playerid][pAdminDienst]) {
+        new Float:fX, Float:fY, Float:fZ;
+        GetPlayerPos(playerid, fX, fY, fZ);
+        SetPlayerPos(playerid, fX, fY, 550);
+        
+        SetTimerEx("ResetPlayerPosFindZ", 250, false, "i", playerid);
+    }
 }
 
 public OnPlayerUpdate(playerid)
