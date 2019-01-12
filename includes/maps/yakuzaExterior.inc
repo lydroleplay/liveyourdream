@@ -15,10 +15,10 @@ static Float:DRAWDISTANCE   = 350.0;
 #define YAKUZA_INTERIOR_EXIT_FACING         320.5
 
 // Map variables
-new object_yakuzaExterior[109];
+new object_yakuzaExterior[24];
 new pickup_yakuzaExterior[1];
 new text3D_yakuzaExterior[1];
-new vehicle_yakuzaExterior[19];
+new vehicle_yakuzaExterior[16];
 
 hook OnPlayerConnect(playerid) {
     // Remove RenderWare objects
