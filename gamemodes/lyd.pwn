@@ -164,7 +164,8 @@ enum
 	VW_BANKINTERIORLV,
     VW_TRIADSINTERIOR,
     VW_PAINTBALLBASEMENT,
-    VW_PARCOUR
+    VW_PARCOUR,
+    VW_NINEDEMONSINTERIOR
 }
 
 #define INFO_STRING "* Benutze: {00CC00}"
@@ -4445,7 +4446,8 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\busStation>
 #include <maps\wantedHackerBase>
 #include <maps\gardenerBase>
-#include <maps\nineDemonsBase>
+#include <maps\nineDemonsExterior>
+#include <maps\nineDemonsInterior>
 #include <maps\beach>
 #include <maps\alhambraExterior>
 #include <maps\alhambraInterior>
@@ -5382,11 +5384,11 @@ public OnGameModeInit2() {
         SetVehicleToRespawn(vehicle_hitmanBase[i]);
         aiVehicles[ vehicle_hitmanBase[i] ] = VEH_HITMANC;
     }
-    for(new i=0;i<sizeof(vehicle_nineDemonsBase);i++)
+    for(new i=0;i<sizeof(vehicle_nineDemonsExterior);i++)
     {
-        SetVehicleNumberPlate(vehicle_nineDemonsBase[i], COLOR_HEX_BLACK"NINEDEMONS");
-        SetVehicleToRespawn(vehicle_nineDemonsBase[i]);
-        aiVehicles[ vehicle_nineDemonsBase[i] ] = VEH_BIKERCARS;
+        SetVehicleNumberPlate(vehicle_nineDemonsExterior[i], COLOR_HEX_BLACK"NINEDEMONS");
+        SetVehicleToRespawn(vehicle_nineDemonsExterior[i]);
+        aiVehicles[ vehicle_nineDemonsExterior[i] ] = VEH_BIKERCARS;
     }
     for(new i=0;i<sizeof(lvpdcars);i++)
     {
@@ -5748,7 +5750,6 @@ public OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Aztecas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 506.0543,-81.1208,998.9609, 15.0, .testlos = 1);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2809.7944,-1171.9598,1025.5703, 15.0, .testlos = 1);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -2165.1348,644.2082,1052.3750, 15.0, .testlos = 1);//Waffenlager
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Nine Demons - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 197.3765,-231.2337,1.7786, 15.0, .testlos = 1);//Waffenlager
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Wheelman - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 938.8259,1737.8749,8.8516, 15.0, .testlos = 1);//Waffenlager
 
     //Job 3D Text
@@ -10370,16 +10371,14 @@ public SetPlayerSpawn(playerid)
 			{
 				SetPlayerPos(playerid, HITMANBASE_SPAWN_POINT);
 				SetPlayerFacingAngle(playerid, HITMANBASE_SPAWN_POINT_FACING);
-				SetPlayerInterior(playerid, 0);
+				SetPlayerInterior(playerid, MAPS_HITMANBASE_INTERIOR);
 				SetPlayerVirtualWorld(playerid, VW_MAIN);
 				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 15)
 			{
-				SetPlayerPos(playerid, NINEDEMONSBASE_SPAWN_POINT);
-				SetPlayerFacingAngle(playerid, NINEDEMONSBASE_SPAWN_POINT_FACING);
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, VW_MAIN);
+				SetPlayerPosEx(playerid, NINEDEMONS_INTERIOR_SPAWN_POINT, MAPS_NINEDEMONSINTERIOR_INTERIOR, VW_NINEDEMONSINTERIOR);
+				SetPlayerFacingAngle(playerid, NINEDEMONS_INTERIOR_SPAWN_POINT_FACING);
 				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 16)
@@ -18034,10 +18033,10 @@ stock GiveHitmanWeapons(playerid)
 CMD:ninowaffen(playerid)
 {
     if(HasWeaponBlock(playerid)) {
-        SendClientMessage(playerid,COLOR_RED,"Du kannst diesen Befehl nicht ausführen");
+        SendClientMessage(playerid,COLOR_RED,"Du kannst diesen Befehl nicht ausführen.");
         return SendWeaponBlockInfo(playerid);
     }
-    if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONSBASE_SPAWN_POINT)) //Biker
+    if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONS_INTERIOR_SPAWN_POINT)) //Biker
     {
         if(Spieler[playerid][pGunLic] == 0) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
         if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
@@ -18109,7 +18108,7 @@ CMD:gheilen(playerid)
         SetPlayerHealth(playerid, 100);
         SetTimerEx("HeilReady", 60000, 0, "i", playerid);
     }
-    else if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONSBASE_SPAWN_POINT))//Ninedemons
+    else if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONS_INTERIOR_SPAWN_POINT))//Ninedemons
     {
         if(!(Spieler[playerid][pFraktion] == 15))return SendClientMessage(playerid, COLOR_RED, "Du bist kein NineDemons Mitglied.");
         Spieler[playerid][pHeilReady] = 0;
@@ -19949,11 +19948,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 15)
 	{
-		for(new i=0;i<sizeof(vehicle_nineDemonsBase);i++)
+		for(new i=0;i<sizeof(vehicle_nineDemonsExterior);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_nineDemonsBase[i])&& !excludeVehicles[vehicle_nineDemonsBase[i]])
+			if(!IsVehicleOccupied(vehicle_nineDemonsExterior[i])&& !excludeVehicles[vehicle_nineDemonsExterior[i]])
 			{
-				SetVehicleToRespawn(vehicle_nineDemonsBase[i]);
+				SetVehicleToRespawn(vehicle_nineDemonsExterior[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die NineDemons Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -48140,8 +48139,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_BIKERCARS ) {
-		for( i  = 0; i < sizeof(vehicle_nineDemonsBase) ; i++) {
-			if( vehicle_nineDemonsBase[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_nineDemonsExterior) ; i++) {
+			if( vehicle_nineDemonsExterior[i] == vehicleid ) {
 			    return 15;
 			}
 		}
@@ -49071,7 +49070,7 @@ new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	{FBI_INTERIOR_FSKIN_POINT,	2, { 286 , 285 , 309 , 166, 165,59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{-2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
 	{HITMANBASE_FSKIN_POINT,	14, { 2 , 29 , 229 ,  171 , 23 , 19 , 35 , 22 , 11, 8 } },
-	{NINEDEMONSBASE_SPAWN_POINT,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
+	{NINEDEMONS_INTERIOR_SPAWN_POINT,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
 	{2284.1960,	2423.7107,	3.4766,		16, { 282 , 285 , 303 , 305 , 304 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{307.6244,  -131.3671,  999.6083,	18, { 287 , 303 , 305 , 304 , 44 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } },
@@ -51075,7 +51074,7 @@ enum e_FraktionsSafeBoxLocation {
 }
 
 new g_FraktionsSafeBoxLocation[][e_FraktionsSafeBoxLocation] = {
-    {15, NINEDEMONSBASE_SAFEBOX_POINT},
+    {15, NINEDEMONS_INTERIOR_SAFEBOX_POINT},
     {17, 938.9147,1729.0337,8.8516},
     {6, GSF_INTERIOR_SAFEBOX_POINT},
     {7,333.7054,1121.7754,1083.8903},
