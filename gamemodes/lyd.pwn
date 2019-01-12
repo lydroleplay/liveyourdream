@@ -29034,13 +29034,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 }
 
 public OnPlayerPause(playerid) {
-    if (Spieler[playerid][pAdmin] && Spieler[playerid][pAdminDienst]) {
-        new Float:fX, Float:fY, Float:fZ;
-        GetPlayerPos(playerid, fX, fY, fZ);
-        SetPVarFloat(playerid, "ADMIN.PRETELEPORT.X", fX);
-        SetPVarFloat(playerid, "ADMIN.PRETELEPORT.Y", fY);
-        SetPVarFloat(playerid, "ADMIN.PRETELEPORT.Z", fZ);
-    }
+
 }
 
 forward ResetPlayerPosFindZ(playerid);
@@ -29051,11 +29045,13 @@ public ResetPlayerPosFindZ(playerid) {
 }
 
 public OnPlayerResume(playerid, pausedtime) {
-    if (Spieler[playerid][pAdmin] && Spieler[playerid][pAdminDienst]) {
+    if (Spieler[playerid][pAdmin] && Spieler[playerid][pAdminDienst] && GetPVarInt(playerid, "ADMIN.MAP.TELEPORTING")) {
         new Float:fX, Float:fY, Float:fZ;
         GetPlayerPos(playerid, fX, fY, fZ);
         SetPlayerPos(playerid, fX, fY, 550);
         
+        DeletePVar(playerid, "ADMIN.MAP.TELEPORTING");
+
         SetTimerEx("ResetPlayerPosFindZ", 250, false, "i", playerid);
     }
 }
@@ -39014,7 +39010,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 900.4517,-1664.7787,13.5469,2.0, CP_NAVI49);
+                    SetPlayerCheckpointEx(playerid, TRIADS_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI49);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Triaden Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
@@ -45350,6 +45346,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
     if (Spieler[playerid][pAdmin] < 3 || !Spieler[playerid][pAdminDienst]) return 1;
+    SetPVarInt(playerid, "ADMIN.MAP.TELEPORTING", 1);
     SetPlayerPosFindZ(playerid, fX, fY, fZ);
     return 1;
 }
@@ -59735,11 +59732,6 @@ public NPC(var)
 }
 #endif
 */
-COMMAND:aaaaa(playerid, params[]) {
-    SCMFormatted(playerid, COLOR_WHITE, "DEBUG: /AAAAA called: %i, %s", playerid, params);
-
-    return 1;
-}
 
 COMMAND:allesspeichern(playerid,params[]) {
     #pragma unused params
