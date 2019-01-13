@@ -4,17 +4,17 @@
 #define MAPS_TERRORBASE_INTERIOR      0
 
 // Local drawdistance & streamdistance setting
-static Float:STREAMDISTANCE = 350.0;
-static Float:DRAWDISTANCE   = 350.0;
+// static Float:STREAMDISTANCE = 350.0;
+// static Float:DRAWDISTANCE   = 350.0;
 
 // Terror base points
 #define TERRORBASE_SPAWN_POINT          -795.0400, 1557.1365, 27.1244
 #define TERRORBASE_SPAWN_POINT_FACING   90.0
 
 // Map variables
-new object_terrorBase[94];
-new pickup_terrorBase[1];
-new text3D_terrorBase[1];
+// new object_terrorBase[94];
+// new pickup_terrorBase[1];
+// new text3D_terrorBase[1];
 new vehicle_terrorBase[16];
 
 hook OnPlayerConnect(playerid) {
@@ -42,13 +42,13 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnGameModeInit() {
     // Pickups
-    pickup_terrorBase[0] = CreateDynamicPickup(1240, 1, TERRORBASE_SPAWN_POINT, VW_MAIN, MAPS_TERRORBASE_INTERIOR); // Spawn point
+    //pickup_terrorBase[0] = CreateDynamicPickup(1240, 1, TERRORBASE_SPAWN_POINT, VW_MAIN, MAPS_TERRORBASE_INTERIOR); // Spawn point
 
     // 3DTextLabels
-    text3D_terrorBase[0] = _:CreateDynamic3DTextLabel("Terroristenlager\n" COLOR_HEX_WHITE "Tippe /Terrorwaffen zum Ausrüsten\nTippe /Gheilen zum Heilen", COLOR_BLUE, TERRORBASE_SPAWN_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TERRORBASE_INTERIOR);
+    //text3D_terrorBase[0] = _:CreateDynamic3DTextLabel("Terroristenlager\n" COLOR_HEX_WHITE "Tippe /Terrorwaffen zum Ausrüsten\nTippe /Gheilen zum Heilen", COLOR_BLUE, TERRORBASE_SPAWN_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_TERRORBASE_INTERIOR);
 
     // Vehicles
-    vehicle_terrorBase[0] = AddStaticVehicleEx(468, -793.5461, 1606.8418, 26.6697, 232.6591, 45, 132, -1); // nrg1
+    /*vehicle_terrorBase[0] = AddStaticVehicleEx(468, -793.5461, 1606.8418, 26.6697, 232.6591, 45, 132, -1); // nrg1
 	vehicle_terrorBase[1] = AddStaticVehicleEx(468, -793.6014, 1605.1918, 26.6710, 230.6999, 6, 6, -1); // nrg2
 	vehicle_terrorBase[2] = AddStaticVehicleEx(468, -789.8359, 1606.4724, 26.7862, 238.1966, 12, 12, -1); // sanchez1
 	vehicle_terrorBase[3] = AddStaticVehicleEx(468, -790.1686, 1604.6023, 26.7861, 236.2739, 0, 0, -1); // sanchez2neu
@@ -63,10 +63,10 @@ hook OnGameModeInit() {
 	vehicle_terrorBase[12] = AddStaticVehicleEx(526, -764.9205, 1592.8184, 26.8759, 86.6844, 123, 123, -1); // infi1
 	vehicle_terrorBase[13] = AddStaticVehicleEx(542, -765.1465, 1589.6088, 26.8759, 86.8303, 17, 17, -1); // infi2
 	vehicle_terrorBase[14] = AddStaticVehicleEx(476, -780.1793, 1635.1915, 27.7771, 268.5923, 145, 0, -1); // rustler1
-	vehicle_terrorBase[15] = AddStaticVehicleEx(487, -781.8011, 1618.2927, 27.3038, 270.0000, 97, 23, -1); // heli
+	vehicle_terrorBase[15] = AddStaticVehicleEx(487, -781.8011, 1618.2927, 27.3038, 270.0000, 97, 23, -1); // heli*/
 
     // Objects
-    object_terrorBase[0] = CreateDynamicObject(11457, -737.32343, 1592.15918, 25.50940, 0.00000, 0.00000, -50.52000, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    /*object_terrorBase[0] = CreateDynamicObject(11457, -737.32343, 1592.15918, 25.50940, 0.00000, 0.00000, -50.52000, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_terrorBase[1] = CreateDynamicObject(17070, -780.39221, 1598.08118, 26.11068, -0.18000, 0.12000, 182.33990, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_terrorBase[2] = CreateDynamicObject(11458, -797.15222, 1589.49109, 26.11920, 0.00000, 0.00000, -110.22000, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_terrorBase[3] = CreateDynamicObject(11441, -819.52667, 1606.99280, 26.07931, 0.00000, 0.00000, 15.30007, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
@@ -159,5 +159,5 @@ hook OnGameModeInit() {
     object_terrorBase[90] = CreateDynamicObject(3350, -819.38757, 1604.07251, 25.99092, 0.00000, 0.00000, 42.80001, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_terrorBase[91] = CreateDynamicObject(8483, -722.12677, 1541.65881, 66.10001, 0.00000, 0.00000, 172.90008, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
     object_terrorBase[92] = CreateDynamicObject(898, -722.016052, 1544.51916, 65.36016, 0.00000, 47.09999, 36.29999, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_terrorBase[93] = CreateDynamicObject(898, -721.998291, 1540.16565, 65.56657,  -12.20001, 57.10005, 25.39998, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    object_terrorBase[93] = CreateDynamicObject(898, -721.998291, 1540.16565, 65.56657,  -12.20001, 57.10005, 25.39998, VW_MAIN, MAPS_TERRORBASE_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);*/
 }
