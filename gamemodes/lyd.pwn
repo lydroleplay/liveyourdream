@@ -65235,7 +65235,7 @@ stock GetPlayerGangZone(playerid) {
 }
 
 #define GANG_FIGHT_PLAYERS 3
-#define GANGFIGHT_DURATION 50 // Minutes
+#define GANGFIGHT_DURATION 40 // Minutes
 
 CMD:gotozone(playerid, params[]) {
     if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
