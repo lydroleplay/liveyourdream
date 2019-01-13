@@ -38994,42 +38994,42 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(listitem==0)
                 {
                     SetPlayerCheckpointEx(playerid, 2000.7357,-1136.0017,25.3077,2.0, CP_NAVI44);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Ballas Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Ballas Base wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==1)
                 {
                     SetPlayerCheckpointEx(playerid, 1816.0269,-2112.6909,13.3828,2.0, CP_NAVI45);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Aztecas Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Aztecas Base wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==2)
                 {
                     SetPlayerCheckpointEx(playerid, 2810.6587,-1581.4873,10.9309,2.0, CP_NAVI46);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Vagos Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Vagos Base wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==3)
                 {
                     SetPlayerCheckpointEx(playerid, YAKUZA_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI47);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Yakuza Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Yakuza Base wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==4)
                 {
                     SetPlayerCheckpointEx(playerid, LCN_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI48);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die La Cosa Nostra Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die La Cosa Nostra Base wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==5)
                 {
                     SetPlayerCheckpointEx(playerid, 2489.8831,-1668.2643,13.3438,2.0, CP_NAVI48);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Grove Street Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Grove Street Base wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==6)
                 {
                     SetPlayerCheckpointEx(playerid, TRIADS_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI49);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Triaden Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Triaden Base wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
                 {
                     SetPlayerCheckpointEx(playerid, -49.7421,-301.2473,5.4297,2.0, CP_NAVI49);
-                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Outlawz Base in Los Santos wurde auf der Karte Rot markiert.");
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Outlawz Base wurde auf der Karte Rot markiert.");
                 }
             }
             if(!response)return 1;
