@@ -65247,6 +65247,8 @@ CMD:gotozone(playerid, params[]) {
     return cmd_gotopos(playerid, params);
 }
 
+CMD:gf(playerid, params[]) return cmd_gangfight(playerid, params);
+
 COMMAND:gangfight(playerid,params[]) {
     new
         frak = Spieler[playerid][pFraktion];
@@ -65352,6 +65354,7 @@ COMMAND:gangfight(playerid,params[]) {
     return 1;
 }
 
+CMD:gfstop(playerid, params[]) return cmd_gangfightstop(playerid, params);
 
 COMMAND:gangfightstop(playerid,params[]) {
     new
