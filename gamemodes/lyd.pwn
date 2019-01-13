@@ -2155,6 +2155,7 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_COINBASE_AMOUNT 1392
 #define     DIALOG_COINBASE_CONFIRM 1393
 #define     DIALOG_ASETTINGS 1394
+#define     DIALOG_CONFIGBIZ_KASSE 1395
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -12853,7 +12854,7 @@ CMD:configbiz(playerid)
     if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe eines Geschäftes.");
     new dialogCaption[128];
     format(dialogCaption, sizeof(dialogCaption), "Konfigurieren des Geschäftes (ID: %d)", Biz[b][bID]);
-    ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ, DIALOG_STYLE_LIST, dialogCaption, "Besitzer rauswerfen\nKaufpreis ändern\nWarenpreis ändern\nStatus\nBeschreibung\nMaximale Waren\nWaren\nÖffnungszeit", "Auswählen", "Abbrechen");
+    ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ, DIALOG_STYLE_LIST, dialogCaption, "Besitzer rauswerfen\nKaufpreis ändern\nWarenpreis ändern\nStatus\nBeschreibung\nMaximale Waren\nWaren\nÖffnungszeit\nBizkassestand", "Auswählen", "Abbrechen");
     return 1;
 }
 
@@ -37401,8 +37402,31 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich die Öffnungszeiten ändern?\nDerzeitige  Öffnungszeiten: "COLOR_HEX_ORANGE"%d Uhr bis %d Uhr\n\n"COL_DEFAULT"Gib die Öffnungszeiten mit LEERZEICHEN ein.\nBeispiel:8 21\nErgibt Öffnungszeiten von 8 Uhr bis 21 Uhr", Biz[b][bLadenAuf], Biz[b][bLadenZu]);
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_ZEITEN, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ändern", "Abbrechen");
                 }
+                if(listitem==8)//Bizkassestand
+                {
+                    new b = IsPlayerAtBiz(playerid);
+                    if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
+                    new dStr[256];
+                    format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich den Bizkassenstand ändern?\nDerzeitiger Stand: "COLOR_HEX_ORANGE"$%s\n\n", AddDelimiters(Biz[b][bKasse]));
+                    ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_KASSE, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ändern", "Abbrechen");
+                }
             }
             if(!response)return 1;
+        }
+        case DIALOG_CONFIGBIZ_KASSE: {
+            if (!response) return 1;
+            if (Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+            new b = IsPlayerAtBiz(playerid);
+            if (b == 999) return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
+            new amount;
+            if (sscanf(inputtext, "d", amount)) {
+                new dStr[256];
+                format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich den Bizkassenstand ändern?\nDerzeitiger Stand: "COLOR_HEX_ORANGE"$%s\n\n", AddDelimiters(Biz[b][bKasse]));
+                ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_KASSE, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ändern", "Abbrechen");
+            }
+
+            Biz[b][bKasse] = amount;
+            return SCMFormatted(playerid, COLOR_GREEN, "Du hast den Bizkassenstand auf $%s gesetzt.", AddDelimiters(amount));
         }
         case DIALOG_CONFIGBIZ_ZEITEN: {
             if(response) {
@@ -69200,9 +69224,20 @@ stock GetVehicleName(modelid) {
     return String;
 }
 
+CMD:aunlock(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 5) return 0;
+    new toggleDoors = 0;
+    sscanf(params, "i", toggleDoors);
+    new vehicleid = IsPlayerInAnyVehicle(playerid) ? GetPlayerVehicleID(playerid) : GetClosestVehicle(playerid, 10.0);
+    new engine, light, alarm, doors, bonnet, boot, objective;
+    GetVehicleParamsEx(vehicleid, engine, light, alarm, doors, bonnet, boot, objective);
+    SetVehicleParamsEx(vehicleid, engine, light, alarm, toggleDoors, bonnet, boot, objective);
+    return 1;
+}
+
 CMD:carowner(playerid) {
     if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
-    new vehicleid = GetClosestVehicle(playerid, 5.0);
+    new vehicleid = IsPlayerInAnyVehicle(playerid) ? GetPlayerVehicleID(playerid) : GetClosestVehicle(playerid, 10.0);
     if (vehicleid == INVALID_VEHICLE_ID ) return SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der Nähe eines Fahrzeuges.");
     new besitzer = GetCarOwner(vehicleid);
     if (!IsPlayerConnected(besitzer)) return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug gehört keinem Spieler.");
