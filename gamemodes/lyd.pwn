@@ -23106,12 +23106,14 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         }
         else if(IsABike(mod))
         {
-            if(Spieler[playerid][pMotoLic] == 0 && pFahrStunde[playerid] == 0&&pFahrschulCar[playerid]== INVALID_VEHICLE_ID)
-            {
-                FreezePlayer(playerid);
-                RemovePlayerFromVehicle(playerid);
-                UnfreezePlayer(playerid);
-                SendClientMessage(playerid, COLOR_RED, "Du hast noch keinen Motorradschein!");
+            if (!(mod == 462 || mod == 448)) {
+                if(Spieler[playerid][pMotoLic] == 0 && pFahrStunde[playerid] == 0&&pFahrschulCar[playerid]== INVALID_VEHICLE_ID)
+                {
+                    FreezePlayer(playerid);
+                    RemovePlayerFromVehicle(playerid);
+                    UnfreezePlayer(playerid);
+                    SendClientMessage(playerid, COLOR_RED, "Du hast noch keinen Motorradschein!");
+                }
             }
         }
         if( !IsBicycle(modelid) )
@@ -46157,7 +46159,7 @@ stock IsATruck(carid)
 
 stock IsABike(carid)
 {
-    if(carid == 581 || carid == 522 || carid == 521 || carid == 523 || carid == 586 || carid == 448 || carid == 461 || carid == 463 || carid == 468 || carid == 471)return 1;
+    if(carid == 581 || carid == 522 || carid == 521 || carid == 523 || carid == 586 || carid == 448 || carid == 462 || carid == 461 || carid == 463 || carid == 468 || carid == 471)return 1;
     return 0;
 }
 
