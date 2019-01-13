@@ -2551,7 +2551,7 @@ enum {
 #define     COLOR_DARKYELLOW    0xA2A602FF
 #define     COLOR_ORANGE        0xFBB420FF
 //Blue
-#define     COLOR_LIGHTBLUE     0x33CCFFAA
+#define     COLOR_LIGHTBLUE     0x33CCFFFF
 #define     COLOR_BLUE          0x3592D7FF
 #define     COLOR_COPPARTNER    0x0000CDFF
 #define     COLOR_DARKBLUE      0x2171ABFF
@@ -3113,7 +3113,7 @@ new
     sBusLinie4[]="Linie 4:\n\
                 Bauernfarm und Trucker GmbH\n\
                 LS - Zollamt\n\
-                LS - Bank\n\
+                LS - Posthaus\n\
                 LS - Clubvilla\n\
                 Los Santos Startower\n\
                 LS - Busbahnhof";
@@ -24462,7 +24462,7 @@ public OnPlayerWaitLinie(playerid)
                 {
                     SetPlayerCheckpointEx(playerid, 927.5668,-981.8544,38.2044, 5.0, CP_BUSLINIE4CP4);
                     UnfreezePlayer(playerid);
-                    format(string, sizeof(string), "Nächste Haltestelle: Los Santos Bank");
+                    format(string, sizeof(string), "Nächste Haltestelle: Los Santos Posthaus");
                     SendRoundMessage(x, y, z, COLOR_PURPLE, string);
                     //KillTimer(buswait[playerid]);
                     format(buslogstring, sizeof(buslogstring), "Name: %s - Linie: %d - Ort: %s", GetName(playerid), 1, ort);
