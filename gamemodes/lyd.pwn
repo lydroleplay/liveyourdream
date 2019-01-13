@@ -43530,7 +43530,7 @@ CMD:showjob(playerid)
     }
     else if(Spieler[playerid][pJob] == 6)
     {
-        SetPlayerCheckpointEx(playerid, 1541.1398,-1675.4747,13.1065, 7.0, CP_SHOWJOB5);
+        SetPlayerCheckpointEx(playerid, 960.7043, -1580.0457, 13.5469, 7.0, CP_SHOWJOB5);
     }
     else if(Spieler[playerid][pJob] == 7)
     {
