@@ -10091,7 +10091,7 @@ public OnPlayerSpawn(playerid)
     PlayerTextDrawShow(playerid, Gesucht[playerid]);
     //PlayerTextDrawShow(playerid, WantedBar[playerid]);
     Spieler[playerid][pAntiSpawnKillOn] = true;
-    SetTimerEx("ASKTimer", PlayerIsPaintballing[playerid] ? 1000 : 10000, 0, "i", playerid);
+    SetTimerEx("ASKTimer", PlayerIsPaintballing[playerid] ? 1000 : 15000, 0, "i", playerid);
     //SetPlayerWeather(playerid,18);
     UpdatePayDayTextdraw(playerid);
     PlayerTextDrawShow(playerid,Spieler[playerid][ptPayDay]);
@@ -45273,8 +45273,11 @@ public DetectHacks() {
             if( !IsPlayerInAnyVehicle(i) && ( Spieler[i][punixFlyhack] < now ) && (( Spieler[i][unixUpdate] + 5 ) > now ) ) {
                 GetPlayerVelocity(i,vx,vy,vz);
                 speed = floatround( floatpower( vx * vx + vy * vy + vz * vz , 0.5 )  * 100.0 * 2.0);
-                if( speed >= 130 ) {
-                    format(string,sizeof(string),"[ACHTUNG] Spieler %s FlyHack Warnung: %dKm/h",GetName(i),speed);
+                if (speed >= 130) {
+                    if (Spieler[i][pAntiSpawnKillOn])
+                        return SpawnPlayerEx(i);
+
+                    format(string,sizeof(string),"[ACHTUNG] Spieler %s FlyHack Warnung: %d km/h",GetName(i),speed);
                     SendAdminMessage(COLOR_LIGHTRED2,string);
                     Spieler[i][punixFlyhack] = now + 8;
                 }
@@ -45487,7 +45490,7 @@ stock mysql_GetInt(Table[], Field[], Where[], Is[])
 stock SpawnPlayerEx(playerid)
 {
     SetPlayerPos(playerid, 0.0, 0.0, 0.0);
-    SpawnPlayer(playerid);
+    return SpawnPlayer(playerid);
 }
 
 stock UpdateInfos()
@@ -65247,6 +65250,7 @@ COMMAND:gangfight(playerid,params[]) {
     if( index == -1 ) {
         return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Ganggebiet.");
     }
+    printf("GF_Index: %i, x%f, y%f, z%f", index, g_GangZone[index][GZ_fIconX],g_GangZone[index][GZ_fIconY],g_GangZone[index][GZ_fIconZ]);
     if( !IsPlayerInRangeOfPoint( playerid , 6.0 , g_GangZone[index][GZ_fIconX],g_GangZone[index][GZ_fIconY],g_GangZone[index][GZ_fIconZ] )) {
         return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Icons.");
     }
