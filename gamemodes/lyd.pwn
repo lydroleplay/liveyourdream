@@ -31035,13 +31035,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     return cmd_hausmenu(playerid,"");
                 }
                 else if(listitem == 3 ) { // Mieteranzahl ändern
-                    new String[160];
+                    new String[256];
                     format(String, sizeof(String), COLOR_HEX_WHITE"Möchtest du wirklich die maximale Anzahl an Mietern des Hauses ändern?\nDerzeitige maximale Anzahl: "COLOR_HEX_ORANGE"%d"COLOR_HEX_WHITE"\nDerzeitige Mieter Anzahl: "COLOR_HEX_ORANGE"%d", Haus[pHouse][hMieterMax], Haus[pHouse][hMieterAnzahl]);
                     ShowPlayerDialog(playerid, DIALOG_HAUSMENU_MIETERANZAHL, DIALOG_STYLE_INPUT, "Anzahl Hausmieter", String, "Ändern", "Abbrechen");
                 }
                 else if(listitem == 4 ) { // Mietpreis ändern
-                    new String[160];
-                    format(String, sizeof(String), COLOR_HEX_WHITE"Möchtest du wirklich den aktuellen Mitpreis ändern??\nDerzeitiger Mietpreis: "COLOR_HEX_ORANGE"%d"COLOR_HEX_WHITE, Haus[pHouse][hMietPreis]);
+                    new String[256];
+                    format(String, sizeof(String), COLOR_HEX_WHITE"Möchtest du wirklich den aktuellen Mitpreis ändern?\nDerzeitiger Mietpreis: "COLOR_HEX_ORANGE"%d"COLOR_HEX_WHITE, Haus[pHouse][hMietPreis]);
                     ShowPlayerDialog(playerid, DIALOG_HAUSMENU_MIETPREIS, DIALOG_STYLE_INPUT, "Höhe Mietpreis", String, "Ändern", "Abbrechen");
                 }
                 else if(listitem == 5 ) { // Möbelkatalog
@@ -37346,7 +37346,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     new b = IsPlayerAtBiz(playerid);
                     if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
-                    new dStr[128];
+                    new dStr[256];
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich den Besitzer "COLOR_HEX_ORANGE"%s "COLOR_HEX_WHITE"aus dem Geschäft schmeißen?", Biz[b][bBesitzer]);
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_RAUSWERFEN, DIALOG_STYLE_MSGBOX, "Konfigurieren des Geschäftes", dStr, "Ja", "Nein");
                 }
@@ -37354,7 +37354,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     new b = IsPlayerAtBiz(playerid);
                     if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
-                    new dStr[128];
+                    new dStr[256];
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich den Kaufpreis ändern?\nDer derzeitige Kaufpreis beträgt:"COLOR_HEX_ORANGE" $%s", AddDelimiters(Biz[b][bPreis]));
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_KAUFPREIS, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ja", "Nein");
                 }
@@ -37362,7 +37362,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     new b = IsPlayerAtBiz(playerid);
                     if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
-                    new dStr[128];
+                    new dStr[256];
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich den Warenpreis ändern?\nDer derzeitige Warenpreis beträgt:"COLOR_HEX_ORANGE" $%s", AddDelimiters(Biz[b][bWarenPreis]));
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_WARENPREIS, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ja", "Nein");
                 }
@@ -37376,7 +37376,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     new b = IsPlayerAtBiz(playerid);
                     if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
-                    new dStr[128];
+                    new dStr[256];
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich die Beschreibung des Geschäft ändern?\nDerzeitige Beschreibung: "COLOR_HEX_ORANGE"%s", Biz[b][bName]);
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_NAME, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ändern", "Abbrechen");
                 }
@@ -37390,7 +37390,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     new b = IsPlayerAtBiz(playerid);
                     if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
-                    new dStr[128];
+                    new dStr[256];
                     format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich die Waren ändern?\nDerzeitiger Warenstand: "COLOR_HEX_ORANGE"%d", Biz[b][bWaren]);
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_WAREN, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ändern", "Abbrechen");
                 }
@@ -37399,7 +37399,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     new b = IsPlayerAtBiz(playerid);
                     if(b == 999)return SendClientMessage(playerid, COLOR_RED, "Da du dich an keinem Geschäft befindest, wurde die Aktion abgebrochen.");
                     new dStr[256];
-                    format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich die Öffnungszeiten ändern?\nDerzeitige  Öffnungszeiten: "COLOR_HEX_ORANGE"%d Uhr bis %d Uhr\n\n"COL_DEFAULT"Gib die Öffnungszeiten mit LEERZEICHEN ein.\nBeispiel:8 21\nErgibt Öffnungszeiten von 8 Uhr bis 21 Uhr", Biz[b][bLadenAuf], Biz[b][bLadenZu]);
+                    format(dStr, sizeof(dStr), COLOR_HEX_WHITE"Möchtest du wirklich die Öffnungszeiten ändern?\nDerzeitige  Öffnungszeiten: "COLOR_HEX_ORANGE"%d Uhr bis %d Uhr\n\n"COL_DEFAULT"Gib die Öffnungszeiten mit LEERZEICHEN ein.\nBeispiel: 8 21\nErgibt Öffnungszeiten von 8 Uhr bis 21 Uhr", Biz[b][bLadenAuf], Biz[b][bLadenZu]);
                     ShowPlayerDialog(playerid, DIALOG_CONFIGBIZ_ZEITEN, DIALOG_STYLE_INPUT, "Konfigurieren des Geschäftes", dStr, "Ändern", "Abbrechen");
                 }
                 if(listitem==8)//Bizkassestand
