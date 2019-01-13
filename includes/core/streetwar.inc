@@ -96,7 +96,7 @@ hook OnGameModeExit() {
 
 hook OnPlayerDeath(playerid, killerid, reason) {
     if (killerid == INVALID_PLAYER_ID) return 1;
-    if (Spieler[playerid][pFraktion] == Spieler[killerid][pFraktion]) return 1;
+    if (Spieler[playerid][pFraktion] == Spieler[killerid][pFraktion] || g_Faction[Spieler[killerid][pFraktion]][F_iPartner] == Spieler[playerid][pFraktion]) return 1;
     if (IsAFightFaction(Spieler[playerid][pFraktion]) && killerid != INVALID_PLAYER_ID && IsAFightFaction(Spieler[killerid][pFraktion])) {
         new fightid = GetGangFight(Spieler[playerid][pFraktion]);
         if (fightid != GetGangFight(Spieler[killerid][pFraktion]) || fightid == -1) {

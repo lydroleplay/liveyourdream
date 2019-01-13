@@ -62621,7 +62621,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
             FreezePlayer(hitid);
             TazerTime[playerid] = 0;
             TextDrawShowForPlayer(hitid, TazerBox);
-            ClearAnimations(playerid);
+            ClearAnimations(hitid);
             ApplyAnimation(hitid, "CRACK", "crckdeth2", 4.0, 1, 0, 0, 0,0, 1); // Dieing of Crack
             SetTimerEx("TazerReady", 5000, 0, "i", playerid);
             Tazered[hitid] = 1;
