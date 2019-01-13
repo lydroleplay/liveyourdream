@@ -2582,6 +2582,9 @@ enum {
 #define HOLDING(%0) \
     ((newkeys & (%0)) == (%0))
 
+#define HOLDING2(%0,%1) \
+    ((%0 & (%1)) == (%1))
+
 #define RELEASED(%0) \
     (((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
 
@@ -18994,7 +18997,7 @@ stock GiveOAmtWeapons(playerid)
 {
     GivePlayerWeapon(playerid, 41, 2000);
     GivePlayerWeapon(playerid, 3, 1);
-    GivePlayerWeapon(playerid, 24, 1);
+    GivePlayerWeapon(playerid, 24, 100);
     SetPlayerHealth(playerid, 100);
     return 1;
 }
@@ -28625,40 +28628,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
             KillTimer(knastunfreezetimer[playerid]);
             knastunfreezetimer[playerid] = SetTimerEx("KnastUnfreeze", 60000*1, 0, "i", playerid);
-        }
-    }
-    new targetid = GetPlayerTargetPlayer(playerid);
-    if(targetid != INVALID_PLAYER_ID)
-    {
-        if((newkeys & KEY_CROUCH) && !(oldkeys & KEY_CROUCH))
-        {
-            if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 18))return 1;
-            if(GetPlayerWeapon(playerid) != 24)return 1;
-            if(TazerTime[playerid] == 0)return 1;
-            if(Spieler[playerid][pDuty] == 0)return 1;
-            new string[128];
-            new Float:x, Float:y, Float:z;
-            GetPlayerPos(playerid, x,y,z);
-            if(Tazered[targetid] == 1)return 1;
-            if(IsPlayerInRangeOfPoint(targetid, 8.0, x,y,z))
-            {
-                FreezePlayer(targetid);
-                TazerTime[playerid] = 0;
-                TextDrawShowForPlayer(targetid, TazerBox);
-                ClearAnimations(playerid);
-                ApplyAnimation(targetid, "CRACK", "crckdeth2", 4.0, 1, 0, 0, 0,0, 1); // Dieing of Crack
-                SetTimerEx("TazerReady", 5000, 0, "i", playerid);
-                Tazered[targetid] = 1;
-                unfreezewait[targetid] = SetTimerEx("UnFreeze", 15000, 0, "i", targetid);
-                format(string, sizeof(string), "* %s schoss mit seinem Tazer auf %s.", GetName(playerid), GetName(targetid));
-                for(new i = 0 ; i < MAX_PLAYERS ; i++)
-                {
-                    if(IsPlayerInRangeOfPoint(i, 10.0, x,y,z))
-                    {
-                        SendClientMessage(i, COLOR_WHITE, string);
-                    }
-                }
-            }
         }
     }
 
@@ -62628,13 +62597,54 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
         return 0;
     }
 
+    if (PlayerIsPaintballing[playerid] || !Spieler[playerid][pDuty]) return 1;
+
+    // LSPD Tazer
+    new pKeys, kUpdown, kLeftright;
+    GetPlayerKeys(playerid, pKeys, kUpdown, kLeftright);
+    
+    if (weaponid == WEAPON_DEAGLE && HOLDING2(pKeys, KEY_YES)) {
+        if (!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 
+            || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 18)) return 1;
+
+        if (TazerTime[playerid] == 0) return 0;
+
+        if (hittype == BULLET_HIT_TYPE_PLAYER && IsPlayerConnected(hitid)) {
+            new string[128];
+
+            if (Tazered[hitid] == 1) return 0;
+            if (vectorSize > 8.0) {
+                SendClientMessage(playerid, COLOR_RED, "Du bist zu weit weg, der Tazer hat verfehlt.");
+                return 0;
+            }
+
+            FreezePlayer(hitid);
+            TazerTime[playerid] = 0;
+            TextDrawShowForPlayer(hitid, TazerBox);
+            ClearAnimations(playerid);
+            ApplyAnimation(hitid, "CRACK", "crckdeth2", 4.0, 1, 0, 0, 0,0, 1); // Dieing of Crack
+            SetTimerEx("TazerReady", 5000, 0, "i", playerid);
+            Tazered[hitid] = 1;
+            unfreezewait[hitid] = SetTimerEx("UnFreeze", 15000, 0, "i", hitid);
+            format(string, sizeof(string), "schiesst mit seinem Tazer auf %s.", GetName(hitid));
+            cmd_me(playerid, string);
+        }
+
+        return 0;
+    }
+
+    if (weaponid == WEAPON_DEAGLE && Spieler[playerid][pFraktion] == 5 && Spieler[playerid][pDuty]) return 0;
+
+    return 1;
+}
+
+public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:objectid, Float:x, Float:y, Float:z) {
+    // Calls OnPlayerWeaponShot
     return 1;
 }
 
 public OnPlayerFloodControl(playerid, iCount, iTimeSpan) {
-    if(iCount > 3 && iTimeSpan < 10000) {
-        Ban(playerid);
-    }
+    if (iCount > 3 && iTimeSpan < 10000) Ban(playerid);
     return 1;
 }
 /*
