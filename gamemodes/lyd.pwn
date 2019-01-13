@@ -42426,9 +42426,7 @@ public PayDay()
             }
             #pragma unused maxexp
             new string[128];
-            new tempBank = Spieler[playerid][pBank];
-            if(tempBank > 500000000){tempBank = 500000000;  }
-            new tempSteuern = (finalcheck/100)*gSteuern;
+            new tempSteuern = floatround(finalcheck/100, floatround_floor)*gSteuern;
             new hausmiete;
             new hausstrom;
             new tankestrom;
@@ -42437,7 +42435,7 @@ public PayDay()
             new kreditrest;
             new kreditgezahlt;
             Kasse[Staat] += tempSteuern;
-            new fbz = floatround(tempBank * 0.001);
+            new fbz = floatround((Spieler[playerid][pBank] > 50000000 ? 50000000 : Spieler[playerid][pBank]) * 0.001, floatround_floor);
             if( Spieler[playerid][pDuty] == 0 ) {
                 SendClientMessage(playerid, COLOR_ORANGE, "Du erhältst keinen extra Lohn, da du nicht im Dienst warst!");
             }
@@ -42465,7 +42463,7 @@ public PayDay()
                         //format(string, sizeof(string), "Haus Stromkosten: -$500");
                         //SendClientMessage(playerid, COLOR_ORANGE, string);
                         hausstrom = 3200;
-                        Spieler[playerid][pBank] -= 3200;
+                        Haus[Spieler[playerid][pPlayerHouse]][hKasse] -= 3200;
                         Biz[StromBiz_Index][bKasse] += 2700;
                     }
                     else
@@ -42510,9 +42508,6 @@ public PayDay()
                 Biz[ StromBiz_Index ][bKasse] += 9000;
             }
 
-            if( Spieler[playerid][pKFZSteuer] > 0 ) {
-                Spieler[playerid][pBank] -= Spieler[playerid][pKFZSteuer];
-            }
             if( Spieler[playerid][pSSteuer] > 0 ) {
                 Spieler[playerid][pBank] -= Spieler[playerid][pSSteuer];
             }
@@ -42558,10 +42553,6 @@ public PayDay()
                 }
             }
 
-            // Reichensteuer 2.0
-            if (fbz > 50000)
-                fbz = 50000;
-
             SendClientMessage(playerid, COLOR_YELLOW, "======================== {FFFFFF}[ PAYDAY ] {FFFF00}========================");
 
             // Anti-Cheat Bonus
@@ -42576,8 +42567,8 @@ public PayDay()
                     ", HartzIV Zuschlag: "COLOR_HEX_GREEN"+$%s", AddDelimiters(finalcheck), AddDelimiters(fahrlehrerboni[playerid]), AddDelimiters(tempSteuern), AddDelimiters(hartz4));
 
             SendClientMessage(playerid, COLOR_WHITE, string);
-            format(string, sizeof(string),"Kontostand: "COLOR_HEX_GREEN"$%s"COLOR_HEX_WHITE", Zinsen: "COLOR_HEX_GREEN"$%s"COLOR_HEX_WHITE", Zinssatz: "COLOR_HEX_GREEN\
-                "0.1 Prozent", AddDelimiters(tempBank), AddDelimiters(fbz));
+            format(string, sizeof(string),"Neuer Kontostand: "COLOR_HEX_GREEN"$%s"COLOR_HEX_WHITE", Zinsen: "COLOR_HEX_GREEN"$%s"COLOR_HEX_WHITE", Zinssatz: "COLOR_HEX_GREEN\
+                "0.1 Prozent", AddDelimiters(Spieler[playerid][pBank]), AddDelimiters(fbz));
             SendClientMessage(playerid, COLOR_WHITE, string);
             format(string,sizeof(string),"Respektpunkte: "COLOR_HEX_GREEN"+%d (%d/%d)"COLOR_HEX_WHITE", Wantedanzahl: " COLOR_HEX_RED "%d", earnedExp, Spieler[playerid][pExp],maxexp,Spieler[playerid][pWanteds]);
             SendClientMessage(playerid, COLOR_WHITE, string);
