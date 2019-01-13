@@ -9243,7 +9243,7 @@ CMD:ladung(playerid, params[])
                 if(GetVehicleModel(GetVehicleTrailer(vID)) == 584)
                 {
                     new tempBenzin = Benzin[GetVehicleTrailer(vID)];
-                    format(string, sizeof(string), "* Benzin-Stand: %d/8000 Liter *", tempBenzin);
+                    format(string, sizeof(string), "* Benzin-Stand: %d/4000 Liter *", tempBenzin);
                     SendClientMessage(playerid, COLOR_LIGHTGREEN, string);
                 }
             }
@@ -9296,27 +9296,23 @@ CMD:loadwaren(playerid, params[])
                         SendClientMessage(playerid, COLOR_RED, string);
                         return 1;
                     }
-                    if(waren < 1 || waren > 2000)return SendClientMessage(playerid, COLOR_RED, "Du kannst mindestens 1 Ware und höchstens 2.000 Waren beladen!");
-                    if(waren + Waren[vID] > 2000)
-                    {
-                        SendClientMessage(playerid, COLOR_RED, "Soviele Waren passen nicht in den Transporter hinein!");
-                        return 1;
-                    }
+                    if (waren < 1 || waren > 2000) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur zwischen 1 Ware und 2.000 Waren einladen!");
+                    if (waren + Waren[vID] > 2000) return SendClientMessage(playerid, COLOR_RED, "Diese Menge an Waren passen nicht in den Anhänger nicht mehr hinein (/Ladung)!");
                     Waren[vID] += waren;
                     GivePlayerCash(playerid, -tempRechnung);
                     format(string, sizeof(string), "* Du hast %d Waren für $%s gekauft.", waren, AddDelimiters(tempRechnung));
                     SendClientMessage(playerid, COLOR_LIGHTGREEN, string);
-                    SendClientMessage(playerid, COLOR_YELLOW, "Mit '/Startwaren' erfährst du dein Ablieferungsort!");
+                    SendClientMessage(playerid, COLOR_YELLOW, "Mit '/Startwaren' erfährst du deinen Ablieferungsort!");
                     }
                     else
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Du hast nicht den passenden Anhänger dran.");
+                        SendClientMessage(playerid, COLOR_RED, "Du hast nicht den passenden Anhänger angekoppelt.");
                         return 1;
                     }
                 }
                 else
                 {
-                    SendClientMessage(playerid, COLOR_RED, "Du hast keinen Anhänger dran.");
+                    SendClientMessage(playerid, COLOR_RED, "Du hast keinen Anhänger angekoppelt.");
                     return 1;
                 }
             }
@@ -9361,27 +9357,27 @@ CMD:loadbenzin(playerid, params[])
                         SendClientMessage(playerid, COLOR_RED, string);
                         return 1;
                     }
-                    if(benzin < 1 || benzin > 2000)return SendClientMessage(playerid, COLOR_RED, "Du kannst mindestens 1 Liter und höchstens 2000 Liter beladen!");
-                    if(benzin + Benzin[trailer] > 2000)
+                    if(benzin < 1 || benzin > 4000)return SendClientMessage(playerid, COLOR_RED, "Du kannst mindestens 1 Liter und höchstens 4000 Liter beladen!");
+                    if(benzin + Benzin[trailer] > 4000)
                     {
-                        SendClientMessage(playerid, COLOR_RED, "Soviel Liter passt in den Anhänger nicht hinein!");
+                        SendClientMessage(playerid, COLOR_RED, "Diese Menge an Benzin passt in den Anhänger nicht mehr hinein (/Ladung)!");
                         return 1;
                     }
                     Benzin[trailer] += benzin;
                     GivePlayerCash(playerid, -tempRechnung);
                     format(string, sizeof(string), "* Du hast %d Liter für $%s gekauft.", benzin, AddDelimiters(tempRechnung));
                     SendClientMessage(playerid, COLOR_LIGHTGREEN, string);
-                    SendClientMessage(playerid, COLOR_YELLOW, "Mit '/Startbenzin' erfährst du dein Ablieferungsort!");
+                    SendClientMessage(playerid, COLOR_YELLOW, "Mit '/Startbenzin' erfährst du deinen Ablieferungsort!");
                 }
                 else
                 {
-                    SendClientMessage(playerid, COLOR_RED, "Du hast nicht den passenden Anhänger dran.");
+                    SendClientMessage(playerid, COLOR_RED, "Du hast nicht den passenden Anhänger angekoppelt.");
                     return 1;
                 }
             }
             else
             {
-                SendClientMessage(playerid, COLOR_RED, "Du hast keinen Anhänger dran.");
+                SendClientMessage(playerid, COLOR_RED, "Du hast keinen Anhänger angekoppelt.");
                 return 1;
             }
         }
@@ -23418,7 +23414,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
                         {
                             SendClientMessage(playerid, COLOR_ORANGE, "Wenn du Tank beliefern möchtest, verwende folgende Befehle:");
                             SendClientMessage(playerid, COLOR_WHITE, "Tippe /Loadbenzin um den Tanker mit Benzin zu beladen.");
-                            SendClientMessage(playerid, COLOR_WHITE, "Tippe /Startbenzin um den Benzin Ausliegerungsort zu erfahren.");
+                            SendClientMessage(playerid, COLOR_WHITE, "Tippe /Startbenzin um das Benzin Auslieferungsort zu erfahren.");
                             SendClientMessage(playerid, COLOR_WHITE, "Unter /Navi -> Weitere Orte findest du die Öl-Raffinerie.");
                             break;
                         }
@@ -23426,7 +23422,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
                         {
                             SendClientMessage(playerid, COLOR_ORANGE, "Wenn du Waren ausliefern möchtest, verwende folgende Befehle:");
                             SendClientMessage(playerid, COLOR_WHITE, "Tippe /Loadwaren um den Transporter mit Waren zu beladen.");
-                            SendClientMessage(playerid, COLOR_WHITE, "Tippe /Startwaren um den Waren Ausliegerungsort zu erfahren.");
+                            SendClientMessage(playerid, COLOR_WHITE, "Tippe /Startwaren um die Waren Auslieferungsort zu erfahren.");
                             SendClientMessage(playerid, COLOR_WHITE, "Unter /Navi -> Weitere Orte findest du die Waren-Vergabe.");
                             break;
                         }
@@ -24662,7 +24658,13 @@ public OnPlayerWaitLinie(playerid)
 public OnPlayerEnterCheckpoint(playerid)
 {
     new mvID = GetPlayerVehicleID(playerid);
-    if (pCheckpoint[playerid] == CP_TUTORIAL1)
+    if (pCheckpoint[playerid] == CP_TRUCKERTANK || pCheckpoint[playerid] == CP_TRUCKERTANK2) {
+        SendClientMessage(playerid, COLOR_GREEN, "Benutze /Entladen um das geladene Benzin zu verkaufen.");
+    }
+    else if (pCheckpoint[playerid] == CP_TRUCKERWAREN || pCheckpoint[playerid] == CP_TRUCKERWAREN2) {
+        SendClientMessage(playerid, COLOR_GREEN, "Benutze /Entladen um die geladenen Waren zu verkaufen.");
+    }
+    else if (pCheckpoint[playerid] == CP_TUTORIAL1)
     {
         SendClientMessage(playerid, COLOR_GREEN, "Du kannst dir hier per /Startbonus ein Startgeschenk sichern.");
         SendClientMessage(playerid, COLOR_GREEN, "Auf der anderen Straßenseite kannst du dir ein Fahrrad mieten und zur Stadthalle fahren.");
@@ -24690,7 +24692,7 @@ public OnPlayerEnterCheckpoint(playerid)
         new
             firmenindex;
         firmenindex = GetJobFirmaIndex(1);
-        g_Firma[firmenindex][F_iKasse] -= 4000;
+        g_Firma[firmenindex][F_iKasse] += 4000;
         GivePlayerCash(playerid,5000);
         SendClientMessage(playerid,COLOR_YELLOW,"Du hast den Eimer Milch an den Milchstand verkauft! Du erhältst $4.000");
         DisablePlayerCheckpointEx(playerid);
@@ -26397,7 +26399,7 @@ public OnPlayerEnterCheckpoint(playerid)
                     format(truckerlog, sizeof(truckerlog), "Name: %s - Ort: %s - Geld: 7600", GetName(playerid), ort);
                     LogTrucker(truckerlog);
                     SetVehicleToRespawn(vID);
-                    ShowBuyInformation(playerid,"~y~Lieferung ~w~entladet!");
+                    ShowBuyInformation(playerid,"~y~Lieferung ~w~entladen!");
                     Spieler[playerid][tickJobCheckpoint] = gettime() + (5*60);
                     return 1;
                 }
@@ -64705,12 +64707,13 @@ COMMAND:entladen(playerid,params[]) {
         if( CP_TRUCKERWAREN2 == pCheckpoint[playerid] && !IsPlayerInRangeOfPoint(playerid,6.0,2571.6233,-2226.6980,13.3550) ) {
             return SendClientMessage(playerid,COLOR_RED,"Du kannst die Ware hier nicht abladen.");
         }
-        new ppw = RandomEx(14,16);
+        new ppw = RandomEx(14, 16);
         new preis = ppw * Waren[vehicleid];
         new String[128];
         format(String,sizeof(String),"Du hast %d Waren für je $%d pro Ware verkauft ($%s).",Waren[vehicleid],ppw, AddDelimiters(preis));
         SendClientMessage(playerid,COLOR_YELLOW,String);
-        GivePlayerCash(playerid,preis);
+        GivePlayerCash(playerid,preis);        
+        g_Firma[GetJobFirmaIndex(3)][F_iKasse] += floatround(preis / 4, floatround_floor);
         Spieler[playerid][tickJobCheckpoint] = gettime() + (3*60);
         if( CP_TRUCKERWAREN == pCheckpoint[playerid] ) {
             StaticBiz[0][SBD_iWaren] += Waren[vehicleid];
@@ -64744,17 +64747,18 @@ COMMAND:entladen(playerid,params[]) {
             return SendClientMessage(playerid,COLOR_RED,"Du hast kein Benzin beladen.");
         }
         if( CP_TRUCKERTANK == pCheckpoint[playerid] && !IsPlayerInRangeOfPoint(playerid,6.0,-1034.6223,-626.2365,32.0078) ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du kannst den Benzin hier nicht abladen.");
+            return SendClientMessage(playerid,COLOR_RED,"Du kannst das Benzin hier nicht abladen.");
         }
         if( CP_TRUCKERTANK2 == pCheckpoint[playerid] && !IsPlayerInRangeOfPoint(playerid,6.0,2482.8813,-2084.2239,13.5469) ) {
-            return SendClientMessage(playerid,COLOR_RED,"Du kannst den Benzin hier nicht abladen.");
+            return SendClientMessage(playerid,COLOR_RED,"Du kannst das Benzin hier nicht abladen.");
         }
-        new ppw = RandomEx(10,11);
+        new ppw = RandomEx(11,12);
         new preis = ppw * Benzin[trailer];
         new String[128];
         format(String,sizeof(String),"Du hast %d Liter Benzin für je $%d pro Liter verkauft ($%s).",Benzin[trailer],ppw, AddDelimiters(preis));
         SendClientMessage(playerid,COLOR_YELLOW,String);
         GivePlayerCash(playerid,preis);
+        g_Firma[GetJobFirmaIndex(3)][F_iKasse] += floatround(preis / 4, floatround_floor);
         Spieler[playerid][tickJobCheckpoint] = gettime() + (3*60);
         if( CP_TRUCKERTANK == pCheckpoint[playerid] ) {
             StaticBiz[2][SBD_iWaren] += Benzin[trailer];
@@ -64840,7 +64844,7 @@ COMMAND:startbenzin(playerid,params[]) {
     else if(r == 1 ) {
         SetPlayerCheckpointEx(playerid,2482.8813,-2084.2239,13.5469,5.0,CP_TRUCKERTANK2);
     }
-    SendClientMessage(playerid,COLOR_YELLOW,"Du kannst den Benzin nun zu der markierten Position liefern.");
+    SendClientMessage(playerid,COLOR_YELLOW,"Du kannst das Benzin nun zu der markierten Position liefern.");
     Spieler[playerid][pTruckerBlock] = gettime() + 5*60;
     return 1;
 }
