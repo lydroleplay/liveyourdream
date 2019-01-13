@@ -4644,7 +4644,7 @@ public MinuteTimer() {
         SetTimer("LottoTimer", 1000 * 60 * 5, false);
     }
     
-    new wday, wmonth, wyear;
+    /*new wday, wmonth, wyear;
     getdate(wyear, wmonth, wday);
 
     for (new playerid; playerid <= GetPlayerPoolSize(); playerid++) {
@@ -4653,7 +4653,7 @@ public MinuteTimer() {
                 SendClientMessage(playerid, COLOR_LIME, "Du kannst jetzt ein Adventstürchen beim Adventskalender öffnen (/Findekalender).");
             }
         }
-    }
+    }*/
     return 1;
 }
 
