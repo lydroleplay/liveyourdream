@@ -8833,6 +8833,10 @@ CMD:grillen(playerid, params[])
     return 1;
 }
 
+CMD:a(playerid, params[]) {
+    return cmd_admin(playerid, params);
+}
+
 CMD:admin(playerid, params[])
 {
     if( gPlayerLogged[playerid] == 0 ) return SendClientMessage(playerid,COLOR_RED,"Du bist nicht eingeloggt");
@@ -65222,6 +65226,16 @@ stock GetPlayerGangZone(playerid) {
 
 #define GANG_FIGHT_PLAYERS 3
 #define GANGFIGHT_DURATION 50 // Minutes
+
+CMD:gotozone(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    new gfindex = -1;
+    if (sscanf(params, "i", gfindex) || gfindex < 0 || gfindex >= MAX_GANGZONES)
+        return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Gotozone [INDEX]");
+
+    format(params, 128, "%f %f %f", g_GangZone[gfindex][GZ_fIconX], g_GangZone[gfindex][GZ_fIconY], g_GangZone[gfindex][GZ_fIconZ]);
+    return cmd_gotopos(playerid, params);
+}
 
 COMMAND:gangfight(playerid,params[]) {
     new
