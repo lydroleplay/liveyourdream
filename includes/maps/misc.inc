@@ -1,7 +1,8 @@
 #include <YSI\y_hooks>
 
 // Global interior define
-#define MAPS_MISC_INTERIOR      0
+#define MAPS_MISC_INTERIOR          0
+#define MAPS_MISC_APRISON_INTERIOR  10
 
 // Local drawdistance & streamdistance setting
 static Float:STREAMDISTANCE = 350.0;
@@ -22,6 +23,9 @@ hook OnPlayerConnect(playerid) {
     //Army Schranken
     RemoveBuildingForPlayer(playerid, 968, -1526.4375, 481.3828, 6.9063, 0.25);
     RemoveBuildingForPlayer(playerid, 966, -1526.3906, 481.3828, 6.1797, 0.25);
+    // LV Oben Rechts Gangfight Gebiet (Zäune)
+    RemoveBuildingForPlayer(playerid, 985, 2497.4063, 2777.0703, 11.5313, 0.25);
+    RemoveBuildingForPlayer(playerid, 986, 2497.4063, 2769.1094, 11.5313, 0.25);
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
@@ -37,5 +41,5 @@ hook OnGameModeInit() {
 
     // Gangjailtor, Adminprisonwand
     object_misc[2] = CreateDynamicObject(2930, 2162, -98.900001525879, 4.4000000953674, 0, 0, 300.5, VW_MAIN, MAPS_MISC_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Gangjailtor
-    object_misc[3] = CreateDynamicObject(2395, 264.39999389648, 112.40000152588, 1003.5999755859, 0, 0, 0, VW_MAIN, MAPS_MISC_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Adminprisontor
+    object_misc[3] = CreateDynamicObject(2395, 264.39999389648, 112.40000152588, 1003.5999755859, 0, 0, 0, VW_MAIN, MAPS_MISC_APRISON_INTERIOR, .streamdistance = -1, .drawdistance = DRAWDISTANCE); //Adminprisontor
 }

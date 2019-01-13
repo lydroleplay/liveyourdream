@@ -164,7 +164,8 @@ enum
 	VW_BANKINTERIORLV,
     VW_TRIADSINTERIOR,
     VW_PAINTBALLBASEMENT,
-    VW_PARCOUR
+    VW_PARCOUR,
+    VW_NINEDEMONSINTERIOR
 }
 
 #define INFO_STRING "* Benutze: {00CC00}"
@@ -393,7 +394,6 @@ new gSQL;
 new gWebSQL;
 new MySQLConnected = 0;
 new tMySQL;
-new bool:g_bRegSperre = false;
 new savewetterid;
 
 // Global vars
@@ -531,6 +531,26 @@ enum {
     CARKEY_TYPE_MOVE1,
     CARKEY_TYPE_MOVE2
 }
+
+enum {
+    ASETTING_GLOBALCHAT,
+    ASETTING_GANGFIGHTBLOCK,
+    ASETTING_ROBBLOCK,
+    ASETTING_REGBLOCK
+}
+
+enum E_ASETTING {
+    ASETTING_NAME[20],
+    ASETTING_RANK,
+    bool:ASETTING_TOGGLE
+}
+
+new g_aSettings[][E_ASETTING] = {
+    {"Globaler Chat", 3, true},
+    {"Gangfightsperre", 3, false},
+    {"Überfallsperre", 3, false},
+    {"Regsperre", 1, false}
+};
 
 new jobNames[][] = {
     "Arbeitslos",
@@ -796,6 +816,9 @@ enum {
 }
 
 #include <a_samp>
+#include <timerfix>
+#include <pause>
+#include <YSI\y_timers>
 #include <YSI\y_hooks>
 
 #if defined MAX_PLAYERS
@@ -881,6 +904,8 @@ native gpci(playerid, serial [], len);
 #endif
 
 #define MAX_DEATH_ICONS 50
+#define MAX_FACTIONS 22
+#define MAX_CANISTER 3
 
 enum e_DeathIcon {
     DI_iPickup,
@@ -2129,6 +2154,7 @@ stock bool:IsTUVNeeded(distance) {
 #define     DIALOG_COINBASE_BUYORSELL 1391
 #define     DIALOG_COINBASE_AMOUNT 1392
 #define     DIALOG_COINBASE_CONFIRM 1393
+#define     DIALOG_ASETTINGS 1394
 
 #define     KEIN_KENNZEICHEN    "KEINE PLAKETTE"
 
@@ -3250,7 +3276,7 @@ new const g_HausMoebel[][e_HausMoebel] = {
         {29,2127,3,6500,"Moderner Kühlschrank in Rot"},
         {30,2130,3,3600,"Moderne Küchenkommode in Rot"},
         {31,19609,3,3420,"Kühlschrank in Weiß"},
-        {32,19819,3,1800,"Badewanne"},
+        {32,2526,3,1800,"Badewanne"},
         {33,19581,3,180,"Kochpfanne"},
         {34,19585,3,200,"Kochtopf"},
         {35,19586,3,150,"Pfannenwender"},
@@ -3653,7 +3679,9 @@ new Float:ATM[][] = {
     {921.592407, -1207.274780, 16.619688},
     {1790.9886, -1303.7802, 119.8556},
     {1484.833862, -1805.827637, 14.740836},
-    {959.964539, -1562.702515, 13.211584}
+    {959.964539, -1562.702515, 13.211584}, 
+    {-29.488010, -2522.075195, 36.048595},
+    {1137.1497, -1630.7759, 12.9359}
 };
 
 enum e_FahrpruefungCP {
@@ -3716,7 +3744,7 @@ stock Float:GetPlayerVehicleSpeedEx(playerid) {
 }
 
 //Servername
-new serverhost = 1;
+new bool:serverhost = false;
 new lagerbestand = 0;
 new Lottostand = 0;
 
@@ -4039,6 +4067,7 @@ enum SpielerDaten {
     pWheelmenP,
     pWModus,
     pKillsGangFight,
+    pKillsStreetwar,
     pKillsGangFightSession,
     pPremiumNeon,
     tLoginTimeout,
@@ -4219,7 +4248,6 @@ new vSirene[MAX_VEHICLES];
 new vNeon[MAX_VEHICLES];
 new OAmtSirene[MAX_VEHICLES];
 
-new GCOff;
 new GMXMode;
 new gmxtimer;
 new automsg;
@@ -4322,6 +4350,8 @@ stock Float:frandom(Float:max, Float:min = 0.0, dp = 4) {
     return float(random(imax - imin) + imin) / mul;
 }
 
+#define ALCATRAZ_WANTEDS 40
+
 #define MAX_GANGZONES 20
 
 enum e_GangZone {
@@ -4416,7 +4446,8 @@ new alcatrazGateHackTimestamp = 0;
 #include <maps\busStation>
 #include <maps\wantedHackerBase>
 #include <maps\gardenerBase>
-#include <maps\nineDemonsBase>
+#include <maps\nineDemonsExterior>
+#include <maps\nineDemonsInterior>
 #include <maps\beach>
 #include <maps\alhambraExterior>
 #include <maps\alhambraInterior>
@@ -4461,6 +4492,7 @@ new alcatrazGateHackTimestamp = 0;
 //#include <maps\christmasCalendar>
 //#include <maps\christmasMarket>
 #include <maps\coinbase>
+#include <maps\hallOfFame>
 
 // Systems
 #include <paintball>
@@ -4468,6 +4500,7 @@ new alcatrazGateHackTimestamp = 0;
 #include <core\anticheat>
 #include <core\coinbase_system>
 #include <core\ghettoblaster>
+#include <core\streetwar>
 
 enum E_VEHICLE_DEALERSHIP {
     VEHICLE_DEALERSHIP_NAME[50],
@@ -4611,7 +4644,7 @@ public MinuteTimer() {
         SetTimer("LottoTimer", 1000 * 60 * 5, false);
     }
     
-    new wday, wmonth, wyear;
+    /*new wday, wmonth, wyear;
     getdate(wyear, wmonth, wday);
 
     for (new playerid; playerid <= GetPlayerPoolSize(); playerid++) {
@@ -4620,7 +4653,7 @@ public MinuteTimer() {
                 SendClientMessage(playerid, COLOR_LIME, "Du kannst jetzt ein Adventstürchen beim Adventskalender öffnen (/Findekalender).");
             }
         }
-    }
+    }*/
     return 1;
 }
 
@@ -4753,10 +4786,11 @@ public HauptTimer() {
 public OnGameModeInit() {
 	Connect_To_Database();
 	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, STREAMER_MAX_OBJECTS, -1); // Object fix
-    OnGameModeInit2();
+    CallLocalFunction("OnGameModeInit2", ""); // y_hooks
 }
 
-OnGameModeInit2() {
+forward OnGameModeInit2();
+public OnGameModeInit2() {
     CollectUnusedAccount();
     HashPasswords();
     LoadInfos();
@@ -5350,11 +5384,11 @@ OnGameModeInit2() {
         SetVehicleToRespawn(vehicle_hitmanBase[i]);
         aiVehicles[ vehicle_hitmanBase[i] ] = VEH_HITMANC;
     }
-    for(new i=0;i<sizeof(vehicle_nineDemonsBase);i++)
+    for(new i=0;i<sizeof(vehicle_nineDemonsExterior);i++)
     {
-        SetVehicleNumberPlate(vehicle_nineDemonsBase[i], COLOR_HEX_BLACK"NINEDEMONS");
-        SetVehicleToRespawn(vehicle_nineDemonsBase[i]);
-        aiVehicles[ vehicle_nineDemonsBase[i] ] = VEH_BIKERCARS;
+        SetVehicleNumberPlate(vehicle_nineDemonsExterior[i], COLOR_HEX_BLACK"NINEDEMONS");
+        SetVehicleToRespawn(vehicle_nineDemonsExterior[i]);
+        aiVehicles[ vehicle_nineDemonsExterior[i] ] = VEH_BIKERCARS;
     }
     for(new i=0;i<sizeof(lvpdcars);i++)
     {
@@ -5477,7 +5511,6 @@ OnGameModeInit2() {
 
     KillTimer(gmxtimer);
     GMXMode = 0;
-    GCOff = 0;
     automsg = 0;
 
 	/*CreateDynamicPickup(19346, 23, 1782.0698,-2087.7612,13.5469, 0);//Bratwurst
@@ -5717,7 +5750,6 @@ OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Aztecas - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 506.0543,-81.1208,998.9609, 15.0, .testlos = 1);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Vagos - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 2809.7944,-1171.9598,1025.5703, 15.0, .testlos = 1);//Waffenlager
 	CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"OutlawZ - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, -2165.1348,644.2082,1052.3750, 15.0, .testlos = 1);//Waffenlager
-    CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Nine Demons - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 197.3765,-231.2337,1.7786, 15.0, .testlos = 1);//Waffenlager
     CreateDynamic3DTextLabel(COLOR_HEX_YELLOW"Wheelman - Waffenlager\n"COLOR_HEX_WHITE"Tippe /Waffenlager", COLOR_WHITE, 938.8259,1737.8749,8.8516, 15.0, .testlos = 1);//Waffenlager
 
     //Job 3D Text
@@ -6315,6 +6347,7 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][pFLehrer] = INVALID_PLAYER_ID;
     Spieler[playerid][pPremiumNeon] = 0;
     Spieler[playerid][pKillsGangFight] = 0;
+    Spieler[playerid][pKillsStreetwar] = 0;
     Spieler[playerid][pMP3Player] = 0;
     Spieler[playerid][pRadarfallenWarnung] = 0;
     Spieler[playerid][pPremiumBizSlot] = 0;
@@ -7002,14 +7035,9 @@ public OnPlayerDisconnect(playerid, reason)
     // SendAdminMessage(COLOR_GREY, str);
     for(new i = 0 ; i < MAX_PLAYERS ; i++)
     {
-        if(IsPlayerConnected(i) && gPlayerLogged[i] == 1)
+        if (IsPlayerConnected(i) && gPlayerLogged[i] == 1)
         {
-            if(Spieler[i][pAdmin] >= 1)
-            {
-                if( pJL[i] == 1 ) {
-                    SendClientMessage(i, COLOR_GREY, String);
-                }
-            }
+            if (pJL[i] == 1) SendClientMessage(i, COLOR_GREY, String);
         }
     }
     KillTimer( Spieler[playerid][tFahrschule] );
@@ -7300,6 +7328,7 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pFLehrer] = INVALID_PLAYER_ID;
     Spieler[playerid][pPremiumNeon] = 0;
     Spieler[playerid][pKillsGangFight] = 0;
+    Spieler[playerid][pKillsStreetwar] = 0;
     Spieler[playerid][pMP3Player] = 0;
     Spieler[playerid][pRadarfallenWarnung] = 0;
     Spieler[playerid][pPremiumBizSlot] = 0;
@@ -7890,6 +7919,10 @@ public gwarentimer()
     }
 }
 
+CMD:gfinfo(playerid) {
+    return cmd_gangfightinfo(playerid);
+}
+
 CMD:gangfightinfo(playerid)
 {
     new string[400], bool:gangfightRunning = false;
@@ -7899,9 +7932,9 @@ CMD:gangfightinfo(playerid)
         {
             new wartime;
             wartime=gettime()-g_GangZone[i][GZ_iGangWarEnd];
-            format(string,400,"%s (%i Punkte) vs. %s (%i Punkte), Gangfightende: in %i Sekunden",
+            format(string,400,"%s (%i Punkte) vs. %s (%i Punkte), Gangfightende: in %02i:%02i Minuten.",
             GetFactionNameOfFaction(g_GangZone[i][GZ_iAttacker]),g_GangZone[i][GZ_iAttackerScore],
-            GetFactionNameOfFaction(g_GangZone[i][GZ_iOwner]),g_GangZone[i][GZ_iOwnerScore],wartime);
+            GetFactionNameOfFaction(g_GangZone[i][GZ_iOwner]),g_GangZone[i][GZ_iOwnerScore], floatround(-wartime / 60, floatround_floor), floatround(-wartime % 60, floatround_floor));
             SendClientMessage(playerid,COLOR_YELLOW,string);
             gangfightRunning = true;
         }
@@ -10338,16 +10371,14 @@ public SetPlayerSpawn(playerid)
 			{
 				SetPlayerPos(playerid, HITMANBASE_SPAWN_POINT);
 				SetPlayerFacingAngle(playerid, HITMANBASE_SPAWN_POINT_FACING);
-				SetPlayerInterior(playerid, 0);
+				SetPlayerInterior(playerid, MAPS_HITMANBASE_INTERIOR);
 				SetPlayerVirtualWorld(playerid, VW_MAIN);
 				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 15)
 			{
-				SetPlayerPos(playerid, NINEDEMONSBASE_SPAWN_POINT);
-				SetPlayerFacingAngle(playerid, NINEDEMONSBASE_SPAWN_POINT_FACING);
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, VW_MAIN);
+				SetPlayerPosEx(playerid, NINEDEMONS_INTERIOR_SPAWN_POINT, MAPS_NINEDEMONSINTERIOR_INTERIOR, VW_NINEDEMONSINTERIOR);
+				SetPlayerFacingAngle(playerid, NINEDEMONS_INTERIOR_SPAWN_POINT_FACING);
 				SetCameraBehindPlayer(playerid);
 			}
 			else if(Spieler[playerid][pFraktion] == 16)
@@ -10442,7 +10473,7 @@ public SetPlayerSpawn(playerid)
                 Spieler[playerid][tSpawnView] = SetTimerEx("SetPlayerView",5003,false,"dd",playerid,1); // Muss,sonst klappt Spectate nicht
             }
             else {
-                if(g_bRegSperre) {
+                if(g_aSettings[ASETTING_REGBLOCK][ASETTING_TOGGLE]) {
                     static String[] = "\
                                     Wir begrüßen dich ganz Herzlich auf Live your Dream!\n\
                                     Aus aktuellem Anlass ist eine Registrierung gerade nicht möglich.\n\
@@ -10756,13 +10787,13 @@ public OnPlayerDeath(playerid, killerid, reason)
                 SendFraktionMessage(16, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(18, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(22, COLOR_COP_MELDUNG, string);
-                if(Spieler[killerid][pFraktion] == 1){format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 2){format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 16){format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 18){format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 22){format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > 20 ? " ins Alcatraz" : "");}
+                if(Spieler[killerid][pFraktion] == 1){format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 2){format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 16){format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 18){format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                else if(Spieler[killerid][pFraktion] == 22){format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
                 SendClientMessageToAll(COLOR_DARKRED, string);
-                if( Spieler[playerid][pWanteds] >= 20 ) {
+                if( Spieler[playerid][pWanteds] >= ALCATRAZ_WANTEDS ) {
                     Spieler[playerid][pJailed] = 2;
                 }
                 else {
@@ -10812,7 +10843,7 @@ public OnPlayerDeath(playerid, killerid, reason)
         GivePlayerCash(playerid, -500);
         Spieler[playerid][pDeaths]++;
         if(!bGangfight) {
-            SetTimerEx("NotrufDialog", 100, false, "%i", playerid);
+            SetTimerEx("NotrufDialog", 100, false, "i", playerid);
             //SendClientMessage(playerid,COLOR_YELLOW,"Du bist schwer verletzt! Wähle '/Service -> Rettungsdienst' um ein Notarzt zu rufen.");
         }
         SetPlayerPos(playerid,Spieler[playerid][pTotX],Spieler[playerid][pTotY],Spieler[playerid][pTotZ]);
@@ -13186,7 +13217,7 @@ CMD:gmx(playerid)
             InterpolateCameraLookAt(i, 370.090270, -2041.220214, 7.687465, 371.139587, -1813.225585, 9.687144, 60000);
             SendClientMessage(i, COLOR_RED, "Speichere Daten ... Es kann zu starken Lags kommen!");
         }
-        SaveAll();
+        CallLocalFunction("SaveAll", ""); // y_hooks
         GMXMode = 1;
         gmxtimer = SetTimer("GMXModeTimer", 10000, 1);
         SendAdminMessage(COLOR_YELLOW, "Der Server kann nun restartet werden!");
@@ -13381,7 +13412,7 @@ CMD:gotopos(playerid, params[])
 {
     new Float:x, Float:y, Float:z, string[128];
     if(sscanf(params, "fff", x,y,z))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Gotopos [Float-X] [Float-Y] [Float-Z]");
-    if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
+    if(Spieler[playerid][pAdmin] < 1)return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
     new vID = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid))
     {
@@ -13416,7 +13447,7 @@ CMD:gotopos(playerid, params[])
 CMD:gotocp(playerid, params[]) return cmd_gotomarker(playerid, params);
 
 CMD:gotomarker(playerid, params[]) {
-    if (!Spieler[playerid][pAdmin])
+    if (Spieler[playerid][pAdmin] < 1)
         return SendClientMessage(playerid, COLOR_DARKRED, "Du besitzt nicht die benötigten Rechte.");
 
     if (!GetPVarFloat(playerid, "MARKER.X"))
@@ -14081,6 +14112,27 @@ CMD:setbwstrafe(playerid, params[]) {
     SendUCPAktenEintrag(playerid, GetName(playerid), GetName(pID), message);
     SaveAccount(pID);
     return 1;
+}
+
+CMD:lastdamage(playerid, params[]) {
+    return cmd_lastdmg(playerid, params);
+}
+
+CMD:lastdmg(playerid, params[]) {
+    new pID;
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    if (sscanf(params, "u", pID))
+        return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Lastdmg [SpielerID/Name]");
+
+    if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler wurde nicht gefunden.");
+    if (!GetPVarInt(pID, "DAMAGE.TIME")) return SCMFormatted(playerid, COLOR_ORANGE, "[DAMAGE] {FFFFFF}%s hat noch keinen Schaden von einem Spieler erhalten.", GetName(pID));
+
+    new pName[MAX_PLAYER_NAME], sWeapon[32];
+    GetWeaponNameEx(GetPVarInt(pID, "DAMAGE.WEAPON"), sWeapon, sizeof(sWeapon));
+    GetPVarString(pID, "DAMAGE.NAME", pName, sizeof(pName));
+    if (isnull(sWeapon)) sWeapon = "Fist";
+    return SCMFormatted(playerid, COLOR_ORANGE, "[DAMAGE] {FFFFFF}%s hat zuletzt von %s %.0f Schaden erhalten, vor %i Sekunden (Waffe: %s).", GetName(pID),\
+        pName, GetPVarFloat(pID, "DAMAGE.AMOUNT"), gettime() - GetPVarInt(pID, "DAMAGE.TIME"), sWeapon);
 }
 
 CMD:configplayer(playerid, params[])
@@ -14824,16 +14876,10 @@ CMD:createhouse(playerid, params[])
 forward Servername();
 public Servername()
 {
-    if(serverhost == 1)
-    {
-        SendRconCommand("hostname [LyD] Live your Dream ~ Roleplay [FROHES NEUES]");
-        serverhost = 2;
-    }
-    else if(serverhost == 2)
-    {
-        SendRconCommand("hostname Live your Dream ~ Roleplay [NEUJAHRSFEIER 05.01.2019!]");
-        serverhost = 1;
-    }
+    new sName[128];
+    format(sName, sizeof(sName), "hostname %sLive your Dream ~ Roleplay%s", (serverhost = !serverhost) ? "[LyD] " : "", GetWeekDayNumber() < 2 ? " - [DOUBLE-EXP]" : "");
+    SendRconCommand(sName);
+    return 1;
 }
 
 CMD:clear(playerid, params[])
@@ -15095,11 +15141,11 @@ CMD:suicidearrest(playerid, params[])
     GetPlayerPos(pID, x, y, z);
     if(IsPlayerInRangeOfPoint(playerid, 10, x, y, z))
     {
-        if(Spieler[playerid][pFraktion] == 1)format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 2)format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 16)format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 18)format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
-        else if(Spieler[playerid][pFraktion] == 22)format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > 20 ? " ins Alcatraz" : "");
+        if(Spieler[playerid][pFraktion] == 1)format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 2)format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 16)format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 18)format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
+        else if(Spieler[playerid][pFraktion] == 22)format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s eingesperrt. <<", GetName(playerid), GetName(pID), Spieler[pID][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
         if(Spieler[playerid][pFraktion] == 1) {
             SendJobMessage(6, COLOR_RED, string);
         }
@@ -15113,7 +15159,7 @@ CMD:suicidearrest(playerid, params[])
         Spieler[playerid][pPayCheck] += gehalt;
         GivePlayerCash(pID, -gehalt);
 
-        if( Spieler[pID][pWanteds] >= 20 ) {
+        if( Spieler[pID][pWanteds] >= ALCATRAZ_WANTEDS ) {
             Spieler[pID][pJailed] = 2;
         }
         else {
@@ -15236,7 +15282,7 @@ CMD:animlist(playerid)
 {
     SendClientMessage(playerid, COLOR_GREEN, "==> Verfügbare Animationen:");
     SendClientMessage(playerid,COLOR_WHITE,"/Handsup, /Drunk, /Bomb, /Getarrested, /Laugh, /Lookout, /Robman, /Wank, /Chairsit, /Celebrate");
-    SendClientMessage(playerid,COLOR_WHITE,"/Crossarms, /Lay, /Hide, /Vomit, /Eat, /Wave[1-2], /Taichi, /Pee, /Dance[1-4], /Idles, /Buhen");
+    SendClientMessage(playerid,COLOR_WHITE,"/Crossarms, /Lay, /Hide, /Vomit, /Eat, /Wave[1-2], /Taichi, /Pee, /Dance[1-4], /Idles, /Tired");
     SendClientMessage(playerid,COLOR_WHITE,"/Deal, /Smokem, /Smokef, /Groundsit[1-3], /Chat, /Fucku, /Kiss[1-6], /Angry, /Follow, /Cry");
     SendClientMessage(playerid,COLOR_WHITE,"Stoppen mit Enter");
     return 1;
@@ -15279,7 +15325,7 @@ CMD:cry(playerid)
     ApplyAnimation(playerid,"GRAVEYARD","mrnF_loop", 4.0, 1, 0, 0, 0, 0);
     return 1;
 }
-CMD:buhen(playerid)
+CMD:tired(playerid)
 {
     if(Spieler[playerid][pTot] == 1)return SendClientMessage(playerid, COLOR_RED, "Du kannst keine Animationen ausführen während du verletzt bist.");
     if(Cuffed[playerid] == 1)return SendClientMessage(playerid, COLOR_RED, "Während du gefesselt bist kannst du keine Animationen ausführen.");
@@ -15288,7 +15334,7 @@ CMD:buhen(playerid)
     if (IsPlayerFalling(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst nur eine Animation ausführen, wenn du auf dem Boden bist.");
     MakeAnimation[playerid] = 1;
     TextDrawShowForPlayer(playerid, Leer);
-    ApplyAnimation(playerid,"BEACH", "SitnWait_loop_W", 4.0, 1, 0, 0, 0, 0, 1);
+    ApplyAnimation(playerid,"PED", "IDLE_tired", 4.0, 1, 0, 0, 0, 0, 1);
     return 1;
 }
 CMD:bomb(playerid)
@@ -17648,9 +17694,11 @@ CMD:kidnap(playerid, params[])
     GetPlayerPos(playerid, x,y,z);
     if(!IsPlayerInRangeOfPoint(pID, 5.0, x,y,z))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
     if(!IsPlayerInAnyVehicle(playerid))return SendClientMessage(playerid, COLOR_RED, "Du bist in keinem Fahrzeug.");
+    new maxSeats = GetVehicleMaxPassengers(GetVehicleModel(GetPlayerVehicleID(playerid)));
+    if (!maxSeats || maxSeats == 0xF) return SendClientMessage(playerid, COLOR_RED, "Dieses Fahrzeug hat keinen Beifahrersitz.");
     if(IsPlayerInAnyVehicle(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist in einem anderen Fahrzeug.");
-    if( Spieler[pID][pLevel] <= 2 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst kein Neuling entführen!");
+    if( Spieler[pID][pLevel] < 3 ) {
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst keinen Neuling entführen!");
     }
 
     // Buguse
@@ -17661,11 +17709,11 @@ CMD:kidnap(playerid, params[])
         return SendClientMessage(playerid, COLOR_RED, "Du versuchst gerade noch einen Spieler zu entführen.");
     }
     if( Spieler[pID][bKidnapped] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Der Spieler wird bereits entführt");
+        return SendClientMessage(playerid, COLOR_RED, "Der Spieler wird bereits entführt.");
     }
     Spieler[playerid][tickKidnap] = gettime() + 7;
     Spieler[playerid][tKidnap] = SetTimerEx("Pulse_Kidnap",1627,true,"dd",playerid,pID );
-    format(string,sizeof(string),"%s versucht %s ins Fahrzeug zu zerren",GetName(playerid),GetName(pID));
+    format(string,sizeof(string),"%s versucht %s ins Fahrzeug zu zerren.",GetName(playerid),GetName(pID));
     SendRoundMessage(x,y,z, COLOR_LIGHTRED2, string);
 
     // PutPlayerInVehicle(pID, GetPlayerVehicleID(playerid), 1);
@@ -17737,6 +17785,11 @@ public Pulse_Kidnap(entfuehrer,opferid){
         new string[128];
         KillTimer(Spieler[entfuehrer][tKidnap]);
         Spieler[entfuehrer][tKidnap] = INVALID_TIMER_ID;
+        new maxSeats = GetVehicleMaxPassengers(GetVehicleModel(GetPlayerVehicleID(entfuehrer)));
+        if (!maxSeats || maxSeats == 0xF) {
+            SendClientMessage(entfuehrer, COLOR_RED, "Dieses Fahrzeug hat keinen Beifahrersitz.");
+            return SendClientMessage(opferid, COLOR_GREEN, "Du bist deinem Entführer entkommen.");
+        }
         SendClientMessage(opferid, COLOR_GREEN, "Du bist deinem Entführer nicht entkommen.");
         PutPlayerInVehicle(opferid, GetPlayerVehicleID(entfuehrer), 1);
         FreezePlayer(opferid);
@@ -17980,10 +18033,10 @@ stock GiveHitmanWeapons(playerid)
 CMD:ninowaffen(playerid)
 {
     if(HasWeaponBlock(playerid)) {
-        SendClientMessage(playerid,COLOR_RED,"Du kannst diesen Befehl nicht ausführen");
+        SendClientMessage(playerid,COLOR_RED,"Du kannst diesen Befehl nicht ausführen.");
         return SendWeaponBlockInfo(playerid);
     }
-    if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONSBASE_SPAWN_POINT)) //Biker
+    if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONS_INTERIOR_SPAWN_POINT)) //Biker
     {
         if(Spieler[playerid][pGunLic] == 0) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Waffenschein.");
         if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
@@ -18055,7 +18108,7 @@ CMD:gheilen(playerid)
         SetPlayerHealth(playerid, 100);
         SetTimerEx("HeilReady", 60000, 0, "i", playerid);
     }
-    else if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONSBASE_SPAWN_POINT))//Ninedemons
+    else if(IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONS_INTERIOR_SPAWN_POINT))//Ninedemons
     {
         if(!(Spieler[playerid][pFraktion] == 15))return SendClientMessage(playerid, COLOR_RED, "Du bist kein NineDemons Mitglied.");
         Spieler[playerid][pHeilReady] = 0;
@@ -18959,22 +19012,25 @@ stock GiveFahrWeapons(playerid)
 
 CMD:news(playerid, params[])
 {
-    new text[96], string[128], vID = GetPlayerVehicleID(playerid);
+    new text[96], string[128];
     if(!(Spieler[playerid][pFraktion] == 4))return SendClientMessage(playerid, COLOR_RED, "Du bist kein San Andreas News Agentur Mitglied.");
     if(Spieler[playerid][pRank] < 3) {
         return SendClientMessage(playerid,COLOR_LIGHTRED2,"Dein Rank ist zu niedrig! Du musst mind. Rank 3 sein, um News schreiben zu dürfen.");
     }
     if(sscanf(params, "s[96]", text))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /News [Nachricht]");
     format(string, sizeof(string), "Reporter %s: %s", GetName(playerid), text);
+    new Float:x, Float:y, Float:z, Float:vX, Float:vY, Float:vZ;
+    GetPlayerPos(playerid, x, y, z);
     for(new i=0;i<sizeof(vehicle_sanaBase);i++)
     {
-        if(vID == vehicle_sanaBase[i])
+        GetVehiclePos(vehicle_sanaBase[i], vX, vY, vZ);
+        if (GetDistance(x, y, z, vX, vY, vZ) < 30.0)
         {
             SendClientMessageToAll(COLOR_ORANGE, string);
             return 1;
         }
     }
-    SendClientMessage(playerid, COLOR_RED, "Du bist in keinem San Andreas News Agentur Fahrzeug.");
+    SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe eines San Andreas News Agentur Fahrzeuges.");
     return 1;
 }
 
@@ -19181,7 +19237,7 @@ CMD:bizkassestand(playerid)
 {
     new h=IsPlayerAtBiz(playerid);
     if(h==999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich vor keinem Geschäft.");
-    if(Spieler[playerid][pAdmin] > 3 || strcmp(GetName(playerid), Biz[h][bBesitzer], true) == 0)
+    if(Spieler[playerid][pAdmin] > 1 || strcmp(GetName(playerid), Biz[h][bBesitzer], true) == 0)
     {
         new string[128];
         format(string, sizeof(string), "* Geschäfts-Kasse: $%s *", AddDelimiters(Biz[h][bKasse]));
@@ -19892,11 +19948,11 @@ stock RespawnFactionCars(playerid, factionID) {
 	}
 	else if(factionID == 15)
 	{
-		for(new i=0;i<sizeof(vehicle_nineDemonsBase);i++)
+		for(new i=0;i<sizeof(vehicle_nineDemonsExterior);i++)
 		{
-			if(!IsVehicleOccupied(vehicle_nineDemonsBase[i])&& !excludeVehicles[vehicle_nineDemonsBase[i]])
+			if(!IsVehicleOccupied(vehicle_nineDemonsExterior[i])&& !excludeVehicles[vehicle_nineDemonsExterior[i]])
 			{
-				SetVehicleToRespawn(vehicle_nineDemonsBase[i]);
+				SetVehicleToRespawn(vehicle_nineDemonsExterior[i]);
 			}
 		}
 		format(string, sizeof(string), "* Die NineDemons Fahrzeuge wurden von %s respawnt.", GetName(playerid));
@@ -20473,24 +20529,14 @@ CMD:sc(playerid, params[])
 
 CMD:gcoff(playerid)
 {
-    new string[128];
-    if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    if(GCOff == 0)
-    {
-        GCOff = 1;
-        format(string, sizeof(string), "Der Globale Chat wurde von %s %s deaktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-        SendClientMessageToAll(COLOR_GREEN, string);
-    }
-    else if(GCOff == 1)
-    {
-        GCOff = 0;
-        format(string, sizeof(string), "Der Globale Chat wurde von %s %s aktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-        SendClientMessageToAll(COLOR_GREEN, string);
-    }
-    return 1;
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
+    return ToggleASetting(playerid, ASETTING_GLOBALCHAT, false);
 }
 
-
+CMD:regsperre(playerid)
+{
+    return cmd_asettings(playerid);
+}
 
 CMD:gc(playerid, params[])
 {
@@ -20506,7 +20552,7 @@ CMD:gc(playerid, params[])
     }
     if(Spieler[playerid][pAdmin] < 3)
     {
-        if(GCOff == 1)return SendClientMessage(playerid, COLOR_RED, "Der Globale Chat ist derzeit deaktiviert.");
+        if(!g_aSettings[ASETTING_GLOBALCHAT][ASETTING_TOGGLE])return SendClientMessage(playerid, COLOR_RED, "Der Globale Chat ist derzeit deaktiviert.");
         if(!pGC[playerid])return SendClientMessage(playerid, COLOR_YELLOW, "Du hast den Globalen Chat für dich deaktiviert, tippe /chatoff.");
         format(string, sizeof(string), "(( %s: %s ))", GetName(playerid), text);
         SendGlobalMessage(COLOR_CHAT_GC_NONADM, string);
@@ -22094,6 +22140,23 @@ stock GetBusIndex(vehicleid){
         }
     }
     return -1;
+}
+
+stock GetVehicleMaxPassengers(iModel)
+{
+    if(400 <= iModel <= 611)
+    {
+        static
+            s_MaxPassengers[] =
+            {
+                271782163, 288428337, 288559891, -2146225407, 327282960, 271651075, 268443408, 286339857, 319894289, 823136512, 805311233,
+                285414161, 286331697, 268513553, 18026752, 286331152, 286261297, 286458129, 856765201, 286331137, 856690995, 269484528, 
+                51589393, -15658689, 322109713, -15527663, 65343    
+            }
+        ;
+        return ((s_MaxPassengers[(iModel -= 400) >>> 3] >>> ((iModel & 7) << 2)) & 0xF);
+    }
+    return 0xF;
 }
 
 CMD:startgarten(playerid)
@@ -26487,7 +26550,7 @@ public OnRconCommand(cmd[])
             SendClientMessage(i, COLOR_RED, "Speichere Daten...");
         }
 
-        SaveAll();
+        CallLocalFunction("SaveAll", ""); // y_hooks
         SetTimer("GMXModeTimer", 5000, 1);
         return 1;
     }
@@ -27909,13 +27972,53 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             {
                 if(skin == 57)
                 {
-                    pChoosedSkin[playerid] = 55;
+                    pChoosedSkin[playerid] = 187;
                 }
-                else if(skin == 55)
+                else if(skin == 187)
                 {
-                    pChoosedSkin[playerid] = 56;
+                    pChoosedSkin[playerid] = 147;
                 }
-                else if(skin == 56)
+                else if(skin == 147)
+                {
+                    pChoosedSkin[playerid] = 192;
+                }
+                else if(skin == 192)
+                {
+                    pChoosedSkin[playerid] = 40;
+                }
+                else if(skin == 40)
+                {
+                    pChoosedSkin[playerid] = 91;
+                }
+                else if(skin == 91)
+                {
+                    pChoosedSkin[playerid] = 2;
+                }
+                else if(skin == 2)
+                {
+                    pChoosedSkin[playerid] = 66;
+                }
+                else if(skin == 66)
+                {
+                    pChoosedSkin[playerid] = 1;
+                }
+                else if(skin == 1)
+                {
+                    pChoosedSkin[playerid] = 15;
+                }
+                else if(skin == 15)
+                {
+                    pChoosedSkin[playerid] = 23;
+                }
+                else if(skin == 23)
+                {
+                    pChoosedSkin[playerid] = 29;
+                }
+                else if(skin == 29)
+                {
+                    pChoosedSkin[playerid] = 72;
+                }
+                else if(skin == 72)
                 {
                     pChoosedSkin[playerid] = 57;
                 }
@@ -28930,6 +29033,29 @@ public OnRconLoginAttempt(ip[], password[], success)
     return 1;
 }
 
+public OnPlayerPause(playerid) {
+
+}
+
+forward ResetPlayerPosFindZ(playerid);
+public ResetPlayerPosFindZ(playerid) {
+    new Float:fX, Float:fY, Float:fZ;
+    GetPlayerPos(playerid, fX, fY, fZ);
+    return SetPlayerPosFindZ(playerid, fX, fY, fZ);
+}
+
+public OnPlayerResume(playerid, pausedtime) {
+    if (Spieler[playerid][pAdmin] && Spieler[playerid][pAdminDienst] && GetPVarInt(playerid, "ADMIN.MAP.TELEPORTING")) {
+        new Float:fX, Float:fY, Float:fZ;
+        GetPlayerPos(playerid, fX, fY, fZ);
+        SetPlayerPos(playerid, fX, fY, 550);
+        
+        DeletePVar(playerid, "ADMIN.MAP.TELEPORTING");
+
+        SetTimerEx("ResetPlayerPosFindZ", 250, false, "i", playerid);
+    }
+}
+
 public OnPlayerUpdate(playerid)
 {
     Spieler[playerid][unixUpdate] = gettime();
@@ -29102,12 +29228,56 @@ stock DestroyVehicleEx(vehicleid) {
     return DestroyVehicle(vehicleid);
 }
 
+stock ToggleASetting(playerid, index, showDialog = false) {
+    g_aSettings[index][ASETTING_TOGGLE] = !g_aSettings[index][ASETTING_TOGGLE];
+
+    new message[144];
+    switch (index) {
+        case ASETTING_GLOBALCHAT: {
+            format(message, sizeof(message), "[SERVER] {FFFFFF}Der Globale Chat wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendClientMessageToAll(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_GREEN : COLOR_RED, message);
+        }
+        case ASETTING_GANGFIGHTBLOCK: {
+            format(message, sizeof(message), "[SERVER] {FFFFFF}Die Gangfightsperre wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendClientMessageToAll(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_RED : COLOR_GREEN, message);
+        }
+        case ASETTING_ROBBLOCK: {
+            format(message, sizeof(message), "[SERVER] {FFFFFF}Die Überfallsperre wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendClientMessageToAll(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_RED : COLOR_GREEN, message);
+        }
+        case ASETTING_REGBLOCK: {
+            format(message, sizeof(message), "[ADMIN] {FFFFFF}Die Regsperre wurde von %s %s %s.", GetPlayerAdminRang(playerid), GetName(playerid), 
+                g_aSettings[index][ASETTING_TOGGLE] ? "aktiviert" : "deaktiviert");
+            SendAdminMessage(g_aSettings[index][ASETTING_TOGGLE] ? COLOR_RED : COLOR_GREEN, message);
+        }
+    }
+
+    if (showDialog)
+        return cmd_asettings(playerid);
+
+    return 1;
+}
+
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     for(new i , len = strlen(inputtext) ; i < len ; i++) {
         if( inputtext[i] == '%' ) inputtext[i] = ' ';
     }
     if(Werbebanner_OnDialogResponse(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if (dialogid == DIALOG_ASETTINGS) {
+        if (!response) return 1;
+        if (listitem < 0 || listitem >= sizeof(g_aSettings)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Ungültige Auswahl.");
+        if (Spieler[playerid][pAdmin] < 1) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Dafür hast du keine Berechtigung.");
+        if (Spieler[playerid][pAdmin] < g_aSettings[listitem][ASETTING_RANK]) {
+            SendClientMessage(playerid, COLOR_RED, "[INFO] {FFFFFF}Dafür hast du nicht die nötigen Rechte.");
+            return cmd_asettings(playerid);
+        }
+
+        return ToggleASetting(playerid, listitem, true);
+    }
     if (dialogid == DIALOG_NEON) {
         if (!response) return 1;
         if (listitem < 0 || listitem >= sizeof(g_NeonLights)) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Ungültige Auswahl.");
@@ -30919,7 +31089,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 if(strcmp(Tanke[t][tBesitzer], "Niemand", true) == 0)return SendClientMessage(playerid, COLOR_RED, "Die Tankstelle hat keinen Besitzer.");
 
                 if (listitem >= sizeof(g_SnackShop)) {
-                    if (Spieler[playerid][pKanister] >= 3) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits drei Kanister.");
+                    if (Spieler[playerid][pKanister] >= MAX_CANISTER) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits " #MAX_CANISTER " Kanister.");
                     if (Tanke[t][tBenzin] < 10) return SendClientMessage(playerid, COLOR_RED, "Die Tankstelle hat zu wenig Benzin dafür.");
                     if (Spieler[playerid][pCash] < 2500) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dafür.");
                     GivePlayerCash(playerid, -2500);
@@ -32309,7 +32479,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response) {
                 new t = IsPlayerAtTanke(playerid);
                 if(t == 999)return SendClientMessage(playerid, COLOR_RED, "Du befindest dich an keiner Tankstelle.");
-                if(Spieler[playerid][pKanister] >= 3)return SendClientMessage(playerid, COLOR_RED, "Du hast bereits drei Kanister.");
+                if(Spieler[playerid][pKanister] >= MAX_CANISTER) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits " #MAX_CANISTER " Kanister.");
                 if (Tanke[t][tBenzin] < 10) return SendClientMessage(playerid, COLOR_RED, "Die Tankstelle hat zu wenig Benzin dafür.");
 
                 new preis;
@@ -33286,7 +33456,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SendClientMessage(playerid, COLOR_BLUE, "* ALLGEMEIN *: {FFFFFF}/Jailtime, /Tottime, /Mutetime, /Animlist, /Staatskasse, /Killauftrag, /Leader, /Gutscheincode");
                     SendClientMessage(playerid, COLOR_BLUE, "* MUSIK-BEFEHLE *: {FFFFFF}/Musik, /Mp3player, /Ghettoblaster, /Removeghettoblaster (/Rghettoblaster)");
                     SendClientMessage(playerid, COLOR_BLUE, "* GELD-BEFEHLE *: {FFFFFF}/Automat, /Ueberweisen, /Gebecheck, /Guthaben, /Zahlen");
-                    SendClientMessage(playerid, COLOR_BLUE, "* GANGFIGHT-BEFEHLE *: {FFFFFF}/Gangfightwette, /Gangfightinfo");
+                    SendClientMessage(playerid, COLOR_BLUE, "* GANGFIGHT-BEFEHLE *: {FFFFFF}/Gangfightwette, /Gangfightinfo, /Swinfo");
                     SendClientMessage(playerid, COLOR_BLUE, "* RAUBBEFEHLE *: {FFFFFF}/Transporterausrauben, /Bankausrauben, /Tankstelleausrauben");
                     SendClientMessage(playerid, COLOR_BLUE, "* CASINO-BEFEHLE *: {FFFFFF}/Spielautomat, /Wettspiel, /Kartenspiel, /Gluecksrad");
                 }
@@ -33698,6 +33868,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     else if(Spieler[playerid][pFraktion] == 4)
                     {
                         SendClientMessage(playerid, COLOR_BLUE, "* SA-NA *: {FFFFFF}/Dienst, /News, /Starteventpoint, /Stopeventpoint, /Interview, /Fc, /Kasse, /Kassenstand, /Mitglieder");
+                        SendClientMessage(playerid, COLOR_BLUE, "* SA-NA *: {FFFFFF}/Sanagarage, /Fskin");
                     }
                     else if(Spieler[playerid][pFraktion] == 5)
                     {
@@ -33714,7 +33885,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* GROVE GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* GROVE GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* GROVE ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 7)
@@ -33722,7 +33893,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* BALLAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* BALLAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* BALLAS ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 8)
@@ -33741,7 +33912,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* YAKUZA ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 11)
@@ -33749,7 +33920,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* AZTECAS ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 12)
@@ -33757,7 +33928,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* LCN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* LCN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* LCN ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 13)
@@ -33765,7 +33936,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* VAGOS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* VAGOS GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* VAGOS ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 14)
@@ -33814,7 +33985,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* OUTLAWZ ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     else if(Spieler[playerid][pFraktion] == 21)
@@ -33822,7 +33993,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN ALLGEMEIN*: {FFFFFF}/Gangwaffen, /Gheilen, /Mitglieder, /Buendnis, /Kasse, /Kassenstand, /Fc, /Flock");
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN KIDNAP*: {FFFFFF}/Kidnap, /Mundbinde, /Augenbinde, /Fesseln, Entfesseln, /Gangjail, /Aufbrechen");
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN BLACKLIST*: {FFFFFF}/Frakblacklist, /Addfrakblacklist, /Delfrakblacklist");
-                        SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo");
+                        SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN GANGFIGHT*: {FFFFFF}/Gangfight, /Fge(Flaggeerobern), /Gangfightinfo, /Swinfo");
                         SendClientMessage(playerid, COLOR_BLUE, "* TRIADEN ERPRESSUNG*: {FFFFFF}/Schutzgeld, /Schutzgeldabbrechen");
                     }
                     if(Spieler[playerid][pFraktion] == 22)
@@ -33841,20 +34012,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if(Spieler[playerid][pAdmin] >= 1)
                     {
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Goto, /Gethere, /Spawn, /Kick, /ban (Level 1-3), /spec, /specoff, /Adienst, /Aschlagen, /Gebannt, /Spawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Regsperre, /Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster), /Gotocp");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Setafk, /Mute, /Sichercode, /Sc, /Freeze, /Unfreeze, /Guncheck, /Check, /Checkscheine, /Supauto /Respawncar");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Removeghettoblaster (/Rghettoblaster), /Gotocp, /Asettings, /Gotohaus, /Regelwarnung, /Delveh");
                         SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORT TICKET *: {FFFFFF}/Openticket, /Delticket, /Dticket, /Aticket, /Closeticket, /Tickets");
-                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER JOBS/FRAKTIONEN *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar");
+                        SendClientMessage(playerid, COLOR_ORANGE, "* SUPPORTER *: {FFFFFF}/Rjobcars, /Rfrakcars, /Jobs, /Fraktionen, /Ngeld, /Gotocar, /Getcar, /Gotopos");
                     }
                     if(Spieler[playerid][pAdmin] >= 3)
                     {
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ban, /Ipban, /Tban, /zollsperre, /Verwarnen, /Prison, /Cprison, /Offprison, /Offcprison, /Clearchat");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gotoliste, /Gotopos, /Gotohaus, /Veh, /Delveh, /Delallvehs, /Spec, /Specoff, /Changeweather");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gotoliste, /Veh, /Delallvehs, /Spec, /Specoff, /Changeweather, /Bizkassestand");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Sethp, /Setarmor, /Spielerip, /Akteneintrag, /Waffensperre, /Eventitem, /Atafelentmieten, /Checkskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Regsperre, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons, /Lastdmg, /Givegun");
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
@@ -33864,7 +34035,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                     if(Spieler[playerid][pAdmin] >= 5)
                     {
-                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Givegun, /Createaplatz, /Createtanke, /Createhotelroom");
+                        SendClientMessage(playerid, COLOR_BLUE, "* SERVER MANAGER *: {FFFFFF}/Createaplatz, /Createtanke, /Createhotelroom");
                     }
                     if(Spieler[playerid][pAdmin] >= 6)
                     {
@@ -36574,13 +36745,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response)
             {
                 new pVW = GetPlayerVirtualWorld(playerid);
-                
-                SCMFormatted(playerid, COLOR_WHITE, "DEBUG: vwid: %i", pVW);
-
                 if (pVW != 22 && pVW != 23 && pVW != 24 && pVW != 26 && pVW != 27 && pVW != 60)
                     return 1;
-
-                SCMFormatted(playerid, COLOR_WHITE, "DEBUG: pVW ok %s", "");
 
                 if(listitem==0)//Telefonbuch
                 {
@@ -38423,7 +38589,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem == 19)
                 {
-                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nShisha-Bar\nSan News Agency", "Auswählen", "Abbrechen");
+                    ShowPlayerDialog(playerid, WORTE, DIALOG_STYLE_LIST, "Weitere Orte", "Los Santos Flughafen\nSan Fierro Flughafen\nLas Venturas Flughafen\nClubVilla in Los Santos\nClubVilla in Las Venturas\nNeulingsspawn\nLas Venturas Öl-Raffinerie\nLas Venturas Waren-Vergabe\nSan Fierro Hafen\nAngelplatz\nWerbeagentur in Los Santos\nWerbeagentur in Las Venturas\nPaintball Arena\nSportstudio\nShisha-Bar\nSan News Agency\nHall of Fame", "Auswählen", "Abbrechen");
                 }
                 if (listitem == 20) return cmd_suchatm(playerid);
             }
@@ -38844,7 +39010,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 }
                 if(listitem==6)
                 {
-                    SetPlayerCheckpointEx(playerid, 900.4517,-1664.7787,13.5469,2.0, CP_NAVI49);
+                    SetPlayerCheckpointEx(playerid, TRIADS_INTERIOR_ENTER_COORDS, 2.0, CP_NAVI49);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Triaden Base in Los Santos wurde auf der Karte Rot markiert.");
                 }
                 if(listitem==7)
@@ -39157,6 +39323,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                     SetPlayerCheckpointEx(playerid, SANABASE_DONATION_POINT, 2.0, CP_NAVI76);
                     SendClientMessage(playerid, COLOR_SAMP, "GPS: Die San News Agency wurde auf der Karte Rot markiert.");
+                }
+                if(listitem==16)
+                {
+                    SetPlayerCheckpointEx(playerid, HALL_OF_FAME_COORDS, 2.0, CP_NAVI76);
+                    SendClientMessage(playerid, COLOR_SAMP, "GPS: Die Hall of Fame wurde auf der Karte Rot markiert.");
                 }
             }
             if(!response)return 1;
@@ -41502,7 +41673,8 @@ stock SaveAccount(playerid)
                 `cb_ETH` = %f, \
                 `cb_LTC` = %f, \
                 `cb_AAPL` = %f, \
-                `cb_SSUNF` = %f",
+                `cb_SSUNF` = %f, \
+                `KillsStreetwar` = %d",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -41534,7 +41706,8 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pETH],
                     Spieler[playerid][pLTC],
                     Spieler[playerid][pAAPL],
-                    Spieler[playerid][pSSUNF]);
+                    Spieler[playerid][pSSUNF],
+                    Spieler[playerid][pKillsStreetwar]);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -41713,7 +41886,8 @@ new const PlayerColumns[][] = {
     {"cb_ETH"},
     {"cb_LTC"},
     {"cb_AAPL"},
-    {"cb_SSUNF"}
+    {"cb_SSUNF"},
+    {"KillsStreetwar"}
 };
 
 new
@@ -42198,13 +42372,12 @@ public PayDay()
             check += Spieler[playerid][pPayCheck];
             new finalcheck, earnedExp;
             finalcheck=check+fahrlehrerboni[playerid];
-            //jedensamstag
-            if (!strcmp(GetWeekDay(), "Samstag", true)) {
-                if(Spieler[playerid][pDonateRank] >= 1) earnedExp = 3;
+            
+            if (GetWeekDayNumber() < 2) { // Saturday & Sunday
+                if (Spieler[playerid][pDonateRank] >= 1) earnedExp = 3;
                 else earnedExp = 2;
-            }
-            else {
-                if(Spieler[playerid][pDonateRank] >= 1) earnedExp = 2;
+            } else {
+                if (Spieler[playerid][pDonateRank] >= 1) earnedExp = 2;
                 else earnedExp = 1;
             }
 
@@ -45135,6 +45308,10 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
     damagesperre[playerid] = 5;
     g_aiLastDamagedByPlayer[playerid] = issuerid;
     if( issuerid != INVALID_PLAYER_ID) {
+        SetPVarString(playerid, "DAMAGE.NAME", GetName(issuerid));
+        SetPVarFloat(playerid, "DAMAGE.AMOUNT", amount);
+        SetPVarInt(playerid, "DAMAGE.WEAPON", weaponid);
+        SetPVarInt(playerid, "DAMAGE.TIME", gettime());
         PlayerPlaySound(issuerid,17802,0.0,0.0,0.0);
         if( 1 <= Spieler[playerid][pTot] <= 2 ) {
             SetPlayerHealth(playerid,100.0); // Kann man es irgendwie verhindern, dass man kein Leben verliert wenn man Tod ist?
@@ -45174,6 +45351,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
     if (Spieler[playerid][pAdmin] < 3 || !Spieler[playerid][pAdminDienst]) return 1;
+    SetPVarInt(playerid, "ADMIN.MAP.TELEPORTING", 1);
     SetPlayerPosFindZ(playerid, fX, fY, fZ);
     return 1;
 }
@@ -47037,9 +47215,9 @@ CMD:gefangene(playerid, params[])
 
             if (Spieler[i][pJailed] == 1 && (Spieler[playerid][pJob] == 6 || bPlayerExecutive) || Spieler[i][pJailed] == 2 && (bPlayerExecutive || Spieler[playerid][pFraktion] == 17) || Spieler[i][pJailed] == 4 && bPlayerExecutive)
             {
-                new giveplayer[MAX_PLAYER_NAME], string[128], jailTypeString[128];
+                new giveplayer[MAX_PLAYER_NAME], string[144], jailTypeString[128];
                 GetPlayerName(i, giveplayer, sizeof(giveplayer));
-                jailTypeString = Spieler[i][pJailed] == 1 ? "Knast" : (Spieler[i][pJailed] == 4 ? "Gangjail" : "Alcatraz");
+                format(jailTypeString, sizeof(jailTypeString), "%s", Spieler[i][pJailed] == 1 ? "Knast" : (Spieler[i][pJailed] == 4 ? "Gangjail" : "Alcatraz"));
                 new playerJailTimeout = JAIL_TIMEOUT - (gettime() - GetPVarInt(i, "JAIL.TIMESTAMP"));
                 if (playerJailTimeout > 0) {
                     if (playerJailTimeout == 1) format(jailTypeString, sizeof(jailTypeString), "%s - eine Sekunde Wartezeit", jailTypeString);
@@ -47961,8 +48139,8 @@ stock GetVehicleFraktion(vehicleid) {
 		}
 	}
 	else if( aiVehicles[vehicleid] == VEH_BIKERCARS ) {
-		for( i  = 0; i < sizeof(vehicle_nineDemonsBase) ; i++) {
-			if( vehicle_nineDemonsBase[i] == vehicleid ) {
+		for( i  = 0; i < sizeof(vehicle_nineDemonsExterior) ; i++) {
+			if( vehicle_nineDemonsExterior[i] == vehicleid ) {
 			    return 15;
 			}
 		}
@@ -48224,6 +48402,7 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
         SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Las Venturas Zentralbank.");
         return 1;
     }
+    if (g_aSettings[ASETTING_ROBBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Überfallsperre aktiviert.");
     if( g_iBankraubStatus == Bankraub_Wartezeit ) {
         SendClientMessage(playerid, COLOR_RED, "Die Bank kann zur Zeit nicht ausgeraubt werden.");
         return 1;
@@ -48236,7 +48415,7 @@ COMMAND:tresoraufbrechen(playerid,params[]) {
         SendClientMessage(playerid, COLOR_RED, "Du kannst die Bank nicht ohne eine Waffe ausrauben.");
         return 1;
     }
-    if( GetOnlineExekutive(playerid) < 0) {
+    if( GetOnlineExekutive(playerid) < 4) {
         SendClientMessage(playerid, COLOR_RED, "Es sind nicht genug Spieler der Exekutive online.");
 	    return 1;
 	}
@@ -48322,6 +48501,7 @@ COMMAND:kammerausrauben(playerid, params[]) {
     if (!(IsPlayerInRangeOfPoint(playerid, 2.0, EVIDENCEROOM_INTERIOR_HEIST_P) && GetPlayerInterior(playerid) == 18 && GetPlayerVirtualWorld(playerid) == VW_EVIDENCEROOMINTERIOR)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Asservatenkammer.");
     if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "Du bist noch zu frisch auf dem Server.");
     if (IsPlayerExecutive(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du bist Teil der Exekutive.");
+    if (g_aSettings[ASETTING_ROBBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Überfallsperre aktiviert.");
     if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_ONGOING) return SendClientMessage(playerid, COLOR_RED, "Es läuft bereits ein Überfall auf die Asservatenkammer.");
     if (g_evidenceRoomHeist[EVIDENCEROOM_HEIST_STATUS] == EVIDENCEROOM_STATUS_COOLDOWN) return SendClientMessage(playerid, COLOR_RED, "Die Asservatenkammer kann noch nicht wieder überfallen werden.");
     if (GetOnlineExekutive(playerid) < 4) return SendClientMessage(playerid, COLOR_RED, "Es sind nicht genug Spieler der Exekutive online.");
@@ -48361,6 +48541,7 @@ COMMAND:kammerausrauben(playerid, params[]) {
 
 COMMAND:bankausrauben(playerid,params[]) {
     if ((!IsPlayerInRangeOfPoint(playerid,2.0,2144.1409,1641.5856,993.5761) ) || (GetPlayerInterior(playerid) != 1)) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Los Santos Zentralbank.");
+    if (g_aSettings[ASETTING_ROBBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Überfallsperre aktiviert.");
     if (g_iBankraubStatus == Bankraub_Wartezeit) return SendClientMessage(playerid, COLOR_RED, "Die Bank kann zur Zeit nicht ausgeraubt werden.");
     if (g_iBankraubStatus == Bankraub_Aktiv) return SendClientMessage(playerid, COLOR_RED, "Ein Bankraub läuft gerade. ");
     if (!HasPlayerWeapon(playerid)) return SendClientMessage(playerid, COLOR_RED, "Du kannst die Bank nicht ohne eine Waffe ausrauben.");
@@ -48889,10 +49070,11 @@ new const g_FraktionsSkins[][e_FraktionsSkins] = {
 	{FBI_INTERIOR_FSKIN_POINT,	2, { 286 , 285 , 309 , 166, 165,59 , 21 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{-2033.1216, -117.4597,  1035.1719,	8, { 194 , 240 , 151 , 59 , 7 , 101 , 12 , 5 , 24 , 29 , 192 , 56 } },
 	{HITMANBASE_FSKIN_POINT,	14, { 2 , 29 , 229 ,  171 , 23 , 19 , 35 , 22 , 11, 8 } },
-	{NINEDEMONSBASE_SPAWN_POINT,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
+	{NINEDEMONS_INTERIOR_SPAWN_POINT,		15, { 247, 248, 100, 261, 291, 146, 158, 162, 199, 200, 201 } },
 	{2284.1960,	2423.7107,	3.4766,		16, { 282 , 285 , 303 , 305 , 304 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
 	{307.6244,  -131.3671,  999.6083,	18, { 287 , 303 , 305 , 304 , 44 , 59 , 60 , 72 ,188 , 229 , 93 , 233 , 226 } },
-	{326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } }
+	{326.9853,  306.7588,  999.1484,	22, { 288 , 34 , 29 , 19 , 21 , 59, 211 , 7 , 5 , 24 , 60 } },
+    {SANABASE_FSKIN_POINT,    4, { 57, 187, 147, 192, 40, 91, 2, 66, 1, 15, 23, 29, 72 } } // SANA
 };
 
 
@@ -50892,7 +51074,7 @@ enum e_FraktionsSafeBoxLocation {
 }
 
 new g_FraktionsSafeBoxLocation[][e_FraktionsSafeBoxLocation] = {
-    {15, NINEDEMONSBASE_SAFEBOX_POINT},
+    {15, NINEDEMONS_INTERIOR_SAFEBOX_POINT},
     {17, 938.9147,1729.0337,8.8516},
     {6, GSF_INTERIOR_SAFEBOX_POINT},
     {7,333.7054,1121.7754,1083.8903},
@@ -52470,153 +52652,101 @@ stock IsBizOpened(biz) {
     return 0;
 }
 
-COMMAND:geben(playerid,params[]) {
-    new
-        methode,
-        giveid,
-        inventar[24],
-        anzahl;
-    if(sscanf(params,"us[24]d",giveid,inventar,anzahl)) {
-        SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
-        return SendClientMessage(playerid,COLOR_ORANGE,"Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
+COMMAND:geben(playerid, params[]) {
+    new methode, giveid, inventar[24], anzahl;
+    if (sscanf(params, "us[24]d", giveid, inventar, anzahl)) {
+        SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
+        return SendClientMessage(playerid, COLOR_ORANGE, "Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
     }
-    if( !IsPlayerConnected(giveid)) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Der Spieler konnte nicht gefunden werden.");
-    }
-    if( Spieler[giveid][pAdminDienst] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist gerade im Admindienst.");
-    }
-    if( Spieler[playerid][pLevel] < 3 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst Level 3 sein um einem anderen Spieler etwas zu geben!");
-    }
-    if( Spieler[giveid][pLevel] < 3 ) {
-        return SendClientMessage(giveid, COLOR_RED, "Der Spieler muss mindestens Level 3 sein!");
-    }
-    if( playerid == giveid ) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Das ergibt keinen Sinn. Wirklich nicht.");
-    }
-    if( anzahl <= 0 ) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Gebe eine gültige Anzahl ein.");
-    }
-    new
-        Float:x,
-        Float:y,
-        Float:z;
-    GetPlayerPos(playerid,x,y,z);
-    if( !IsPlayerInRangeOfPoint(giveid,5.0,x,y,z)) {
-        return SendClientMessage(playerid,COLOR_LIGHTRED2,"Der Spieler ist nicht in deiner Nähe.");
-    }
-    if(!strcmp(inventar,"Waffen", true) || !strcmp(inventar,"Waffe", true)) {
+
+    if (!IsPlayerConnected(giveid)) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Der Spieler konnte nicht gefunden werden.");
+    if (Spieler[giveid][pAdminDienst]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist gerade im Admindienst.");
+    if (Spieler[playerid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "Du musst Level 3 sein um einem anderen Spieler etwas zu geben!");
+    if (Spieler[giveid][pLevel] < 3) return SendClientMessage(giveid, COLOR_RED, "Der Spieler muss mindestens Level 3 sein!");
+    if (playerid == giveid) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Das ergibt keinen Sinn. Wirklich nicht.");
+    if (anzahl <= 0) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Gebe eine gültige Anzahl ein.");
+
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+    if (!IsPlayerInRangeOfPoint(giveid, 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Der Spieler ist nicht in deiner Nähe.");
+
+    if (!strcmp(inventar, "Waffen", true) || !strcmp(inventar, "Waffe", true)) {
         inventar = "Waffen";
         methode = 1;
     }
-    else if(!strcmp(inventar,"Kekse", true)) {
+    else if (!strcmp(inventar, "Kekse", true))
         methode = 2;
-    }
-    else if(!strcmp(inventar,"Zigaretten", true)) {
+    else if (!strcmp(inventar, "Zigaretten", true))
         methode = 3;
-    }
-    else if(!strcmp(inventar,"Tankkanister", true) || !strcmp(inventar,"Kanister", true)) {
-        inventar = "einen Kanister";
+    else if (!strcmp(inventar, "Tankkanister", true) || !strcmp(inventar, "Kanister", true)) {
+        inventar = "Kanister";
         methode = 4;
     }
-    else if(!strcmp(inventar,"Fische", true)) {
+    else if (!strcmp(inventar, "Fische", true))
         methode = 5;
-    }
-    new
-        String[128];
-    if( methode == 0 ) {
-        SendClientMessage(playerid,COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
-        return SendClientMessage(playerid,COLOR_ORANGE,"Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
-    }
-    else if( methode == 1 ) {
-        //Waffen
-        new
-            weapon,
-            muni;
-        weapon = GetPlayerWeapon(playerid);
-        if( weapon ) {
-            if(HasWeaponBlock(giveid)) {
-                SendClientMessage(playerid,COLOR_ORANGE,"Der Spieler hat noch eine Waffensperre.");
-                return SendWeaponBlockInfo(giveid);
-            }
-            new
-                armed_weapon,
-                slot;
-            slot = GetWeaponSlot(weapon);
-            GetPlayerWeaponData( playerid,slot,weapon,muni);
-            if( muni < anzahl ) {
-                return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du besitzt nicht genug Munition von dieser Waffe.");
-            }
-            armed_weapon = GetPlayerWeapon(giveid);
-            GivePlayerWeapon( giveid, weapon , anzahl );
-            if( armed_weapon ) {
-                SetPlayerArmedWeapon(playerid,armed_weapon);
-            }
-            if( GetPlayerState(giveid) == PLAYER_STATE_PASSENGER ) {
-                if( weapon == 29 || weapon == 31 ) {
-                    SetPlayerArmedWeapon(playerid,weapon);
+
+    new String[128];
+    switch (methode) {
+        case 0: {
+            SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Geben [SPIELERNAME/ID] [INVENTAR] [ANZAHL]");
+            return SendClientMessage(playerid, COLOR_ORANGE, "Inventar = Waffen, Kekse, Zigaretten, Tankkanister oder Fische");
+        }
+        case 1: {
+            new weapon = GetPlayerWeapon(playerid), muni;
+            if (weapon) {
+                if (HasWeaponBlock(giveid)) {
+                    SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler hat noch eine Waffensperre.");
+                    return SendWeaponBlockInfo(giveid);
                 }
-                else {
-                    SetPlayerArmedWeapon(playerid,0);
-                }
+
+                new slot = GetWeaponSlot(weapon);
+                GetPlayerWeaponData(playerid, slot, weapon, muni);
+                if (muni < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du besitzt nicht genug Munition von dieser Waffe.");
+                GivePlayerWeapon(giveid, weapon, anzahl);
+                GivePlayerWeapon(playerid, weapon, -anzahl);
+                if (IsPlayerInAnyVehicle(giveid)) SetPlayerArmedWeapon(giveid, weapon == 29 || weapon == 31 ? weapon : 0);
+                else SetPlayerArmedWeapon(giveid, weapon);
             }
-            GivePlayerWeapon( playerid, weapon , -anzahl );
+            else 
+                return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du musst die Waffe auf der Hand tragen.");
         }
-        else {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du musst die Waffe auf der Hand tragen.");
+        case 2: {
+            if (Spieler[playerid][pKekse] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Kekse.");
+            if (anzahl > 100) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du darfst maximal 100 Kekse vergeben.");
+            Spieler[playerid][pKekse] -= anzahl;
+            Spieler[giveid][pKekse] += anzahl;
+        }
+        case 3: {
+            if (Spieler[playerid][pZigaretten] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Zigaretten.");
+            Spieler[playerid][pZigaretten] -= anzahl;
+            Spieler[giveid][pZigaretten] += anzahl;
+        }
+        case 4: {
+            if (Spieler[playerid][pKanister] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Tankkanister.");
+            if (Spieler[giveid][pKanister] + anzahl > MAX_CANISTER) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Der Spieler kann maximal " #MAX_CANISTER " Kanister haben.");
+            Spieler[playerid][pKanister] -= anzahl;
+            Spieler[giveid][pKanister] += anzahl;
+        }
+        case 5: {
+            if (Spieler[playerid][pFische] < anzahl) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du hast nicht genug Fische.");
+            Spieler[playerid][pFische] -= anzahl;
+            Spieler[giveid][pFische] += anzahl;
         }
     }
-    else if( methode == 2 ) {
-        //Kekse
-        // Spieler[playerid][pKekse]
-        if( Spieler[playerid][pKekse] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast nicht genug Kekse.");
-        }
-        if (anzahl > 100) return SendClientMessage(playerid, COLOR_LIGHTRED2, "Du darfst maximal 100 Kekse vergeben.");
-        Spieler[playerid][pKekse] -= anzahl;
-        Spieler[giveid][pKekse] += anzahl;
-    }
-    else if( methode == 3 ) {
-        //Zigaretten
-        // pZigaretten
-        if( Spieler[playerid][pZigaretten] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast nicht genug Zigaretten.");
-        }
-        Spieler[playerid][pZigaretten] -= anzahl;
-        Spieler[giveid][pZigaretten] += anzahl;
-    }
-    else if( methode == 4 ) {
-        //Tankkanister
-        // pKanister
-        anzahl = 1;
-        if( Spieler[playerid][pFische] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast keinen Tankkanister.");
-        }
-        Spieler[playerid][pFische] -= anzahl;
-        Spieler[giveid][pFische] += anzahl;
-    }
-    else if( methode == 5 ) {
-        //Fische
-        // pFische
-        if( Spieler[playerid][pFische] < anzahl ) {
-            return SendClientMessage(playerid,COLOR_LIGHTRED2,"Du hast nicht genug Fische.");
-        }
-        Spieler[playerid][pFische] -= anzahl;
-        Spieler[giveid][pFische] += anzahl;
-    }
+
     format(String, sizeof(String), "* %s gab %s %s.", GetName(playerid), GetName(giveid), inventar);
-    SendRoundMessage(x,y,z, COLOR_PURPLE, String);
+    SendRoundMessage(x, y, z, COLOR_PURPLE, String);
+
     // ApplyAnimation(playerid,"BAR","Barserve_give",4.1,0,1,1,1,1);
     // ApplyAnimation(giveid,"BAR","Barserve_give",4.1,0,1,1,1,1);
 
-    format(String,sizeof(String),"Du hast %s %d %s gegeben.",GetName(giveid),anzahl,inventar);
-    SendClientMessage(playerid,COLOR_GREEN,String);
+    format(String, sizeof(String), "Du hast %s %d %s gegeben.", GetName(giveid), anzahl, inventar);
+    SendClientMessage(playerid, COLOR_GREEN, String);
 
-    format(String,sizeof(String),"Du hast von %s %d %s erhalten!",GetName(playerid),anzahl,inventar);
-    SendClientMessage(giveid,COLOR_GREEN,String);
+    format(String,sizeof(String), "Du hast von %s %d %s erhalten!", GetName(playerid), anzahl, inventar);
+    SendClientMessage(giveid, COLOR_GREEN, String);
 
-    format(String,sizeof(String),"%s hat %s %d %s gegeben",GetName(playerid),GetName(giveid),anzahl,inventar);
+    format(String,sizeof(String), "%s hat %s %d %s gegeben", GetName(playerid), GetName(giveid), anzahl, inventar);
     GebeLog(String);
     return 1;
 }
@@ -53256,6 +53386,7 @@ COMMAND:skill(playerid, params[]) {
     SendClientMessage(giveid, COLOR_YELLOW, String);
     format(String, sizeof(String), "Waffenteile-Skill: {FFFFFF}%d/%d (Bis zu %d Päckchen)", GetPlayerWaffenteileSkillLevel(playerid), sizeof(g_WaffenteileSkills), GetPlayerWaffenteileSkillValue(playerid));
     SendClientMessage(giveid, COLOR_YELLOW, String);
+    SCMFormatted(giveid, COLOR_YELLOW, "Streetwar-Kills: {FFFFFF}%d Kills", Spieler[giveid][pKillsStreetwar]);
     return 1;
 }
 
@@ -54027,7 +54158,7 @@ COMMAND:suche(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Der Spieler wurde nicht gefunden");
 
     new String[128];
-    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "An" : "Aus");
+    format(String, sizeof(String), "Spielername: %s, ID: %d, FPS: %d, Anti-Cheat: %s, Paketverlust: %.2f Prozent", GetName(giveid), giveid, pFPS[giveid], CAC_GetStatus(giveid) ? "An" : "Aus", NetStats_PacketLossPercent(giveid));
     SendClientMessage(playerid, COLOR_BLUE, String);
 
     return 1;
@@ -54862,7 +54993,8 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
                 SendClientMessage(extraid,COLOR_GREEN,String);
                 format(String,sizeof(String),"Du erhältst: \"%s\"",g_Gutschein[gutschein]);
                 SendClientMessage(extraid,COLOR_GREEN,String);
-
+                format(String, sizeof(String), "[GUTSCHEIN] {FFFFFF}%s hat den Gutscheincode '%s' (%s) eingelöst!", GetName(extraid), inputtext, g_Gutschein[gutschein]);
+                SendClientMessageToAll(COLOR_GREEN, String);
                 format(String,sizeof(String),"UPDATE `gutschein` SET `expired` = 1 WHERE `id` = %d",id);
                 mysql_pquery( String , THREAD_GUTSCHEINCODE , extraid, gSQL,MySQLThreadOwner);
                 switch(gutschein) {
@@ -55857,6 +55989,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pLTC] = cache_get_row_float(0, 147, connectionHandle);
             Spieler[playerid][pAAPL] = cache_get_row_float(0, 148, connectionHandle);
             Spieler[playerid][pSSUNF] = cache_get_row_float(0, 149, connectionHandle); // Coinbase end
+            Spieler[playerid][pKillsStreetwar] = cache_get_row_int(0, 150, connectionHandle);
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
@@ -56340,7 +56473,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][tSpawnView] = SetTimerEx("SetPlayerView",5003,false,"dd",playerid,1); // Muss,sonst klappt Spectate nicht
         }
         else {
-            if(g_bRegSperre) {
+            if(g_aSettings[ASETTING_REGBLOCK][ASETTING_TOGGLE]) {
                 static String[] = "\
                                 Wir begrüßen dich ganz Herzlich auf Live your Dream!\n\
                                 Aus aktuellem Anlass ist eine Registrierung gerade nicht möglich.\n\
@@ -58455,10 +58588,12 @@ COMMAND:promille(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     }
     if( !(( Spieler[playerid][pFraktion] == 1) || ( Spieler[playerid][pFraktion] == 2) || ( Spieler[playerid][pFraktion] == 5) || ( Spieler[playerid][pFraktion] == 16 ) || ( Spieler[playerid][pFraktion] == 22 )) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist kein Polizist");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist kein Exekutivbeamter.");
     }
-    new
-        String[128];
+
+    if (!IsPlayerInRangeOfPlayer(playerid, giveid, 5.0)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
+
+    new String[128];
     if( pDrogenEinfluss[playerid] == 1 ) {
         format(String,sizeof(String),"Spieler %s steht unter Drogen Einfluss.",GetName(giveid));
         SendClientMessage(playerid,COLOR_YELLOW,String);
@@ -58471,10 +58606,8 @@ COMMAND:promille(playerid,params[]) {
         format(String,sizeof(String),"Spieler %s steht nicht unter Alkohol- noch Drogeneinfluss",GetName(giveid));
         SendClientMessage(playerid,COLOR_YELLOW,String);
     }
-    new
-        Float:x,
-        Float:y,
-        Float:z;
+
+    new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid,x,y,z);
     format(String,sizeof(String),"Beamter %s prüft den Alkohol-Drogeneinfluss von %s",GetName(playerid),GetName(giveid));
     SendRoundMessage(x,y,z, COLOR_PURPLE, String);
@@ -59604,17 +59737,12 @@ public NPC(var)
 }
 #endif
 */
-COMMAND:aaaaa(playerid, params[]) {
-    SCMFormatted(playerid, COLOR_WHITE, "DEBUG: /AAAAA called: %i, %s", playerid, params);
-
-    return 1;
-}
 
 COMMAND:allesspeichern(playerid,params[]) {
     #pragma unused params
     if(Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     SendClientMessage(playerid,COLOR_YELLOW,"Daten werden zum Speichern gesendet ...");
-    SaveAll();
+    CallLocalFunction("SaveAll", ""); // y_hooks
     mysql_pquery("SELECT NOW()",THREAD_SAVEALL,playerid,gSQL,MySQLThreadOwner);
     return 1;
 }
@@ -61084,12 +61212,12 @@ COMMAND:bank(playerid,params[]) {
 }
 
 COMMAND:koffer(playerid,params[]) {
-    if(Spieler[playerid][pKoffer] == false ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
-    }
-    if( PlayerIsPaintballing[playerid] == 1 ) {
-            return SendClientMessage(playerid, COLOR_RED, "In der Paintball-Arena kannst du keinen Koffer rausholen!");
-    }
+    if (Spieler[playerid][pKoffer] == false ) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
+    if (Spieler[playerid][pTotTime] || Spieler[playerid][bKidnapped] || Cuffed[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer jetzt gerade nicht benutzen.");
+    if (Spieler[playerid][pJailed] || Spieler[playerid][pPrisonRun] || PlayerIsPaintballing[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer hier nicht benutzen.");
+
     if( IsPlayerAttachedObjectSlotUsed(playerid,ATTACHED_INDEX_KOFFER) ) {
         RemovePlayerAttachedObject(playerid,ATTACHED_INDEX_KOFFER);
     }
@@ -61099,14 +61227,14 @@ COMMAND:koffer(playerid,params[]) {
     return 1;
 }
 
-COMMAND:kofferauf(playerid,params[]) {
-    if(Spieler[playerid][pKoffer] == false ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
-    }
-    if( !IsPlayerAttachedObjectSlotUsed(playerid,ATTACHED_INDEX_KOFFER) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer nur öffnen, wenn du ihn gerade trägst.");
-    }
-    ShowKoffer(playerid,playerid);
+COMMAND:kofferauf(playerid, params[]) {
+    if (Spieler[playerid][pKoffer] == false) return SendClientMessage(playerid, COLOR_RED, "Du besitzt keinen Koffer.");
+    if (!IsPlayerAttachedObjectSlotUsed(playerid, ATTACHED_INDEX_KOFFER)) return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer nur öffnen, wenn du ihn gerade trägst.");
+    if (Spieler[playerid][pTotTime] || Spieler[playerid][bKidnapped] || Cuffed[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer jetzt gerade nicht benutzen.");
+    if (Spieler[playerid][pJailed] || Spieler[playerid][pPrisonRun] || PlayerIsPaintballing[playerid]) 
+        return SendClientMessage(playerid, COLOR_RED, "Du kannst den Koffer hier nicht benutzen.");
+    ShowKoffer(playerid, playerid);
     return 1;
 }
 
@@ -63766,7 +63894,9 @@ COMMAND:tankstelleausrauben(playerid,params[]) {
     }
     // Nachricht an Polizei
     if( Tanke[t][tAutomatischerNotruf] == true ) {
-        format(String,sizeof(String),"[ZENTRALE] Die Tankstelle von %s wird vom %s überfallen!",Tanke[t][tBesitzer],GetName(playerid) );
+        new ort[28];
+        GetPoint2DZone(Tanke[t][EnterX], Tanke[t][EnterY], ort, 28);
+        format(String,sizeof(String),"[ZENTRALE] Die Tankstelle von %s wird von %s überfallen! Ort: %s.",Tanke[t][tBesitzer],GetName(playerid), ort);
         SendExecutiveMessage(COLOR_RED,String);
     }
 
@@ -63811,7 +63941,7 @@ stock Tankstelle_Ueberfall_Stop(playerid,tankstelle,reason) {
                 SendClientMessage(besitzerid,COLOR_YELLOW,String);
             }
         }
-        SendClientMessage(playerid,COLOR_RED,"Tankstellen-Überfall abgebrochen. Du hast dich zu weit entfernt");
+        SendClientMessage(playerid,COLOR_RED,"Tankstellen-Überfall abgebrochen. Du hast dich zu weit entfernt.");
     }
     else if( reason == 1 ) { // Erfolgreich
         new besitzerid;
@@ -64855,7 +64985,7 @@ public GangZone_Pulse() {
             // Gangwar Zeit agelaufen
             if( g_GangZone[i][GZ_iStatus] == 1 ) {
                 new
-                    betrag = 40000,
+                    betrag = 50000,
                     score,
                     winner,
                     loser;
@@ -65009,7 +65139,7 @@ public GangZone_Pulse() {
                 format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF}Die %s hat den Gangfight mit %dP. gewonnen!",GetFactionNameOfFaction(winner),score);
                 SendFraktionMessage(winner,COLOR_YELLOW,String);
                 SendFraktionMessage(loser,COLOR_YELLOW,String);
-                format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$50.000 und das Gebiet geht an die %s",GetFactionNameOfFaction(winner));
+                format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$50.000 + 25.000 Waffenteile und das Gebiet gehen an die %s.",GetFactionNameOfFaction(winner));
                 SendFraktionMessage(winner,COLOR_YELLOW,String);
                 SendFraktionMessage(loser,COLOR_YELLOW,String);
                 format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben den Gangfight mit %dP. gegen die %s gewonnen!",GetFactionNameOfFaction(winner),score,GetFactionNameOfFaction(loser));
@@ -65088,21 +65218,23 @@ stock GetPlayerGangZone(playerid) {
 }
 
 #define GANG_FIGHT_PLAYERS 3
+#define GANGFIGHT_DURATION 50 // Minutes
 
 COMMAND:gangfight(playerid,params[]) {
     new
         frak = Spieler[playerid][pFraktion];
     if( !IsAFightFaction(frak) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion.");
     }
     /*if( Spieler[playerid][pAdmin] < 3 ) {
         return SendClientMessage(playerid, COLOR_RED, "Ein Wettkampf kann nur durch ein Moderatoren gestartet werden!");
     }*/
+    if (g_aSettings[ASETTING_GANGFIGHTBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Gangfightsperre aktiviert.");
     if( Spieler[playerid][pRank] < 4 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 in deiner Gang sein");
+        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 in deiner Gang sein.");
     }
     if( IsGangInFight(frak) ){
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich zur Zeit in einem Gangfight");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich zur Zeit in einem Gangfight.");
     }
 
     if( GetFactionOnlinePlayers( frak ) < GANG_FIGHT_PLAYERS ) {
@@ -65113,33 +65245,37 @@ COMMAND:gangfight(playerid,params[]) {
         index;
     index = GetPlayerGangZone(playerid);
     if( index == -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Ganggebiet");
+        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Ganggebiet.");
     }
     if( !IsPlayerInRangeOfPoint( playerid , 6.0 , g_GangZone[index][GZ_fIconX],g_GangZone[index][GZ_fIconY],g_GangZone[index][GZ_fIconZ] )) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der nähe des Icons");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Icons.");
     }
     if( frak == g_GangZone[index][GZ_iOwner] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet gehört bereits deiner Gang");
+        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet gehört bereits deiner Gang.");
     }
-    if( gettime() < g_GangZone[index][GZ_iTimeout] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet hat noch eine Zeitsperre, bevor das Gebiet angegriffen werden kann");
+    if (gettime() < g_GangZone[index][GZ_iTimeout]) {
+        new diff = g_GangZone[index][GZ_iTimeout] - gettime();
+        new h = diff / 3600 % 24;
+        new m = diff / 60 % 60;
+
+        return SCMFormatted(playerid, COLOR_RED, "Dieses Ganggebiet hat noch %i Stunden %i Minuten lang eine Zeitsperre.", h, m);
     }
     if( IsGangInFight(g_GangZone[index][GZ_iOwner]) ){
-        return SendClientMessage(playerid, COLOR_RED, "Die Gang ist bereits noch in einem Gangfight involviert");
+        return SendClientMessage(playerid, COLOR_RED, "Die Gang ist bereits in einem Gangfight involviert.");
     }
     if( GetFactionOnlinePlayers( g_GangZone[index][GZ_iOwner] ) < GANG_FIGHT_PLAYERS ) {
-        return SendClientMessage(playerid, COLOR_RED, "Von der Besitzerfraktion sind nicht genug Spieler Online");
+        return SendClientMessage(playerid, COLOR_RED, "Von der Besitzerfraktion sind nicht genug Spieler online.");
     }
     if(gangfightpause[frak]<gettime())
     {
         if(gangfightpause[g_GangZone[index][GZ_iOwner]]<gettime())
         {
             new String[128];
-            format(String,sizeof(String),"Gangfight gegen %s wird gestartet! Der Kampf dauert 40 Minuten.",GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
+            format(String,sizeof(String),"Gangfight gegen %s wird gestartet! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
             SendFraktionMessage( frak, COLOR_RED, String );
-            format(String,sizeof(String),"%s startet einen Gangfight. Der Kampf dauert 40 Minuten.",GetFactionNameOfFaction(frak));
+            format(String,sizeof(String),"%s startet einen Gangfight. Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(frak));
             SendFraktionMessage( g_GangZone[index][GZ_iOwner], COLOR_RED, String );
-            format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s startet ein Gangfight gegen die %s! Der Kampf dauert 40 Minuten.",GetFactionNameOfFaction(frak),GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
+            format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s startet ein Gangfight gegen die %s! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(frak),GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
             SendClientMessageToAll(COLOR_YELLOW, String);
             SendClientMessageToAll(COLOR_YELLOW, "Mit /Gangfightwette kannst du für den Sieg einer Gangfraktion wetten!");
             for(new i;i<4;i++)
@@ -65156,7 +65292,7 @@ COMMAND:gangfight(playerid,params[]) {
             g_GangZone[index][GZ_iAttacker] = frak;
             g_GangZone[index][GZ_iAttackerScore] = 0;
             g_GangZone[index][GZ_iOwnerScore] = 0;
-            g_GangZone[index][GZ_iGangWarEnd] = gettime() + 40*60;
+            g_GangZone[index][GZ_iGangWarEnd] = gettime() + GANGFIGHT_DURATION * 60;
             //g_GangZone[index][GZ_iGangWarEnd] = gettime() + 2*60;
             g_GangZone[index][GZ_iFlagge] = -1;
             g_GangZone[index][GZ_iFlaggePlayer] = INVALID_PLAYER_ID;
@@ -65177,13 +65313,13 @@ COMMAND:gangfight(playerid,params[]) {
         {
             new string[200];
             format(string,200,
-            "Die %s kann nicht angegriffen werden, da sie vor 10 Minuten zuletzt ein Gangfight hatten",
+            "Die %s kann nicht angegriffen werden, da sie vor 10 Minuten zuletzt einen Gangfight hatten.",
             GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
         }
     }
     else
     {
-        SendClientMessage(playerid,COLOR_RED,"Ihr habt eine 10 minütige Gangfightpause, da ihr vorhin schon ein Gangfight hattet.");
+        SendClientMessage(playerid,COLOR_RED,"Ihr habt eine 10 minütige Gangfightpause, da ihr vorhin schon einen Gangfight hattet.");
     }
     return 1;
 }
@@ -65193,19 +65329,19 @@ COMMAND:gangfightstop(playerid,params[]) {
     new
         frak = Spieler[playerid][pFraktion];
     if( !IsAFightFaction(frak) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion");
+        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang-Fraktion.");
     }
     if( Spieler[playerid][pRank] < 4 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 sein in deiner Gang");
+        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 sein in deiner Gang.");
     }
     if( !IsGangInFight(frak) ){
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight.");
     }
     new
         index;
     index = GetGangFight( Spieler[playerid][pFraktion] );
     if( index == -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich in keinem Gangfight.");
     }
     new
         betrag = 40000,
@@ -65342,10 +65478,10 @@ COMMAND:gangfightstop(playerid,params[]) {
         format(gangfightwettenp[b],32,"");
     }
 
-    format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF} Die %s hat den Gangfight aufgegeben. Die %s haben gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
+    format(String,sizeof(String),"->GANGFIGHT<- {FFFFFF} Die %s haben den Gangfight aufgegeben. Die %s haben gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
     SendFraktionMessage( winner , COLOR_YELLOW, String );
     SendFraktionMessage( loser , COLOR_YELLOW, String );
-    format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$40.000 + 25.000 Waffenteile und das Gebiet geht an die %s. ",GetFactionNameOfFaction(winner));
+    format(String,sizeof(String),"->GANGFIGHT<- {00FF00}$50.000 + 25.000 Waffenteile und das Gebiet geht an die %s. ",GetFactionNameOfFaction(winner));
     SendFraktionMessage( winner , COLOR_YELLOW, String );
     SendFraktionMessage( loser , COLOR_YELLOW, String );
     format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s haben den Gangfight aufgegeben. Die %s haben somit gewonnen!",GetFactionNameOfFaction(loser),GetFactionNameOfFaction(winner));
@@ -66978,16 +67114,16 @@ COMMAND:ticketkaufen(playerid,params[]) {
 
 stock GetFreeWasserScooterSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_WasserScooterSlot) ; i++) {
         if( g_WasserScooterSlot[i][ASS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_WasserScooterSlot) ; i++) {
             if( g_WasserScooterSlot[i][ASS_bUsed] == false ) {
                 if( c == r) {
@@ -67073,16 +67209,16 @@ stock RemovePlayerWasserScooter(playerid) {
 
 stock GetFreeAutoScooterSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_AutoScooterSlot) ; i++) {
         if( g_AutoScooterSlot[i][ASS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_AutoScooterSlot) ; i++) {
             if( g_AutoScooterSlot[i][ASS_bUsed] == false ) {
                 if( c == r) {
@@ -67168,16 +67304,16 @@ stock RemovePlayerAutoscooter(playerid) {
 
 stock GetFreeKartbahnSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_KartbahnSlot) ; i++) {
         if( g_KartbahnSlot[i][ASS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_KartbahnSlot) ; i++) {
             if( g_KartbahnSlot[i][ASS_bUsed] == false ) {
                 if( c == r) {
@@ -67332,17 +67468,17 @@ public Pulse_Fallturm() {
 
 stock GetFreeFallTurmSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < 4 ; i++) {
         if( g_FallTurm[FT_abUsed][i] == false ) {
-            free++;
+            freecount++;
         }
     }
     //printf("GetFreeFallTurmSlot() free %d",free);
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < 4 ; i++) {
             if( g_FallTurm[FT_abUsed][i] == false ) {
                 if( c == r) {
@@ -67601,16 +67737,16 @@ public Pulse_Schiff() {
 
 stock GetFreeBreakdancerSlot() {
     new
-        free;
+        freecount;
     for(new i = 0 ; i < sizeof(g_BreakDancerSlot) ; i++) {
         if( g_BreakDancerSlot[i][BDS_bUsed] == false ) {
-            free++;
+            freecount++;
         }
     }
-    if( free ) {
+    if( freecount ) {
         new
             c,
-            r = random(free);
+            r = random(freecount);
         for(new i = 0 ; i < sizeof(g_BreakDancerSlot) ; i++) {
             if( g_BreakDancerSlot[i][BDS_bUsed] == false ) {
                 if( c == r) {
@@ -69800,18 +69936,14 @@ COMMAND:hausverstaatlichen(playerid,params[]) {
     return 1;
 }
 
-COMMAND:regsperre(playerid,params[]) {
+CMD:asettings(playerid) {
     if (Spieler[playerid][pAdmin] < 1) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-
-    new String[128];
-    if(g_bRegSperre) {
-        format(String,sizeof(String),"%s %s hat die Reg-Sperre deaktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-    }
-    else {
-        format(String,sizeof(String),"%s %s hat die Reg-Sperre aktiviert.", GetPlayerAdminRang(playerid), GetName(playerid));
-    }
-    SendAdminMessage(COLOR_RED, String);
-    g_bRegSperre = !g_bRegSperre;
+    new dialogText[256];
+    dialogText = "Einstellung\tStatus\n";
+    for (new i = 0; i < sizeof(g_aSettings); i++)
+        format(dialogText, sizeof(dialogText), "%s%s\t%s\n", dialogText, g_aSettings[i][ASETTING_NAME], g_aSettings[i][ASETTING_TOGGLE] ? "{00FF00}AN" : "{FF0000}AUS");
+    
+    ShowPlayerDialog(playerid, DIALOG_ASETTINGS, DIALOG_STYLE_TABLIST_HEADERS, "{FF9900}Admineinstellungen", dialogText, "Ändern", "Schließen");
     return 1;
 }
 
@@ -70136,38 +70268,40 @@ public meslockrelease(playerid)
 {
     meslock[playerid]=0;
 }
-GetWeekDay(day=0, month=0, year=0)
-{
-  if (!day)
-    getdate(year, month, day);
 
-  new
-    weekday_str[20],
-    j,
-    e
-  ;
+stock GetWeekDay(day = 0, month = 0, year = 0) {
+    new weekday_str[20];
 
-  if (month <= 2)
-  {
-    month += 12;
-    --year;
-  }
+    switch (GetWeekDayNumber(day, month, year))
+    {
+        case 0: weekday_str = "Samstag";
+        case 1: weekday_str = "Sonntag";
+        case 2: weekday_str = "Montag";
+        case 3: weekday_str = "Dienstag";
+        case 4: weekday_str = "Mittwoch";
+        case 5: weekday_str = "Donnerstag";
+        case 6: weekday_str = "Freitag";
+    }
 
-  j = year % 100;
-  e = year / 100;
+    return weekday_str;
+}
 
-  switch ((day + (month+1)*26/10 + j + j/4 + e/4 - 2*e) % 7)
-  {
-    case 0: weekday_str = "Samstag";
-    case 1: weekday_str = "Sonntag";
-    case 2: weekday_str = "Montag";
-    case 3: weekday_str = "Dienstag";
-    case 4: weekday_str = "Mittwoch";
-    case 5: weekday_str = "Donnerstag";
-    case 6: weekday_str = "Freitag";
-  }
+GetWeekDayNumber(day = 0, month = 0, year = 0) {
+    if (!day)
+        getdate(year, month, day);
 
-  return weekday_str;
+    new j, e;
+
+    if (month <= 2)
+    {
+        month += 12;
+        --year;
+    }
+
+    j = year % 100;
+    e = year / 100;
+
+    return ((day + (month + 1) * 26 / 10 + j + j / 4 + e / 4 - 2 * e) % 7);
 }
 
 forward fraklabeltimer();

@@ -9,19 +9,29 @@ static Float:STREAMDISTANCE = 150.0;
 static Float:DRAWDISTANCE   = 130.0;
 
 // La Cosa Nostra base points
-#define LCN_INTERIOR_ENTER_COORDS        1083.0183, -1226.5609, 15.8203
+#define LCN_INTERIOR_ENTER_COORDS        2196.3020, 1677.2394, 12.3672
 #define LCN_INTERIOR_EXIT_COORDS         -794.9042, 490.1946, 1376.1953
-#define LCN_INTERIOR_ENTER_FACING        270.0
-#define LCN_INTERIOR_EXIT_FACING         0.0
+#define LCN_INTERIOR_ENTER_FACING        0.0
+#define LCN_INTERIOR_EXIT_FACING         270.0
 
 // Map variables
-new object_lcnExterior[33];
+new object_lcnExterior[24];
 new pickup_lcnExterior[1];
 new text3D_lcnExterior[1];
 new vehicle_lcnExterior[17];
 
 hook OnPlayerConnect(playerid) {
-    // ---
+    // Remove RenderWare objects
+    RemoveBuildingForPlayer(playerid, 3509, 2093.7700, 1652.1300, 9.7031, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2105.0000, 1652.0300, 9.7031, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2114.2900, 1710.8699, 9.7343, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2114.2500, 1653.3900, 9.7031, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2126.4899, 1657.0899, 9.7031, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2126.5600, 1706.2299, 9.7343, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2135.6101, 1700.9799, 9.7343, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2135.8999, 1662.5799, 9.7031, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2143.8601, 1691.5500, 9.7343, 0.10); // VgsN_nitree_r01
+    RemoveBuildingForPlayer(playerid, 3509, 2143.8601, 1671.1500, 9.7031, 0.10); // VgsN_nitree_r01
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
@@ -48,56 +58,67 @@ hook OnGameModeInit() {
     text3D_lcnExterior[0] = _:CreateDynamic3DTextLabel("Territorium der\n" COLOR_HEX_BLACK "LCN", COLOR_YELLOW, LCN_INTERIOR_ENTER_COORDS, 25.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_LCNEXTERIOR_INTERIOR);
     
     // Vehicles
-    vehicle_lcnExterior[0] = AddStaticVehicleEx(411, 1093.5651, -1225.2573, 15.5453, 179.6005, 75, 75, -1); // LCNInfernus1
-	vehicle_lcnExterior[1] = AddStaticVehicleEx(411, 1097.7482, -1225.2493, 15.5518, 178.5437, 75, 75, -1); // LCNInfernus2
-	vehicle_lcnExterior[2] = AddStaticVehicleEx(541, 1101.8160, -1224.9753, 15.4502, 180.5087, 75, 75, -1); // LCNBullet
-	vehicle_lcnExterior[3] = AddStaticVehicleEx(451, 1105.7065, -1225.3906, 15.5357, 180.2435, 75, 75, -1); // LCNTurismo
-	vehicle_lcnExterior[4] = AddStaticVehicleEx(415, 1110.0857, -1225.2145, 15.5810, 177.0805, 75, 75, -1); // LCNCHeetah
-	vehicle_lcnExterior[5] = AddStaticVehicleEx(560, 1085.1581, -1233.8633, 15.5268, 270.0235, 75, 75, -1); // LCNSultan1
-	vehicle_lcnExterior[6] = AddStaticVehicleEx(560, 1085.1577, -1238.1287, 15.5303, 270.0153, 75, 75, -1); // LCNSultan2
-	vehicle_lcnExterior[7] = AddStaticVehicleEx(545, 1085.0730, -1242.3641, 15.6388, 269.5403, 75, 75, -1); // LCNHustler
-	vehicle_lcnExterior[8] = AddStaticVehicleEx(409, 1086.2042, -1249.8860, 15.6279, 312.7260, 75, 75, -1); // LCNStretch
-	vehicle_lcnExterior[9] = AddStaticVehicleEx(579, 1094.4312, -1250.1664, 15.7551, 0.0048, 75, 75, -1); // LCNHuntley
-	vehicle_lcnExterior[10] = AddStaticVehicleEx(579, 1098.6012, -1250.1639, 15.7501, 359.7653, 75, 75, -1); // LCNHuntle2
-	vehicle_lcnExterior[11] = AddStaticVehicleEx(580, 1103.6172, -1250.3773, 15.6175, 359.0536, 75, 75, -1); // LCNStafford1
-	vehicle_lcnExterior[12] = AddStaticVehicleEx(580, 1109.1460, -1250.3403, 15.6179, 358.9023, 75, 75, -1); // LCNStafford2
-	vehicle_lcnExterior[13] = AddStaticVehicleEx(522, 1120.5494, -1248.6732, 15.6190, 87.9424, 75, 75, -1); // LCNNRG1
-	vehicle_lcnExterior[14] = AddStaticVehicleEx(522, 1120.5509, -1247.0037, 15.6137, 86.6539, 75, 75, -1); // LCNNRG2
-	vehicle_lcnExterior[15] = AddStaticVehicleEx(468, 1120.6541, -1245.2303, 15.7300, 86.4783, 75, 75, -1); // LCNSanchez1
-	vehicle_lcnExterior[16] = AddStaticVehicleEx(468, 1120.6490, -1243.2313, 15.7329, 89.4255, 75, 75, -1); // LCNSanchez2
+    vehicle_lcnExterior[0] = AddStaticVehicleEx(560, 2172.4726, 1696.1943, 10.5227, 152.3939, 75, 75, -1);
+	vehicle_lcnExterior[1] = AddStaticVehicleEx(411, 2175.8723, 1663.4050, 10.5473, 16.2105, 75, 75, -1);
+	vehicle_lcnExterior[2] = AddStaticVehicleEx(560, 2175.8774, 1694.3946, 10.5253, 152.7749, 75, 75, -1);
+	vehicle_lcnExterior[3] = AddStaticVehicleEx(541, 2168.2744, 1660.9134, 10.4432, 16.2940, 75, 75, -1);
+	vehicle_lcnExterior[4] = AddStaticVehicleEx(411, 2172.0400, 1662.3006, 10.5473, 16.2322, 75, 75, -1);
+	vehicle_lcnExterior[5] = AddStaticVehicleEx(451, 2164.4650, 1660.0128, 10.5334, 15.3069, 75, 75, -1);
+	vehicle_lcnExterior[6] = AddStaticVehicleEx(480, 2160.7143, 1658.8255, 10.5930, 16.3178, 75, 75, -1);
+	vehicle_lcnExterior[7] = AddStaticVehicleEx(522, 2185.9091, 1662.6257, 10.6646, 16.0790, 75, 75, -1);
+	vehicle_lcnExterior[8] = AddStaticVehicleEx(522, 2184.0534, 1662.0483, 10.6548, 17.0366, 75, 75, -1);
+	vehicle_lcnExterior[9] = AddStaticVehicleEx(468, 2186.1394, 1693.3574, 10.7665, 152.7044, 75, 75, -1);
+	vehicle_lcnExterior[10] = AddStaticVehicleEx(468, 2184.3032, 1694.1590, 10.7531, 153.2075, 75, 75, -1);
+	vehicle_lcnExterior[11] = AddStaticVehicleEx(409, 2152.0078, 1680.2058, 10.6062, 178.3874, 75, 75, -1);
+	vehicle_lcnExterior[12] = AddStaticVehicleEx(579, 2168.7446, 1697.9535, 10.7521, 152.3968, 75, 75, -1);
+	vehicle_lcnExterior[13] = AddStaticVehicleEx(579, 2164.8994, 1699.8979, 10.9135, 152.4835, 75, 75, -1);
+	vehicle_lcnExterior[14] = AddStaticVehicleEx(580, 2157.4245, 1704.1496, 10.5461, 153.8112, 75, 75, -1);
+	vehicle_lcnExterior[15] = AddStaticVehicleEx(580, 2161.2934, 1702.1673, 10.6773, 152.2848, 75, 75, -1);
+	vehicle_lcnExterior[16] = AddStaticVehicleEx(545, 2156.9604, 1657.6397, 10.6310, 16.7611, 75, 75, -1);
 
     // Objects
-    object_lcnExterior[0] = CreateDynamicObject(19121, 1083.127685, -1249.881225, 15.387152, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[1] = CreateDynamicObject(19121, 1085.797607, -1252.912353, 15.387152, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[2] = CreateDynamicObject(19121, 1082.892333, -1228.695556, 15.230315, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[3] = CreateDynamicObject(19121, 1082.892333, -1224.614990, 15.230315, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[4] = CreateDynamicObject(18652, 1081.926269, -1225.705200, 18.400325, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[5] = CreateDynamicObject(18652, 1081.926269, -1227.575439, 18.400325, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[6] = CreateDynamicObject(1361, 1083.116455, -1223.411621, 15.550312, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[7] = CreateDynamicObject(1361, 1083.116455, -1229.651977, 15.550312, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[8] = CreateDynamicObject(3017, 1090.112426, -1222.863403, 16.190317, 0.000000, 0.000000, -2.100007, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[9] = CreateDynamicObject(3017, 1090.083862, -1223.643066, 16.190317, 0.000000, 0.000000, -2.100007, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[10] = CreateDynamicObject(3928, 1088.369384, -1198.745727, 17.074693, 0.000000, 0.000000, -90.800018, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[11] = CreateDynamicObject(3928, 1109.577636, -1199.041381, 17.074693, 0.000000, 0.000000, -90.800018, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[12] = CreateDynamicObject(19121, 1121.587402, -1250.174316, 15.522873, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[13] = CreateDynamicObject(19121, 1121.587402, -1241.753417, 15.522873, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[14] = CreateDynamicObject(3461, 1083.020141, -1229.005371, 16.370313, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[15] = CreateDynamicObject(3461, 1083.020141, -1224.214721, 16.370313, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[16] = CreateDynamicObject(3014, 1114.425415, -1252.388427, 15.035564, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[17] = CreateDynamicObject(1271, 1113.868896, -1253.041381, 15.170311, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[18] = CreateDynamicObject(1271, 1114.568847, -1253.041381, 15.170311, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[19] = CreateDynamicObject(3014, 1113.885131, -1252.388427, 15.035564, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[20] = CreateDynamicObject(1575, 1114.579467, -1253.153808, 15.470314, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[21] = CreateDynamicObject(1575, 1113.769042, -1253.153808, 15.470314, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[22] = CreateDynamicObject(1575, 1090.121704, -1223.365844, 16.030315, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[23] = CreateDynamicObject(356, 1085.467773, -1222.699829, 16.150312, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[24] = CreateDynamicObject(356, 1086.817504, -1222.699829, 16.150312, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[25] = CreateDynamicObject(3383, 1083.725830, -1185.659423, 17.312070, 0.000000, 0.000000, -92.399993, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[26] = CreateDynamicObject(970, 1140.890991, -1203.531616, 18.699331, 0.000000, 0.000000, -86.500015, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[27] = CreateDynamicObject(19121, 1141.023803, -1205.828613, 18.606925, 0.000000, 0.000000, 0.000000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[28] = CreateDynamicObject(2319, 1083.142089, -1219.064208, 16.804687, 0.000000, 0.000000, -91.400009, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[29] = CreateDynamicObject(355, 1082.777099, -1219.574340, 17.422010, 0.000000, 0.000000, 92.999992, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[30] = CreateDynamicObject(355, 1082.750854, -1220.625610, 17.422010, 0.000000, 0.000000, 93.899978, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[31] = CreateDynamicObject(351, 1083.192993, -1219.404418, 17.321632, 85.499984, -5.799996, -84.199981, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
-    object_lcnExterior[32] = CreateDynamicObject(19173, 1082.729125, -1219.829589, 19.062023, 0.000000, 0.000000, 88.000030, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE);
+    object_lcnExterior[0] = CreateDynamicObject(19172, 2086.5449, 1654.8537, 12.0551, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
+    SetDynamicObjectMaterialText(object_lcnExterior[0], 0, "LCN", OBJECT_MATERIAL_SIZE_256x128, "Arial", 145, 1, 0xFFFFFFFF, 0x00000000, 0);
+    SetDynamicObjectMaterial(object_lcnExterior[0], 1, 19297, "matlights", "invisible", 0x00000000);
+    object_lcnExterior[1] = CreateDynamicObject(3509, 2103.5742, 1726.9681, 9.8148, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //VgsN_nitree_r01
+    object_lcnExterior[2] = CreateDynamicObject(3934, 2124.7893, 1665.4836, 9.8203, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //helipad01
+    object_lcnExterior[3] = CreateDynamicObject(18981, 2099.0476, 1543.4321, 1.9378, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[3], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[4] = CreateDynamicObject(3934, 2104.5256, 1665.4836, 9.8203, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //helipad01
+    object_lcnExterior[5] = CreateDynamicObject(18981, 2087.0466, 1555.4521, 1.9385, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[5], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[6] = CreateDynamicObject(3934, 2104.5256, 1701.4033, 9.8203, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //helipad01
+    object_lcnExterior[7] = CreateDynamicObject(3934, 2124.7893, 1701.4033, 9.8203, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //helipad01
+    object_lcnExterior[8] = CreateDynamicObject(18981, 2087.0466, 1580.4520, 1.9385, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[8], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[9] = CreateDynamicObject(18981, 2087.0466, 1605.4499, 1.9385, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[9], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[10] = CreateDynamicObject(18981, 2087.0476, 1626.7292, 1.9377, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[10], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[11] = CreateDynamicObject(18981, 2087.0476, 1664.2674, 1.9377, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[11], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[12] = CreateDynamicObject(18981, 2087.0476, 1689.2668, 1.9377, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[12], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[13] = CreateDynamicObject(18766, 2090.8742, 1710.5843, 11.9335, 0.0000, 0.0000, 62.9000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete10mx1mx5m
+    SetDynamicObjectMaterial(object_lcnExterior[13], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[14] = CreateDynamicObject(18766, 2087.0561, 1698.2441, 11.9335, 0.0000, 0.0000, 90.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete10mx1mx5m
+    SetDynamicObjectMaterial(object_lcnExterior[14], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[15] = CreateDynamicObject(18766, 2089.2775, 1707.4654, 11.9343, 0.0000, 0.0000, 62.9000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete10mx1mx5m
+    SetDynamicObjectMaterial(object_lcnExterior[15], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[16] = CreateDynamicObject(18981, 2104.9020, 1737.9670, 1.9377, 0.0000, 0.0000, -26.6000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[16], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[17] = CreateDynamicObject(18981, 2112.0214, 1752.1883, 1.9364, 0.0000, 0.0000, -26.6000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //Concrete1mx25mx25m
+    SetDynamicObjectMaterial(object_lcnExterior[17], 0, 12855, "cunte_cop", "ws_bigstones", 0xFFFFFFFF);
+    object_lcnExterior[18] = CreateDynamicObject(19172, 2086.5449, 1636.3835, 12.0551, 0.0000, 0.0000, -90.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
+    SetDynamicObjectMaterialText(object_lcnExterior[18], 0, "LCN", OBJECT_MATERIAL_SIZE_256x128, "Arial", 145, 1, 0xFFFFFFFF, 0x00000000, 0);
+    SetDynamicObjectMaterial(object_lcnExterior[18], 1, 19297, "matlights", "invisible", 0x00000000);
+    object_lcnExterior[19] = CreateDynamicObject(19172, 2091.3649, 1712.6739, 12.0551, 0.0000, 0.0000, 242.8999, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
+    SetDynamicObjectMaterialText(object_lcnExterior[19], 0, "LCN", OBJECT_MATERIAL_SIZE_256x128, "Arial", 145, 1, 0xFFFFFFFF, 0x00000000, 0);
+    SetDynamicObjectMaterial(object_lcnExterior[19], 1, 19297, "matlights", "invisible", 0x00000000);
+    object_lcnExterior[20] = CreateDynamicObject(19172, 2100.0244, 1729.3298, 12.0551, 0.0000, 0.0000, -116.5998, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //SAMPPicture1
+    SetDynamicObjectMaterialText(object_lcnExterior[20], 0, "LCN", OBJECT_MATERIAL_SIZE_256x128, "Arial", 145, 1, 0xFFFFFFFF, 0x00000000, 0);
+    SetDynamicObjectMaterial(object_lcnExterior[20], 1, 19297, "matlights", "invisible", 0x00000000);
+    object_lcnExterior[21] = CreateDynamicObject(3509, 2110.3769, 1739.5672, 9.8148, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //VgsN_nitree_r01
+    object_lcnExterior[22] = CreateDynamicObject(3509, 2115.3886, 1750.1975, 9.8148, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //VgsN_nitree_r01
+    object_lcnExterior[23] = CreateDynamicObject(3509, 2119.7985, 1759.7591, 9.8148, 0.0000, 0.0000, 0.0000, VW_MAIN, MAPS_LCNEXTERIOR_INTERIOR, .streamdistance = STREAMDISTANCE, .drawdistance = DRAWDISTANCE); //VgsN_nitree_r01
 }
