@@ -28,9 +28,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if (newkeys & KEY_SECONDARY_ATTACK) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONS_INTERIOR_ENTER_COORDS)) { // Nine Demons Entrance
             if (Spieler[playerid][pFraktion] != 15) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Mitglied der Nine Demons.");
-            SetPlayerInterior(playerid, MAPS_NINEDEMONSINTERIOR_INTERIOR);
-            SetPlayerVirtualWorld(playerid, VW_NINEDEMONSINTERIOR);
-            SetPlayerPos(playerid, NINEDEMONS_INTERIOR_EXIT_COORDS);
+            SetPlayerPosEx(playerid, NINEDEMONS_INTERIOR_EXIT_COORDS, MAPS_NINEDEMONSINTERIOR_INTERIOR, VW_NINEDEMONSINTERIOR);
             SetPlayerFacingAngle(playerid, NINEDEMONS_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
             return 1;
