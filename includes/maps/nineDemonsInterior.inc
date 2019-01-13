@@ -65,7 +65,9 @@ hook OnDynamicObjectMoved(objectid) {
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if (newkeys & KEY_SECONDARY_ATTACK) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, NINEDEMONS_INTERIOR_EXIT_COORDS)) { // Ninedemons Exit
-            SetPlayerPosEx(playerid, NINEDEMONS_INTERIOR_ENTER_COORDS, MAPS_NINEDEMONSEXTERIOR_INTERIOR, VW_MAIN);
+            SetPlayerInterior(playerid, MAPS_NINEDEMONSEXTERIOR_INTERIOR);
+            SetPlayerVirtualWorld(playerid, VW_MAIN);
+            SetPlayerPos(playerid, NINEDEMONS_INTERIOR_ENTER_COORDS);
             SetPlayerFacingAngle(playerid, NINEDEMONS_INTERIOR_EXIT_FACING);
             SetCameraBehindPlayer(playerid);
             return 1;

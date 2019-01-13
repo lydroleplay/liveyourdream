@@ -26,6 +26,7 @@ hook OnGameModeInit() {
 }
 
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
+    new bIndex = GetBizIndexByID(COINBASE_BIZ_INDEX);
     switch (dialogid) {
         case DIALOG_COINBASE_CHOOSE: {
             if (response && -1 < listitem < (MAX_CRYPTOS + MAX_STOCKS)) {
@@ -79,7 +80,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
                     if (GetPVarFloat(playerid, "COINBASE.AMOUNT") > Float:Spieler[playerid][pBTC + SpielerDaten:assetIndex])
                         return ShowPlayerDialog(playerid, DIALOG_COINBASE_AMOUNT, DIALOG_STYLE_INPUT, "Betrag", "{FF0000}Du kannst nicht mehr an Anlagen verkaufen, als du besitzt.\n\n{FFFFFF}Gebe den Betrag an, wie viel du kaufen / verkaufen möchtest:", "Fertig", "Abbrechen");
 
-                    if (Biz[COINBASE_BIZ_INDEX][bKasse] < (sum - fee))
+                    if (Biz[bIndex][bKasse] < (sum - fee))
                         return ShowPlayerDialog(playerid, DIALOG_COINBASE_AMOUNT, DIALOG_STYLE_INPUT, "Betrag", "{FF0000}Das Geschäft hat nicht genügend Geld, um dir deine Anlage in dieser Höhe abzukaufen.\n\n{FFFFFF}Gebe den Betrag an, wie viel du kaufen / verkaufen möchtest:", "Fertig", "Abbrechen");
 
                     format(dialogString, sizeof(dialogString), "Folgende Offerte können wir dir anbieten.\n\n{FF0000}Betrag\t\t\t\t-%.5f %s\n{FF0000}Münzkassette Gebühr\t\t-$%s\n\nTOTAL\t\t\t\t-%.5f %s + -$%s\n\n{00FF00}Du erhälst\t\t\t+$%s", GetPVarFloat(playerid, "COINBASE.AMOUNT"), getAssetNameByIndex(GetPVarInt(playerid, "COINBASE.ASSET")), AddDelimiters(fee), GetPVarFloat(playerid, "COINBASE.AMOUNT"), getAssetNameByIndex(GetPVarInt(playerid, "COINBASE.ASSET")), AddDelimiters(fee), AddDelimiters(sum - fee));
@@ -107,7 +108,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
                         return SendClientMessage(playerid, COLOR_DARKRED, "Der Preis der Anlage hat sich seit der Offerte zu stark geändert, beantrage eine neue Offerte an.");
                     
                     GivePlayerCash(playerid, -total);
-                    Biz[COINBASE_BIZ_INDEX][bKasse] += total;
+                    Biz[bIndex][bKasse] += total;
                     Spieler[playerid][pBTC + SpielerDaten:assetIndex] = _:floatadd(Float:Spieler[playerid][pBTC + SpielerDaten:assetIndex], amount);
 
                     LogCoinbase(GetName(playerid), GetPVarInt(playerid, "COINBASE.BUYORSELL"), amount, getAssetNameByIndex(assetIndex), total);
@@ -115,7 +116,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
                     return SCMFormatted(playerid, COLOR_DARKGREEN, "Du hast dir für $%s, %.5f %s gekauft.", AddDelimiters(total), amount, getAssetNameByIndex(assetIndex));
                 } else {
                     // Sell
-                    if (Biz[COINBASE_BIZ_INDEX][bKasse] < GetPVarInt(playerid, "COINBASE.TOTAL"))
+                    if (Biz[bIndex][bKasse] < GetPVarInt(playerid, "COINBASE.TOTAL"))
                         return SendClientMessage(playerid, COLOR_DARKRED, "Das Geschäft hat nicht genügend Geld, um dir deine Anlage in dieser Höhe abzukaufen.");
 
                     if (amount > Float:Spieler[playerid][pBTC + SpielerDaten:assetIndex])
@@ -125,7 +126,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
                         return SendClientMessage(playerid, COLOR_DARKRED, "Der Preis der Anlage hat sich seit der Offerte zu stark geändert, beantrage eine neue Offerte an.");
                     
                     GivePlayerCash(playerid, total);
-                    Biz[COINBASE_BIZ_INDEX][bKasse] -= total;
+                    Biz[bIndex][bKasse] -= total;
                     Spieler[playerid][pBTC + SpielerDaten:assetIndex] = _:floatsub(Float:Spieler[playerid][pBTC + SpielerDaten:assetIndex], amount);
 
                     LogCoinbase(GetName(playerid), GetPVarInt(playerid, "COINBASE.BUYORSELL"), amount, getAssetNameByIndex(assetIndex), total);

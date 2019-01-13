@@ -51,10 +51,11 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if (newkeys & KEY_SECONDARY_ATTACK) {
+        new bizIndex = GetBizIndexByID(11);
 		if (IsPlayerInRangeOfPoint(playerid, 2.0, SHISHABAR_ENTER_COORDS) && GetPlayerVirtualWorld(playerid) == VW_MAIN) { // Lounge Enter
-			if (Spieler[playerid][pCash] < Biz[11][bEintritt]) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld, um die Shisha-Bar zu betreten.");
-			GivePlayerCash(playerid, Biz[11][bEintritt] * -1);
-			Biz[11][bKasse] += Biz[11][bEintritt];
+			if (Spieler[playerid][pCash] < Biz[bizIndex][bEintritt]) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld, um die Shisha-Bar zu betreten.");
+			GivePlayerCash(playerid, Biz[bizIndex][bEintritt] * -1);
+			Biz[bizIndex][bKasse] += Biz[bizIndex][bEintritt];
             SetPlayerPos(playerid, SHISHABAR_EXIT_COORDS);
             SetPlayerFacingAngle(playerid, SHISHABAR_ENTER_FACING);
 			SetCameraBehindPlayer(playerid);
@@ -68,7 +69,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         } else if (IsPlayerInRangeOfPoint(playerid, 2.0, SHISHABAR_VIP_ENTER)) { // VIP Enter
 			if (Spieler[playerid][pCash] < 25000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei, um den VIP-Bereich zu betreten.");
 			GivePlayerCash(playerid, -25000);
-			Biz[11][bKasse] += 25000;
+			Biz[bizIndex][bKasse] += 25000;
 			SetPlayerPos(playerid, SHISHABAR_VIP_EXIT);
             SetPlayerFacingAngle(playerid, SHISHABAR_VIP_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
@@ -79,7 +80,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		} else if (IsPlayerInRangeOfPoint(playerid, 2.0, SHISHABAR_O18_ENTER)) { // O18 Enter
 			if (Spieler[playerid][pCash] < 40000) return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genug Geld dabei, um den Ü18-Bereich zu betreten.");
 			GivePlayerCash(playerid, -40000);
-			Biz[11][bKasse] += 40000;
+			Biz[bizIndex][bKasse] += 40000;
 			SetPlayerPos(playerid, SHISHABAR_O18_EXIT);
             SetPlayerFacingAngle(playerid, SHISHABAR_O18_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
