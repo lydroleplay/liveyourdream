@@ -68816,10 +68816,10 @@ COMMAND:ergeben(playerid,params[]) {
 COMMAND:wpreis(playerid,params[]) {
     if (Spieler[playerid][pFraktion] != 17) return SendClientMessage(playerid, COLOR_RED, "Dieser Befehl ist nur für Wheelmen möglich.");
 
-    new giveid, modus = 0, pruefung[16];
+    new giveid, modus;
 
-    if (sscanf(params,"us[38]",giveid,pruefung) || isnull(pruefung)) {
-        SendClientMessage(playerid, COLOR_RED, "* Benutze:"COLOR_HEX_GREENA" /Wpreis [ID] [Nummer]");
+    if (sscanf(params, "ud", giveid, modus) || (modus < 1 || modus > 6)) {
+        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /Wpreis [ID] [Nummer]");
         SendClientMessage(playerid, COLOR_RED, "1. Chauffeur - 8.000$");
         SendClientMessage(playerid, COLOR_RED, "2. Personenschutz - 25.000$");
         SendClientMessage(playerid, COLOR_RED, "3. Befreiung von Entführung - 20.000$");
@@ -68829,21 +68829,6 @@ COMMAND:wpreis(playerid,params[]) {
 
         return 1;
     }
-
-    if (!strcmp(pruefung, "1", true))
-        modus = 1;
-    else if (!strcmp(pruefung, "2", true))
-        modus = 2;
-    else if (!strcmp(pruefung, "3", true))
-        modus = 3;
-    else if (!strcmp(pruefung, "4", true))
-        modus = 4;
-    else if (!strcmp(pruefung, "5", true))
-        modus = 5;
-    else if (!strcmp(pruefung, "6", true))
-        modus = 6;
-    else if (!modus)
-        cmd_wpreis(playerid, "");
 
     if (!IsPlayerConnected(giveid)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if (giveid == playerid) return SendClientMessage(playerid, COLOR_RED, "Diese Aktion ist nicht möglich.");
