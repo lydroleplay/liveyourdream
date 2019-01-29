@@ -399,6 +399,17 @@ new savewetterid;
 // Global vars
 new JAIL_TIMEOUT = 120;
 
+
+enum {
+    WEEKDAY_SATURDAY,
+    WEEKDAY_SUNDAY,
+    WEEKDAY_MONDAY,
+    WEEKDAY_TUESDAY,
+    WEEKDAY_WEDNESDAY,
+    WEEKDAY_THURSDAY,
+    WEEKDAY_FRIDAY
+}
+
 enum {
     WEAPON_DEPOT_OWN,
     WEAPON_DEPOT_OTHER,
@@ -7470,6 +7481,19 @@ stock GetCustomObjectIDIndex(objectID) {
 	return MAX_CUSTOM_OBJECTS;
 }
 
+CMD:setkasse(playerid, params[]) {
+    if (Spieler[playerid][pAdmin] < 3) return SendClientMessage(playerid, COLOR_RED, "Dafür hast du keine Berechtigung.");
+    new money;
+    if (sscanf(params, "i", money) || money < 1 || money > 1500000000)
+        return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Setkasse [$1-$1.500.000.000]");
+
+    Kasse[Staat] = money;
+    new message[144];
+    format(message, sizeof(message), "%s %s hat die Staatskasse auf $%s gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), AddDelimiters(money));
+    SendAdminMessage(COLOR_YELLOW, message);
+    return 1;
+}
+
 CMD:destroyallobjects(playerid) {
 	if (Spieler[playerid][pAdmin] < 6) return 1;
 
@@ -10777,7 +10801,7 @@ public OnPlayerDeath(playerid, killerid, reason)
                 Spieler[playerid][pTotTime] = 0;
                 new pGehalt = (500*Spieler[playerid][pWanteds]);
                 new pStaatGehalt = (3000*Spieler[playerid][pWanteds]);
-                Kasse[Staat] += pStaatGehalt;
+                TreasuryDeposit(pStaatGehalt);
                 Spieler[killerid][pPayCheck] += pGehalt;
                 format(string, sizeof(string), "~r~Fluchttaeter ~g~getoetet~n~+$%s", AddDelimiters(pGehalt));
                 GameTextForPlayer(killerid, string, 3000, 6);
@@ -11547,7 +11571,7 @@ CMD:lotto(playerid, params[])
     SendClientMessage(playerid, COLOR_GREEN, string);
     Spieler[playerid][pLottoNr] = entry;
     Lottostand += 5000;
-    Kasse[Staat] += 500;
+    TreasuryDeposit(500);
     GivePlayerCash(playerid, -1200);
     return 1;
 }
@@ -15253,7 +15277,7 @@ CMD:arrest(playerid, params[])
 				SendClientMessage(pID, COLOR_GREEN, "* Da du dich gestellt hast, wirst du je Wanted 150 Sekunden anstatt 220 Sekunden je Wanted sitzen!");
 				new gehalt = (200*Spieler[pID][pWanteds]);
 				new pStaatGehalt = (200*Spieler[pID][pWanteds]);
-				Kasse[Staat] += pStaatGehalt;
+				TreasuryDeposit(pStaatGehalt);
 				format(string, sizeof(string), "~w~Gesuchten ~g~eingesperrt~n~+$%s", AddDelimiters( gehalt));
 				GameTextForPlayer(playerid, string, 3000, 6);
 				Spieler[playerid][pPayCheck] += gehalt;
@@ -19210,7 +19234,7 @@ CMD:staatskasse(playerid, params[])
     }
     if(entry < 1 || entry > 50000000)return SendClientMessage(playerid, COLOR_RED, "Der Wert sollte zwischen $1 und $50.000.000 liegen.");
     if(GetPlayerMoney(playerid) < entry)return SendClientMessage(playerid, COLOR_RED, "Soviel Geld hast du nicht!");
-    Kasse[Staat] += entry;
+    TreasuryDeposit(entry);
     GivePlayerCash(playerid, -entry);
     format(string, sizeof(string), "* Du hast dem Staat $%s gespendet. Vielen Danke für die Spende!", AddDelimiters(entry));
     SendClientMessage(playerid, COLOR_GREEN, string);
@@ -19513,7 +19537,7 @@ CMD:kasse(playerid, params[])
             GivePlayerCash(playerid, -entry);
             format(string, sizeof(string), "* Du hast $%s in die %s Kasse eingezahlt.", AddDelimiters(entry), factionNames[Spieler[playerid][pFraktion]]);
             SendClientMessage(playerid, COLOR_WHITE, string);
-            Kasse[Staat] += entry;
+            TreasuryDeposit(entry);
         }
         else if(Spieler[playerid][pFraktion] == 10)
         {
@@ -21590,7 +21614,7 @@ CMD:accept(playerid, params[])
                 format(string, sizeof(string), "Davon erhält die Staatskasse $%d aufgrund deines Anwalt-Skills.", staatsanteil);
                 SendClientMessage(AnwaltID[playerid], COLOR_LIGHTBLUE, string);
                 GivePlayerCash(playerid,-staatsanteil);
-                Kasse[Staat] += staatsanteil;
+                TreasuryDeposit(staatsanteil);
                 AnwaltPreis[playerid] = 0;
                 AnwaltID[playerid] = 999;
                 Spieler[playerid][pJailTime] = 0;
@@ -31223,7 +31247,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 format(String,sizeof(String),"Du hast einen Zollpass der bis zum %02d/%02d/%d gültig ist für $15.000 gekauft!",d,m,year );
                 SendClientMessage(playerid,COLOR_GREEN,String);
                 GivePlayerCash(playerid, -15000);
-                Kasse[Staat] += 15000;
+                TreasuryDeposit(15000);
             }
         }
         case DIALOG_RECHTSSCHUTZ: {
@@ -31244,7 +31268,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 format(String,sizeof(String),"Du hast eine Rechtsschutzversicherung abgeschlossen! Gültig bis zum %02d/%02d/%d. Preis: $87.000",d,m,year );
                 SendClientMessage(playerid,COLOR_GREEN,String);
                 GivePlayerCash(playerid, -87000);
-                Kasse[Staat] += 87000;
+                TreasuryDeposit(87000);
             }
         }
         case DIALOG_STARTBAUER: {
@@ -32440,7 +32464,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					Das Kennzeichen wird automatisch an dein Fahrzeug angebracht!",
 				    CarName[modelid-400],nummernschild);
 				ShowPlayerDialog(playerid,DIALOG_DUMMY,DIALOG_STYLE_MSGBOX,"Fahrzeug Zulassen",String,"Weiter","");
-				Kasse[Staat] += 4500;
+				TreasuryDeposit(4500);
 				GivePlayerCash(playerid,-4500);
 				//Spieler[playerid][pKFZSteuer] += FIX_KFZSTEUER;
 				format(PlayerCar[playerid][slot][CarNumberplate],32,"%s",nummernschild);
@@ -32465,7 +32489,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 format(String,sizeof(String),"Vielen Dank! Ihr Fahrzeug %s mit dem amtlichen Kennzeichen %s wurde erfolgreich abgemeldet!",
                     CarName[modelid-400],PlayerCar[playerid][slot][CarNumberplate]);
                 ShowPlayerDialog(playerid,DIALOG_DUMMY,DIALOG_STYLE_MSGBOX,"Fahrzeug Abmelden",String,"Weiter","");
-                Kasse[Staat] += 3500;
+                TreasuryDeposit(3500);
                 GivePlayerCash(playerid,-3500);
                 //Spieler[playerid][pKFZSteuer] -= FIX_KFZSTEUER;
                 format(PlayerCar[playerid][slot][CarNumberplate],32,"%s",KEIN_KENNZEICHEN);
@@ -34023,7 +34047,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Afkick, /Configplayer, /Entbannen, /Offbannen, /Offtban /Stopevent, /Startevent, /Eventpunkte");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Fraksperre, /Delfraksperre, /Respawnallcars, /Oafkick, /Offverwarnen, /Eventmarker, /Gebeskill");
                         SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Gcoff, /Inballon, /Eventuhr, /Givecar, /Adminwarnung, /Bwstrafe, /Bwstrafen, /Setbwstrafe");
-                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons, /Lastdmg, /Givegun, /Carowner");
+                        SendClientMessage(playerid, COLOR_BLUE, "* MODERATOR *: {FFFFFF}/Ageld, /Alevel, /Arp, /Offageld, /Clearweapons, /Lastdmg, /Givegun, /Carowner, /Setkasse");
                     }
                     if(Spieler[playerid][pAdmin] >= 4)
                     {
@@ -42436,11 +42460,22 @@ public PayDay()
             new handyvertrag;
             new kreditrest;
             new kreditgezahlt;
-            Kasse[Staat] += tempSteuern;
+            TreasuryDeposit(tempSteuern);
             new fbz = floatround((Spieler[playerid][pBank] > 50000000 ? 50000000 : Spieler[playerid][pBank]) * 0.001, floatround_floor);
-            if( Spieler[playerid][pDuty] == 0 ) {
+            if (IsADutyFaction(Spieler[playerid][pFraktion]) && Spieler[playerid][pDuty] == 0 ) {
                 SendClientMessage(playerid, COLOR_ORANGE, "Du erhältst keinen extra Lohn, da du nicht im Dienst warst!");
             }
+
+            if (IsAFightFaction(Spieler[playerid][pFraktion])) {
+                new gzCount = GetGangZoneCount(Spieler[playerid][pFraktion]);
+                if (gzCount > 0) {
+                    if (gzCount == 1) SCMFormatted(playerid, COLOR_ORANGE, "Du erhältst $%s für das eine Gangfight-Gebiet, das deine Gang beherrscht.", AddDelimiters(gzCount * 1500), gzCount);
+                    else SCMFormatted(playerid, COLOR_ORANGE, "Du erhältst $%s für die %i Gangfight-Gebiete, die deine Gang beherrscht.", AddDelimiters(gzCount * 1500), gzCount);
+                    Spieler[playerid][pBank] += gzCount * 1500;
+                }
+                else SendClientMessage(playerid, COLOR_ORANGE, "Du erhältst keine Belohnung, da deine Gang keine Gebiete beherrscht.");
+            }
+
             new hartz4;
             if( Spieler[playerid][pHartz4]==1) {
                 hartz4 = HARTZ4_GELD;
@@ -46598,6 +46633,10 @@ stock IsAFightFaction(Faction)
     return 0;
 }
 
+stock IsADutyFaction(factionid) {
+    return factionid == 1 || factionid == 2 || factionid == 3 || factionid == 4 || factionid == 5 || factionid == 8 || factionid == 16 ? true : false;
+}
+
 stock GetZoneColorOfFaction(Faction,trans = 0xFFFFFF90)
 {
     new color;
@@ -46654,6 +46693,18 @@ stock GetGangFactionIDByName(faction[]) {
         return 21;
     else
         return -1;
+}
+
+stock GetGangZoneCount(factionid) {
+    new count = 0;
+    for (new i = 0; i < MAX_GANGZONES; i++) if (g_GangZone[i][GZ_iOwner] == factionid) count++;
+    return count;
+}
+
+stock TreasuryDeposit(money) {
+    if (Kasse[Staat] > 1500000000) return 1;
+    Kasse[Staat] += money;
+    return 1;
 }
 
 CMD:setzoneowner(playerid, params[]) {
@@ -49796,7 +49847,7 @@ public OnPlayerEnterDynamicArea(playerid, areaid) {
                             }
 
                             GivePlayerCash(playerid,-strafe);
-                            Kasse[Staat] += strafe;
+                            TreasuryDeposit(strafe);
                         }
                         break;
                     }
@@ -65285,108 +65336,91 @@ CMD:gotozone(playerid, params[]) {
 
 CMD:gf(playerid, params[]) return cmd_gangfight(playerid, params);
 
-COMMAND:gangfight(playerid,params[]) {
-    new
-        frak = Spieler[playerid][pFraktion];
-    if( !IsAFightFaction(frak) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion.");
-    }
-    /*if( Spieler[playerid][pAdmin] < 3 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Ein Wettkampf kann nur durch ein Moderatoren gestartet werden!");
-    }*/
+CMD:gangfight(playerid, params[]) {
+    new frak = Spieler[playerid][pFraktion];
+    if (!IsAFightFaction(frak)) return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Gang Fraktion.");
     if (g_aSettings[ASETTING_GANGFIGHTBLOCK][ASETTING_TOGGLE]) return SendClientMessage(playerid, COLOR_RED, "Zurzeit ist die Gangfightsperre aktiviert.");
-    if( Spieler[playerid][pRank] < 4 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 in deiner Gang sein.");
-    }
-    if( IsGangInFight(frak) ){
-        return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich zur Zeit in einem Gangfight.");
-    }
-
-    if( GetFactionOnlinePlayers( frak ) < GANG_FIGHT_PLAYERS ) {
-        return SendClientMessage(playerid, COLOR_RED, "Es müssen mindestens "#GANG_FIGHT_PLAYERS" Gangmitglieder deiner und der gegnerischen online sein!");
-    }
-
-    new
-        index;
-    index = GetPlayerGangZone(playerid);
-    if( index == -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Ganggebiet.");
-    }
-    printf("GF_Index: %i, x%f, y%f, z%f", index, g_GangZone[index][GZ_fIconX],g_GangZone[index][GZ_fIconY],g_GangZone[index][GZ_fIconZ]);
-    if( !IsPlayerInRangeOfPoint( playerid , 6.0 , g_GangZone[index][GZ_fIconX],g_GangZone[index][GZ_fIconY],g_GangZone[index][GZ_fIconZ] )) {
+    if (Spieler[playerid][pRank] < 4) return SendClientMessage(playerid, COLOR_RED, "Du musst mindestens Rang 4 in deiner Gang sein.");
+    new index = GetPlayerGangZone(playerid);
+    if (index == -1) return SendClientMessage(playerid, COLOR_RED, "Du befindest dich in keinem Ganggebiet.");
+    if (frak == g_GangZone[index][GZ_iOwner]) return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet gehört bereits deiner Gang.");
+    if (IsGangInFight(frak)) return SendClientMessage(playerid, COLOR_RED, "Deine Gang befindet sich zur Zeit in einem Gangfight.");
+    if (IsGangInFight(g_GangZone[index][GZ_iOwner])) return SendClientMessage(playerid, COLOR_RED, "Die Gang ist bereits in einem Gangfight involviert.");
+    if (!IsPlayerInRangeOfPoint(playerid, 6.0, g_GangZone[index][GZ_fIconX], g_GangZone[index][GZ_fIconY], g_GangZone[index][GZ_fIconZ]))
         return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in der Nähe des Icons.");
-    }
-    if( frak == g_GangZone[index][GZ_iOwner] ) {
-        return SendClientMessage(playerid, COLOR_RED, "Dieses Ganggebiet gehört bereits deiner Gang.");
-    }
-    if (gettime() < g_GangZone[index][GZ_iTimeout]) {
-        new diff = g_GangZone[index][GZ_iTimeout] - gettime();
+
+    new hour, minute, second, time = gettime(hour, minute, second);
+
+    if (time < g_GangZone[index][GZ_iTimeout]) {
+        new diff = g_GangZone[index][GZ_iTimeout] - time;
         new h = diff / 3600 % 24;
         new m = diff / 60 % 60;
 
         return SCMFormatted(playerid, COLOR_RED, "Dieses Ganggebiet hat noch %i Stunden %i Minuten lang eine Zeitsperre.", h, m);
     }
-    if( IsGangInFight(g_GangZone[index][GZ_iOwner]) ){
-        return SendClientMessage(playerid, COLOR_RED, "Die Gang ist bereits in einem Gangfight involviert.");
-    }
-    if( GetFactionOnlinePlayers( g_GangZone[index][GZ_iOwner] ) < GANG_FIGHT_PLAYERS ) {
-        return SendClientMessage(playerid, COLOR_RED, "Von der Besitzerfraktion sind nicht genug Spieler online.");
-    }
-    if(gangfightpause[frak]<gettime())
-    {
-        if(gangfightpause[g_GangZone[index][GZ_iOwner]]<gettime())
-        {
-            new String[128];
-            format(String,sizeof(String),"Gangfight gegen %s wird gestartet! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
-            SendFraktionMessage( frak, COLOR_RED, String );
-            format(String,sizeof(String),"%s startet einen Gangfight. Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(frak));
-            SendFraktionMessage( g_GangZone[index][GZ_iOwner], COLOR_RED, String );
-            format(String,sizeof(String),"[GANGFIGHT-MELDUNG] {FFFFFF}Die %s startet ein Gangfight gegen die %s! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.",GetFactionNameOfFaction(frak),GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
-            SendClientMessageToAll(COLOR_YELLOW, String);
-            SendClientMessageToAll(COLOR_YELLOW, "Mit /Gangfightwette kannst du für den Sieg einer Gangfraktion wetten!");
-            for(new i;i<4;i++)
-            {
-                if(gangfightwetten[i]==0)
-                {
-                    gangfightwetten[i]=gettime();
-                    gangfightkampffraks[i][0]=g_GangZone[index][GZ_iOwner];
-                    gangfightkampffraks[i][1]=frak;
-                    break;
-                }
-            }
-            g_GangZone[index][GZ_iStatus] = 1;
-            g_GangZone[index][GZ_iAttacker] = frak;
-            g_GangZone[index][GZ_iAttackerScore] = 0;
-            g_GangZone[index][GZ_iOwnerScore] = 0;
-            g_GangZone[index][GZ_iGangWarEnd] = gettime() + GANGFIGHT_DURATION * 60;
-            //g_GangZone[index][GZ_iGangWarEnd] = gettime() + 2*60;
-            g_GangZone[index][GZ_iFlagge] = -1;
-            g_GangZone[index][GZ_iFlaggePlayer] = INVALID_PLAYER_ID;
-            g_GangZone[index][GZ_iCounter] = 0;
-            UpdateGangFightInfo(index);
-            for(new z;z<MAX_PLAYERS;z++) {
-                if(IsPlayerConnected(z)) {
-                    if( Spieler[z][pFraktion] == frak || Spieler[z][pFraktion] == g_GangZone[index][GZ_iOwner]) {
-                        TextDrawShowForPlayer( z,tdGangZoneHeader );
-                        TextDrawShowForPlayer( z,g_GangZone[index][GZ_tdInfo] );
 
-                        Spieler[z][pKillsGangFightSession] = 0;
-                    }
-                }
-            }
-        }
-        else
-        {
-            new string[200];
-            format(string,200,
-            "Die %s kann nicht angegriffen werden, da sie vor 10 Minuten zuletzt einen Gangfight hatten.",
+    // Montag - Donnerstag zwischen 19-21 Uhr starten können ohne das ein Gegner online sein muss. Freitag - Sonntag von 19-22 Uhr
+
+    new day = GetWeekDayNumber(), minimumPlayers = (hour >= 19 && hour < 21) || (day >= WEEKDAY_FRIDAY && day <= WEEKDAY_SUNDAY && hour == 21) ? 0 : GANG_FIGHT_PLAYERS;
+
+    if (GetFactionOnlinePlayers(frak) < minimumPlayers)
+        return SCMFormatted(playerid, COLOR_RED, "Es müssen mindestens %d Gangmitglieder deiner und der gegnerischen online sein!", minimumPlayers);
+
+    new onlineCount, pPoolSize = GetPlayerPoolSize();
+    for (new z ; z <= pPoolSize; z++) {
+        if (!IsPlayerConnected(z)) continue;
+        if (Spieler[z][pFraktion] == g_GangZone[index][GZ_iOwner] && time - Spieler[z][pLoginTimestamp] > 30) onlineCount++;
+    }
+
+    if (onlineCount < minimumPlayers)
+        return SendClientMessage(playerid, COLOR_RED, "Von der Besitzerfraktion sind nicht genug Spieler online bzw. lange genug eingeloggt.");
+
+    if (gangfightpause[frak] >= time)
+       return SendClientMessage(playerid,COLOR_RED,"Ihr habt eine 10 minütige Gangfightpause, da ihr vorhin schon einen Gangfight hattet.");
+
+    if (gangfightpause[g_GangZone[index][GZ_iOwner]] >= time) 
+        return SCMFormatted(playerid, COLOR_RED, "Die %s kann nicht angegriffen werden, da sie vor 10 Minuten zuletzt einen Gangfight hatten.",\
             GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
+
+    // Start GF
+    new String[128];
+    format(String, sizeof(String), "Gangfight gegen %s wird gestartet! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.", GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
+    SendFraktionMessage(frak, COLOR_RED, String);
+    format(String, sizeof(String), "%s startet einen Gangfight. Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.", GetFactionNameOfFaction(frak));
+    SendFraktionMessage(g_GangZone[index][GZ_iOwner], COLOR_RED, String);
+    format(String, sizeof(String), "[GANGFIGHT-MELDUNG] {FFFFFF}Die %s startet ein Gangfight gegen die %s! Der Kampf dauert " #GANGFIGHT_DURATION " Minuten.", GetFactionNameOfFaction(frak), GetFactionNameOfFaction(g_GangZone[index][GZ_iOwner]));
+    SendClientMessageToAll(COLOR_YELLOW, String);
+    SendClientMessageToAll(COLOR_YELLOW, "Mit /Gangfightwette kannst du für den Sieg einer Gangfraktion wetten!");
+    
+    for (new i; i < 4; i++) {
+        if (!gangfightwetten[i]) {
+            gangfightwetten[i] = time;
+            gangfightkampffraks[i][0] = g_GangZone[index][GZ_iOwner];
+            gangfightkampffraks[i][1] = frak;
+            break;
         }
     }
-    else
-    {
-        SendClientMessage(playerid,COLOR_RED,"Ihr habt eine 10 minütige Gangfightpause, da ihr vorhin schon einen Gangfight hattet.");
+
+    g_GangZone[index][GZ_iStatus] = 1;
+    g_GangZone[index][GZ_iAttacker] = frak;
+    g_GangZone[index][GZ_iAttackerScore] = 0;
+    g_GangZone[index][GZ_iOwnerScore] = 0;
+    g_GangZone[index][GZ_iGangWarEnd] = time + GANGFIGHT_DURATION * 60;
+    g_GangZone[index][GZ_iFlagge] = -1;
+    g_GangZone[index][GZ_iFlaggePlayer] = INVALID_PLAYER_ID;
+    g_GangZone[index][GZ_iCounter] = 0;
+
+    UpdateGangFightInfo(index);
+
+    for (new z ; z <= pPoolSize; z++) {
+        if (!IsPlayerConnected(z)) continue;
+        if (Spieler[z][pFraktion] == frak || Spieler[z][pFraktion] == g_GangZone[index][GZ_iOwner]) {
+            TextDrawShowForPlayer(z, tdGangZoneHeader);
+            TextDrawShowForPlayer(z, g_GangZone[index][GZ_tdInfo]);
+            Spieler[z][pKillsGangFightSession] = 0;
+        }
     }
+
     return 1;
 }
 
@@ -65952,7 +65986,7 @@ stock BuyCar(playerid,paymethod) {
     ShowBuyInformation(playerid, sInfo);
 
     new CarMoneyFinal = (preis/100)*30;//0,08%
-    Kasse[Staat] += (preis-CarMoneyFinal);
+    TreasuryDeposit(preis-CarMoneyFinal);
     TogglePlayerControllable(playerid,false);
 
     SetTimerEx("DelayCameraMove",59,false,"ddffffff",playerid,3500,Autospawns[autohaus][CarPos_x],Autospawns[autohaus][CarPos_y],Autospawns[autohaus][CarPos_z],7.0,-3.0,3.0);
@@ -66739,7 +66773,7 @@ COMMAND:zoll(playerid,params[]) {
     }
     if( Spieler[playerid][pZollValid] < gettime() ) {
         GivePlayerCash(playerid,-500);
-        Kasse[Staat] += 500;
+        TreasuryDeposit(500);
         SendClientMessage(playerid,COLOR_YELLOW,"Zollwächter: Vielen Dank! Sie dürfen den Zoll überqueren. Gute Weiterfahrt ( -500$ )!");
     }
     else {
@@ -68985,7 +69019,7 @@ COMMAND:kfzversicherung(playerid,params[]) {
 
     SendClientMessage(playerid,COLOR_YELLOW,"Glückwunsch! Du hast eine KFZ-Versicherung für 7 Tage für $10.000 abgeschlossen.");
     GivePlayerCash(playerid,-10000);
-    Kasse[Staat] += 10000;
+    TreasuryDeposit(10000);
     Spieler[playerid][pKFZVersicherung] = gettime() + 7*24*60*60;
     return 1;
 }
