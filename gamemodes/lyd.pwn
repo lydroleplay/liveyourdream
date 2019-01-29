@@ -7492,7 +7492,7 @@ CMD:setkasse(playerid, params[]) {
     format(message, sizeof(message), "%s %s hat die Staatskasse auf $%s gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), AddDelimiters(money));
     SendAdminMessage(COLOR_YELLOW, message);
     return 1;
-}
+}h
 
 CMD:destroyallobjects(playerid) {
 	if (Spieler[playerid][pAdmin] < 6) return 1;
@@ -11630,6 +11630,7 @@ CMD:drivein(playerid)
         SetPlayerHealth(playerid, 100);
         GivePlayerCash(playerid, -50);
         Biz[GetBizIndexByID(2)][bKasse] += 50;
+        Biz[GetBizIndexByID(2)][bWaren] += 1;
         return SendClientMessage(playerid, COLOR_ORANGE, "[DRIVE-IN] {FFFFFF}Du hast dir ein Chicken Teriyaki Sub am Drive-In bestellt.");
     }
 
@@ -11655,7 +11656,7 @@ CMD:essen(playerid)
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, 377.1597,-67.7632,1001.5151) && pVW == 4) // Burgershot South
     {
-        bIndex = GetBizIndexByID(4);
+        bIndex = GetBizIndexByID(2);
         SendClientMessage(playerid, COLOR_WHITE, "Verkäufer sagt: Guten Appetit! Besuchen Sie uns bald wieder.");
         if(Biz[bIndex][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat keine Waren mehr.");
         if(GetPlayerMoney(playerid) < 50)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
