@@ -4140,7 +4140,7 @@ new const g_WheelmenD[][e_WheelmenD] = {
     {"Personenschutz",25000,SpielerDaten:pMotoLic},
     {"Befreiung vor Entführung",20000,SpielerDaten:pFlyLic},
     {"Befreiung vor Festnahme",25000,SpielerDaten:pBoatLic},
-    {"Alcatraz Gefangenenbefreiung",40000,SpielerDaten:pGunLic},
+    {"Alcatraz Gefangenenbefreiung",50000,SpielerDaten:pGunLic},
     {"GangJail Gefangenenbefreiung",15000,SpielerDaten:pGunLicB}
 };
 
@@ -31140,7 +31140,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 modus = Spieler[playerid][pFModus];
                 if( Spieler[playerid][pCash] < g_WheelmenD[modus][W_iPrice] ) {
                     SendClientMessage(giveid,COLOR_RED,"Der Spieler konnte das Angebot nicht annehmen.");
-                    return SendClientMessage(playerid,COLOR_RED,"Du hast nicht genug Geld auf der Hand für dieses Angebot");
+                    return SendClientMessage(playerid,COLOR_RED,"Du hast nicht genug Geld auf der Hand für dieses Angebot.");
                 }
                 /*
                 if( Spieler[playerid][ g_FahrPruefung[modus][FP_iVar] ] ) {
@@ -31148,10 +31148,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     return SendClientMessage(playerid,COLOR_RED,"Du hast bereits die Lizenz");
                 }
                 */
-                Kasse[Wheelmenk] += g_WheelmenD[modus][W_iPrice];
-                GivePlayerCash(playerid, -g_WheelmenD[modus][W_iPrice] );
-                format(String,sizeof(String),"Spieler %s hat das Angebot zum %s angenommen",GetName(playerid), g_WheelmenD[modus][W_sName]);
+                new provision = floatround(g_WheelmenD[modus][W_iPrice] / 5, floatround_ceil);
+                Kasse[Wheelmenk] += g_WheelmenD[modus][W_iPrice] - provision;
+                GivePlayerCash(giveid, provision);
+                GivePlayerCash(playerid, -g_WheelmenD[modus][W_iPrice]);
+                format(String,sizeof(String),"Spieler %s hat das Angebot zum %s angenommen.",GetName(playerid), g_WheelmenD[modus][W_sName]);
                 SendClientMessage(giveid,COLOR_GREEN,String);
+                SCMFormatted(giveid, COLOR_ORANGE, "Du hast $%s Provision erhalten.", AddDelimiters(provision));
+                SCMFormatted(playerid, COLOR_GREEN, "Du hast das Angebot zum %s von %s angenommen.", g_WheelmenD[modus][W_sName], GetName(giveid));
             }
             else {
                 new
