@@ -20,7 +20,7 @@ enum {
 
 enum E_PB_INFO {
     E_PB_INFO_STATUS,
-    E_PB_INFO_SETTINGS[4],
+    E_PB_INFO_SETTINGS[7],
     E_PB_INFO_KILLS,
     E_PB_INFO_DEATHS,
     E_PB_INFO_PARTNER,
@@ -84,11 +84,14 @@ stock _ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button1[],
 // Custom functions
 
 stock Show1v1MenuDialog(playerid) {
-    new dialogText[256];
+    new dialogText[400];
     format(dialogText, sizeof(dialogText), "%sDesert Eagle (150 Schuss) - %s\n", dialogText, paintballInfo[playerid][E_PB_INFO_SETTINGS][0] ? "{00FF00}Ja" : "{FF0000}Nein");
     format(dialogText, sizeof(dialogText), "%sSchutzweste (100 Prozent) - %s\n", dialogText, paintballInfo[playerid][E_PB_INFO_SETTINGS][1] ? "{00FF00}Ja" : "{FF0000}Nein");
     format(dialogText, sizeof(dialogText), "%sMP5 (150 Schuss) - %s\n", dialogText, paintballInfo[playerid][E_PB_INFO_SETTINGS][2] ? "{00FF00}Ja" : "{FF0000}Nein");
     format(dialogText, sizeof(dialogText), "%sM4 (200 Schuss) - %s\n", dialogText, paintballInfo[playerid][E_PB_INFO_SETTINGS][3] ? "{00FF00}Ja" : "{FF0000}Nein");
+    format(dialogText, sizeof(dialogText), "%sSniper Rifle (50 Schuss) - %s\n", dialogText, paintballInfo[playerid][E_PB_INFO_SETTINGS][4] ? "{00FF00}Ja" : "{FF0000}Nein");
+    format(dialogText, sizeof(dialogText), "%sShotgun (100 Schuss) - %s\n", dialogText, paintballInfo[playerid][E_PB_INFO_SETTINGS][5] ? "{00FF00}Ja" : "{FF0000}Nein");
+    format(dialogText, sizeof(dialogText), "%sRifle (100 Schuss) - %s\n", dialogText, paintballInfo[playerid][E_PB_INFO_SETTINGS][6] ? "{00FF00}Ja" : "{FF0000}Nein");
     format(dialogText, sizeof(dialogText), "%sEinen Spieler einladen", dialogText);
     ShowPlayerDialog(playerid, DIALOG_PAINTBALL_1V1MENU, DIALOG_STYLE_LIST, "{47A1AE}Paintball - 1v1 - Einstellungen", dialogText, "Ändern", "Abbrechen");
     return -1;
@@ -100,6 +103,9 @@ stock GivePlayerPaintballWeapons(playerid) {
     if (paintballInfo[playerid][E_PB_INFO_SETTINGS][2]) GivePlayerWeapon(playerid, WEAPON_MP5, 150);
     if (paintballInfo[playerid][E_PB_INFO_SETTINGS][3]) GivePlayerWeapon(playerid, WEAPON_M4, 200);
     if (paintballInfo[playerid][E_PB_INFO_SETTINGS][0]) GivePlayerWeapon(playerid, WEAPON_DEAGLE, 150);
+    if (paintballInfo[playerid][E_PB_INFO_SETTINGS][4]) GivePlayerWeapon(playerid, WEAPON_SNIPER, 50);
+    if (paintballInfo[playerid][E_PB_INFO_SETTINGS][5]) GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 100);
+    if (paintballInfo[playerid][E_PB_INFO_SETTINGS][6]) GivePlayerWeapon(playerid, WEAPON_RIFLE, 100);
     SetPlayerHealth(playerid, 100.0);
 
     return 1;
@@ -186,7 +192,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
         }
 
         if (listitem == 1) {
-            paintballInfo[playerid][E_PB_INFO_SETTINGS] = {1, 0, 0, 0};
+            paintballInfo[playerid][E_PB_INFO_SETTINGS] = {1, 0, 0, 0, 0, 0, 0};
             return Show1v1MenuDialog(playerid);
         }
 
@@ -194,11 +200,11 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
     }
     if (dialogid == DIALOG_PAINTBALL_1V1MENU) {
         if (!response) return 1;
-        if (listitem < 0 || listitem > 4) {
+        if (listitem < 0 || listitem > 7) {
             SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du hast keine gültige Auswahl getroffen.");
             return Show1v1MenuDialog(playerid);
         }
-        if (listitem == 4) return ShowPlayerDialog(playerid, DIALOG_PAINTBALL_SEND1V1INV, DIALOG_STYLE_INPUT, "{47A1AE}Paintball - 1v1 - Einladen", "{FFFFFF}Gebe \
+        if (listitem == 7) return ShowPlayerDialog(playerid, DIALOG_PAINTBALL_SEND1V1INV, DIALOG_STYLE_INPUT, "{47A1AE}Paintball - 1v1 - Einladen", "{FFFFFF}Gebe \
             eine Spieler ID oder den Namen eines Spielers ein:", "Einladen", "Zurück");
 
         paintballInfo[playerid][E_PB_INFO_SETTINGS][listitem] = !paintballInfo[playerid][E_PB_INFO_SETTINGS][listitem];
@@ -243,18 +249,22 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             return Show1v1MenuDialog(playerid);
         }
         
-        new set[4];
+        new set[7];
         set[0] = paintballInfo[playerid][E_PB_INFO_SETTINGS][0];
         set[1] = paintballInfo[playerid][E_PB_INFO_SETTINGS][1];
         set[2] = paintballInfo[playerid][E_PB_INFO_SETTINGS][2];
         set[3] = paintballInfo[playerid][E_PB_INFO_SETTINGS][3];
+        set[4] = paintballInfo[playerid][E_PB_INFO_SETTINGS][4];
+        set[5] = paintballInfo[playerid][E_PB_INFO_SETTINGS][5];
+        set[6] = paintballInfo[playerid][E_PB_INFO_SETTINGS][6];
         SCMFormatted(playerid, COLOR_LIGHTBLUE, "[Paintball] {FFFFFF}Du hast " COLOR_HEX_LIGHTBLUE "%s" COLOR_HEX_WHITE " zu einem 1v1-Match eingeladen.", GetName(pID));
         SCMFormatted(pID, COLOR_LIGHTBLUE, "[Paintball] {FFFFFF}Du hast von " COLOR_HEX_LIGHTBLUE "%s" COLOR_HEX_WHITE " eine 1v1-Match Anfrage erhalten.", GetName(playerid));
 
-        new dialogText[350];
+        new dialogText[500];
         format(dialogText, sizeof(dialogText), "{FFFFFF}Du wurdest von {FFFF00}%s {FFFFFF}zu einem 1v1-Match eingeladen.\n\n{FF9900}Einstellungen:\n{FFFFFF}Desert Eagle\
-         - %s\n{FFFFFF}Schutzweste - %s\n{FFFFFF}MP5 - %s\n{FFFFFF}M4 - %s\n\n{FFFFFF}Wähle 'Annehmen' oder 'Ablehnen'.", GetName(playerid), set[0] ? "{00FF00}Ja" : "{FF0000}Nein", 
-            set[1] ? "{00FF00}Ja" : "{FF0000}Nein", set[2] ? "{00FF00}Ja" : "{FF0000}Nein", set[3] ? "{00FF00}Ja" : "{FF0000}Nein");
+         - %s\n{FFFFFF}Schutzweste - %s\n{FFFFFF}MP5 - %s\n{FFFFFF}M4 - %s\n{FFFFFF}Sniper Rifle - %s\n{FFFFFF}Shotgun - %s\n{FFFFFF}Rifle - %s\n\n{FFFFFF}Wähle 'Annehmen' oder 'Ablehnen'.", GetName(playerid), set[0] ? "{00FF00}Ja" : "{FF0000}Nein", 
+            set[1] ? "{00FF00}Ja" : "{FF0000}Nein", set[2] ? "{00FF00}Ja" : "{FF0000}Nein", set[3] ? "{00FF00}Ja" : "{FF0000}Nein", set[4] ? "{00FF00}Ja" : "{FF0000}Nein",
+            set[5] ? "{00FF00}Ja" : "{FF0000}Nein", set[6] ? "{00FF00}Ja" : "{FF0000}Nein");
 
         paintballInfo[pID][E_PB_INFO_STATUS] = PAINTBALL_STATUS_INVITED;
         paintballInfo[pID][E_PB_INFO_PARTNER] = playerid;
@@ -263,8 +273,9 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
         ShowPlayerDialog(pID, DIALOG_PAINTBALL_ACCEPT1V1INV, DIALOG_STYLE_MSGBOX, "{47A1AE}Paintball - 1v1 - Einladung", dialogText, "Annehmen", "Ablehnen");
         format(dialogText, sizeof(dialogText), "{FFFFFF}Du hast {FFFF00}%s {FFFFFF}zu einem 1v1-Match eingeladen.\n\n{FF9900}Einstellungen:\n{FFFFFF}Desert Eagle\
-         - %s\n{FFFFFF}Schutzweste - %s\n{FFFFFF}MP5 - %s\n{FFFFFF}M4 - %s\n\n{FFFFFF}Wähle 'Abbrechen' um die Anfrage zurückzunehmen.", GetName(pID), set[0] ? "{00FF00}Ja" : "{FF0000}Nein", 
-            set[1] ? "{00FF00}Ja" : "{FF0000}Nein", set[2] ? "{00FF00}Ja" : "{FF0000}Nein", set[3] ? "{00FF00}Ja" : "{FF0000}Nein");
+         - %s\n{FFFFFF}Schutzweste - %s\n{FFFFFF}MP5 - %s\n{FFFFFF}M4 - %s\n{FFFFFF}Sniper Rifle - %s\n{FFFFFF}Shotgun - %s\n{FFFFFF}Rifle - %s\n\n{FFFFFF}Wähle 'Abbrechen' um die Anfrage zurückzunehmen.", GetName(pID), set[0] ? "{00FF00}Ja" : "{FF0000}Nein", 
+            set[1] ? "{00FF00}Ja" : "{FF0000}Nein", set[2] ? "{00FF00}Ja" : "{FF0000}Nein", set[3] ? "{00FF00}Ja" : "{FF0000}Nein", set[4] ? "{00FF00}Ja" : "{FF0000}Nein",
+            set[5] ? "{00FF00}Ja" : "{FF0000}Nein", set[6] ? "{00FF00}Ja" : "{FF0000}Nein");
 
         ShowPlayerDialog(playerid, DIALOG_PAINTBALL_WAIT1V1, DIALOG_STYLE_MSGBOX, "{47A1AE}Paintball - 1v1 - Einladung", dialogText, "Abbrechen", "");
         return -1;
@@ -306,6 +317,9 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
         paintballInfo[playerid][E_PB_INFO_SETTINGS][1] = paintballInfo[pID][E_PB_INFO_SETTINGS][1];
         paintballInfo[playerid][E_PB_INFO_SETTINGS][2] = paintballInfo[pID][E_PB_INFO_SETTINGS][2];
         paintballInfo[playerid][E_PB_INFO_SETTINGS][3] = paintballInfo[pID][E_PB_INFO_SETTINGS][3];
+        paintballInfo[playerid][E_PB_INFO_SETTINGS][4] = paintballInfo[pID][E_PB_INFO_SETTINGS][4];
+        paintballInfo[playerid][E_PB_INFO_SETTINGS][5] = paintballInfo[pID][E_PB_INFO_SETTINGS][5];
+        paintballInfo[playerid][E_PB_INFO_SETTINGS][6] = paintballInfo[pID][E_PB_INFO_SETTINGS][6];
 
         paintballInfo[pID][E_PB_INFO_STATUS] = PAINTBALL_STATUS_1V1;
         paintballInfo[pID][E_PB_INFO_SESSION_OWNER] = true;
