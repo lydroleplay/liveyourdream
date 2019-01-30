@@ -26,19 +26,7 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if (newkeys & KEY_SECONDARY_ATTACK) {
         if (IsPlayerInRangeOfPoint(playerid, 2.0, PAINTBALLBASEMENT_SPAWN_POINT)) { // Exit
-            SetPlayerInterior(playerid, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR);
-            SetPlayerVirtualWorld(playerid, VW_PAINTBALLLOBBY);
-            SetPlayerPos(playerid, PAINTBALLLOBBYINTERIOR_SPAWN_POINT1);
-            SetPlayerFacingAngle(playerid, PAINTBALLLOBBYINTERIOR_SPAWN_FACING);
-            SetCameraBehindPlayer(playerid);
-            ResetPlayerWeapons(playerid);
-            ReStore_PlayerWeapons(playerid);
-            new message[145];
-            format(message, sizeof(message), "%s hat die Paintball-Halle verlassen.", GetName(playerid));
-            SendPaintballMessage(COLOR_ORANGE, message);
-            PlayerIsPaintballing[playerid] = 0;
-            for (new i = 0; i < 5; i++) SendDeathMessageToPlayer(playerid, 1001, 1001, 200);
-            return 1;
+            ExitPaintballArena(playerid);
         }
     }
 
@@ -48,4 +36,20 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 hook OnGameModeInit() {
     pickup_paintballBasement[0] = CreateDynamicPickup(19197, 1, PAINTBALLBASEMENT_SPAWN_POINT, VW_PAINTBALLBASEMENT, MAPS_PAINTBALLBASEMENT_INTERIOR); // Exit
     // Objects
+}
+
+stock ExitPaintballArena(playerid) {
+    SetPlayerInterior(playerid, MAPS_PAINTBALLLOBBYINTERIOR_INTERIOR);
+    SetPlayerVirtualWorld(playerid, VW_PAINTBALLLOBBY);
+    SetPlayerPos(playerid, PAINTBALLLOBBYINTERIOR_SPAWN_POINT1);
+    SetPlayerFacingAngle(playerid, PAINTBALLLOBBYINTERIOR_SPAWN_FACING);
+    SetCameraBehindPlayer(playerid);
+    ResetPlayerWeapons(playerid);
+    ReStore_PlayerWeapons(playerid);
+    new message[145];
+    format(message, sizeof(message), "%s hat die Paintball-Halle verlassen.", GetName(playerid));
+    SendPaintballMessage(COLOR_ORANGE, message);
+    PlayerIsPaintballing[playerid] = 0;
+    for (new i = 0; i < 5; i++) SendDeathMessageToPlayer(playerid, 1001, 1001, 200);
+    return 1;
 }

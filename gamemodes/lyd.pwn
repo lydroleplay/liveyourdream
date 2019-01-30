@@ -7142,6 +7142,7 @@ public OnPlayerDisconnect(playerid, reason)
         new message[145];
         format(message, sizeof(message), "%s hat die Paintball-Halle verlassen.", GetName(playerid));
         paintballInfo[playerid][E_PB_INFO_STATUS] = PAINTBALL_STATUS_NONE;
+        PlayerIsPaintballing[playerid] = 0;
         SendPaintballMessage(COLOR_ORANGE, message);
     }
 
@@ -7492,7 +7493,7 @@ CMD:setkasse(playerid, params[]) {
     format(message, sizeof(message), "%s %s hat die Staatskasse auf $%s gesetzt.", GetPlayerAdminRang(playerid), GetName(playerid), AddDelimiters(money));
     SendAdminMessage(COLOR_YELLOW, message);
     return 1;
-}h
+}
 
 CMD:destroyallobjects(playerid) {
 	if (Spieler[playerid][pAdmin] < 6) return 1;
@@ -19616,7 +19617,7 @@ CMD:kasse(playerid, params[])
     }
     else if(strcmp(eingabe, "nehmen", true) == 0)
     {
-        if(Spieler[playerid][pRank] != 6)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Leader!");
+        if(Spieler[playerid][pRank] != 6 && Spieler[playerid][pFraktion] != 4)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Leader!");
         if(Spieler[playerid][pFraktion] == 0)return SendClientMessage(playerid, COLOR_RED, "* Du kannst nichts von der Staatskasse nehmen.");
         else if(Spieler[playerid][pFraktion] == 1)return SendClientMessage(playerid, COLOR_RED, "* Du kannst nichts von der Staatskasse nehmen.");
         else if(Spieler[playerid][pFraktion] == 2)return SendClientMessage(playerid, COLOR_RED, "* Du kannst nichts von der Staatskasse nehmen.");
@@ -19630,6 +19631,7 @@ CMD:kasse(playerid, params[])
         }
         else if(Spieler[playerid][pFraktion] == 4)
         {
+            if (Spieler[playerid][pRank] < 5) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Leader oder Co-Leader!");
             if(entry > Kasse[Sana])return SendClientMessage(playerid, COLOR_RED, "Soviel Geld ist auf der Kasse nicht vorhanden.");
             format(string, sizeof(string), "* Du hast $%s aus der %s Kasse ausgezahlt.", AddDelimiters(entry), factionNames[Spieler[playerid][pFraktion]]);
             SendClientMessage(playerid, COLOR_WHITE, string);
@@ -52157,7 +52159,7 @@ stock sendMoneyAlert(playerid, giveid, money[], reason[]) {
     new String[128];
     format(String,sizeof(String),"[WARNUNG] Spieler %s hat %s $%s überwiesen!", GetName(playerid), GetName(giveid), money);
     if (!isnull(reason)) format(String, sizeof(String), "%s Begründung: %s", String, reason);
-    SendAdminMessage(COLOR_YELLOW, String);
+    SendAdminMessage(COLOR_WHITE, String);
     return 1;
 }
 

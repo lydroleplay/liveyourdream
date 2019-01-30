@@ -181,6 +181,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             format(message, sizeof(message), "%s hat die Paintball-Halle betreten.", GetName(playerid));
             paintballInfo[playerid][E_PB_INFO_STATUS] = PAINTBALL_STATUS_NORMAL;
             SendPaintballMessage(COLOR_GREEN, message);
+            SendClientMessage(playerid, COLOR_ORANGE, "[INFO] {FFFFFF}Benutze den Ausgang oder /Leave um die Paintball-Halle wieder zu verlassen.");
             return 1;
         }
 
@@ -490,8 +491,8 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 
 CMD:leave(playerid) {
     if (!gPlayerLogged[playerid]) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist nicht eingeloggt.");
+    if (PlayerIsPaintballing[playerid]) ExitPaintballArena(playerid);
     if (paintballInfo[playerid][E_PB_INFO_STATUS] != PAINTBALL_STATUS_1V1) return 1;
-
     LeavePaintball(paintballInfo[playerid][E_PB_INFO_PARTNER], LEAVE_REASON_PARTNER_COMMAND);
     LeavePaintball(playerid, LEAVE_REASON_COMMAND);
     return 1;
