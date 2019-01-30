@@ -20,9 +20,9 @@ task SW_checkStreetwarEnd[60000]() {
 
     new money, wamount, damount;
 
-    money = floatround(RandomEx(100000, 150000) / winnerCount, floatround_ceil);
-    wamount = floatround(RandomEx(20000, 30000) / winnerCount, floatround_ceil);
-    damount = floatround(RandomEx(400, 600) / winnerCount, floatround_ceil);
+    money = floatround(RandomEx(200000, 300000) / winnerCount, floatround_ceil);
+    wamount = floatround(RandomEx(40000, 50000) / winnerCount, floatround_ceil);
+    damount = floatround(RandomEx(700, 1000) / winnerCount, floatround_ceil);
 
     new message[144], winners[144];
 
@@ -107,6 +107,9 @@ hook OnPlayerDeath(playerid, killerid, reason) {
             format(message, sizeof(message), "[Streetwar] {FFFFFF}%s %s hat %s (%s) getötet.", rk, GetName(killerid), GetName(playerid), factionNames[Spieler[playerid][pFraktion]]);
             GameTextForPlayer(killerid, "+1 Streetwarkill", 3000, 4);
             SendFraktionMessage(Spieler[killerid][pFraktion], COLOR_DARKGREEN, message);
+            ReturnPlayerRank(playerid, rk);
+            format(message, sizeof(message), "[Streetwar] {FFFFFF}%s %s wurde von %s (%s) getötet.", rk, GetName(playerid), GetName(killerid), factionNames[Spieler[killerid][pFraktion]]);
+            SendFraktionMessage(Spieler[playerid][pFraktion], COLOR_RED, message);
             SW_score[Spieler[killerid][pFraktion]]++;
             Spieler[killerid][pKillsStreetwar]++;
             GivePlayerCash(killerid, 450);
