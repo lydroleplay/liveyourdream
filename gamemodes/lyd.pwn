@@ -43905,11 +43905,13 @@ CMD:stopwbstunde(playerid, params[])
 CMD:setlohn(playerid, params[])
 {
     new pID, string[128], lohn;
+    if(!Spieler[playerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Du bist in keiner Fraktion.");
     if(Spieler[playerid][pRank] < 5)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Leader.");
     if(sscanf(params, "ui", pID, lohn))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Setlohn [SpielerID/Name] [Lohn]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if(Spieler[playerid][pFraktion] != Spieler[pID][pFraktion])return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Fraktion.");
-    if(lohn < 0 || lohn > 40000)return SendClientMessage(playerid, COLOR_RED, "Der Lohn sollte zwischen $1 und $40.000 liegen.");
+    new dFaction = IsADutyFaction(Spieler[playerid][pFraktion]);
+    if (lohn < 0 || lohn > (dFaction ? 50000 : 40000)) return SCMFormatted(playerid, COLOR_RED, "Der Lohn sollte zwischen $1 und $%s liegen.", dFaction ? "50.000" : "40.000");
     Spieler[pID][pFrakLohn] = lohn;
     format(string, sizeof(string), "Dein Lohn wurde von Leader %s auf $%s gesetzt.", GetName(playerid), AddDelimiters(lohn));
     SendClientMessage(pID, COLOR_LIGHTBLUE, string);
