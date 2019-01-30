@@ -20,9 +20,9 @@ task SW_checkStreetwarEnd[60000]() {
 
     new money, wamount, damount;
 
-    money = floatround(RandomEx(100000, 150000) / winnerCount, floatround_ceil);
-    wamount = floatround(RandomEx(20000, 30000) / winnerCount, floatround_ceil);
-    damount = floatround(RandomEx(400, 600) / winnerCount, floatround_ceil);
+    money = floatround(RandomEx(200000, 300000) / winnerCount, floatround_ceil);
+    wamount = floatround(RandomEx(40000, 50000) / winnerCount, floatround_ceil);
+    damount = floatround(RandomEx(700, 1000) / winnerCount, floatround_ceil);
 
     new message[144], winners[144];
 
