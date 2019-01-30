@@ -2511,7 +2511,7 @@ enum {
 #define     TEAM_LSPD_COLOR     0x217BFFFF
 #define     TEAM_FBI_COLOR      0x0000A0FF
 #define     TEAM_NEWS_COLOR     0xFF6600FF
-#define     TEAM_OAMT_COLOR     0x00FFFFFF
+#define     TEAM_OAMT_COLOR     0x3592D7FF
 #define     TEAM_SANI_COLOR     0xFF0021FF
 #define     TEAM_FAHR_COLOR     0xFFFF00FF
 #define     TEAM_STAAT_COLOR    0x008000FF
@@ -2544,7 +2544,7 @@ enum {
 #define     COLOR_GREY          0xADADADFF
 #define     COLOR_DARKGREY      0x818181FF
 #define     COLOR_BLACK         0x000000FF
-#define     COLOR_CLUB          0x00EAFFFF
+#define     COLOR_CLUB          0x3592D7FF
 #define     COLOR_BLINKER       0xFFD9A6FF
 //Grün
 #define     COLOR_LIGHTGREEN    0x00FF00FF
