@@ -17950,7 +17950,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 6))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Grove Street Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, 331.0788,1128.5469,1083.8828))//Ballas
     {
@@ -17958,7 +17957,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 7))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Ballas Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, YAKUZA_INTERIOR_SPAWN_POINT))//Yakuza
     {
@@ -17966,7 +17964,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 10))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Yakuza Mitglied.");
         GiveGangWeapons(playerid);
-        //GivePlayerWeapon(playerid, 8, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0,2807.4153,-1165.1274,1025.5703))//Vagos
     {
@@ -17974,7 +17971,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 13))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Vagos Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0,508.3369,-84.9195,998.9609))//Aztecas
     {
@@ -17982,7 +17978,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 11))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Aztecas Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 5, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, LCN_INTERIOR_SPAWN_POINT))//LCN
     {
@@ -17990,7 +17985,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 12))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LCN Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 2, 1);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 2.0, WHEELMANBASE_SPAWN_POINT))//Wheelman
     {
@@ -17998,7 +17992,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 17)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Wheelman Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 5, 1);
     }
     else if (GetPlayerVirtualWorld(playerid) == VW_TRIADSINTERIOR && IsPlayerInRangeOfPoint(playerid, 2.0, TRIADS_INTERIOR_SPAWN_POINT))//Triaden
     {
@@ -18013,7 +18006,6 @@ CMD:gangwaffen(playerid)
         if(GetPlayerMoney(playerid) < 800)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 20))return SendClientMessage(playerid, COLOR_RED, "Du bist kein OutlawZ Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 5, 1);
     }
     return 1;
 }
@@ -18092,7 +18084,6 @@ CMD:ninowaffen(playerid)
         if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, COLOR_RED, "Du benötigst $800.");
         if(!(Spieler[playerid][pFraktion] == 15)) return SendClientMessage(playerid, COLOR_RED, "Du bist kein Nine Demons Mitglied.");
         GiveGangWeapons(playerid);
-        GivePlayerWeapon(playerid, 5, 1);
     }
     return 1;
 }
