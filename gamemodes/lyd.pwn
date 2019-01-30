@@ -463,6 +463,16 @@ new const g_shishaPipes[][E_SHISHA_PIPE] = {
     {"Blue NRG",        1200,   "{2BFFC4}"}
 };
 
+new const g_ChatNames[][20] = {
+    "Global-Chat",
+    "Fraktions-Chat",
+    "Job-Chat",
+    "Clubmitglied-Chat",
+    "Join/Leave-Chat",
+    "Serverinfo-Chat",
+    "Beamten-Chat"
+};
+
 enum E_NEON {
     NEON_NAME[5],
     NEON_OBJECT_ID,
@@ -831,6 +841,7 @@ enum {
 #include <pause>
 #include <YSI\y_timers>
 #include <YSI\y_hooks>
+#include <YSI\y_bit>
 
 #if defined MAX_PLAYERS
     #undef MAX_PLAYERS
@@ -4234,12 +4245,17 @@ new IsPlayerFishing[MAX_PLAYERS];
 new NeedTAXI[MAX_PLAYERS];
 new EventCP[MAX_PLAYERS];
 
-new pGC[MAX_PLAYERS];
-new pFC[MAX_PLAYERS];
-new pJC[MAX_PLAYERS];
-new pBC[MAX_PLAYERS];
-new pCC[MAX_PLAYERS];
-new pJL[MAX_PLAYERS];
+enum {
+    CHAT_GC,
+    CHAT_FC,
+    CHAT_JC,
+    CHAT_CC,
+    CHAT_JL,
+    CHAT_SM,
+    CHAT_BC
+}
+
+new bool:pChatSettings[MAX_PLAYERS char][7];
 
 new bestand[MAX_VEHICLES];
 new Benzin[MAX_VEHICLES];
@@ -4283,7 +4299,7 @@ new eismann[4];
 new hotdogcar[3];
 new pdeaccadmin[MAX_PLAYERS][MAX_PLAYER_NAME];
 new ballascars[17];
-new fscars[18];
+new fscars[17];
 new fsacars[2];
 new aztcars[18];
 new vagoscars[16];
@@ -4638,6 +4654,16 @@ public LottoTimer() {
     return 1;
 }
 
+stock SendServerInfo(infoColor, infoText[]) {
+    new pPoolSize = GetPlayerPoolSize();
+    for (new i = 0; i <= pPoolSize; i++) {
+        if (!gPlayerLogged[i] || !pChatSettings[i][CHAT_SM]) continue;
+        SendClientMessage(i, infoColor, infoText);
+    }
+
+    return 1;
+}
+
 new playertimestamp[MAX_PLAYERS];
 public MinuteTimer() {
     new i, stunde, minute, sekunde;
@@ -4658,6 +4684,40 @@ public MinuteTimer() {
         SendClientMessageToAll(COLOR_YELLOW, "Kaufe dir mit /Lotto ein Lottoticket für $1.200 und versuche dein Glück!");
         SetTimer("LottoTimer", 1000 * 60 * 5, false);
     }
+
+    if (minute == 10) {
+        SendServerInfo(COLOR_BLUE,   "________________________________________________________________");
+        SendServerInfo(COLOR_YELLOW, "                                  LyD ~ Häufig gestellte Fragen");
+        SendServerInfo(COLOR_WHITE,  "Mit /Help werden Dir die wichtigsten Befehle auf dem Server aufgelistet.");
+        SendServerInfo(COLOR_WHITE,  "Solltest Du einen Ort nicht finden, so leitet Dir /Navi den Weg!");
+        SendServerInfo(COLOR_WHITE,  "Bei einem Anliegen kannst Du unseren Support mit /Sup erreichen.");
+        SendServerInfo(COLOR_BLUE,   "________________________________________________________________");
+    }
+    else if (minute == 25) {
+        SendServerInfo(COLOR_BLUE,   "___________________________________________________________________");
+        SendServerInfo(COLOR_YELLOW, "                                     LyD ~ Spenden für den Server");
+        SendServerInfo(COLOR_WHITE,  "Du möchtest LyD unterstützen?");
+        SendServerInfo(COLOR_WHITE,  "Dann schau in unserem Shop vorbei, wo Du dir tolle Extras sichern kannst!");
+        SendServerInfo(COLOR_WHITE,  "Unseren Shop erreichst Du unter: lyd-roleplay.de/shop");
+        SendServerInfo(COLOR_BLUE,   "___________________________________________________________________");
+    }
+    else if (minute == 40) {
+        SendServerInfo(COLOR_BLUE,   "________________________________________________________________");
+        SendServerInfo(COLOR_YELLOW, "                                      LyD ~ Informationen");
+        SendServerInfo(COLOR_WHITE,  "In unserem Forum findest Du wichtige Neuigkeiten,");
+        SendServerInfo(COLOR_WHITE,  "bezüglich Updates und Neuerungen, welche Du nicht verpassen solltest!");
+        SendServerInfo(COLOR_WHITE,  "Unser Forum erreichst du unter: lyd-roleplay.de/forum");
+        SendServerInfo(COLOR_WHITE,  "Unsere Teamspeak-IP lautet: ts.lyd-roleplay.de");
+        SendServerInfo(COLOR_BLUE,   "________________________________________________________________");
+    }
+    else if (minute == 55) {
+        SendServerInfo(COLOR_BLUE,   "______________________________________________________________");
+        SendServerInfo(COLOR_YELLOW, "                                  LyD ~ User Control Panel");
+        SendServerInfo(COLOR_WHITE,  "In unserem User Panel kannst Du jederzeit diverse Statistiken abrufen,");
+        SendServerInfo(COLOR_WHITE,  "ein Support-Ticket erstellen oder einen Regelverstoß melden.");
+        SendServerInfo(COLOR_WHITE,  "Unser User-Panel erreichst Du unter: ucp.lyd-roleplay.de");
+        SendServerInfo(COLOR_BLUE,   "______________________________________________________________");
+    }
     
     /*new wday, wmonth, wyear;
     getdate(wyear, wmonth, wday);
@@ -4677,49 +4737,6 @@ public HauptTimer() {
         new tick = GetTickCount(), tick2;
     #endif
     new i, str[58], SpecStr[155], weaponStr[32], Float:pHealth, Float:pArmor;
-    automsg++;
-    if (automsg == 600) {
-        SendClientMessageToAll(COLOR_YELLOW, "|___________________ Live your Dream ___________________|");
-        SendClientMessageToAll(COLOR_WHITE, "Mit /Help werden dir alle Befehle strukturiert aufgelistet,");
-        SendClientMessageToAll(COLOR_WHITE, "mit /Navi kannst du alle wichtigen Orte finden.");
-        SendClientMessageToAll(COLOR_WHITE, "Hast du Fragen oder Probleme? Dann helfen wir dir gerne!");
-        SendClientMessageToAll(COLOR_WHITE, "Unser Support erreichst du über /Sup.");
-        SendClientMessageToAll(COLOR_WHITE, "Du möchtest ein Regelverstoß melden? Mit /Admin kannst du");
-        SendClientMessageToAll(COLOR_WHITE, "sofort in eiligen Situationen ein Administrator kontaktieren.");
-        SendClientMessageToAll(COLOR_YELLOW, "|___________________________________________________|");
-    }
-    else if (automsg == 1200) {
-        SendClientMessageToAll(COLOR_YELLOW, "|_________________ Live your Dream _________________|");
-        SendClientMessageToAll(COLOR_WHITE, "Du möchtest dem Server behilflich sein?");
-        SendClientMessageToAll(COLOR_WHITE, "Dann schau in unserem Shop vorbei, wo du dir tolle");
-        SendClientMessageToAll(COLOR_WHITE, "Premiumvorteile sichern kannst!");
-        SendClientMessageToAll(COLOR_WHITE, "Unser Shop erreichst du unter: www.Shop.LyD-Roleplay.de");
-        SendClientMessageToAll(COLOR_YELLOW, "|___________________________________________________|");
-    }
-    else if (automsg == 1800) {
-        SendClientMessageToAll(COLOR_YELLOW, "|_________________ Live your Dream _________________|");
-        SendClientMessageToAll(COLOR_WHITE, "In unserem Forum findest du wichtige Neuigkeiten,");
-        SendClientMessageToAll(COLOR_WHITE, "die du unbedingt nicht verpassen solltest!");
-        SendClientMessageToAll(COLOR_WHITE, "Außerdem kannst du dich für Fraktionen o.ä bewerben");
-        SendClientMessageToAll(COLOR_WHITE, "oder dich in unseren Smalltalk-Bereichen vergnügen");
-        SendClientMessageToAll(COLOR_WHITE, "und den Marktplatz durchforsten.");
-        SendClientMessageToAll(COLOR_WHITE, "Unser Forum erreichst du unter: www.LyD-Roleplay.de");
-        SendClientMessageToAll(COLOR_WHITE, "Unsere Teamspeak-IP lautet: Teamspeak.LyD-Roleplay.de");
-        SendClientMessageToAll(COLOR_YELLOW, "|___________________________________________________|");
-    }
-    else if (automsg == 2400) {
-        SendClientMessageToAll(COLOR_YELLOW, "|_____________________ Live your Dream _____________________|");
-        SendClientMessageToAll(COLOR_WHITE, "Mit deinen Spielerdaten kannst du dich über ein Internet-Browser");
-        SendClientMessageToAll(COLOR_WHITE, "in unser User Panel anmelden. Unser User Panel bietet eine");
-        SendClientMessageToAll(COLOR_WHITE, "Vielfalt an Funktionen und ist sehr benutzerfreundlich.");
-        SendClientMessageToAll(COLOR_WHITE, "Jederzeit kannst du deine Spielstände, die Server-Statistiken");
-        SendClientMessageToAll(COLOR_WHITE, "abrufen und Einstellungen vornehmen. Außerdem kannst du");
-        SendClientMessageToAll(COLOR_WHITE, "ein Support-Ticket erstellen oder ein Regelverstoß bei unserer");
-        SendClientMessageToAll(COLOR_WHITE, "Beschwerdestelle anzeigen. Unser User-Panel erreichst du");
-        SendClientMessageToAll(COLOR_WHITE, "unter www.UCP.LyD-Roleplay.de");
-        SendClientMessageToAll(COLOR_YELLOW, "|___________________________________________________________|");
-        automsg = 0;
-    }
 
     OnUpdateUhr();
     OnUpdateDatum();
@@ -5214,6 +5231,7 @@ public OnGameModeInit2() {
 	fscars[13] = AddStaticVehicleEx(452,941.0000000,-2064.8999000,0.0000000,181.0000000,1,1,-1);//FS Boot
 	fscars[14] = AddStaticVehicleEx(452,940.5000000,-2050.0000000,0.0000000,0.0000000,1,1,-1);//FS Boot
 	fscars[15] = AddStaticVehicleEx(593,1225.2351,-1797.4314,34.1174,90.1936,3,1,-1); // fs fahr
+    fscars[16] = AddStaticVehicleEx(487,1199.1924,-1776.8152,33.8373,180.0687,3,1, -1);
 	//fscars[16] = AddStaticVehicleEx(431,1200.3561,-1831.2299,13.5042,270.4382,3,3,-1); // bus fahrschule
 	//fscars[17] = AddStaticVehicleEx(431,1200.3883,-1835.4598,13.5199,270.4391,3,3,-1); // bus fahrschule
 
@@ -6098,7 +6116,7 @@ public OnPlayerConnect(playerid)
 	format(string, sizeof(string), "* %s hat Live your Dream betreten.", sName);
     
 	for (new i = 0; i < MAX_PLAYERS; i++)
-	    if (IsPlayerConnected(i) && gPlayerLogged[i] == 1 && pJL[i] == 1)
+	    if (IsPlayerConnected(i) && gPlayerLogged[i] == 1 && pChatSettings[i][CHAT_JL] == 1)
             SendClientMessage(i, COLOR_GREY, string);
 
     PlayAudioStreamForPlayer(playerid, URL_LOGINMUSIC);
@@ -6443,12 +6461,13 @@ public OnPlayerConnect(playerid)
     pCurrentBiz[playerid] = 0;
     pSkinSelection[playerid] = 0;
     pChoosedSkin[playerid] = 0;
-    pGC[playerid] = 0;
-    pFC[playerid] = 0;
-    pJC[playerid] = 0;
-    pBC[playerid] = 0;
-    pCC[playerid] = 0;
-    pJL[playerid] = 0;
+    pChatSettings[playerid][CHAT_GC] = 0;
+    pChatSettings[playerid][CHAT_FC] = 0;
+    pChatSettings[playerid][CHAT_JC] = 0;
+    pChatSettings[playerid][CHAT_BC] = 0;
+    pChatSettings[playerid][CHAT_CC] = 0;
+    pChatSettings[playerid][CHAT_JL] = 0;
+    pChatSettings[playerid][CHAT_SM] = 0;
     wantedcodename[playerid]=MAX_PLAYERS;
     ReportCall[playerid]=999;
     PlayerNeedsHelp[playerid] = 0;
@@ -7052,7 +7071,7 @@ public OnPlayerDisconnect(playerid, reason)
     {
         if (IsPlayerConnected(i) && gPlayerLogged[i] == 1)
         {
-            if (pJL[i] == 1) SendClientMessage(i, COLOR_GREY, String);
+            if (pChatSettings[i][CHAT_JL] == 1) SendClientMessage(i, COLOR_GREY, String);
         }
     }
     KillTimer( Spieler[playerid][tFahrschule] );
@@ -7425,12 +7444,13 @@ public OnPlayerDisconnect(playerid, reason)
     pCurrentBiz[playerid] = 0;
     pSkinSelection[playerid] = 0;
     pChoosedSkin[playerid] = 0;
-    pGC[playerid] = 0;
-    pFC[playerid] = 0;
-    pJC[playerid] = 0;
-    pBC[playerid] = 0;
-    pCC[playerid] = 0;
-    pJL[playerid] = 0;
+    pChatSettings[playerid][CHAT_GC] = 0;
+    pChatSettings[playerid][CHAT_FC] = 0;
+    pChatSettings[playerid][CHAT_JC] = 0;
+    pChatSettings[playerid][CHAT_BC] = 0;
+    pChatSettings[playerid][CHAT_CC] = 0;
+    pChatSettings[playerid][CHAT_JL] = 0;
+    pChatSettings[playerid][CHAT_SM] = 0;
     wantedcodename[playerid]=MAX_PLAYERS;
     ReportCall[playerid]=999;
     PlayerNeedsHelp[playerid] = 0;
@@ -7938,11 +7958,11 @@ public gwarentimer()
         if(g_GangZone[index][GZ_igupgrade]!=0)
         {
             if(g_GangZone[index][GZ_igupgrade] == 3) // Geld
-                g_GangZone[index][GZ_igbestand] += 75000;
+                g_GangZone[index][GZ_igbestand] += 60000;
             else if (g_GangZone[index][GZ_igupgrade] == 2) // Drogen
-                g_GangZone[index][GZ_igbestand] += 200;
+                g_GangZone[index][GZ_igbestand] += 180;
             else if (g_GangZone[index][GZ_igupgrade] == 1) // WTeile
-                g_GangZone[index][GZ_igbestand] += 3000;
+                g_GangZone[index][GZ_igbestand] += 2800;
             SaveGangZones();
         }
     }
@@ -13936,25 +13956,21 @@ CMD:nummer(playerid, params[])
     SendClientMessage(playerid, COLOR_WHITE, string);
     return 1;
 }
-
-CMD:chatoff(playerid, params[])
-{
-    new stra1[64], stra2[64], stra3[64], str4[256],str5[64],str6[64];
-    if(pGC[playerid] == 0){stra1=COLOR_HEX_WHITE"Globaler Chat: "COLOR_HEX_RED"Ausgeschaltet";}
-    else if(pGC[playerid] == 1){stra1=COLOR_HEX_WHITE"Globaler Chat: "COLOR_HEX_GREEN"Angeschaltet";}
-    if(pJC[playerid] == 0){stra2=COLOR_HEX_WHITE"Job Chat: "COLOR_HEX_RED"Ausgeschaltet";}
-    else if(pJC[playerid] == 1){stra2=COLOR_HEX_WHITE"Job Chat: "COLOR_HEX_GREEN"Angeschaltet";}
-    if(pFC[playerid] == 0){stra3=COLOR_HEX_WHITE"Fraktions Chat: "COLOR_HEX_RED"Ausgeschaltet";}
-    else if(pFC[playerid] == 1){stra3=COLOR_HEX_WHITE"Fraktions Chat: "COLOR_HEX_GREEN"Angeschaltet";}
-    if(pJL[playerid] == 0){str5=COLOR_HEX_WHITE"Join/Leave Chat: "COLOR_HEX_RED"Ausgeschaltet";}
-    else if(pJL[playerid] == 1){str5=COLOR_HEX_WHITE"Join/Leave Chat: "COLOR_HEX_GREEN"Angeschaltet";}
-    if(pCC[playerid] == 0){str6=COLOR_HEX_WHITE"Clubmitglied Chat: "COLOR_HEX_RED"Ausgeschaltet";}
-    else if(pCC[playerid] == 1){str6=COLOR_HEX_WHITE"Clubmitglied Chat: "COLOR_HEX_GREEN"Angeschaltet";}
-    format(str4, sizeof(str4), "%s\n%s\n%s\n%s\n%s", stra1, stra2, stra3,str5,str6);
-    ShowPlayerDialog(playerid, DIALOG_CHATOFF, DIALOG_STYLE_LIST, "Chat Status", str4, "Ändern", "Abbrechen");
-    return 1;
+CMD:chatsettings(playerid) {
+    return cmd_chatoff(playerid);
 }
 
+CMD:chatoff(playerid) {
+    new dialogText[400];
+    format(dialogText, sizeof(dialogText), "Chat\tEinstellungen\n");
+    for (new i = 0; i < sizeof(g_ChatNames); i++) {
+        if (i == 6 && !IsBeamter(playerid)) continue;
+        format(dialogText, sizeof(dialogText), "%s%s\t%s\n", dialogText, g_ChatNames[i], 
+            pChatSettings[playerid][i] ? COLOR_HEX_GREEN "Angeschaltet" : COLOR_HEX_RED "Ausgeschaltet");
+    }
+
+    return ShowPlayerDialog(playerid, DIALOG_CHATOFF, DIALOG_STYLE_TABLIST_HEADERS, "Chat-Einstellungen", dialogText, "Ändern", "Abbrechen");
+}
 
 CMD:handystatus(playerid, params[])
 {
@@ -16786,7 +16802,7 @@ CMD:veh(playerid, params[])
     gMaxGas[vehicle] = GetMaxTank(vehicle);
     aiVehicles[ vehicle ] = VEH_CAR;
     format(string, sizeof(string), "%s %s hat ein Fahrzeug gespawnt (CarID: %d)", GetPlayerAdminRang(playerid), GetName(playerid), vID);
-    SendAdminMessage(COLOR_YELLOW, string);
+    SendAdminMessage(COLOR_BLUE, string);
     return 1;
 }
 
@@ -16809,7 +16825,7 @@ CMD:supauto(playerid, params[])
     gMaxGas[vehicle] = GetMaxTank(vehicle);
     aiVehicles[ vehicle ] = VEH_CAR;
     format(string, sizeof(string), "%s %s hat einen Sultan gespawnt (CarID: 560)", GetPlayerAdminRang(playerid), GetName(playerid));
-    SendAdminMessage(COLOR_YELLOW, string);
+    SendAdminMessage(COLOR_BLUE, string);
     return 1;
 }
 
@@ -20424,7 +20440,7 @@ CMD:jc(playerid, params[])
         return 0;
     }
     new text[96];
-    if(pJC[playerid] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Job Chat für dich deaktiviert, tippe /Chatoff.");
+    if(pChatSettings[playerid][CHAT_JC] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Job Chat für dich deaktiviert, tippe /Chatoff.");
     if(sscanf(params, "s[96]", text))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Jc [Nachricht]");
     if(Spieler[playerid][pJob] >= 1)
     {
@@ -20444,7 +20460,7 @@ CMD:cc(playerid, params[])
     if(Spieler[playerid][pDonateRank] != 1) return SendClientMessage(playerid,COLOR_RED,"Du bist kein Clubmitglied");
     new text[96];
     if(sscanf(params, "s[96]", text)) return SendClientMessage(playerid, COLOR_BLUE, "* Club-Chat:"COLOR_HEX_GREENA" /CC [Nachricht]");
-    if(pCC[playerid] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Clubmitglied Chat für dich deaktiviert, tippe /Chatoff.");
+    if(pChatSettings[playerid][CHAT_CC] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Clubmitglied Chat für dich deaktiviert, tippe /Chatoff.");
     new string[128];
     format(string, sizeof(string), "* Clubmitglied %s sagt: %s *", GetName(playerid), text);
     SendClubMessage(COLOR_CLUB,string);
@@ -20473,7 +20489,7 @@ CMD:fc(playerid, params[])
         return 0;
     }
     new text[96];
-    if(pFC[playerid] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Fraktions Chat für dich deaktiviert, tippe /Chatoff.");
+    if(pChatSettings[playerid][CHAT_FC] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Fraktions Chat für dich deaktiviert, tippe /Chatoff.");
     if(sscanf(params, "s[96]", text))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Fc [Nachricht]");
     if(Spieler[playerid][pFraktion] >= 1)
     {
@@ -20507,9 +20523,9 @@ CMD:bc(playerid, params[])
         return 0;
     }
     new text[96];
-    if(pBC[playerid] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Beamten Chat für dich deaktiviert, tippe /Chatoff.");
+    if(pChatSettings[playerid][CHAT_BC] == 0)return SendClientMessage(playerid, COLOR_RED, "Du hast den Beamten Chat für dich deaktiviert, tippe /Chatoff.");
     if(sscanf(params, "s[96]", text))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Bc [Nachricht]");
-    if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 3 || Spieler[playerid][pFraktion] == 5 || Spieler[playerid][pFraktion] == 9 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Nur für SAPD, FBI, SA-MD, Zollbeamte und O-AMT verfügbar.");
+    if(!IsBeamter(playerid))return SendClientMessage(playerid, COLOR_RED, "Nur für SAPD, FBI, SA-MD, Zollbeamte und O-AMT verfügbar.");
     new string[128];
     new rk[50];
     if(Spieler[playerid][pFraktion] == 1){rk ="LSPD Beamter";}
@@ -20525,9 +20541,9 @@ CMD:bc(playerid, params[])
     {
         if(IsPlayerConnected(i))
         {
-            if(pBC[i] == 1)
+            if(pChatSettings[i][CHAT_BC] == 1)
             {
-                if(Spieler[i][pFraktion] == 1 || Spieler[i][pFraktion] == 2 || Spieler[i][pFraktion] == 3 || Spieler[i][pFraktion] == 5 || Spieler[i][pFraktion] == 9 || Spieler[i][pFraktion] == 16 || Spieler[i][pFraktion] == 18 || Spieler[i][pFraktion] == 22)
+                if(IsBeamter(i))
                 {
                     SendClientMessage(i, COLOR_BCHAT, string);
                 }
@@ -20595,14 +20611,14 @@ CMD:gc(playerid, params[])
     if(Spieler[playerid][pAdmin] < 3)
     {
         if(!g_aSettings[ASETTING_GLOBALCHAT][ASETTING_TOGGLE])return SendClientMessage(playerid, COLOR_RED, "Der Globale Chat ist derzeit deaktiviert.");
-        if(!pGC[playerid])return SendClientMessage(playerid, COLOR_YELLOW, "Du hast den Globalen Chat für dich deaktiviert, tippe /chatoff.");
+        if(!pChatSettings[playerid][CHAT_GC])return SendClientMessage(playerid, COLOR_YELLOW, "Du hast den Globalen Chat für dich deaktiviert, tippe /chatoff.");
         format(string, sizeof(string), "(( %s: %s ))", GetName(playerid), text);
         SendGlobalMessage(COLOR_CHAT_GC_NONADM, string);
     }
     else
     {
-        if(!pGC[playerid])return SendClientMessage(playerid, COLOR_YELLOW, "Du hast den Globalen Chat für dich deaktiviert, tippe /chatoff.");
-        format(string, sizeof(string), "(( %s: %s ))", GetName(playerid), text);
+        if(!pChatSettings[playerid][CHAT_GC])return SendClientMessage(playerid, COLOR_YELLOW, "Du hast den Globalen Chat für dich deaktiviert, tippe /chatoff.");
+        format(string, sizeof(string), "(( %s %s: %s ))", GetPlayerAdminRang(playerid), GetName(playerid), text);
         SendGlobalMessage(COLOR_CHAT_GC_ADM, string);
     }
     format(string, sizeof(string), "Name: %s - %s", GetName(playerid), text);
@@ -36168,85 +36184,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         }
         case DIALOG_CHATOFF:
         {
-            if(response)
-            {
-                if(listitem==0)
-                {
-                    if(pGC[playerid] == 0)
-                    {
-                        pGC[playerid] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Globalen Chat eingeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                    else if(pGC[playerid] == 1)
-                    {
-                        pGC[playerid] = 0;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Globalen Chat ausgeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                }
-                if(listitem==1)
-                {
-                    if(pJC[playerid] == 0)
-                    {
-                        pJC[playerid] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Job Chat eingeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                    else if(pJC[playerid] == 1)
-                    {
-                        pJC[playerid] = 0;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Job Chat ausgeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                }
-                if(listitem==2)
-                {
-                    if(pFC[playerid] == 0)
-                    {
-                        pFC[playerid] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Fraktions Chat eingeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                    else if(pFC[playerid] == 1)
-                    {
-                        pFC[playerid] = 0;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Fraktions Chat ausgeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                }
-                if(listitem==3)
-                {
-                    if(pJL[playerid] == 0)
-                    {
-                        pJL[playerid] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Join/Leave Chat eingeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                    else if(pJL[playerid] == 1)
-                    {
-                        pJL[playerid] = 0;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Join/Leave Chat ausgeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                }
-                if(listitem==4)
-                {
-                    if(pCC[playerid] == 0)
-                    {
-                        pCC[playerid] = 1;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Clubmitglied Chat eingeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                    else if(pCC[playerid] == 1)
-                    {
-                        pCC[playerid] = 0;
-                        SendClientMessage(playerid, COLOR_WHITE, "Du hast den Clubmitglied Chat ausgeschaltet.");
-                        return cmd_chatoff(playerid,"");
-                    }
-                }
-            }
-            if(!response)return 1;
+            if (!response) return 1;
+            if (listitem < 0 || listitem >= sizeof(g_ChatNames) || !IsBeamter(playerid) && listitem == sizeof(g_ChatNames)) 
+                return SendClientMessage(playerid, COLOR_RED, "[FEHLER]{FFFFFF}Ungültige Auswahl.");
+            pChatSettings[playerid][listitem] = !pChatSettings[playerid][listitem];
+            SCMFormatted(playerid, pChatSettings[playerid][listitem] ? COLOR_GREEN : COLOR_RED, "[INFO] {FFFFFF}Du hast den %s %s.",\
+                g_ChatNames[listitem], pChatSettings[playerid][listitem] ? "angeschaltet" : "ausgeschaltet");
+            return cmd_chatoff(playerid);
         }
         case DIALOG_GOTOLISTE:
         {
@@ -41681,6 +41625,11 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pPremiumBizSlot],
                     Spieler[playerid][pHouseMieteKey]
         );
+        new increment = 1, chatBit;
+        for (new i = 0; i < 7; i++) {
+            chatBit += pChatSettings[playerid][i] ? increment : 0;
+            increment *= 2;
+        }
         format(saveaccount,sizeof(saveaccount),"%s \
                 `PrisonRunCount` = %d, \
                 `PrisonRun` = %d, \
@@ -41713,7 +41662,8 @@ stock SaveAccount(playerid)
                 `cb_LTC` = %f, \
                 `cb_AAPL` = %f, \
                 `cb_SSUNF` = %f, \
-                `KillsStreetwar` = %d",
+                `KillsStreetwar` = %d, \
+                `ChatSettings` = %d",
                     saveaccount,
                     Spieler[playerid][pPrisonRunCount],
                     Spieler[playerid][pPrisonRun],
@@ -41746,7 +41696,8 @@ stock SaveAccount(playerid)
                     Spieler[playerid][pLTC],
                     Spieler[playerid][pAAPL],
                     Spieler[playerid][pSSUNF],
-                    Spieler[playerid][pKillsStreetwar]);
+                    Spieler[playerid][pKillsStreetwar],
+                    chatBit);
         format(saveaccount,sizeof(saveaccount),"%s \
                 WHERE `Name` = '%s'",
                     saveaccount,
@@ -41926,7 +41877,8 @@ new const PlayerColumns[][] = {
     {"cb_LTC"},
     {"cb_AAPL"},
     {"cb_SSUNF"},
-    {"KillsStreetwar"}
+    {"KillsStreetwar"},
+    {"ChatSettings"}
 };
 
 new
@@ -44230,7 +44182,7 @@ stock SendGlobalMessage(color, string[])
     {
         if(IsPlayerConnected(i))
         {
-            if(pGC[i])
+            if(pChatSettings[i][CHAT_GC])
             {
                 SendClientMessage(i, color, string);
             }
@@ -44246,7 +44198,7 @@ stock SendFraktionMessage(frakid, color, string[])
         {
             if(Spieler[i][pFraktion] == frakid)
             {
-                if(pFC[i])
+                if(pChatSettings[i][CHAT_FC])
                 {
                     SendClientMessage(i, color, string);
                 }
@@ -44264,7 +44216,7 @@ stock SendClubMessage(color, string[])
         {
             if(Spieler[i][pDonateRank] >= 1)
             {
-                if(pCC[i])
+                if(pChatSettings[i][CHAT_CC])
                 {
                     SendClientMessage(i, color, string);
                 }
@@ -44279,7 +44231,7 @@ stock SendGlobalChatMessage(color, string[])
     {
         if(IsPlayerConnected(i))
         {
-            if(pGC[i])
+            if(pChatSettings[i][CHAT_GC])
             {
                 SendClientMessage(i, color, string);
             }
@@ -44295,7 +44247,7 @@ stock SendJobMessage(job, color, string[])
         {
             if(Spieler[i][pJob] == job)
             {
-                if(pJC[i])
+                if(pChatSettings[i][CHAT_JC])
                 {
                     SendClientMessage(i, color, string);
                 }
@@ -56050,6 +56002,14 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             Spieler[playerid][pAAPL] = cache_get_row_float(0, 148, connectionHandle);
             Spieler[playerid][pSSUNF] = cache_get_row_float(0, 149, connectionHandle); // Coinbase end
             Spieler[playerid][pKillsStreetwar] = cache_get_row_int(0, 150, connectionHandle);
+
+            new chatBit[2], increment = 1;
+            cache_get_row(0, 151, chatBit, connectionHandle);
+            for (new i = 0; i < 7; i++) {
+                pChatSettings[playerid][i] = chatBit[0] & increment ? true : false;
+                increment *= 2;
+            }
+
             // Spieler[playerid][pfrakwarn] = cache_get_row_int(0,137,connectionHandle);
             // Spieler[playerid][pdeacc] = cache_get_row_int(0,138,connectionHandle);
             // Spieler[playerid][pschulden] = cache_get_row_int(0,139,connectionHandle);
@@ -56190,11 +56150,6 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             SetSpawnInfo(playerid, 0,0,0,0,0,0,0,0,0,0,0,0);
 
             //SetTimerEx("OnPlayerMoneyCheck", 1000, 1, "i", playerid);
-            pJC[playerid] = 1;
-            pFC[playerid] = 1;
-            pBC[playerid] = 1;
-            pGC[playerid] = 1;
-            pCC[playerid] = 1;
 
             if( Spieler[playerid][pWarns] ) {
                 format(String,sizeof(String),"Du hast %d/3 Admin Verwarnungen! Ab 3 Admin Verwarnungen wirst du dauerhaft gesperrt!",Spieler[playerid][pWarns]);
