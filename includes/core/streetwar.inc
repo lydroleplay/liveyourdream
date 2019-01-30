@@ -107,6 +107,9 @@ hook OnPlayerDeath(playerid, killerid, reason) {
             format(message, sizeof(message), "[Streetwar] {FFFFFF}%s %s hat %s (%s) getötet.", rk, GetName(killerid), GetName(playerid), factionNames[Spieler[playerid][pFraktion]]);
             GameTextForPlayer(killerid, "+1 Streetwarkill", 3000, 4);
             SendFraktionMessage(Spieler[killerid][pFraktion], COLOR_DARKGREEN, message);
+            ReturnPlayerRank(playerid, rk);
+            format(message, sizeof(message), "[Streetwar] {FFFFFF}%s %s wurde von %s (%s) getötet.", rk, GetName(playerid), GetName(killerid), factionNames[Spieler[killerid][pFraktion]]);
+            SendFraktionMessage(Spieler[playerid][pFraktion], COLOR_RED, message);
             SW_score[Spieler[killerid][pFraktion]]++;
             Spieler[killerid][pKillsStreetwar]++;
             GivePlayerCash(killerid, 450);
