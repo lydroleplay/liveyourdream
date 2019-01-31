@@ -4255,7 +4255,7 @@ enum {
     CHAT_BC
 }
 
-new bool:pChatSettings[MAX_PLAYERS char][7];
+new bool:pChatSettings[MAX_PLAYERS][7];
 
 new bestand[MAX_VEHICLES];
 new Benzin[MAX_VEHICLES];
