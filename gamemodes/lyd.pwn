@@ -11651,7 +11651,7 @@ CMD:drivein(playerid)
         SetPlayerHealth(playerid, 100);
         GivePlayerCash(playerid, -50);
         Biz[GetBizIndexByID(2)][bKasse] += 50;
-        Biz[GetBizIndexByID(2)][bWaren] += 1;
+        Biz[GetBizIndexByID(2)][bWaren] -= 1;
         return SendClientMessage(playerid, COLOR_ORANGE, "[DRIVE-IN] {FFFFFF}Du hast dir ein Chicken Teriyaki Sub am Drive-In bestellt.");
     }
 
@@ -42565,7 +42565,7 @@ public PayDay()
             format(string,sizeof(string),"Eigentumshaus: "COLOR_HEX_RED"-$%s"COLOR_HEX_WHITE", Inhaberkosten - Geschäft: "COLOR_HEX_RED"-$%s"COLOR_HEX_WHITE\
                 ", Tankstelle: "COLOR_HEX_RED"-$%s", AddDelimiters(hausstrom), AddDelimiters(bizstrom), AddDelimiters(tankestrom));
             SendClientMessage(playerid, COLOR_WHITE, string);
-            SendClientMessage(playerid, COLOR_YELLOW, "|============================================================|");
+            SendClientMessage(playerid, COLOR_YELLOW, "|==========================================================|");
             ShowBuyInformation(playerid,"~y~Glueckwunsch,~w~ Zahltag!");
 
             if (Spieler[playerid][pSuspendedSentence] > 0) {
@@ -47163,11 +47163,16 @@ public Cooldown_ChatSpam(playerid) {
     Spieler[playerid][pChatSpam]--;
     return 1;
 }*/
-public OnPlayerCommandPerformed(playerid, cmdtext[], success)
-{
+
+public OnPlayerCommandReceived(playerid, cmdtext[]) {
     new command[128];
     format(command, sizeof(command), "%s - %s", GetName(playerid), cmdtext);
     LogCommand(command);
+    return 1;
+}
+
+public OnPlayerCommandPerformed(playerid, cmdtext[], success)
+{
     if (Spieler[playerid][pAdmin] < 2) Spieler[playerid][pCommandSpam]++;
     if( Spieler[playerid][pCommandSpam] >= 10 ) {
         new
@@ -65777,7 +65782,7 @@ COMMAND:alevel(playerid,params[]) {
     SendAdminMessage(COLOR_YELLOW, string);
     format(string,sizeof(string),"%s %s gab dir %d Level.", GetPlayerAdminRang(playerid), GetName(playerid), level);
     Spieler[pID][pLevel] += level;
-    SetPlayerScore(playerid, Spieler[pID][pLevel]);
+    SetPlayerScore(pID, Spieler[pID][pLevel]);
     SendClientMessage(pID,COLOR_GREEN,string);
     return 1;
 }
