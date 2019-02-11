@@ -65319,9 +65319,13 @@ CMD:gangfight(playerid, params[]) {
         return SCMFormatted(playerid, COLOR_RED, "Dieses Ganggebiet hat noch %i Stunden %i Minuten lang eine Zeitsperre.", h, m);
     }
 
-    // Montag - Donnerstag zwischen 19-21 Uhr starten können ohne das ein Gegner online sein muss. Freitag - Sonntag von 19-22 Uhr
+    // Donnerstag & Freitag sollte das System von 19-21 Uhr funktionieren, sodass man angreifen kann wenn kein einziges Mitglied da ist der Gegner.
+    // Samstag von 16 - 18 Uhr und Sonntag von 19-22
 
-    new day = GetWeekDayNumber(), minimumPlayers = (hour >= 19 && hour < 21) || (day >= WEEKDAY_FRIDAY && day <= WEEKDAY_SUNDAY && hour == 21) ? 0 : GANG_FIGHT_PLAYERS;
+    new day = GetWeekDayNumber(),
+        minimumPlayers = ((day == WEEKDAY_THURSDAY || day == WEEKDAY_FRIDAY) && hour >= 19 && hour < 21) ||
+                         (day == WEEKDAY_SATURDAY && hour >= 16 && hour < 18) ||
+                         (day == WEEKDAY_SUNDAY && hour >= 19 && hour < 22) ? 0 : GANG_FIGHT_PLAYERS;
 
     if (GetFactionOnlinePlayers(frak) < minimumPlayers)
         return SCMFormatted(playerid, COLOR_RED, "Es müssen mindestens %d Gangmitglieder deiner und der gegnerischen online sein!", minimumPlayers);
