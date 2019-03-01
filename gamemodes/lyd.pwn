@@ -11045,6 +11045,9 @@ public Anti_OnVehicleDeath(playerid) {
 }
 
 public OnVehicleDeath(vehicleid, killerid) {
+    new string[128];
+    format(string, sizeof(string), "Killer: %s (ID: %d) - Vehicle ID: %d", GetName(killerid), killerid, vehicleid);
+    LogVehicleDeath(string);
     if (Spieler[killerid][pAdmin] < 3 && g_aiDestroyedVehicles[killerid] >= 5 ) {
         new String[128];
         format(String, sizeof(String), "[Anti-Cheat] Spieler %s Verdacht auf Vehicle-Spam: %d Fahrzeug(e)", GetName(killerid), g_aiDestroyedVehicles[killerid]);
@@ -46722,6 +46725,19 @@ stock LogCommand(text[])
     return 1;
 }
 
+stock LogVehicleDeath(text[])
+{
+    new File:LogFile, jahr, monat, tag, stunde, minute, sekunde, string[128], path[64];
+    getdate(jahr, monat, tag);
+    gettime(stunde, minute, sekunde);
+    format(path, sizeof(path), "/Logs/VehicleDeath/%02d-%02d-%d.txt", tag, monat, jahr);
+    LogFile = fopen(path, io_append);
+    format(string, sizeof(string), "[VDEATH] [%02d:%02d:%02d] - %s\r\n", stunde, minute, sekunde, text);
+    fwrite(LogFile, string);
+    fclose(LogFile);
+    return 1;
+}
+
 stock LogBus(text[])
 {
     new File:LogFile, jahr, monat, tag, stunde, minute, sekunde, string[128], path[64];
@@ -49481,32 +49497,21 @@ public stopMask(playerid) {
     return 1;
 }
 
-COMMAND:adminmaske(playerid,params[]) {
-    if( !(Spieler[playerid][pAdmin] == 5 || Spieler[playerid][pAdmin] == 6) ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die nötigen Rechte!");
-    }
-    if( Spieler[playerid][abMaske] ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du trägst bereits eine Maske");
-    }
-    SendClientMessage(playerid,COLOR_GREEN,"Du hast deine Maske aufgezogen, dein Name ist nun für 10 Minuten verdeckt!");
-    Spieler[playerid][atMaske] = SetTimerEx("astopMask",(10*60*1000)+53,false,"d",playerid);
-    Spieler[playerid][abMaske] = true;
-    SetPlayerColor(playerid, ( GetPlayerColor(playerid) & 0xFFFFFF00 ) );
-    for(new i ; i < MAX_PLAYERS ; i++) {
-        ShowPlayerNameTagForPlayer(i,playerid,0);
-    }
-    return 1;
-}
+CMD:amaske(playerid) return cmd_adminmaske(playerid);
 
-forward astopMask(playerid);
-public astopMask(playerid) {
-    SendClientMessage(playerid,COLOR_ORANGE,"Die 10 Minuten sind um, dein Name kann nun jeder wieder sehen!");
-    Spieler[playerid][abMaske] = false;
-    KillTimer(Spieler[playerid][atMaske]);
-    SetPlayerColor(playerid, ( GetPlayerColor(playerid) | 0xFF ) );
-    for(new i ; i < MAX_PLAYERS ; i++) {
-        ShowPlayerNameTagForPlayer(i,playerid,1);
+CMD:adminmaske(playerid) {
+    if (Spieler[playerid][pAdmin] < 5) return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die nötigen Rechte!");
+    new poolSize = GetPlayerPoolSize();
+    Spieler[playerid][abMaske] = !Spieler[playerid][abMaske];
+    if (!Spieler[playerid][abMaske]) {
+        SetPlayerColor(playerid, GetPlayerColor(playerid) | 0xFF);
+        for (new i; i <= poolSize; i++) ShowPlayerNameTagForPlayer(i, playerid, 1);
+        return SendClientMessage(playerid, COLOR_ORANGE, "Du hast deine Maske abgenommen.");
     }
+
+    SendClientMessage(playerid, COLOR_GREEN, "Du hast deine Maske aufgezogen.");
+    SetPlayerColor(playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
+    for (new i; i < MAX_PLAYERS; i++)  ShowPlayerNameTagForPlayer(i, playerid, 0);
     return 1;
 }
 
