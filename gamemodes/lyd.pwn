@@ -48618,18 +48618,13 @@ COMMAND:bankausrauben(playerid,params[]) {
     return 1;
 }
 
-COMMAND:flock(playerid,params[]) {
-    new
-        vehicleid,
-        fraktion;
-    vehicleid = GetPlayerVehicleID(playerid);
-    if( !vehicleid ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in einem Fahrzeug.");
-    }
+CMD:flock(playerid, params[]) {
+    new vehicleid = GetPlayerVehicleID(playerid), fraktion;
+    if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "Du bist nicht in einem Fahrzeug.");
     fraktion = GetVehicleFraktion(vehicleid);
-    if(!fraktion) {
-        return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug ist kein Fraktionsfahrzeug.");
-    }
+    if (!fraktion) return SendClientMessage(playerid, COLOR_RED, "Das Fahrzeug ist kein Fraktionsfahrzeug.");
+    if (fraktion != Spieler[playerid][pFraktion]) return SendClientMessage(playerid, COLOR_RED, "Du hast keine Schlüssel für dieses Fraktionsfahrzeug.");
+
     new engine, lights, alarm, doors, bonnet, boot, objective;
     GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
     if(doors == VEHICLE_PARAMS_ON)
