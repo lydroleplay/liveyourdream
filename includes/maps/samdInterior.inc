@@ -29,7 +29,7 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if (newkeys & KEY_SECONDARY_ATTACK) {
-        if (IsPlayerInRangeOfPoint(playerid, 2.0, SAMD_INTERIOR_EXIT_COORDS)) { // Exit
+        if (IsPlayerInRangeOfPoint(playerid, 2.0, SAMD_INTERIOR_EXIT_COORDS) && GetPlayerVirtualWorld(playerid) == VW_SAMDINTERIOR) { // Exit
             SetPlayerFacingAngle(playerid, SAMD_INTERIOR_ENTER_FACING);
             SetCameraBehindPlayer(playerid);
 			SetPlayerPosEx(playerid, SAMD_INTERIOR_ENTER_COORDS, MAPS_SAMDEXTERIOR_INTERIOR, VW_MAIN);
