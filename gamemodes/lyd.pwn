@@ -55757,7 +55757,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             }
 
             sscanf(pName, "k<playername>", giveid);
-            if (giveid != INVALID_PLAYER_ID) format(string, sizeof(string), "{228B22}Online (ID: %i)\t%s\t%d\t%d - %s ($%s)\n", giveid, pName, lv, rk, rank, AddDelimiters(salary));
+            if (giveid != INVALID_PLAYER_ID) format(string, sizeof(string), "{228B22}Online (ID: %i)\t%s%s\t%d\t%d - %s ($%s)\n", giveid, Spieler[giveid][pDuty] ? "{87CEFA}" : "", pName, lv, rk, rank, AddDelimiters(salary));
             else format(string, sizeof(string), "{FF0000}Offline\t%s\t%d\t%d - %s ($%s)\n", pName, lv, rk, rank, AddDelimiters(salary));
 
             strcat(str2, string);
