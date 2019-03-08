@@ -54780,6 +54780,7 @@ COMMAND:staatrepair(playerid,params[]) {
     for(new i ; i < sizeof(g_StaatRepair); i++) {
         if( IsPlayerInRangeOfPoint(playerid,5.0, g_StaatRepair[i][0], g_StaatRepair[i][1], g_StaatRepair[i][2])) {
             RepairVehicle(vehicleid);
+            if (IsArmoredVehicle(vehicleid)) SetVehicleHealth(vehicleid, 2000.0);
             gGas[vehicleid] = GetMaxTank(vehicleid);
             SendClientMessage(playerid,COLOR_YELLOW,"Dein Fahrzeug wurde repariert und aufgetankt!");
             return 1;
@@ -58132,6 +58133,23 @@ COMMAND:kofferraumansehen(playerid,params[]) {
     }
     ShowKofferraum(playerid,vehicleid);
     return 1;
+}
+
+stock IsArmoredVehicle(vehicleid) {
+    new i;
+    for (i = 0; i < sizeof(vehicle_lspdExterior); i++)
+        if (vehicle_lspdExterior[i] == vehicleid) return true;
+
+    for (i = 0; i < sizeof(vehicle_fbiExterior); i++)
+        if (vehicle_fbiExterior[i] == vehicleid) return true;
+
+    for (i = 0; i < sizeof(lvpdcars); i++)
+        if (lvpdcars[i] == vehicleid) return true;
+
+    for (i = 0; i < sizeof(armycars); i++)
+        if (armycars[i] == vehicleid) return true;
+
+    return false;
 }
 
 stock IsTrunkOpen(vehicleid) {
@@ -63284,7 +63302,7 @@ CMD:fixveh(playerid, params[]) {
     if (!vehicleid) return SendClientMessage(playerid, COLOR_RED, "[FEHLER] {FFFFFF}Du bist in keinem Fahrzeug.");
     new Float:vehhealth;
     if (isnull(params)) vehhealth = 1000.0, RepairVehicle(vehicleid);
-    else if (sscanf(params, "%f", vehhealth)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Fixveh optional:[Zustand]");
+    else if (sscanf(params, "%f", vehhealth)) return SendClientMessage(playerid, COLOR_BLUE, INFO_STRING "/Fixveh optional: [Zustand]");
     SetVehicleHealth(vehicleid, vehhealth);
     return true;
 }
