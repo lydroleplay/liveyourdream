@@ -273,7 +273,7 @@ new GasMax[] = {
 70,//"Hotring",
 80,//"Sandking",
 50,//"Blista Compact",
-80,//"Police Maverick",
+300,//"Police Maverick",
 80,//"Boxville",
 58,//"Benson",
 80,//"Mesa",
@@ -442,6 +442,8 @@ new word[11][]= {
 	{"Schlampe"},
 	{"Arschgeburt"}
 };
+
+new const g_armoredVehicleModels[] = {407, 427, 433, 490, 497, 596, 597, 598, 599, 601};
 
 enum E_SHISHA_PIPE {
     SHISHA_PIPE_NAME[30],
@@ -6316,8 +6318,6 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][unixUpdate] = _gettime;
     Spieler[playerid][punixFlyhack] = Spieler[playerid][unixUpdate];
     Spieler[playerid][pStartbonus] = 0;
-    Spieler[playerid][pDetektivPoints] = 1;
-    Spieler[playerid][pHurePoints] = 1;
     Spieler[playerid][iWheelmanID] = INVALID_PLAYER_ID;
     Spieler[playerid][pSecureCodeLevel] = -1;
     Spieler[playerid][pVertragID] = INVALID_PLAYER_ID;
@@ -6354,7 +6354,11 @@ public OnPlayerConnect(playerid)
     Spieler[playerid][pHaustierSpawned] = false;
     Spieler[playerid][pHaustierObject] = INVALID_OBJECT_ID;
     Spieler[playerid][pWiederbelebung] = 0;
+    Spieler[playerid][pDetektivPoints] = 1;
+    Spieler[playerid][pHurePoints] = 1;
     Spieler[playerid][pLawyerPoints] = 0;
+    Spieler[playerid][pWaffenteilePoints] = 0;
+    Spieler[playerid][pDrogenPoints] = 0;
     Spieler[playerid][tRadarfallenWarnung] = INVALID_TIMER_ID;
     Spieler[playerid][pAutomatik] = 0;
     Spieler[playerid][tKidnap] = INVALID_TIMER_ID;
@@ -7301,8 +7305,6 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][ibInterviewStat] = 0;
     Spieler[playerid][punixFlyhack] = Spieler[playerid][unixUpdate];
     Spieler[playerid][pStartbonus] = 0;
-    Spieler[playerid][pDetektivPoints] = 1;
-    Spieler[playerid][pHurePoints] = 1;
     Spieler[playerid][iWheelmanID] = INVALID_PLAYER_ID;
     Spieler[playerid][pSecureCodeLevel] = -1;
     Spieler[playerid][pVertragID] = INVALID_PLAYER_ID;
@@ -7337,7 +7339,11 @@ public OnPlayerDisconnect(playerid, reason)
     Spieler[playerid][pHaustierSpawned] = false;
     Spieler[playerid][pHaustierObject] = INVALID_OBJECT_ID;
     Spieler[playerid][pWiederbelebung] = 0;
+    Spieler[playerid][pDetektivPoints] = 1;
+    Spieler[playerid][pHurePoints] = 1;
     Spieler[playerid][pLawyerPoints] = 0;
+    Spieler[playerid][pWaffenteilePoints] = 0;
+    Spieler[playerid][pDrogenPoints] = 0;
     Spieler[playerid][tRadarfallenWarnung] = INVALID_TIMER_ID;
     Spieler[playerid][pAutomatik] = 0;
     Spieler[playerid][tKidnap] = INVALID_TIMER_ID;
@@ -12965,8 +12971,10 @@ CMD:zigweg(playerid)
     new string[128];
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x,y,z);
-    ClearAnimations(playerid);
-    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+    if (!IsPlayerInAnyVehicle(playerid)) {
+        ClearAnimations(playerid);
+        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+    }
     format(string, sizeof(string), "* %s wirft seine Zigarette weg.", GetName(playerid));
     SendRoundMessage(x,y,z, COLOR_PURPLE, string);
     return 1;
@@ -16788,12 +16796,17 @@ CMD:spawncar(playerid, params[]) {
     return 1;
 }
 
+stock IsValidVehicleModelID(vehid) {
+    return vehid >= 400 && vehid <= 611 ? true : false;
+}
+
 CMD:veh(playerid, params[])
 {
     new string[128];
     if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     new vID, color1, color2, Float:x, Float:y, Float:z, Float:angle;
     if(sscanf(params, "iii", vID, color1, color2))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Veh [VehicleID] [Color 1] [Color 2]");
+    if (!IsValidVehicleModelID(vID)) return SendClientMessage(playerid, COLOR_RED, "Ungültige Fahrzeug Model-ID.");
     GetPlayerFacingAngle(playerid, angle);
     GetPlayerPos(playerid, x,y,z);
     new vehicle;
@@ -22761,6 +22774,15 @@ public OnPlayerExitVehicle(playerid, vehicleid)
         UnLockCar(vehicleid);
     }
     */
+
+    if (Cuffed[playerid]) {
+        new Float:pX, Float:pY, Float:pZ, seat = GetPlayerVehicleSeat(playerid);
+        GetPlayerPos(playerid, pX, pY, pZ);
+        SetPlayerPos(playerid, pX, pY, pZ);
+        PutPlayerInVehicle(playerid, vehicleid, seat);
+        return 1;
+    }
+
     for(new i;i<MAX_VEHICLES;i++)
     {
         for(new t;t<sizeof(drogen);t++)
@@ -58138,18 +58160,9 @@ COMMAND:kofferraumansehen(playerid,params[]) {
 }
 
 stock IsArmoredVehicle(vehicleid) {
-    new i;
-    for (i = 0; i < sizeof(vehicle_lspdExterior); i++)
-        if (vehicle_lspdExterior[i] == vehicleid) return true;
-
-    for (i = 0; i < sizeof(vehicle_fbiExterior); i++)
-        if (vehicle_fbiExterior[i] == vehicleid) return true;
-
-    for (i = 0; i < sizeof(lvpdcars); i++)
-        if (lvpdcars[i] == vehicleid) return true;
-
-    for (i = 0; i < sizeof(armycars); i++)
-        if (armycars[i] == vehicleid) return true;
+    new model = GetVehicleModel(vehicleid);
+    for (new i = 0; i < sizeof(g_armoredVehicleModels); i++)
+        if (g_armoredVehicleModels[i] == model) return true;
 
     return false;
 }
@@ -61918,18 +61931,16 @@ CMD:verhaften(playerid, params[])
     if(!(Spieler[playerid][pFraktion] == 1 || Spieler[playerid][pFraktion] == 2 || Spieler[playerid][pFraktion] == 16 || Spieler[playerid][pFraktion] == 18 || Spieler[playerid][pFraktion] == 22))return SendClientMessage(playerid, COLOR_RED, "Du bist kein LSPD/FBI Mitglied.");
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Verhaften [SpielerID/Name]");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
+    //if (pID == playerid) return SendClientMessage(playerid, COLOR_RED, "Du kannst dich nicht selbst verhaften.");
     #if defined USE_NPCS
-    if( IsPlayerNPC(pID) ) return SendClientMessage(playerid, COLOR_RED, "Du kannst diese Funktion nicht an einem Bot ausführen!");
+        if( IsPlayerNPC(pID) ) return SendClientMessage(playerid, COLOR_RED, "Du kannst diese Funktion nicht an einem Bot ausführen!");
     #endif
-    /*
-    if(playerid == pID ) {
-        return SendClientMessage(playerid, COLOR_RED, "Du kannst diese Funktion nicht an dir selbst ausführen!");
-    }
-    */
+
+    if (GetPlayerState(pID) == PLAYER_STATE_SPECTATING) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x,y,z);
     if(!IsPlayerInRangeOfPoint(pID, 3.0, x,y,z))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Nähe.");
-
+    if (Spieler[pID][pAdminDienst]) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist zurzeit im Admindienst.");
     if( IsPlayerAttachedObjectSlotUsed(pID,ATTACHED_INDEX_HANDSCHELLE) ) {
         format(string, sizeof(string), "* Polizeibeamter %s hat %s die Handschellen abgemacht.", GetName(playerid), GetName(pID));
         for(new i = 0 ; i < MAX_PLAYERS ; i++)
@@ -61951,6 +61962,12 @@ CMD:verhaften(playerid, params[])
             {
                 SendClientMessage(i, COLOR_LIGHTRED2, string);
             }
+        }
+        if (MakeAnimation[pID]) {
+            TextDrawHideForPlayer(pID, Leer);
+            ClearAnimations(pID);
+            SetPlayerSpecialAction(pID, SPECIAL_ACTION_NONE);
+            MakeAnimation[pID] = 0;
         }
         SetPlayerAttachedObject(pID, ATTACHED_INDEX_HANDSCHELLE, 19418, 6, -0.011000, 0.028000, -0.022000, -15.600012, -33.699977, -81.700035, 0.891999, 1.000000, 1.168000);
         SetPlayerSpecialAction(pID,SPECIAL_ACTION_CUFFED);
