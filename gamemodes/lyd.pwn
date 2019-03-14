@@ -8992,7 +8992,7 @@ CMD:closeticket(playerid, params[])
         ShowPlayerDialog(pID,DIALOG_RATESUPPORTER,DIALOG_STYLE_MSGBOX,"Bewerte Supporter",
         "Wie hat Ihnen der Support gefallen? Wenn Ihnen die Auskunft geholfen hat, drücken Sie auf \"POSITIV\".\n\
         Wenn die Auskunft vom Supporter nicht hilfreich war, drücken Sie auf \"NEGATIV\".\n\
-        Ihre Meinung ist uns richtig!","Positiv","Negativ");
+        Ihre Meinung ist uns wichtig!","Positiv","Negativ");
     }
     else
     {
