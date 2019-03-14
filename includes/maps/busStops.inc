@@ -12,6 +12,7 @@ new object_busStops[51];
 
 hook OnPlayerConnect(playerid) {
     // ---
+    RemoveBuildingForPlayer(playerid, 1297, 1362.8047, -1225.1406, 16.5078, 0.25); // Street lamp
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
