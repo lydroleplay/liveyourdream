@@ -48939,8 +48939,10 @@ stock CreateDisconnectNotice(playerid, playername[], Float:x,Float:y,Float:z,rea
     g_DeathNotice[id][DN_iPickup] = CreateDynamicPickup(1314, 1, x, y, z + 0.25, .worldid = virtualworld, .interiorid = interior);
     g_DeathNotice[id][DN_t3dLabel] = CreateDynamic3DTextLabel(String, 0xFFFFFFBB, x, y, z + 0.8, 30.0, .testlos = 1, .worldid = virtualworld, .interiorid = interior);
     g_DeathNotice[id][DN_tTimer] = SetTimerEx("DestroyDisconnectNotice",30*1000,0,"d",id);
-    strtolower(playername);
-    g_DeathNotice[id][DN_hashOwner] = udb_hash( playername );
+    new sLowerName[MAX_PLAYER_NAME];
+    format(sLowerName, sizeof(sLowerName), "%s", playername);
+    strtolower(sLowerName);
+    g_DeathNotice[id][DN_hashOwner] = udb_hash( sLowerName );
     return 1;
 }
 
