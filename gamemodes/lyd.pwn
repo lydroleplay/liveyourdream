@@ -57946,7 +57946,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
         while( row < rows ) {
             fraktionid = cache_get_row_int(row,0,connectionHandle);
             partnerid = cache_get_row_int(row,1,connectionHandle);
-            g_Faction[fraktionid][F_iPartner] = partnerid;
+            if (IsAFightFaction(partnerid)) g_Faction[fraktionid][F_iPartner] = partnerid;
             row++;
         }
     }
@@ -68049,19 +68049,19 @@ COMMAND:buendnisanfrage(playerid,params[]) {
         return SendClientMessage(playerid, COLOR_RED, "* Benutze:"COLOR_HEX_GREENA" /Buendnisanfrage [Fraktion]");
     }
     if( frak == partner ) {
-        return SendClientMessage(playerid, COLOR_RED, "Das geht nicht");
+        return SendClientMessage(playerid, COLOR_RED, "Das geht nicht.");
     }
     if( !IsAFightFaction( partner ) ) {
         return SendClientMessage(playerid, COLOR_RED, "Die Angegebene Fraktion ist keine Gang bzw. Mafia.");
     }
     if( Spieler[playerid][pRank] < 6 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion kann NUR der Leader ausführen");
+        return SendClientMessage(playerid, COLOR_RED, "Diese Funktion kann NUR der Leader ausführen.");
     }
     if( g_Faction[frak][F_iPartner] != -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Deine Fraktion hat bereits ein Bündnis");
+        return SendClientMessage(playerid, COLOR_RED, "Deine Fraktion hat bereits ein Bündnis.");
     }
     if( g_Faction[partner][F_iPartner] != -1 ) {
-        return SendClientMessage(playerid, COLOR_RED, "Die Angegeben Fraktion hat bereits ein Bündnis");
+        return SendClientMessage(playerid, COLOR_RED, "Die Angegeben Fraktion hat bereits ein Bündnis.");
     }
     new
         frakname[50],
