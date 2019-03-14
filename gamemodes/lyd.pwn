@@ -56304,7 +56304,7 @@ public OnQueryFinish(query[], resultid, extraid, connectionHandle , threadowner 
             while( x < rows ) {
                 slot = cache_get_row_int(x, 33, connectionHandle);
                 if (slot == -1) slot = x;
-                else if (slot < x) slot = x;
+                else if (slot < x || slot > x) slot = x;
 
                 PlayerCar[playerid][slot][Id] = cache_get_row_int(x,0,connectionHandle);
                 cache_get_row(x,1,PlayerCar[playerid][slot][CarOwner],connectionHandle,MAX_PLAYER_NAME);
