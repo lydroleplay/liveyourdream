@@ -69291,38 +69291,34 @@ COMMAND:strafzettel(playerid,params[]) {
     if( Spieler[playerid][pFraktion] != 1 &&
         Spieler[playerid][pFraktion] != 5 &&
         Spieler[playerid][pFraktion] != 16 ) {
-        SendClientMessage(playerid, COLOR_RED, "Dieser Befehl ist nur für das Ordnungsamt und Polizisten möglich");
+        SendClientMessage(playerid, COLOR_RED, "Dieser Befehl ist nur für das Ordnungsamt und Polizisten möglich.");
         return 1;
     }
     new
         vehicleid = GetClosestVehicle(playerid,4.0);
     if( vehicleid == INVALID_VEHICLE_ID ) {
-        SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der nähe eines Fahrzeuges");
+        SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der Nähe eines Fahrzeuges.");
         return 1;
     }
     new
         besitzer;
     besitzer = GetCarOwner(vehicleid);
     if( IsPlayerConnected(besitzer)) {
-        new
-            String[128];
-        if( g_Parkschein[vehicleid] > gettime() ) {
-            return SendClientMessage(playerid,COLOR_RED,"Das Fahrzeug hat noch einen gültigen Parkschein");
-        }
-        format(String,sizeof(String),"Bußgeld wurde an Fahrzeughalter %s ausgestellt, wegen Parken auf Halteverbot.",GetName(besitzer));
+        new String[128];
+        format(String,sizeof(String),"Bußgeld wurde an Fahrzeughalter %s ausgestellt, wegen Parken im Halteverbot.",GetName(besitzer));
         SendFraktionMessage(1, COLOR_YELLOW, String);
         SendFraktionMessage(16, COLOR_YELLOW, String);
         SendFraktionMessage(5, COLOR_YELLOW, String);
-        SendClientMessage(playerid,COLOR_YELLOW, "* Strafzettel wurde ausgestellt");
-        format(String,sizeof(String),"[BUßGELD] Sie haben ein Bußgeld in Höhe von 2.000$ von Beamten %s erhalten!",GetName(playerid));
+        SendClientMessage(playerid,COLOR_YELLOW, "* Strafzettel wurde ausgestellt.");
+        format(String,sizeof(String),"[BUßGELD] Sie haben ein Bußgeld in Höhe von $2.000 von Beamten %s erhalten!",GetName(playerid));
         SendClientMessage(besitzer,COLOR_RED,String);
-        format(String,sizeof(String),"Ihr Fahrzeug (%s) steht auf Halteverbot.", CarName[ GetVehicleModel(vehicleid) - 400]);
+        format(String,sizeof(String),"Ihr Fahrzeug (%s) steht im Halteverbot.", CarName[ GetVehicleModel(vehicleid) - 400]);
         SendClientMessage(besitzer,COLOR_RED,String);
         Spieler[besitzer][pBank] -= 2000;
         Kasse[Oamt] += 2000;
     }
     else {
-        SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug hat keinen Besitzer");
+        SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug hat keinen Besitzer.");
     }
     return 1;
 }
@@ -69332,13 +69328,13 @@ COMMAND:parkstrafe(playerid,params[]) {
     if( Spieler[playerid][pFraktion] != 1 &&
         Spieler[playerid][pFraktion] != 5 &&
         Spieler[playerid][pFraktion] != 16 ) {
-        SendClientMessage(playerid, COLOR_RED, "Dieser Befehl ist nur für das Ordnungsamt und Polizisten möglich");
+        SendClientMessage(playerid, COLOR_RED, "Dieser Befehl ist nur für das Ordnungsamt und Polizisten möglich.");
         return 1;
     }
     new
         vehicleid = GetClosestVehicle(playerid,4.0);
     if( vehicleid == INVALID_VEHICLE_ID ) {
-        SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der nähe eines Fahrzeuges");
+        SendClientMessage(playerid, COLOR_RED, "Du befindest dich nicht in der Nähe eines Fahrzeuges.");
         return 1;
     }
     new
@@ -69348,22 +69344,22 @@ COMMAND:parkstrafe(playerid,params[]) {
         new
             String[128];
         if( g_Parkschein[vehicleid] > gettime() ) {
-            return SendClientMessage(playerid,COLOR_RED,"Das Fahrzeug hat noch einen gültigen Parkschein");
+            return SendClientMessage(playerid,COLOR_RED,"Das Fahrzeug hat noch einen gültigen Parkschein.");
         }
         format(String,sizeof(String),"Bußgeld wurde an Fahrzeughalter %s ausgestellt, wegen Parken ohne Parkschein.",GetName(besitzer));
         SendFraktionMessage(1, COLOR_YELLOW, String);
         SendFraktionMessage(16, COLOR_YELLOW, String);
         SendFraktionMessage(5, COLOR_YELLOW, String);
-        SendClientMessage(playerid,COLOR_YELLOW, "* Parkstrafe wurde verhängt");
-        format(String,sizeof(String),"[BUßGELD] Sie haben ein Bußgeld in Höhe von 3.000$ von Beamten %s erhalten!",GetName(playerid));
+        SendClientMessage(playerid,COLOR_YELLOW, "* Parkstrafe wurde verhängt.");
+        format(String,sizeof(String),"[BUßGELD] Sie haben ein Bußgeld in Höhe von $3.000 von Beamten %s erhalten!",GetName(playerid));
         SendClientMessage(besitzer,COLOR_RED,String);
-        format(String,sizeof(String),"Ihr Fahrzeug (%s) war ohne gültigem Parkschein an der Stadthalle abgestellt.", CarName[ GetVehicleModel(vehicleid) - 400]);
+        format(String,sizeof(String),"Ihr Fahrzeug (%s) war ohne gültigen Parkschein auf einem Parkplatz abgestellt.", CarName[ GetVehicleModel(vehicleid) - 400]);
         SendClientMessage(besitzer,COLOR_RED,String);
         Spieler[besitzer][pBank] -= 3000;
         Kasse[Oamt] += 3000;
     }
     else {
-        SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug hat keinen Besitzer");
+        SendClientMessage(playerid,COLOR_RED,"Dieses Fahrzeug hat keinen Besitzer.");
     }
     return 1;
 }
