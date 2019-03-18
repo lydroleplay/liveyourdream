@@ -18045,9 +18045,9 @@ CMD:gangwaffen(playerid)
 
 stock GiveGangWeapons(playerid)
 {
-    GivePlayerWeapon(playerid, 24, 100);
-    GivePlayerWeapon(playerid, 29, 150);
-    SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgerüstet (Desert Eagle, MP5).");
+    GivePlayerWeapon(playerid, WEAPON_DEAGLE, 100);
+    GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 100);
+    SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgerüstet (Desert Eagle, Shotgun).");
     GameTextForPlayer(playerid, "~r~-$800", 2000, 1);
     GivePlayerCash(playerid, -800);
     return 1;
@@ -18088,7 +18088,7 @@ CMD:hitmanwaffen(playerid)
         if(GetPlayerMoney(playerid) < 5500)return SendClientMessage(playerid, COLOR_RED, "Du benötigst $5500.");
         if(!(Spieler[playerid][pFraktion] == 14))return SendClientMessage(playerid, COLOR_RED, "Du bist kein Hitman Mitglied.");
         GiveHitmanWeapons(playerid);
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, MP5, Sniper)");
+        SendClientMessage(playerid, COLOR_GREEN, "Du hast dich ausgeruestet. (Desert Eagle, Shotgun, Sniper)");
         GameTextForPlayer(playerid, "~r~-$5500", 2000, 1);
         GivePlayerCash(playerid, -5500);
     }
@@ -18098,7 +18098,7 @@ CMD:hitmanwaffen(playerid)
 stock GiveHitmanWeapons(playerid)
 {
     GivePlayerWeapon(playerid, WEAPON_DEAGLE, 300);
-    GivePlayerWeapon(playerid, WEAPON_MP5, 300);
+    GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 100);
     GivePlayerWeapon(playerid, WEAPON_SNIPER, 50);
     return 1;
 }
