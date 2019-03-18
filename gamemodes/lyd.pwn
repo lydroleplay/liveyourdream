@@ -5688,9 +5688,9 @@ public OnGameModeInit2() {
 	//Verkaufspoints
 
 	CreateDynamicPickup(19627, 1, 1782.8275,-1702.7240,13.5096,0);//Tuningabbaue für Autos und Motorräder
-	CreateDynamicPickup(1240, 1, 377.1597,-67.7632,1001.5151,2);//BSN (BS 1)
+	CreateDynamicPickup(1240, 1, 377.1597,-67.7632,1001.5151,4);//BSN (BS 1)
 	CreateDynamicPickup(1240, 1, 369.8342,-6.2002,1001.8589,3);//Cluckin Bell 1
-	CreateDynamicPickup(1240, 1, 377.1597,-67.7632,1001.5151,4);//BSS (BS 2)
+	CreateDynamicPickup(1240, 1, 377.1597,-67.7632,1001.5151,5);//BSS (BS 2)
 	CreateDynamicPickup(1240, 1, 375.5368,-119.2299,1001.4995,6);//Pizza Stack 1
 	CreateDynamicPickup(1240, 1, 375.5368,-119.2299,1001.4995,7);//Pizza Stack 2
 	CreateDynamicPickup(1240, 1, 377.1597,-67.7632,1001.5151,8);//BS 3
@@ -5871,8 +5871,8 @@ public OnGameModeInit2() {
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 26);//24/7-4
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 27);//24/7-5
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Super Markt\n"COLOR_HEX_WHITE"Tippe /Supermarkt", COLOR_WHITE, 2.2396,-29.0123,1003.5494, 10.0, .worldid = 60);//24/7-6
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Subway\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 2);//BSN (BS 1)
-	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 4);//BSS (BS 2)
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Subway\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 4);//BSN (BS 1)
+	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Burger Shot\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 377.1597,-67.7632,1001.5151, 10.0, .worldid = 5);//BSS (BS 2)
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Cluckin Bell\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 369.8342,-6.2002,1001.8589, 10.0, .worldid = 3);//Cluckin Bell 1
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Pizza Stack\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 375.5368,-119.2299,1001.4995, 10.0, .worldid = 6);//Pizza Stack 1
 	CreateDynamic3DTextLabel(COLOR_HEX_BLUE"Pizza Stack\n"COLOR_HEX_WHITE"Tippe /Essen\n"COLOR_HEX_ORANGE"Preis: 50$", COLOR_WHITE, 375.5368,-119.2299,1001.4995, 10.0, .worldid = 7);//Pizza Stack 2
@@ -11670,7 +11670,7 @@ CMD:drivein(playerid)
 CMD:essen(playerid)
 {
     new pVW = GetPlayerVirtualWorld(playerid), bIndex;
-    if(IsPlayerInRangeOfPoint(playerid, 2.0, 377.1597,-67.7632,1001.5151) && pVW == 2) // Burgershot North
+    if(IsPlayerInRangeOfPoint(playerid, 2.0, 377.1597,-67.7632,1001.5151) && pVW == 4) // Burgershot North Subway
     {
         bIndex = GetBizIndexByID(2);
         SendClientMessage(playerid, COLOR_WHITE, "Verkäufer sagt: Guten Appetit! Besuchen Sie uns bald wieder.");
@@ -11684,9 +11684,9 @@ CMD:essen(playerid)
         Biz[bIndex][bWaren] -= 1;
         ShowBuyInformation(playerid,"~y~Essen ~w~gekauft!");
     }
-    else if(IsPlayerInRangeOfPoint(playerid, 2.0, 377.1597,-67.7632,1001.5151) && pVW == 4) // Burgershot South
+    else if(IsPlayerInRangeOfPoint(playerid, 2.0, 377.1597,-67.7632,1001.5151) && pVW == 5) // Burgershot South
     {
-        bIndex = GetBizIndexByID(2);
+        bIndex = GetBizIndexByID(4);
         SendClientMessage(playerid, COLOR_WHITE, "Verkäufer sagt: Guten Appetit! Besuchen Sie uns bald wieder.");
         if(Biz[bIndex][bWaren] < 1)return SendClientMessage(playerid, COLOR_RED, "Das Geschäft hat keine Waren mehr.");
         if(GetPlayerMoney(playerid) < 50)return SendClientMessage(playerid, COLOR_RED, "Du hast nicht genügend Geld!");
@@ -28755,7 +28755,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
         {
             if(IsPlayerInRangeOfPoint(playerid, 2.0, Biz[i][EnterX], Biz[i][EnterY], Biz[i][EnterZ]))
             {
-
                 if( !IsBizOpened(i) ) {
                     new
                         String[128];
@@ -28769,7 +28768,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                     return 1;
                 }
                 if(Biz[i][bInterior] == 0)return 1;
-                if(i == 5)return 1;
+                //if(i == 5)return 1;
                 if(i == 19)return 1;
                 if(Biz[i][bLock] == 0)
                 {
