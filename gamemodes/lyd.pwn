@@ -16803,10 +16803,21 @@ stock IsValidVehicleModelID(vehid) {
 
 CMD:veh(playerid, params[])
 {
-    new string[128];
     if(Spieler[playerid][pAdmin] < 2)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
-    new vID, color1, color2, Float:x, Float:y, Float:z, Float:angle;
-    if(sscanf(params, "iii", vID, color1, color2))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Veh [VehicleID] [Color 1] [Color 2]");
+    new vID, color1 = 3, color2 = 3, Float:x, Float:y, Float:z, Float:angle, vehName[32];
+    if(sscanf(params, "iI(3)I(3)", vID, color1, color2)) {
+        if (sscanf(params, "s[32]", vehName)) 
+            return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Veh [Vehicle ID/Name] optional:[[Color 1] [Color 2]]");
+
+        for (new j = 0; j < sizeof(CarName); j++) {
+            if (strfind(CarName[j], vehName, true, 0) == 0) {
+                vID = 400 + j;
+                break;
+            }
+        }
+
+        if (!vID) return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Veh [Vehicle ID/Name]");
+    }
     if (!IsValidVehicleModelID(vID)) return SendClientMessage(playerid, COLOR_RED, "Ungültige Fahrzeug Model-ID.");
     GetPlayerFacingAngle(playerid, angle);
     GetPlayerPos(playerid, x,y,z);
@@ -16818,7 +16829,8 @@ CMD:veh(playerid, params[])
     gGas[vehicle] = GetMaxTank(vehicle);
     gMaxGas[vehicle] = GetMaxTank(vehicle);
     aiVehicles[ vehicle ] = VEH_CAR;
-    format(string, sizeof(string), "%s %s hat ein Fahrzeug gespawnt (CarID: %d)", GetPlayerAdminRang(playerid), GetName(playerid), vID);
+    new string[128];
+    format(string, sizeof(string), "%s %s hat ein Fahrzeug gespawnt (%s [%d])", GetPlayerAdminRang(playerid), GetName(playerid), CarName[vID - 400], vID);
     SendAdminMessage(COLOR_BLUE, string);
     return 1;
 }
