@@ -18077,7 +18077,6 @@ stock GiveTerrorWeapons(playerid)
     GivePlayerWeapon(playerid, 24, 100);
     GivePlayerWeapon(playerid, 30, 300);
     GivePlayerWeapon(playerid, 39, 5);
-    GivePlayerWeapon(playerid, 4, 1);
     return 1;
 }
 
@@ -18098,10 +18097,9 @@ CMD:hitmanwaffen(playerid)
 
 stock GiveHitmanWeapons(playerid)
 {
-    GivePlayerWeapon(playerid, 24, 300);
-    GivePlayerWeapon(playerid, 29, 300);
-    GivePlayerWeapon(playerid, 34, 50);
-    GivePlayerWeapon(playerid, 4, 1);
+    GivePlayerWeapon(playerid, WEAPON_DEAGLE, 300);
+    GivePlayerWeapon(playerid, WEAPON_MP5, 300);
+    GivePlayerWeapon(playerid, WEAPON_SNIPER, 50);
     return 1;
 }
 
