@@ -43954,7 +43954,7 @@ CMD:setrank(playerid, params[])
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online.");
     if(pID == playerid)return SendClientMessage(playerid, COLOR_RED, "Du kannst deinen eigenen Rank nicht verändern!");
     if(Spieler[playerid][pFraktion] != Spieler[pID][pFraktion])return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht in deiner Fraktion.");
-    if(Spieler[pID][pRank] > 6)return SendClientMessage(playerid, COLOR_RED, "Du kannst den Rank eines Leaders nicht verändern!");
+    if(Spieler[pID][pRank] > 5)return SendClientMessage(playerid, COLOR_RED, "Du kannst den Rank eines Leaders nicht verändern!");
     if(rankid < 0 || rankid > 5)return SendClientMessage(playerid, COLOR_RED, "Du musst eine Rank-ID zwischen 0 und 5 eingeben.");
     Spieler[pID][pRank] = rankid;
     new rankname[35];
