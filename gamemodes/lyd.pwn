@@ -26208,7 +26208,7 @@ public OnPlayerEnterCheckpoint(playerid)
                             GetXYInFrontOfPosition(x, y, face, -4.0 );
                             SetVehicleVelocity(vehicleid,0.0,0.0,0.0);
                             SetPlayerCheckpointEx(playerid, x,y,z, 1.0, CP_HARVEST14);
-                            SendClientMessage(playerid, COLOR_YELLOW, "Steige aus und gehe hinter den Mähdrescher");
+                            SendClientMessage(playerid, COLOR_YELLOW, "Steige aus und gehe hinter den Mähdrescher.");
                             RemovePlayerFromVehicle(playerid);
                             return 1;
                         }
@@ -26230,7 +26230,7 @@ public OnPlayerEnterCheckpoint(playerid)
                 GetVehiclePos(vehicleid,x,y,z);
                 GetVehicleZAngle(vehicleid,face);
                 GetXYInFrontOfPosition(x, y, face, -4.0 );
-                SetPlayerCheckpointEx(playerid, x, y,z, 1.2, pCheckpoint[playerid] + 1 );
+                SetPlayerCheckpointEx(playerid, x, y,z, 1.0, pCheckpoint[playerid] + 1 );
                 SendClientMessage(playerid, COLOR_YELLOW, "Gehe zurück zum Mähdrescher und hole weitere Ernte.");
                 SetPlayerSpecialAction(playerid,SPECIAL_ACTION_NONE);
                 RemovePlayerAttachedObject(playerid,0);
@@ -43255,7 +43255,7 @@ CMD:acceptanwalt(playerid, params[])
     if(sscanf(params, "u", pID))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Acceptanwalt [SpielerID/Name]");
     if(Spieler[playerid][pJob] != 6)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Anwalt!");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online!");
-    if(NeedAWALT[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt kein Anwalt. Verwende /sliste um die Service-Liste zu sehen.");
+    if(NeedAWALT[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt keinen Anwalt. Verwende /sliste um die Service-Liste zu sehen.");
     format(string, sizeof(string), "* Du hast den Service-Anruf von %s angenommen, gehe nun ins LSPD und rede mit ihm!", GetName(pID));
     SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
     format(string, sizeof(string), "* Anwalt %s hat deinen Service-Anruf angenommen und ist nun unterwegs ins LSPD!", GetName(playerid));
@@ -43271,7 +43271,7 @@ CMD:acceptsani(playerid, params[])
     if(Spieler[playerid][pFraktion] != 3)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Sanitäter!");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online!");
     if(GetPlayerInterior(pID) > 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist in einem Gebäude.");
-    if(NeedMedic[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt kein Sanitäter. Verwende /sliste um die Service-Liste zu sehen.");
+    if(NeedMedic[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt keinen Sanitäter. Verwende /sliste um die Service-Liste zu sehen.");
     new Float:x, Float:y, Float:z;
     GetPlayerPos(pID, x,y,z);
     SetPlayerCheckpointEx(playerid, x,y,z, 5.0, CP_ACCEPTSANI);
@@ -43290,7 +43290,7 @@ CMD:acceptkfz(playerid, params[])
     if(Spieler[playerid][pJob] != 5)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Mechatroniker!");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online!");
     if(GetPlayerInterior(pID) > 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist in einem Gebäude.");
-    if(NeedKFZ[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt kein Mechatroniker. Verwende /sliste um die Service-Liste zu sehen.");
+    if(NeedKFZ[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt keinen Mechatroniker. Verwende /sliste um die Service-Liste zu sehen.");
     new Float:x, Float:y, Float:z;
     GetPlayerPos(pID, x,y,z);
     SetPlayerCheckpointEx(playerid, x,y,z, 5.0, CP_ACCEPTKFZ);
@@ -43309,7 +43309,7 @@ CMD:accepttaxi(playerid, params[])
     if(Spieler[playerid][pJob] != 16)return SendClientMessage(playerid, COLOR_RED, "Du bist kein Taxifahrer!");
     if(!IsPlayerConnected(pID))return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist nicht online!");
     if(GetPlayerInterior(pID) > 0)return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist in einem Gebäude.");
-    if(NeedTAXI[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt kein Mechatroniker. Verwende /sliste um die Service-Liste zu sehen.");
+    if(NeedTAXI[pID] == 0)return SendClientMessage(playerid, COLOR_ORANGE, "Der Spieler benötigt keinen Taxifahrer. Verwende /sliste um die Service-Liste zu sehen.");
     new Float:x, Float:y, Float:z;
     GetPlayerPos(pID, x,y,z);
     SetPlayerCheckpointEx(playerid, x,y,z, 5.0, CP_ACCEPTKFZ);
@@ -44332,7 +44332,14 @@ stock SendModMessage(color, string[])
 stock SetPlayerCheckpointEx(playerid, Float:x, Float:y, Float:z, Float:size, var) {
     if (!var)
         return DisablePlayerCheckpointEx(playerid);
-    
+
+    DisablePlayerCheckpoint(playerid);
+    SetTimerEx("SetCheckpointExFix", 50, 0, "dffffd", playerid, x, y, z, size, var);
+    return 1;
+}
+
+forward SetCheckpointExFix(playerid, Float:x, Float:y, Float:z, Float:size, var);
+public SetCheckpointExFix(playerid, Float:x, Float:y, Float:z, Float:size, var) {
     pCheckpoint[playerid] = var;
     SetPlayerCheckpoint(playerid, x,y,z,size);
     SetPVarFloat(playerid, "MARKER.X", x);
@@ -44341,6 +44348,7 @@ stock SetPlayerCheckpointEx(playerid, Float:x, Float:y, Float:z, Float:size, var
     SetPVarFloat(playerid, "MARKER.SIZE", size);
     return 1;
 }
+
 stock DisablePlayerCheckpointEx(playerid)
 {
     pCheckpoint[playerid] = CP_NONE;
