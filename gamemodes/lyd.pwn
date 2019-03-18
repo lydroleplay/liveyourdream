@@ -13983,19 +13983,20 @@ CMD:chatoff(playerid) {
     return ShowPlayerDialog(playerid, DIALOG_CHATOFF, DIALOG_STYLE_TABLIST_HEADERS, "Chat-Einstellungen", dialogText, "Ändern", "Abbrechen");
 }
 
-CMD:handystatus(playerid, params[])
-{
+CMD:handystatus(playerid, params[]) {
     new status[16];
     if(sscanf(params, "s[16]", status))return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Handystatus [An/Aus]");
     if(strcmp(status, "an", true) == 0)
     {
+        if (!Spieler[playerid][pHandyState]) SendClientMessage(playerid, COLOR_WHITE, "Du hast dein Handy angeschaltet.");
+        else SendClientMessage(playerid, COLOR_WHITE, "Dein Handy ist bereits angeschaltet.");
         Spieler[playerid][pHandyState] = 1;
-        SendClientMessage(playerid, COLOR_WHITE, "Du hast dein Handy angeschaltet.");
     }
     else if(strcmp(status, "aus", true) == 0)
     {
+        if (Spieler[playerid][pHandyState]) SendClientMessage(playerid, COLOR_WHITE, "Du hast dein Handy ausgeschaltet.");
+        else SendClientMessage(playerid, COLOR_WHITE, "Dein Handy ist bereits ausgeschaltet.");
         Spieler[playerid][pHandyState] = 0;
-        SendClientMessage(playerid, COLOR_WHITE, "Du hast dein Handy ausgeschaltet.");
     }
     else return SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Handystatus [An/Aus]");
     return 1;
