@@ -14213,25 +14213,59 @@ CMD:lastdmg(playerid, params[]) {
         pName, GetPVarFloat(pID, "DAMAGE.AMOUNT"), gettime() - GetPVarInt(pID, "DAMAGE.TIME"), sWeapon);
 }
 
+stock GetFactionIDByName(factionname[]) {
+    for (new i = 0; i < sizeof(factionNames); i++) {
+        if (strfind(factionNames[i], factionname, true, 0) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+stock GetJobIDByName(jobname[]) {
+    for (new i = 0; i < sizeof(jobNames); i++) {
+        if (strfind(jobNames[i], jobname, true, 0) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+stock ShowConfigPlayerInfo(playerid) {
+    SendClientMessage(playerid, COLOR_BLUE, "* Benutze:" COLOR_HEX_GREENA " /Configplayer [SpielerID/Name] [Eingabe] [Wert]");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Level, Respektpunkte, Geld, Job, Fraktion, Fraktionsrank, Gehalt, NeonPremium, Spice, Drogen,");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Safewantedcodes, Waffenteile, Wantedcodes, SafeSpice, SafeDrogen, SafeWaffenteile, Waffensperre");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Bankpin, Bankkonto, Skin, Geschlecht, Premium, Spielstunden, Kekse");
+    SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Alizsperre, Flizsperre, Glizsperre, Lkwlizsperre, Mlizsperre, Eventpunkte");
+    
+    if (Spieler[playerid][pAdmin] > 3)
+        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Adm.) *: mustuseac");
+
+    if (Spieler[playerid][pAdmin] > 4)
+        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Dev.) *: adventmin, adventday");
+    
+    return 1;
+}
+
 CMD:configplayer(playerid, params[])
 {
-    new pID, string[140], entry[32], wert;
+    new pID, string[140], entry[32], wert, valstr[32];
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     if(sscanf(params, "us[32]i", pID, entry, wert))
     {
-        SendClientMessage(playerid, COLOR_BLUE, "* Benutze:"COLOR_HEX_GREENA" /Configplayer [SpielerID/Name] [Eingabe] [Wert]");
-        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Level, Respektpunkte, Geld, Job, Fraktion, Fraktionsrank, Gehalt, NeonPremium, Spice, Drogen,");
-        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Safewantedcodes, Waffenteile, Wantedcodes, SafeSpice, SafeDrogen, SafeWaffenteile, Waffensperre");
-        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Bankpin, Bankkonto, Skin, Geschlecht, Premium, Spielstunden, Kekse");
-        SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN *: Alizsperre, Flizsperre, Glizsperre, Lkwlizsperre, Mlizsperre, Eventpunkte");
-        
-        if (Spieler[playerid][pAdmin] > 3)
-            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Adm.) *: mustuseac");
+        if (sscanf(params, "us[32]s[32]", pID, entry, valstr)) return ShowConfigPlayerInfo(playerid);
 
-        if (Spieler[playerid][pAdmin] > 4)
-            SendClientMessage(playerid, COLOR_ORANGE, "* EINGABEN (>= Dev.) *: adventmin, adventday");
-        
-        return 1;
+        if (!strcmp(entry, "fraktion", true)) {
+            wert = GetFactionIDByName(valstr);
+            if (wert == -1) return SendClientMessage(playerid, COLOR_ORANGE, "* Die Fraktion konnte nicht gefunden werden.");
+        }
+        else if (!strcmp(entry, "job", true)) {
+            wert = GetJobIDByName(valstr);
+            if (wert == -1) return SendClientMessage(playerid, COLOR_ORANGE, "* Der Job konnte nicht gefunden werden.");
+        }
+        else return ShowConfigPlayerInfo(playerid);
     }
     
     if (!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_RED, "Der Spieler nicht online.");
