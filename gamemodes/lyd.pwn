@@ -5200,8 +5200,8 @@ public OnGameModeInit2() {
 	zollcars[8]=AddStaticVehicleEx(598,1602.5723,-1683.8928,5.6465,90.3662,154,1,-1); // im PD Zoll
 
     ballascars[0]=AddStaticVehicleEx(541,1990.9467,-1119.4481,26.4129,179.9358,233,233,-1); // BulletBallas
-    ballascars[1]=AddStaticVehicleEx(468,1995.2906,-1115.3430,26.4428,182.9227,233,233,-1); // SanchezBallas
-    ballascars[2]=AddStaticVehicleEx(468,1996.7445,-1115.3165,26.4553,177.6080,233,233,-1); // SanchezBallas2
+    ballascars[1]=AddStaticVehicleEx(521,1995.2906,-1115.3430,26.4428,182.9227,233,233,-1); // SanchezBallas
+    ballascars[2]=AddStaticVehicleEx(521,1996.7445,-1115.3165,26.4553,177.6080,233,233,-1); // SanchezBallas2
     ballascars[3]=AddStaticVehicleEx(522,1998.0895,-1115.4828,26.3332,178.6234,233,233,-1); // NRGBallas2
     ballascars[4]=AddStaticVehicleEx(522,1993.7739,-1115.4847,26.3401,177.6492,233,233,-1); // NRGBallas
     ballascars[5]=AddStaticVehicleEx(492,2012.9988,-1120.6031,25.9860,178.3631,233,233,-1); // GreenwoodBallas
@@ -5276,8 +5276,8 @@ public OnGameModeInit2() {
 
     aztcars[0] = AddStaticVehicleEx(522,1804.4222,-2140.7539,13.1169,88.0794,2,2,-1); // NRGA1
     aztcars[1] = AddStaticVehicleEx(522,1804.4545,-2138.8755,13.1172,89.9769,2,2,-1); // NRGA2
-    aztcars[2] = AddStaticVehicleEx(468,1799.3064,-2141.4197,13.2161,355.6931,2,2,-1); // SanchezA1
-    aztcars[3] = AddStaticVehicleEx(468,1800.5356,-2141.4353,13.2157,0.0592,2,2,-1); // SanchezA2
+    aztcars[2] = AddStaticVehicleEx(521,1799.3064,-2141.4197,13.2161,355.6931,2,2,-1); // SanchezA1
+    aztcars[3] = AddStaticVehicleEx(521,1800.5356,-2141.4353,13.2157,0.0592,2,2,-1); // SanchezA2
     aztcars[4] = AddStaticVehicleEx(541,1786.8893,-2118.3857,13.0903,267.9275,2,2,-1); // BulletA
     aztcars[5] = AddStaticVehicleEx(415,1787.1909,-2107.3713,13.2335,268.2321,2,2,-1); // CheetahA
     aztcars[6] = AddStaticVehicleEx(492,1773.1451,-2099.4297,13.3286,179.8169,2,2,-1); // GreenwoodA
@@ -5296,8 +5296,8 @@ public OnGameModeInit2() {
 
 	vagoscars[0] = AddStaticVehicleEx(522,2769.0017,-1624.9568,10.4935,267.0336,6,6,-1); // NRGV
 	vagoscars[1] = AddStaticVehicleEx(522,2769.0234,-1623.5334,10.4992,265.9211,6,6,-1); // NRGV2
-	vagoscars[2] = AddStaticVehicleEx(468,2768.8862,-1620.2795,10.5908,267.3992,6,6,-1); // SanchezV2
-	vagoscars[3] = AddStaticVehicleEx(468,2768.9001,-1621.9874,10.5962,268.7310,6,6,-1); // SanchezV1
+	vagoscars[2] = AddStaticVehicleEx(521,2768.8862,-1620.2795,10.5908,267.3992,6,6,-1); // SanchezV2
+	vagoscars[3] = AddStaticVehicleEx(521,2768.9001,-1621.9874,10.5962,268.7310,6,6,-1); // SanchezV1
 	vagoscars[4] = AddStaticVehicleEx(482,2768.6836,-1615.3088,11.0414,267.9682,6,6,-1); // BurritoV1
 	vagoscars[5] = AddStaticVehicleEx(482,2768.6824,-1606.2904,11.0390,270.4248,6,6,-1); // BurritoV2
 	vagoscars[6] = AddStaticVehicleEx(411,2795.6733,-1589.1215,10.6552,268.9738,6,6,-1); // InfernusV1
@@ -5328,8 +5328,8 @@ public OnGameModeInit2() {
 	outlawzscars[7] = AddStaticVehicleEx(560,-32.9927,-293.6271,5.1328,270.0236,219,219,-1); // SultanO2
 	outlawzscars[8] = AddStaticVehicleEx(522,-53.8328,-297.3306,5.0034,178.0595,219,219,-1); // NRGO2
 	outlawzscars[9] = AddStaticVehicleEx(522,-45.9062,-297.6670,4.9987,180.2963,219,219,-1); // NRGO1
-	outlawzscars[10] = AddStaticVehicleEx(468,-53.8271,-293.1526,5.0971,181.0236,219,219,-1); // SanchezO2
-	outlawzscars[11] = AddStaticVehicleEx(468,-45.9222,-293.2677,5.0985,180.3444,219,219,-1); // SanchezO1
+	outlawzscars[10] = AddStaticVehicleEx(521,-53.8271,-293.1526,5.0971,181.0236,219,219,-1); // SanchezO2
+	outlawzscars[11] = AddStaticVehicleEx(521,-45.9222,-293.2677,5.0985,180.3444,219,219,-1); // SanchezO1
 	outlawzscars[12] = AddStaticVehicleEx(463,-53.8573,-289.5272,4.9701,179.8784,219,219,-1); // FreewayO2
 	outlawzscars[13] = AddStaticVehicleEx(463,-45.9345,-289.3428,4.9697,177.1727,219,219,-1); // FreewayO1
 	outlawzscars[14] = AddStaticVehicleEx(409,-39.7334,-300.3714,5.2297,269.4898,219,219,-1); // StretchO

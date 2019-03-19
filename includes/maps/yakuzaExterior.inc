@@ -56,8 +56,8 @@ hook OnGameModeInit() {
 	vehicle_yakuzaExterior[11] = AddStaticVehicleEx(415, 1022.7122, 1036.6342, 10.7718, 302.7264, 13, 13, -1); // Yakuza
 	vehicle_yakuzaExterior[12] = AddStaticVehicleEx(522, 1035.0516, 1017.4267, 10.5487, 286.6670, 13, 13, -1); // Yakuza
 	vehicle_yakuzaExterior[13] = AddStaticVehicleEx(522, 1033.6325, 1018.8350, 10.5691, 285.4402, 13, 13, -1); // Yakuza
-	vehicle_yakuzaExterior[14] = AddStaticVehicleEx(468, 1052.3873, 1004.5975, 10.6684, 5.7473, 13, 13, -1); // Yakuza
-	vehicle_yakuzaExterior[15] = AddStaticVehicleEx(468, 1050.5258, 1005.7860, 10.6317, 7.7559, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[14] = AddStaticVehicleEx(521, 1052.3873, 1004.5975, 10.6684, 5.7473, 13, 13, -1); // Yakuza
+	vehicle_yakuzaExterior[15] = AddStaticVehicleEx(521, 1050.5258, 1005.7860, 10.6317, 7.7559, 13, 13, -1); // Yakuza
 
     // Pickups
     pickup_yakuzaExterior[0] = CreateDynamicPickup(19197, 1, YAKUZA_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_YAKUZAEXTERIOR_INTERIOR); // Yakuza Entrance

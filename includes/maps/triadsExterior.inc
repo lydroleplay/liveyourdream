@@ -110,8 +110,8 @@ hook OnGameModeInit() {
     vehicle_triadsExterior[11] = AddStaticVehicleEx(409, -1469.9183, -1465.3393, 101.6829, 180.2624, 79, 79, -1);
     vehicle_triadsExterior[12] = AddStaticVehicleEx(522, -1434.8126, -1463.3232, 101.4721, 181.7286, 79, 79, -1);
     vehicle_triadsExterior[13] = AddStaticVehicleEx(522, -1439.7054, -1463.3059, 101.4699, 179.5567, 79, 79, -1);
-    vehicle_triadsExterior[14] = AddStaticVehicleEx(468, -1449.9005, -1463.0958, 101.5688, 180.5939, 79, 79, -1);
-    vehicle_triadsExterior[15] = AddStaticVehicleEx(468, -1444.6859, -1462.9873, 101.5689, 180.5173, 79, 79, -1);
+    vehicle_triadsExterior[14] = AddStaticVehicleEx(521, -1449.9005, -1463.0958, 101.5688, 180.5939, 79, 79, -1);
+    vehicle_triadsExterior[15] = AddStaticVehicleEx(521, -1444.6859, -1462.9873, 101.5689, 180.5173, 79, 79, -1);
 
     // Pickups
     pickup_triadsExterior[0] = CreateDynamicPickup(19197, 1, TRIADS_INTERIOR_ENTER_COORDS, VW_MAIN, MAPS_TRIADSEXTERIOR_INTERIOR); // Triads Entrance

@@ -48,7 +48,7 @@ hook OnGameModeInit() {
 	vehicle_nineDemonsExterior[5] = AddStaticVehicleEx(560, 782.7468, 380.6778, 20.9937, 340.5484, 245, 245, -1);
 	vehicle_nineDemonsExterior[6] = AddStaticVehicleEx(560, 789.4387, 377.8034, 20.9449, 337.7471, 245, 245, -1);
 	vehicle_nineDemonsExterior[7] = AddStaticVehicleEx(560, 786.1071, 379.2037, 20.9578, 337.6239, 245, 245, -1);
-	vehicle_nineDemonsExterior[8] = AddStaticVehicleEx(468, 776.7501, 351.6570, 19.3581, 9.5296, 245, 245, -1);
+	vehicle_nineDemonsExterior[8] = AddStaticVehicleEx(521, 776.7501, 351.6570, 19.3581, 9.5296, 245, 245, -1);
 	vehicle_nineDemonsExterior[9] = AddStaticVehicleEx(487, 761.3110, 376.6611, 26.2043, 11.3601, 245, 245, -1);
 	vehicle_nineDemonsExterior[10] = AddStaticVehicleEx(522, 809.8894, 378.8163, 18.8836, 62.5461, 245, 245, -1);
 	vehicle_nineDemonsExterior[11] = AddStaticVehicleEx(522, 810.3131, 376.9234, 18.8948, 61.3572, 245, 245, -1);

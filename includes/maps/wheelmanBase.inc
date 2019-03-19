@@ -36,8 +36,8 @@ hook OnGameModeInit() {
     text3D_wheelmanBase[0] = _:CreateDynamic3DTextLabel("Wheelman Spawn\n" COLOR_HEX_WHITE "Tippe /Gangwaffen zum Ausrüsten\nTippe /Gheilen zum Heilen", COLOR_BLUE, WHEELMANBASE_SPAWN_POINT, 15.0, .testlos = 1, .worldid = VW_MAIN, .interiorid = MAPS_WHEELMANBASE_INTERIOR);
     
     // Vehicles
-	vehicle_wheelmanBase[0] = AddStaticVehicleEx(468, 952.5954, 1758.7262, 8.3156, 180.5374, 19, 19, -1); // wheelmen car
-	vehicle_wheelmanBase[1] = AddStaticVehicleEx(468, 955.0316, 1758.8654, 8.3157, 180.7352, 19, 19, -1); // wheelmen car
+	vehicle_wheelmanBase[0] = AddStaticVehicleEx(521, 952.5954, 1758.7262, 8.3156, 180.5374, 19, 19, -1); // wheelmen car
+	vehicle_wheelmanBase[1] = AddStaticVehicleEx(521, 955.0316, 1758.8654, 8.3157, 180.7352, 19, 19, -1); // wheelmen car
 	vehicle_wheelmanBase[2] = AddStaticVehicleEx(522, 958.3127, 1758.9200, 8.2156, 179.1201, 19, 19, -1); // wheelmen car
 	vehicle_wheelmanBase[3] = AddStaticVehicleEx(522, 960.8812, 1759.0088, 8.2190, 180.3178, 19, 19, -1); // wheelmen car
 	vehicle_wheelmanBase[4] = AddStaticVehicleEx(411, 983.6983, 1745.4128, 8.3823, 90.1818, 19, 19, -1); // wheelmen car

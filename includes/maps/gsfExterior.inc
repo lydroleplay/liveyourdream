@@ -53,8 +53,8 @@ hook OnGameModeInit() {
     vehicle_gsfExterior[9]  = AddStaticVehicleEx(560, 2492.1660, -1684.1700, 13.1276, 273.6986, 86, 86, -1); // NEUE GROVE CARS
     vehicle_gsfExterior[10] = AddStaticVehicleEx(567, 2510.5535, -1687.4958, 13.4692, 47.9130,  86, 86, -1); // NEUE GROVE CARS
     vehicle_gsfExterior[11] = AddStaticVehicleEx(522, 2515.7395, -1666.9268, 13.3639, 97.3516,  86, 86, -1); // NEUE GROVE CARS
-    vehicle_gsfExterior[12] = AddStaticVehicleEx(468, 2519.4167, -1666.5616, 14.1826, 98.1252,  86, 86, -1); // NEUE GROVE CARS
-    vehicle_gsfExterior[13] = AddStaticVehicleEx(468, 2519.0330, -1663.9734, 13.9064, 95.4827,  86, 86, -1); // NEUE GROVE CARS
+    vehicle_gsfExterior[12] = AddStaticVehicleEx(521, 2519.4167, -1666.5616, 14.1826, 98.1252,  86, 86, -1); // NEUE GROVE CARS
+    vehicle_gsfExterior[13] = AddStaticVehicleEx(521, 2519.0330, -1663.9734, 13.9064, 95.4827,  86, 86, -1); // NEUE GROVE CARS
     vehicle_gsfExterior[14] = AddStaticVehicleEx(522, 2515.3694, -1664.5391, 13.2992, 96.7674,  86, 86, -1); // NEUE GROVE CARS
     vehicle_gsfExterior[15] = AddStaticVehicleEx(535, 2468.4702, -1669.6483, 13.1571, 190.2437, 86, 86, -1); // NEUE GROVE CARS
 

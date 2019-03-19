@@ -67,8 +67,8 @@ hook OnGameModeInit() {
 	vehicle_lcnExterior[6] = AddStaticVehicleEx(480, 2160.7143, 1658.8255, 10.5930, 16.3178, 75, 75, -1);
 	vehicle_lcnExterior[7] = AddStaticVehicleEx(522, 2185.9091, 1662.6257, 10.6646, 16.0790, 75, 75, -1);
 	vehicle_lcnExterior[8] = AddStaticVehicleEx(522, 2184.0534, 1662.0483, 10.6548, 17.0366, 75, 75, -1);
-	vehicle_lcnExterior[9] = AddStaticVehicleEx(468, 2186.1394, 1693.3574, 10.7665, 152.7044, 75, 75, -1);
-	vehicle_lcnExterior[10] = AddStaticVehicleEx(468, 2184.3032, 1694.1590, 10.7531, 153.2075, 75, 75, -1);
+	vehicle_lcnExterior[9] = AddStaticVehicleEx(521, 2186.1394, 1693.3574, 10.7665, 152.7044, 75, 75, -1);
+	vehicle_lcnExterior[10] = AddStaticVehicleEx(521, 2184.3032, 1694.1590, 10.7531, 153.2075, 75, 75, -1);
 	vehicle_lcnExterior[11] = AddStaticVehicleEx(409, 2152.0078, 1680.2058, 10.6062, 178.3874, 75, 75, -1);
 	vehicle_lcnExterior[12] = AddStaticVehicleEx(579, 2168.7446, 1697.9535, 10.7521, 152.3968, 75, 75, -1);
 	vehicle_lcnExterior[13] = AddStaticVehicleEx(579, 2164.8994, 1699.8979, 10.9135, 152.4835, 75, 75, -1);
