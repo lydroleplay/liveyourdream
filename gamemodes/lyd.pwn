@@ -1508,15 +1508,15 @@ enum e_WaffenLagerConfig {
 }
 
 new const g_WaffenLagerConfig[][e_WaffenLagerConfig] = {
-    {34,25,400},
-    {31,300,350},
-    {30,300,320},
-    {33,100,320},
-    {25,100,300},
+    {WEAPON_SNIPER,25,400},
+    {WEAPON_M4,300,350},
+    {WEAPON_AK47,300,320},
+    {WEAPON_RIFLE,100,320},
+    {WEAPON_MP5,200,300},
     {-1,100,220},
-    {23,200,120},
-    {5,1,50},
-    {2,1,50}
+    {WEAPON_SILENCED,200,120},
+    {WEAPON_BAT,1,50},
+    {WEAPON_GOLFCLUB,1,50}
 };
 
 new g_iWaffenLager, g_WaffenLager[20][e_WaffenLager];
