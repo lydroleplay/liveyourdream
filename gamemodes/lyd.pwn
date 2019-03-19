@@ -9542,6 +9542,146 @@ CMD:tban(playerid, params[])
     return 1;
 }
 
+stock StartPlayerSkinSelection(playerid) {
+    pSkinSelection[playerid] = 1;
+    FreezePlayer(playerid);
+    SetPlayerPos(playerid, 257.9847,-41.5232,1002.0234);
+    SetPlayerCameraPos(playerid, 255.0529,-41.4668,1002.0234);
+    SetPlayerCameraLookAt(playerid, 256.2413,-41.4954,1002.0234);
+    SetPlayerInterior(playerid, 14);
+    SetPlayerVirtualWorld(playerid, playerid+1337);
+    SetPlayerFacingAngle(playerid, 90.4982);
+
+    if(Spieler[playerid][pFraktion] == 0)
+    {
+        if(Spieler[playerid][pSex] == 1)
+        {
+            SetPlayerSkin(playerid, 2);
+            pChoosedSkin[playerid] = 2;
+        }
+        else if(Spieler[playerid][pSex] == 2)
+        {
+            SetPlayerSkin(playerid, 12);
+            pChoosedSkin[playerid] = 12;
+        }
+    }
+    else if(Spieler[playerid][pFraktion] == 1)
+    {
+        SetPlayerSkin(playerid, 265);
+        pChoosedSkin[playerid] = 265;
+    }
+    else if(Spieler[playerid][pFraktion] == 2)
+    {
+        SetPlayerSkin(playerid, 286);
+        pChoosedSkin[playerid] = 286;
+    }
+    else if(Spieler[playerid][pFraktion] == 3)
+    {
+        SetPlayerSkin(playerid, 274);
+        pChoosedSkin[playerid] = 274;
+    }
+    else if(Spieler[playerid][pFraktion] == 4)
+    {
+        SetPlayerSkin(playerid, 57);
+        pChoosedSkin[playerid] = 57;
+    }
+    else if(Spieler[playerid][pFraktion] == 5)
+    {
+        SetPlayerSkin(playerid, 50);
+        pChoosedSkin[playerid] = 50;
+    }
+    else if(Spieler[playerid][pFraktion] == 6)
+    {
+        SetPlayerSkin(playerid, 105);
+        pChoosedSkin[playerid] = 105;
+    }
+    else if(Spieler[playerid][pFraktion] == 7)
+    {
+        SetPlayerSkin(playerid, 102);
+        pChoosedSkin[playerid] = 102;
+    }
+    else if(Spieler[playerid][pFraktion] == 8)
+    {
+        SetPlayerSkin(playerid, 240);
+        pChoosedSkin[playerid] = 240;
+    }
+    else if(Spieler[playerid][pFraktion] == 9)
+    {
+        SetPlayerSkin(playerid, 170);
+        pChoosedSkin[playerid] = 170;
+    }
+    else if(Spieler[playerid][pFraktion] == 10)
+    {
+        SetPlayerSkin(playerid, 123);
+        pChoosedSkin[playerid] = 123;
+    }
+    else if(Spieler[playerid][pFraktion] == 11)
+    {
+        SetPlayerSkin(playerid, 114);
+        pChoosedSkin[playerid] = 114;
+    }
+    else if(Spieler[playerid][pFraktion] == 12)
+    {
+        SetPlayerSkin(playerid, 125);
+        pChoosedSkin[playerid] = 125;
+    }
+    else if(Spieler[playerid][pFraktion] == 13)
+    {
+        SetPlayerSkin(playerid, 110);
+        pChoosedSkin[playerid] = 110;
+    }
+    else if(Spieler[playerid][pFraktion] == 14)
+    {
+        SetPlayerSkin(playerid, 229);
+        pChoosedSkin[playerid] = 229;
+    }
+    else if(Spieler[playerid][pFraktion] == 15)
+    {
+        SetPlayerSkin(playerid, 248);
+        pChoosedSkin[playerid] = 248;
+    }
+    else if(Spieler[playerid][pFraktion] == 16)
+    {
+        SetPlayerSkin(playerid, 282);
+        pChoosedSkin[playerid] = 282;
+    }
+    else if(Spieler[playerid][pFraktion] == 17)
+    {
+        SetPlayerSkin(playerid, 202);
+        pChoosedSkin[playerid] = 202;
+    }
+    else if(Spieler[playerid][pFraktion] == 18)
+    {
+        SetPlayerSkin(playerid, 287);
+        pChoosedSkin[playerid] = 287;
+    }
+    else if(Spieler[playerid][pFraktion] == 19)
+    {
+        SetPlayerSkin(playerid, 142);
+        pChoosedSkin[playerid] = 142;
+    }
+    else if(Spieler[playerid][pFraktion] == 20)
+    {
+        SetPlayerSkin(playerid, 47);
+        pChoosedSkin[playerid] = 47;
+    }
+    else if(Spieler[playerid][pFraktion] == 21)
+    {
+        SetPlayerSkin(playerid, 120);
+        pChoosedSkin[playerid] = 120;
+    }
+    else if(Spieler[playerid][pFraktion] == 22)
+    {
+        SetPlayerSkin(playerid, 288);
+        pChoosedSkin[playerid] = 288;
+    }
+
+    SendClientMessage(playerid, COLOR_WHITE, COLOR_HEX_WHITE"Drücke "COLOR_HEX_BLUE"SPRINT-TASTE "COLOR_HEX_WHITE"um den nächsten Skin anzeigen zu lassen.");
+    SendClientMessage(playerid, COLOR_WHITE, COLOR_HEX_WHITE"Drücke "COLOR_HEX_BLUE"ENTER-TASTE "COLOR_HEX_WHITE"um den derzeitigen Skin auszuwählen.");
+    SendClientMessage(playerid, COLOR_WHITE, COLOR_HEX_BLUE"INFO: "COLOR_HEX_WHITE"Wenn du doch keinen Skin wechseln möchtest, wähle einfach deinen derzeitigen Skin aus.");
+    return 1;
+}
+
 CMD:kleidung(playerid)
 {
     for(new i=1;i<MAX_BIZES;i++)
@@ -9552,141 +9692,9 @@ CMD:kleidung(playerid)
             if(tempCurBiz == 37 || tempCurBiz == 36  || tempCurBiz == 35 )
             {
                 pCurrentBiz[playerid] = tempCurBiz;
-                pSkinSelection[playerid] = 1;
-                FreezePlayer(playerid);
-                SetPlayerPos(playerid, 257.9847,-41.5232,1002.0234);
-                SetPlayerCameraPos(playerid, 255.0529,-41.4668,1002.0234);
-                SetPlayerCameraLookAt(playerid, 256.2413,-41.4954,1002.0234);
-                SetPlayerInterior(playerid, 14);
-                SetPlayerVirtualWorld(playerid, playerid+1337);
-                SetPlayerFacingAngle(playerid, 90.4982);
-                if(Spieler[playerid][pFraktion] == 0)
-                {
-                    if(Spieler[playerid][pSex] == 1)
-                    {
-                        SetPlayerSkin(playerid, 2);
-                        pChoosedSkin[playerid] = 2;
-                    }
-                    else if(Spieler[playerid][pSex] == 2)
-                    {
-                        SetPlayerSkin(playerid, 12);
-                        pChoosedSkin[playerid] = 12;
-                    }
-                }
-                else if(Spieler[playerid][pFraktion] == 1)
-                {
-                    SetPlayerSkin(playerid, 265);
-                    pChoosedSkin[playerid] = 265;
-                }
-                else if(Spieler[playerid][pFraktion] == 2)
-                {
-                    SetPlayerSkin(playerid, 286);
-                    pChoosedSkin[playerid] = 286;
-                }
-                else if(Spieler[playerid][pFraktion] == 3)
-                {
-                    SetPlayerSkin(playerid, 274);
-                    pChoosedSkin[playerid] = 274;
-                }
-                else if(Spieler[playerid][pFraktion] == 4)
-                {
-                    SetPlayerSkin(playerid, 57);
-                    pChoosedSkin[playerid] = 57;
-                }
-                else if(Spieler[playerid][pFraktion] == 5)
-                {
-                    SetPlayerSkin(playerid, 50);
-                    pChoosedSkin[playerid] = 50;
-                }
-                else if(Spieler[playerid][pFraktion] == 6)
-                {
-                    SetPlayerSkin(playerid, 105);
-                    pChoosedSkin[playerid] = 105;
-                }
-                else if(Spieler[playerid][pFraktion] == 7)
-                {
-                    SetPlayerSkin(playerid, 102);
-                    pChoosedSkin[playerid] = 102;
-                }
-                else if(Spieler[playerid][pFraktion] == 8)
-                {
-                    SetPlayerSkin(playerid, 240);
-                    pChoosedSkin[playerid] = 240;
-                }
-                else if(Spieler[playerid][pFraktion] == 9)
-                {
-                    SetPlayerSkin(playerid, 170);
-                    pChoosedSkin[playerid] = 170;
-                }
-                else if(Spieler[playerid][pFraktion] == 10)
-                {
-                    SetPlayerSkin(playerid, 123);
-                    pChoosedSkin[playerid] = 123;
-                }
-                else if(Spieler[playerid][pFraktion] == 11)
-                {
-                    SetPlayerSkin(playerid, 114);
-                    pChoosedSkin[playerid] = 114;
-                }
-                else if(Spieler[playerid][pFraktion] == 12)
-                {
-                    SetPlayerSkin(playerid, 125);
-                    pChoosedSkin[playerid] = 125;
-                }
-                else if(Spieler[playerid][pFraktion] == 13)
-                {
-                    SetPlayerSkin(playerid, 110);
-                    pChoosedSkin[playerid] = 110;
-                }
-                else if(Spieler[playerid][pFraktion] == 14)
-                {
-                    SetPlayerSkin(playerid, 229);
-                    pChoosedSkin[playerid] = 229;
-                }
-                else if(Spieler[playerid][pFraktion] == 15)
-                {
-                    SetPlayerSkin(playerid, 248);
-                    pChoosedSkin[playerid] = 248;
-                }
-                else if(Spieler[playerid][pFraktion] == 16)
-                {
-                    SetPlayerSkin(playerid, 282);
-                    pChoosedSkin[playerid] = 282;
-                }
-                else if(Spieler[playerid][pFraktion] == 17)
-                {
-                    SetPlayerSkin(playerid, 202);
-                    pChoosedSkin[playerid] = 202;
-                }
-                else if(Spieler[playerid][pFraktion] == 18)
-                {
-                    SetPlayerSkin(playerid, 287);
-                    pChoosedSkin[playerid] = 287;
-                }
-                else if(Spieler[playerid][pFraktion] == 19)
-                {
-                    SetPlayerSkin(playerid, 142);
-                    pChoosedSkin[playerid] = 142;
-                }
-                else if(Spieler[playerid][pFraktion] == 20)
-                {
-                    SetPlayerSkin(playerid, 47);
-                    pChoosedSkin[playerid] = 47;
-                }
-                else if(Spieler[playerid][pFraktion] == 21)
-                {
-                    SetPlayerSkin(playerid, 120);
-                    pChoosedSkin[playerid] = 120;
-                }
-                else if(Spieler[playerid][pFraktion] == 22)
-                {
-                    SetPlayerSkin(playerid, 288);
-                    pChoosedSkin[playerid] = 288;
-                }
+                StartPlayerSkinSelection(playerid);
             }
-            SendClientMessage(playerid, COLOR_WHITE, COLOR_HEX_WHITE"Drücke "COLOR_HEX_BLUE"SPRINT-TASTE "COLOR_HEX_WHITE"um den nächsten Skin anzeigen zu lassen.");
-            SendClientMessage(playerid, COLOR_WHITE, COLOR_HEX_WHITE"Drücke "COLOR_HEX_BLUE"ENTER-TASTE "COLOR_HEX_WHITE"um den derzeitigen Skin auszuwählen.");
-            SendClientMessage(playerid, COLOR_WHITE, COLOR_HEX_BLUE"INFO: "COLOR_HEX_WHITE"Wenn du doch keinen Skin wechseln möchtest, wähle einfach deinen derzeitigen Skin aus.");
+                
         }
     }
     return 1;
@@ -12875,7 +12883,7 @@ CMD:spawnchange(playerid)
     else if(Spieler[playerid][pSpawnChange] == 1)
     {
         Spieler[playerid][pSpawnChange] = 0;
-        SendClientMessage(playerid, COLOR_GREEN, "Du hast deinen Spawn auf den Fraktions bzw. Zivi-Spawn geändert.");
+        SendClientMessage(playerid, COLOR_GREEN, "Du hast deinen Spawn auf den Fraktions- bzw. Zivi-Spawn geändert.");
     }
     return 1;
 }
@@ -21708,32 +21716,34 @@ CMD:accept(playerid, params[])
         {
             Spieler[playerid][pFraktion] = FrakInviteID[playerid];
             new frakid = FrakInviteID[playerid];
-            if(frakid == 1){ if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 280); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 150); } }
-            else if(frakid == 2){if (Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 286); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 150); } }
-            else if(frakid == 3){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 276); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 26); } }
-            else if(frakid == 4){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 57); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 55); } }
-            else if(frakid == 5){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 71); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 71); } }
-            else if(frakid == 6){if(Spieler[playerid][pSex] == 1){SetPlayerSkinEx(playerid, 105); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 65); } }
-            else if(frakid == 7){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 102);}else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 195);} }
-            else if(frakid == 8){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 240);}else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 194);} }
-            else if(frakid == 9){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 164);}else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 170);} }
-            else if(frakid == 10){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 122); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 169);} }
-            else if(frakid == 11){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 116); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 116);} }
-            else if(frakid == 12){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 126); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 126);} }
-            else if(frakid == 13){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 110); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 110);} }
-            else if(frakid == 14){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 229); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 110);}}
-            else if(frakid == 15){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 248); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 248);}}
-            else if(frakid == 16){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 282); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 194);}}
-            else if(frakid == 17){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 202); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 89);}}
-            else if(frakid == 18){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 287); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 287);}}
-            else if(frakid == 19){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 220); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 220);}}
-            else if(frakid == 20){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 48); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 48);}}
-            else if(frakid == 21){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 111); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 111);}}
+            // if(frakid == 1){ if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 280); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 150); } }
+            // else if(frakid == 2){if (Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 286); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 150); } }
+            // else if(frakid == 3){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 276); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 26); } }
+            // else if(frakid == 4){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 57); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 55); } }
+            // else if(frakid == 5){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 71); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 71); } }
+            // else if(frakid == 6){if(Spieler[playerid][pSex] == 1){SetPlayerSkinEx(playerid, 105); } else if(Spieler[playerid][pSex] == 2){ SetPlayerSkinEx(playerid, 65); } }
+            // else if(frakid == 7){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 102);}else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 195);} }
+            // else if(frakid == 8){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 240);}else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 194);} }
+            // else if(frakid == 9){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 164);}else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 170);} }
+            // else if(frakid == 10){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 122); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 169);} }
+            // else if(frakid == 11){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 116); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 116);} }
+            // else if(frakid == 12){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 126); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 126);} }
+            // else if(frakid == 13){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 110); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 110);} }
+            // else if(frakid == 14){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 229); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 110);}}
+            // else if(frakid == 15){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 248); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 248);}}
+            // else if(frakid == 16){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 282); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 194);}}
+            // else if(frakid == 17){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 202); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 89);}}
+            // else if(frakid == 18){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 287); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 287);}}
+            // else if(frakid == 19){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 220); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 220);}}
+            // else if(frakid == 20){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 48); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 48);}}
+            // else if(frakid == 21){if(Spieler[playerid][pSex] == 1){ SetPlayerSkinEx(playerid, 111); } else if(Spieler[playerid][pSex] == 2){SetPlayerSkinEx(playerid, 111);}}
             FrakInviteID[playerid] = 999;
             Spieler[playerid][pFrakLohn] = 0;
             Spieler[playerid][pRank] = 0;
             Spieler[playerid][pfrakwarn] = 0;
-            SpawnPlayerEx(playerid);
+            SetPVarInt(playerid, "SELECT.FRAK.SKIN", 1);
+            StartPlayerSkinSelection(playerid);
+            SendClientMessage(playerid, COLOR_GREEN, "Wähle nun deinen Fraktionsskin!");
             if (frakid == 15) AddPlayerToPlantArrayData(playerid);
             SaveAccount(playerid);
         }
@@ -27407,6 +27417,16 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             pSkinSelection[playerid] = 0;
             pChoosedSkin[playerid] = 0;
             UnfreezePlayer(playerid);
+
+            if (GetPVarInt(playerid, "SELECT.FRAK.SKIN")) {
+                DeletePVar(playerid, "SELECT.FRAK.SKIN");
+                SetPlayerSkinEx(playerid, iSkin);
+                Spieler[playerid][pSpawnChange] == 1;
+                SpawnPlayerEx(playerid);
+                SendClientMessage(playerid, COLOR_ORANGE, "Dein Spawnpunkt wurde automatisch auf deine Fraktionsbase verlegt.");
+                SendClientMessage(playerid, COLOR_ORANGE, "Du hast deinen Fraktionsskin ausgewählt und wurdest in deiner Base gespawnt.");
+                return 1;
+            }
 
             if(Biz[iBiz][bWaren] < 1)
             {
