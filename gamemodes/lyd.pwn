@@ -10878,6 +10878,9 @@ public OnPlayerDeath(playerid, killerid, reason)
                 else {
                     Spieler[playerid][pJailed] = 1;
                 }
+
+                Spieler[playerid][bMaske] = false;
+                KillTimer(Spieler[playerid][tMaske]);
                 Spieler[playerid][pJailTime] = 220*Spieler[playerid][pWanteds];
                 Spieler[playerid][pWanteds] = 0;
                 Spieler[playerid][pWantedDeaths] ++;
@@ -49572,6 +49575,8 @@ stock ShowSafeboxDialog(playerid, dialogid, extraid = 0) {
     return 1;
 }
 
+CMD:hmaske(playerid, params[]) return cmd_hitmanmaske(playerid, params);
+
 COMMAND:hitmanmaske(playerid,params[]) {
     if( Spieler[playerid][pFraktion] != 14 ) {
         return SendClientMessage(playerid,COLOR_RED,"Dieser Befehl ist nur für Hitman möglich");
@@ -49590,9 +49595,8 @@ COMMAND:hitmanmaske(playerid,params[]) {
         }
         return SendClientMessage(playerid, COLOR_ORANGE, "Du hast deine Maske vorzeitig abgenommen.");
     }
-    if( Spieler[playerid][pHitmenAuftragID] == INVALID_PLAYER_ID ) {
-        return SendClientMessage(playerid,COLOR_RED,"Du hast kein Auftrag! Somit kannst du deine Maske nicht aufsetzen!");
-    }
+    if (Spieler[playerid][pHitmenAuftragID] == INVALID_PLAYER_ID) return SendClientMessage(playerid,COLOR_RED,"Du hast keinen Auftrag! Somit kannst du deine Maske nicht aufsetzen!");
+    if (Spieler[playerid][pJailed]) return SendClientMessage(playerid, COLOR_RED, "Du bist im Gefängnis und kannst hier keine Maske aufsetzen.");
     SendClientMessage(playerid,COLOR_GREEN,"Du hast deine Maske aufgezogen, dein Name ist nun für 5 Minuten verdeckt!");
     Spieler[playerid][tMaske] = SetTimerEx("stopMask",(5*60*1000)+53,false,"d",playerid);
     Spieler[playerid][bMaske] = true;
