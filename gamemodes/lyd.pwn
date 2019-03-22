@@ -465,6 +465,19 @@ new const g_shishaPipes[][E_SHISHA_PIPE] = {
     {"Blue NRG",        1200,   "{2BFFC4}"}
 };
 
+enum E_EXECUTIVE_NAME {
+    EXECUTIVE_NAME[20],
+    EXECUTIVE_FACTION
+}
+
+new const g_executiveNames[][E_EXECUTIVE_NAME] = {
+    {"LS-Polizeibeamter", 1},
+    {"FBI-Agent", 2},
+    {"LV-Polizeibeamter", 16},
+    {"Soldat", 18},
+    {"Zollbeamter", 22}
+};
+
 new const g_ChatNames[][20] = {
     "Global-Chat",
     "Fraktions-Chat",
@@ -4283,7 +4296,6 @@ new OAmtSirene[MAX_VEHICLES];
 
 new GMXMode;
 new gmxtimer;
-new automsg;
 new CurWeather;
 
 new drogen[6];
@@ -4381,6 +4393,18 @@ stock IsPlayerFalling(playerid) {
 stock Float:frandom(Float:max, Float:min = 0.0, dp = 4) {
     new Float:mul = floatpower(10.0, dp), imin = floatround(min * mul), imax = floatround(max * mul);
     return float(random(imax - imin) + imin) / mul;
+}
+
+stock GetPlayerExecutiveName(playerid) {
+    new execName[20] = "Beamter";
+    for (new i = 0; i < sizeof(g_executiveNames); i++) {
+        if (Spieler[playerid][pFraktion] == g_executiveNames[i][EXECUTIVE_FACTION]) {
+            format(execName, sizeof(execName), "%s", g_executiveNames[i][EXECUTIVE_NAME]);
+            break;
+        }
+    }
+
+    return execName;
 }
 
 #define ALCATRAZ_WANTEDS 40
@@ -5546,7 +5570,6 @@ public OnGameModeInit2() {
 
     KillTimer(gmxtimer);
     GMXMode = 0;
-    automsg = 0;
 
 	/*CreateDynamicPickup(19346, 23, 1782.0698,-2087.7612,13.5469, 0);//Bratwurst
 	Create3DTextLabel(COLOR_HEX_GREEN"Bratwurst Tag, 29.07.2015\n"COLOR_HEX_RED"Mach ein Screen und poste es!", COLOR_WHITE, 1782.0698,-2087.7612,13.5469, 10.0, 0,0);*/
@@ -6110,7 +6133,7 @@ public OnPlayerConnect(playerid)
 
 
 	TextDrawShowForPlayer(playerid, URL);
-	if(strcmp(sName, "Niemand", true) == 0)
+	if(strcmp(sName, "Niemand", true) == 0 || strcmp(sName, "Unbekannt", true) == 0)
 	{
 		SendClientMessage(playerid, COLOR_RED, "Du wurdest gekickt, da dein Name nicht passend war!");
 		Kick(playerid);
@@ -10825,6 +10848,7 @@ public OnPlayerDeath(playerid, killerid, reason)
             SendAdminMessage(COLOR_RED,String);
             Ban(playerid);
         }
+
         if(Spieler[killerid][pFraktion] == 1 || Spieler[killerid][pFraktion] == 2 || Spieler[killerid][pFraktion] == 16 || Spieler[killerid][pFraktion] == 18 || Spieler[killerid][pFraktion] == 22 )
         {
             if(Spieler[playerid][pWanteds] > 0)
@@ -10840,21 +10864,13 @@ public OnPlayerDeath(playerid, killerid, reason)
                 Spieler[killerid][pPayCheck] += pGehalt;
                 format(string, sizeof(string), "~r~Fluchttaeter ~g~getoetet~n~+$%s", AddDelimiters(pGehalt));
                 GameTextForPlayer(killerid, string, 3000, 6);
-                if(Spieler[killerid][pFraktion] == 1){format(string, sizeof(string), "HQ: LS-Polizeibeamter %s hat den Fluchttäter %s überführen können, over.", GetName(killerid), GetName(playerid));}
-                else if(Spieler[killerid][pFraktion] == 2){format(string, sizeof(string), "HQ: FBI-Agent %s hat den Fluchttäter %s überführen können, over.", GetName(killerid), GetName(playerid));}
-                else if(Spieler[killerid][pFraktion] == 16){format(string, sizeof(string), "HQ: LV-Polizeibeamter %s hat den Fluchttäter %s überführen können, over.", GetName(killerid), GetName(playerid));}
-                else if(Spieler[killerid][pFraktion] == 18){format(string, sizeof(string), "HQ: Soldat %s hat den Fluchttäter %s überführen können, over.", GetName(killerid), GetName(playerid));}
-                else if(Spieler[killerid][pFraktion] == 22){format(string, sizeof(string), "HQ: Zollbeamter %s hat den Fluchttäter %s überführen können, over.", GetName(killerid), GetName(playerid));}
+                format(string, sizeof(string), "HQ: %s %s hat den Fluchttäter %s überführen können, over.", GetPlayerExecutiveName(killerid), GetName(killerid), Spieler[playerid][bMaske] ? "<Unbekannt>" : GetName(playerid));
                 SendFraktionMessage(1, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(2, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(16, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(18, COLOR_COP_MELDUNG, string);
                 SendFraktionMessage(22, COLOR_COP_MELDUNG, string);
-                if(Spieler[killerid][pFraktion] == 1){format(string, sizeof(string), ">> LS-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 2){format(string, sizeof(string), ">> FBI-Agent %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 16){format(string, sizeof(string), ">> LV-Polizeibeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 18){format(string, sizeof(string), ">> Soldat %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
-                else if(Spieler[killerid][pFraktion] == 22){format(string, sizeof(string), ">> Zollbeamter %s hat den Verbrecher %s%s überführen können! <<", GetName(killerid), GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");}
+                format(string, sizeof(string), ">> %s %s hat den Verbrecher %s%s überführen können! <<", GetPlayerExecutiveName(killerid), GetName(killerid), Spieler[playerid][bMaske] ? "<Unbekannt>" : GetName(playerid), Spieler[playerid][pWanteds] > ALCATRAZ_WANTEDS ? " ins Alcatraz" : "");
                 SendClientMessageToAll(COLOR_DARKRED, string);
                 if( Spieler[playerid][pWanteds] >= ALCATRAZ_WANTEDS ) {
                     Spieler[playerid][pJailed] = 2;
@@ -10887,7 +10903,10 @@ public OnPlayerDeath(playerid, killerid, reason)
                     SendClientMessage(killerid, COLOR_DARKRED,"Du hast ein Verbrechen begangen! (Beamten/Zivilisten Mord) Reporter: Polizeizentrale");
                     format(string, sizeof(string), "Dein Aktuelles Wanted Level: %d", Spieler[killerid][pWanteds]);
                     SendClientMessage(killerid, COLOR_YELLOW, string);
-                    format(string, sizeof(string), "HQ: %s (ID: %d) hat ein Verbrechen begangen: Beamten-/Zivilisten Mord in %s - Tatwaffe: %s, over.", GetName(killerid), killerid,sOrt,sWeapon);
+                    if (!Spieler[killerid][bMaske])
+                        format(string, sizeof(string), "HQ: %s (ID: %d) hat ein Verbrechen begangen: Beamten-/Zivilisten Mord in %s - Tatwaffe: %s, over.", GetName(killerid), killerid, sOrt, sWeapon);
+                    else
+                        format(string, sizeof(string), "HQ: <Unbekannt> (ID: N/A) hat ein Verbrechen begangen: Beamten-/Zivilisten Mord in %s - Tatwaffe: %s, over.", sOrt, sWeapon);
                 }
                 print(String);
                 SendFraktionMessage(1, COLOR_LIGHTRED, string);
@@ -14259,18 +14278,18 @@ stock ShowConfigPlayerInfo(playerid) {
 
 CMD:configplayer(playerid, params[])
 {
-    new pID, string[140], entry[32], wert, valstr[32];
+    new pID, string[140], entry[32], wert, avalstr[32];
     if(Spieler[playerid][pAdmin] < 3)return SendClientMessage(playerid, COLOR_RED, "Du besitzt nicht die benötigten Rechte.");
     if(sscanf(params, "us[32]i", pID, entry, wert))
     {
-        if (sscanf(params, "us[32]s[32]", pID, entry, valstr)) return ShowConfigPlayerInfo(playerid);
+        if (sscanf(params, "us[32]s[32]", pID, entry, avalstr)) return ShowConfigPlayerInfo(playerid);
 
         if (!strcmp(entry, "fraktion", true)) {
-            wert = GetFactionIDByName(valstr);
+            wert = GetFactionIDByName(avalstr);
             if (wert == -1) return SendClientMessage(playerid, COLOR_ORANGE, "* Die Fraktion konnte nicht gefunden werden.");
         }
         else if (!strcmp(entry, "job", true)) {
-            wert = GetJobIDByName(valstr);
+            wert = GetJobIDByName(avalstr);
             if (wert == -1) return SendClientMessage(playerid, COLOR_ORANGE, "* Der Job konnte nicht gefunden werden.");
         }
         else return ShowConfigPlayerInfo(playerid);
@@ -21612,9 +21631,9 @@ CMD:accept(playerid, params[])
                     //Spieler[pDrogenID[playerid]][pDrugs] -= pDrogenMenge[playerid];
                     Spieler[playerid][pWaffenteile] += pWTeileMenge[playerid];
                     Spieler[ pWTeileID[playerid] ][pWaffenteile] -= pWTeileMenge[playerid];
-                    format(string, sizeof(string), "Du hast %d Stk. Waffenteile von %s für $%s abgekauft.", pWTeileMenge[playerid], GetName(pWTeileID[playerid]), AddDelimiters(pWTeilePreis[playerid]));
+                    format(string, sizeof(string), "Du hast %s Stk. Waffenteile von %s für $%s abgekauft.", AddDelimiters(pWTeileMenge[playerid]), GetName(pWTeileID[playerid]), AddDelimiters(pWTeilePreis[playerid]));
                     SendClientMessage(playerid, COLOR_LIGHTBLUE, string);
-                    format(string, sizeof(string), "%s hat dir %d Stk. Waffenteile für $%s abgekauft.", GetName(playerid), pWTeileMenge[playerid], AddDelimiters(pWTeilePreis[playerid]));
+                    format(string, sizeof(string), "%s hat dir %s Stk. Waffenteile für $%s abgekauft.", GetName(playerid), AddDelimiters(pWTeileMenge[playerid]), AddDelimiters(pWTeilePreis[playerid]));
                     SendClientMessage(pWTeileID[playerid], COLOR_LIGHTBLUE, string);
                     new ort[24], waffenteilelog[128];
                     GetPlayer2DZone(playerid, ort, 24);
@@ -27421,7 +27440,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             if (GetPVarInt(playerid, "SELECT.FRAK.SKIN")) {
                 DeletePVar(playerid, "SELECT.FRAK.SKIN");
                 SetPlayerSkinEx(playerid, iSkin);
-                Spieler[playerid][pSpawnChange] == 1;
+                Spieler[playerid][pSpawnChange] = 0;
                 SpawnPlayerEx(playerid);
                 SendClientMessage(playerid, COLOR_ORANGE, "Dein Spawnpunkt wurde automatisch auf deine Fraktionsbase verlegt.");
                 SendClientMessage(playerid, COLOR_ORANGE, "Du hast deinen Fraktionsskin ausgewählt und wurdest in deiner Base gespawnt.");
@@ -47320,7 +47339,11 @@ CMD:gesuchte(playerid, params[])
                 {
                     new giveplayer[MAX_PLAYER_NAME], string[128];
                     GetPlayerName(i, giveplayer, sizeof(giveplayer));
-                    format(string, sizeof(string), "%s[ID:%d]: %d", giveplayer,i,Spieler[i][pWanteds]);
+                    if (Spieler[i][bMaske])
+                        format(string, sizeof(string), "<Unbekannt> [ID: N/A]: %d Wanteds", Spieler[i][pWanteds]);
+                    else
+                        format(string, sizeof(string), "%s [ID: %d]: %d Wanteds", giveplayer, i, Spieler[i][pWanteds]);
+
                     SendClientMessage(playerid, COLOR_YELLOW, string);
                 }
             }
@@ -49060,7 +49083,7 @@ COMMAND:killauftrag(playerid,params[]) {
     if (playerid == giveid) return SendClientMessage(playerid, COLOR_RED, "Du kannst dir selber kein Kopfgeld geben.");
     if (Spieler[giveid][pLevel] < 3) return SendClientMessage(playerid, COLOR_RED, "Der Spieler ist noch unter Level 3.");
     if (Spieler[playerid][pKopfgeldID] != INVALID_PLAYER_ID) return SendClientMessage(playerid, COLOR_RED, "Du hast bereits ein Kopfgeld auf einen Spieler gesetzt.");
-    if (!(5000 <= preis <= 100000)) return SendClientMessage(playerid, COLOR_RED, "Das Kopfgeld muss zwischen $5.000 und $100.000 liegen");
+    if (!(20000 <= preis <= 150000)) return SendClientMessage(playerid, COLOR_RED, "Das Kopfgeld muss zwischen $20.000 und $150.000 liegen");
     if (GetPlayerMoney(playerid) < preis) return SendClientMessage(playerid, COLOR_RED, "Das gesetzte Kopfgeld besitzt du nicht");
 
     new String[128];
@@ -49560,8 +49583,12 @@ COMMAND:hitmanmaske(playerid,params[]) {
         for (new i ; i < MAX_PLAYERS ; i++) {
             ShowPlayerNameTagForPlayer(i,playerid,1);
         }
+        if (Spieler[playerid][pWanteds] > 0) {
+            new string[128];
+            format(string, sizeof(string), "> Gesucht <\nWantedanzahl: %d", Spieler[playerid][pWanteds]);
+            UpdateDynamic3DTextLabelText(Spieler[playerid][pWantedLabel], COLOR_YELLOW, string);
+        }
         return SendClientMessage(playerid, COLOR_ORANGE, "Du hast deine Maske vorzeitig abgenommen.");
-        // return SendClientMessage(playerid,COLOR_RED,"Du trägst bereits eine Maske");
     }
     if( Spieler[playerid][pHitmenAuftragID] == INVALID_PLAYER_ID ) {
         return SendClientMessage(playerid,COLOR_RED,"Du hast kein Auftrag! Somit kannst du deine Maske nicht aufsetzen!");
@@ -49573,6 +49600,7 @@ COMMAND:hitmanmaske(playerid,params[]) {
     for(new i ; i < MAX_PLAYERS ; i++) {
         ShowPlayerNameTagForPlayer(i,playerid,0);
     }
+    UpdateDynamic3DTextLabelText(Spieler[playerid][pWantedLabel], COLOR_RED," ");
     return 1;
 }
 
@@ -49584,6 +49612,12 @@ public stopMask(playerid) {
     SetPlayerColor(playerid, ( GetPlayerColor(playerid) | 0xFF ) );
     for(new i ; i < MAX_PLAYERS ; i++) {
         ShowPlayerNameTagForPlayer(i,playerid,1);
+    }
+
+    if (Spieler[playerid][pWanteds] > 0) {
+        new string[128];
+        format(string, sizeof(string), "> Gesucht <\nWantedanzahl: %d", Spieler[playerid][pWanteds]);
+        UpdateDynamic3DTextLabelText(Spieler[playerid][pWantedLabel], COLOR_YELLOW, string);
     }
     return 1;
 }
@@ -49602,7 +49636,7 @@ CMD:adminmaske(playerid) {
 
     SendClientMessage(playerid, COLOR_GREEN, "Du hast deine Maske aufgezogen.");
     SetPlayerColor(playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
-    for (new i; i < MAX_PLAYERS; i++)  ShowPlayerNameTagForPlayer(i, playerid, 0);
+    for (new i; i < MAX_PLAYERS; i++) ShowPlayerNameTagForPlayer(i, playerid, 0);
     return 1;
 }
 
@@ -53329,65 +53363,26 @@ stock IsCop(playerid) {
     }
     return 0;
 }
+
 forward WantedLabel();
 public WantedLabel() {
-    new
-        string[128],
-        j,
-        visibleto[MAX_PLAYERS] = {INVALID_PLAYER_ID,...};
-    for(new i ; i < MAX_PLAYERS ; i++) {
-        if( IsPlayerConnected(i) ) {
-            if( IsPlayerExecutive(i)) {
-                visibleto[j] = i;
-                j++;
-            }
+    new string[128], poolSize = GetPlayerPoolSize();
+
+    for (new i = 0; i <= poolSize; i++) {
+        if (!IsPlayerConnected(i) || IsPlayerNPC(i)) continue;
+        for (new a; a < MAX_PLAYERS; a++) {
+            Streamer_RemoveArrayData(STREAMER_TYPE_3D_TEXT_LABEL, Spieler[i][pWantedLabel], E_STREAMER_PLAYER_ID, a);
+            if (IsPlayerConnected(a) && IsPlayerExecutive(a)) Streamer_AppendArrayData(STREAMER_TYPE_3D_TEXT_LABEL, Spieler[i][pWantedLabel], E_STREAMER_PLAYER_ID, a);
         }
+        if (Spieler[i][pWanteds] && !Spieler[i][bMaske]) {
+            format(string, sizeof(string), "> Gesucht <\nWantedanzahl: %d", Spieler[i][pWanteds]);
+            UpdateDynamic3DTextLabelText(Spieler[i][pWantedLabel], COLOR_YELLOW, string);
+        }
+        else UpdateDynamic3DTextLabelText(Spieler[i][pWantedLabel], COLOR_RED, " ");
     }
-    /*
-    for(new i = 0 ; i < MAX_PLAYERS ; i++) {
-        if( visibleto[i] != INVALID_PLAYER_ID ) {
-            printf("visibleto[%d] = %d",i,visibleto[i]);
-        }
-    }*/
-    for(new i = 0 ; i < MAX_PLAYERS ; i++) {
-        if( IsPlayerConnected(i) ) {
-            //#if defined USE_NPCS
-            if( IsPlayerNPC(i) ) continue;
-            //#endif
-            if( Spieler[i][pWanteds] > 0 ) {
-                UpdateDynamic3DTextLabelText( Spieler[i][pWantedLabelEx] , COLOR_RED , "Gesucht");
-            }
-            else {
-                UpdateDynamic3DTextLabelText( Spieler[i][pWantedLabelEx] , 0xFFFFFF00 , " ");
-            }
-            for(new a ; a < MAX_PLAYERS ; a++) {
-                Streamer_RemoveArrayData( STREAMER_TYPE_3D_TEXT_LABEL , Spieler[i][pWantedLabel] , E_STREAMER_PLAYER_ID , a );
-            }
-            if( Spieler[i][pWanteds] ) {
-                format(string,sizeof(string),"Wantedanzahl: %d", Spieler[i][pWanteds] );
-                UpdateDynamic3DTextLabelText( Spieler[i][pWantedLabel],COLOR_YELLOW, string );
-                for(new v = 0 ; v < MAX_PLAYERS ; v++) {
-                    if( visibleto[v] != INVALID_PLAYER_ID ) {
-                        Streamer_AppendArrayData( STREAMER_TYPE_3D_TEXT_LABEL , Spieler[i][pWantedLabel] , E_STREAMER_PLAYER_ID , visibleto[v] );
-                    }
-                }
-            }
-            else {
-                UpdateDynamic3DTextLabelText( Spieler[i][pWantedLabel], COLOR_RED," ");
-            }
-            // Streamer_SetArrayData( STREAMER_TYPE_3D_TEXT_LABEL , Spieler[i][pWantedLabel] , E_STREAMER_PLAYER_ID , {3,4} );
-            /*
-            for( new k ; k < MAX_PLAYERS  ; k++) {
-                if( Streamer_IsInArrayData( STREAMER_TYPE_3D_TEXT_LABEL , Spieler[i][pWantedLabel] , E_STREAMER_PLAYER_ID , k ) ) {
-                    printf("Streamer_IsInArrayData(Text3D:%d , PLAYER_ID , %d",_:Spieler[i][pWantedLabel],k);
-                }
-            }
-            */
-        }
-    }
+
     return 1;
 }
-
 
 stock GetPlayerHureSkillValue(playerid) {
     new
